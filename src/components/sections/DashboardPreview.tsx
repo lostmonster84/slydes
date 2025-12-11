@@ -161,17 +161,7 @@ export function DashboardPreview() {
                   transition={{ duration: 0.25 }}
                   className="animate-phone-float"
                 >
-                  <PhoneMockup 
-                    title={currentSlide.frames[activeFrame]?.name || currentSlide.title}
-                    subtitle={currentSlide.subtitle}
-                    gradient={currentSlide.gradient}
-                    showSlideIndicators={true}
-                    showFrameIndicators={true}
-                    currentSlide={activeSlide}
-                    totalSlides={slides.length}
-                    currentFrame={activeFrame}
-                    totalFrames={currentSlide.frames.length}
-                  />
+                  <PhoneMockup variant="hospitality" />
                 </motion.div>
               </AnimatePresence>
             </div>
