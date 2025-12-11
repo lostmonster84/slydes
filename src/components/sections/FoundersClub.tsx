@@ -25,12 +25,12 @@ export function FoundersClub() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-amber-600/10 border border-amber-500/30 text-amber-400 text-sm font-medium mb-4">
-              <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-leader-blue/20 text-leader-blue text-sm font-medium mb-4">
+              <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
               Genesis Founders — Limited to {totalSpots}
-            </div>
+            </span>
             
-            <h2 className="text-white mb-4">The inner circle.<br /><span className="text-amber-400">The originals.</span></h2>
+            <h2 className="text-white mb-4">The inner circle.<br /><span className="gradient-text">The originals.</span></h2>
             <p className="text-gray-400 text-lg mb-8">
               50 founders. Direct access to me. 25% on every referral, forever.
               <br />
@@ -39,11 +39,11 @@ export function FoundersClub() {
 
             <ul className="space-y-4 mb-8">
               {[
-                { icon: '🔑', title: 'Direct access to James', desc: 'Private Slack channel — I\'m there personally' },
-                { icon: '💰', title: '25% revenue share forever', desc: 'Highest tier — earn on every referral' },
-                { icon: '🎉', title: 'Launch party + team events', desc: 'You\'re invited to everything we do' },
-                { icon: '📞', title: 'Weekly founder calls', desc: 'Direct input on what we build next' },
-                { icon: '🏆', title: '"Built by" founders page', desc: 'Your name, photo, and business featured' },
+                { title: 'Direct access to James', desc: 'Private Slack channel — I\'m there daily' },
+                { title: '25% revenue share forever', desc: 'Highest tier — earn on every referral' },
+                { title: 'Monthly founder calls', desc: 'Group calls to shape what we build' },
+                { title: 'Personal onboarding call', desc: '1-on-1 setup with the founder' },
+                { title: '"Built by" founders page', desc: 'Your name, photo, and business featured' },
               ].map((item, index) => (
                 <motion.li 
                   key={item.title}
@@ -53,7 +53,9 @@ export function FoundersClub() {
                   transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
                   viewport={{ once: true }}
                 >
-                  <span className="text-xl mr-3">{item.icon}</span>
+                  <svg className="w-5 h-5 text-leader-blue mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                   <div>
                     <span className="text-white font-medium">{item.title}</span>
                     <p className="text-gray-500 text-sm">{item.desc}</p>
@@ -65,14 +67,14 @@ export function FoundersClub() {
 
           {/* Right - Pricing Card */}
           <motion.div 
-            className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-3xl p-8 border border-amber-500/20 backdrop-blur-sm"
+            className="bg-gray-800/50 rounded-3xl p-8 border border-gray-700/50 backdrop-blur-sm"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
           >
             <div className="text-center mb-6">
-              <p className="text-amber-400 text-sm font-medium mb-2">Genesis Founder — One-time payment</p>
+              <p className="text-leader-blue text-sm font-medium mb-2">Genesis Founder — One-time payment</p>
               <div className="flex items-baseline justify-center mb-2">
                 <span className="text-6xl font-bold text-white">£499</span>
               </div>
@@ -87,7 +89,7 @@ export function FoundersClub() {
               </div>
               <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
                 <motion.div 
-                  className="h-full bg-gradient-to-r from-amber-400 to-amber-600"
+                  className="h-full bg-leader-blue"
                   initial={{ width: 0 }}
                   whileInView={{ width: `${((totalSpots - spotsRemaining) / totalSpots) * 100}%` }}
                   transition={{ duration: 1, delay: 0.3 }}
@@ -97,7 +99,7 @@ export function FoundersClub() {
             </div>
 
             <Link href="/founding-member" className="block mb-6">
-              <Button size="lg" className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold">
+              <Button size="lg" className="w-full animate-pulse-glow">
                 Become a Genesis Founder
               </Button>
             </Link>
@@ -133,7 +135,7 @@ export function FoundersClub() {
           viewport={{ once: true }}
           className="text-center text-gray-500 text-sm mt-8"
         >
-          Genesis is <span className="text-white">the only tier</span> with direct access to me. Once it&apos;s gone, it&apos;s <span className="text-amber-400">gone forever</span>.
+          Genesis is <span className="text-white">the only tier</span> with direct access to me. Once it&apos;s gone, it&apos;s <span className="text-leader-blue">gone forever</span>.
         </motion.p>
       </div>
     </section>

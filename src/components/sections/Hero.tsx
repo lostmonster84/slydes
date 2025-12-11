@@ -8,13 +8,9 @@ import { motion } from 'framer-motion'
 
 export function Hero() {
   return (
-    <section className="pt-24 md:pt-32 pb-16 md:pb-24 min-h-[90vh] md:min-h-screen flex items-center overflow-hidden relative bg-white">
-      {/* Animated background with blobs + noise + mesh */}
-      <AnimatedHeroBackground>
-        <div className="absolute inset-0" /> {/* Fills the background wrapper */}
-      </AnimatedHeroBackground>
-      
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+    <AnimatedHeroBackground>
+      <section className="pt-24 md:pt-32 pb-16 md:pb-24 min-h-[90vh] md:min-h-screen flex items-center overflow-hidden relative bg-white">
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-20 items-center">
           {/* Left Column - Content */}
           <div className="flex-1 text-center lg:text-left">
@@ -94,5 +90,6 @@ export function Hero() {
         </div>
       </div>
     </section>
+    </AnimatedHeroBackground>
   )
 }

@@ -31,12 +31,11 @@ Three tiers, released in stages. Early = Cheapest. Early = Most Access.
 
 | Perk | Description |
 |------|-------------|
-| 🔑 **Direct access to James** | Private Slack/WhatsApp channel - direct line |
-| 🎉 **Launch party invite** | In-person events when we hit milestones |
-| 🍽️ **Team events** | Invited to staff gatherings, dinners, celebrations |
-| 📞 **Weekly founder calls** | Direct input on what we build next |
-| 🏆 **"Built by" page** | Name + photo + link to your business |
-| 🎯 **1-on-1 onboarding with James** | Personal setup call with the founder |
+| **Direct access to James** | Private Slack channel - I'm there daily |
+| **Personal onboarding call** | 1-on-1 setup call with the founder |
+| **Monthly founder calls** | Group calls to shape what we build next |
+| **Invited to founder events** | Launch celebrations, meetups when they happen |
+| **"Built by" page** | Name + photo + link to your business |
 
 ### Standard Perks (All Tiers Get):
 
@@ -114,11 +113,11 @@ Three tiers, released in stages. Early = Cheapest. Early = Most Access.
 |---------|----------------|-----------------|------------------|
 | **Spots** | 50 | 75 | 100 |
 | **Revenue Share** | 25% | 20% | 15% |
-| **Direct access to James** | ✅ | ❌ | ❌ |
-| **Launch party + events** | ✅ | ❌ | ❌ |
-| **Founder calls** | Weekly | Monthly | Quarterly |
+| **Direct access to James** | ✅ Daily Slack | ❌ | ❌ |
+| **Founder events** | ✅ Invited | ❌ | ❌ |
+| **Founder calls** | Monthly | Quarterly | ❌ |
 | **"Built by" page** | Name + photo + link | Name only | ❌ |
-| **1-on-1 onboarding** | With James | With team | Video guide |
+| **Personal onboarding** | ✅ With founder | ❌ | ❌ |
 | **Launch spotlight** | Featured | Mentioned | ❌ |
 | **Badge** | 🥇 Genesis | 🥈 Founding | 🥉 Charter |
 | **Lifetime Pro** | ✅ | ✅ | ✅ |
