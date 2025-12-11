@@ -1,29 +1,64 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+// Slydes Waitlist Audience ID
+const AUDIENCE_ID = '29817019-d28f-4bbe-8a64-3f4c64d6b8fc'
 
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
-    const { name, email, company, useCase, updates } = data
+    const { email, firstName } = data
 
     // Validate required fields
-    if (!name || !email || !useCase) {
+    if (!email) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Email is required' },
         { status: 400 }
       )
     }
 
-    // TODO: Integrate with Resend for email sending
-    // TODO: Store in database or Airtable/Notion
-    
-    // For now, log to console (in production, send email and store data)
-    console.log('Waitlist signup:', { name, email, company, useCase, updates })
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: 'Invalid email format' },
+        { status: 400 }
+      )
+    }
 
-    // Simulate success response
+    // Add contact to Resend Audience
+    const { data: contact, error } = await resend.contacts.create({
+      email: email,
+      firstName: firstName || undefined,
+      audienceId: AUDIENCE_ID,
+    })
+
+    if (error) {
+      console.error('Resend error:', error)
+      
+      // Handle duplicate email gracefully
+      if (error.message?.includes('already exists')) {
+        return NextResponse.json({
+          success: true,
+          message: 'You\'re already on the waitlist!',
+          alreadyExists: true,
+        })
+      }
+      
+      return NextResponse.json(
+        { error: 'Failed to join waitlist. Please try again.' },
+        { status: 500 }
+      )
+    }
+
+    console.log('Waitlist signup:', { email, firstName, contactId: contact?.id })
+
     return NextResponse.json({
       success: true,
-      position: Math.floor(Math.random() * 250) + 1, // Random position for now
-      message: 'Successfully joined waitlist',
+      message: 'Successfully joined the waitlist!',
+      contactId: contact?.id,
     })
 
   } catch (error) {
@@ -34,4 +69,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-

@@ -16,7 +16,7 @@ interface SlideContent {
 
 interface PhoneMockupProps {
   className?: string
-  variant: 'hospitality' | 'rentals' | 'experiences' | 'wellness' | 'realestate' | 'events' | 'fitness' | 'automotive' | 'wildtrax'
+  variant: 'hospitality' | 'rentals' | 'experiences' | 'wellness' | 'realestate' | 'events' | 'fitness' | 'automotive' | 'wildtrax' | 'lunadomes' | 'extremetrailers'
 }
 
 // 8 INDUSTRIES - All aspirational, luxury, premium
@@ -323,6 +323,108 @@ const variantContent: Record<string, {
         cta: 'Contact Us',
         ctaIcon: 'call',
         videoSrc: 'https://videos.pexels.com/video-files/5309435/5309435-hd_1920_1080_25fps.mp4',
+      },
+    ],
+  },
+
+  // LUNA DOMES - Luxury Glamping (West Kent)
+  // 4 slides: Hero, Featured Dome, Hot Tub Experience, Winter Offer
+  lunadomes: {
+    accentColor: 'bg-amber-500',
+    gradient: 'from-amber-700 to-rose-800',
+    slides: [
+      {
+        // SLIDE 1: Hero - Stunning dome exterior at sunset/dusk
+        title: 'Luna Domes',
+        subtitle: 'West Kent • Luxury Glamping',
+        cta: 'Explore Domes',
+        ctaIcon: 'view',
+        rating: 4.9,
+        reviews: 847,
+        tag: '🌙 Britain\'s Finest',
+        // Glamping dome in nature at dusk
+        videoSrc: 'https://videos.pexels.com/video-files/6394054/6394054-uhd_2560_1440_25fps.mp4',
+      },
+      {
+        // SLIDE 2: Featured Dome - Wakehurst interior luxury
+        title: 'Wakehurst Dome',
+        subtitle: 'Split-level • Incredible views',
+        cta: 'View Dome',
+        ctaIcon: 'view',
+        tag: '👑 Most Popular',
+        // Cozy cabin interior with warm lighting
+        videoSrc: 'https://videos.pexels.com/video-files/6394024/6394024-uhd_2560_1440_25fps.mp4',
+      },
+      {
+        // SLIDE 3: Hot tub experience - the luxury selling point
+        title: 'Private Hot Tubs',
+        subtitle: 'Every dome • Under the stars',
+        cta: 'Book Now',
+        ctaIcon: 'book',
+        tag: '🔥 Included',
+        // Hot tub / spa relaxation
+        videoSrc: 'https://videos.pexels.com/video-files/6394148/6394148-uhd_2560_1440_25fps.mp4',
+      },
+      {
+        // SLIDE 4: Winter promo - cozy fire vibes
+        title: '30% Off Winter',
+        subtitle: '3-night midweek escapes',
+        cta: 'Claim Offer',
+        ctaIcon: 'arrow',
+        tag: '❄️ Limited Time',
+        // Cozy fireplace / winter cabin vibes
+        videoSrc: 'https://videos.pexels.com/video-files/5896379/5896379-uhd_2560_1440_25fps.mp4',
+      },
+    ],
+  },
+
+  // EXTREME TRAILERS - Boat Trailers (Southampton)
+  // 4 slides: Hero, Jet Ski Trailers, RIB/Boat Trailers, Custom Build
+  extremetrailers: {
+    accentColor: 'bg-cyan-500',
+    gradient: 'from-cyan-700 to-blue-900',
+    slides: [
+      {
+        // SLIDE 1: Hero - Epic boat/water lifestyle
+        title: 'Extreme Trailers',
+        subtitle: 'Southampton • Made in Britain',
+        cta: 'View Range',
+        ctaIcon: 'view',
+        rating: 4.9,
+        reviews: 1243,
+        tag: '🇬🇧 100 Years Marine Experience',
+        // Luxury boat on water
+        videoSrc: 'https://videos.pexels.com/video-files/1739010/1739010-uhd_2560_1440_24fps.mp4',
+      },
+      {
+        // SLIDE 2: Jet Ski range - their bestseller
+        title: 'EXT750 Jet Ski',
+        subtitle: 'Best Seller • AL-KO Axles',
+        cta: 'Get Quote',
+        ctaIcon: 'arrow',
+        tag: '🔥 #1 Seller',
+        // Jet ski action
+        videoSrc: 'https://videos.pexels.com/video-files/4816566/4816566-uhd_2560_1440_30fps.mp4',
+      },
+      {
+        // SLIDE 3: RIB & Boat trailers - bigger vessels
+        title: 'RIB & Boat Range',
+        subtitle: 'Up to 10m • Heavy duty',
+        cta: 'View Specs',
+        ctaIcon: 'view',
+        tag: '⚓ Professional Grade',
+        // Boat marina / sailing
+        videoSrc: 'https://videos.pexels.com/video-files/2499573/2499573-uhd_2560_1440_24fps.mp4',
+      },
+      {
+        // SLIDE 4: Custom builds - CNC precision
+        title: 'Custom Built',
+        subtitle: 'CNC laser • Hot-dipped galvanised',
+        cta: 'Call Now',
+        ctaIcon: 'call',
+        tag: '🛠️ Bespoke',
+        // Industrial / manufacturing precision
+        videoSrc: 'https://videos.pexels.com/video-files/3252131/3252131-uhd_2560_1440_25fps.mp4',
       },
     ],
   },

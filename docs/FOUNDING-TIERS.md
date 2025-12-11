@@ -27,27 +27,27 @@ Three tiers, released in stages. Early = Cheapest. Early = Most Access.
 **The Pitch:**
 > You're not buying software. You're joining the founding team.
 
-### Exclusive Perks (Genesis ONLY):
+### Genesis Exclusive Perks:
 
 | Perk | Description |
 |------|-------------|
-| **Direct access to James** | Private Slack channel - I'm there daily |
+| **Direct access to James** | Private Slack channel — I'm there daily |
 | **Personal onboarding call** | 1-on-1 setup call with the founder |
 | **Monthly founder calls** | Group calls to shape what we build next |
 | **Invited to founder events** | Launch celebrations, meetups when they happen |
-| **"Built by" page** | Name + photo + link to your business |
+| **"Built by" founders page** | Your name, photo, and business featured |
 
-### Standard Perks (All Tiers Get):
+### Also Included:
 
 | Perk | Genesis |
 |------|---------|
-| 💰 Revenue share | **25% forever** (highest) |
-| ⚡ Lifetime Pro access | ✅ |
-| 🚀 Early access | **First** (before everyone) |
-| 📢 Launch spotlight | ✅ Featured prominently |
-| 🏅 Founder badge | 🥇 Genesis badge |
-| 💬 Founders channel | ✅ |
-| 🔄 30-day guarantee | ✅ |
+| Revenue share | **25% forever** (highest tier) |
+| Lifetime Pro access | Yes |
+| Early access | **First** (before everyone) |
+| Launch spotlight | Featured prominently |
+| Founder badge | Genesis badge |
+| Private founders channel | Yes |
+| 30-day guarantee | Yes |
 
 ---
 
@@ -61,21 +61,21 @@ Three tiers, released in stages. Early = Cheapest. Early = Most Access.
 
 | Perk | Founding |
 |------|----------|
-| 💰 Revenue share | **20% forever** |
-| ⚡ Lifetime Pro access | ✅ |
-| 🚀 Early access | Second wave |
-| 📞 Founder calls | **Monthly** |
-| 🏆 "Built by" page | Name only (no photo) |
-| 🎯 1-on-1 onboarding | With team member |
-| 📢 Launch spotlight | ✅ Mentioned |
-| 🏅 Founder badge | 🥈 Founding badge |
-| 💬 Founders channel | ✅ |
-| 🔄 30-day guarantee | ✅ |
+| Revenue share | **20% forever** |
+| Lifetime Pro access | Yes |
+| Early access | Second wave |
+| Founder calls | **Quarterly** |
+| "Built by" page | Name only (no photo) |
+| Launch spotlight | Mentioned |
+| Founder badge | Founding badge |
+| Private founders channel | Yes |
+| 30-day guarantee | Yes |
 
 ### NOT Included:
-- ❌ Direct access to James
-- ❌ Launch party / team events
-- ❌ Weekly calls (monthly instead)
+- Direct access to James
+- Personal onboarding call with founder
+- Monthly calls (quarterly instead)
+- Founder events
 
 ---
 
@@ -89,21 +89,21 @@ Three tiers, released in stages. Early = Cheapest. Early = Most Access.
 
 | Perk | Charter |
 |------|---------|
-| 💰 Revenue share | **15% forever** |
-| ⚡ Lifetime Pro access | ✅ |
-| 🚀 Early access | Third wave |
-| 📞 Founder calls | **Quarterly** |
-| 🎯 Onboarding | Video guide |
-| 🏅 Founder badge | 🥉 Charter badge |
-| 💬 Founders channel | ✅ |
-| 🔄 30-day guarantee | ✅ |
+| Revenue share | **15% forever** |
+| Lifetime Pro access | Yes |
+| Early access | Third wave |
+| Video onboarding guide | Yes |
+| Founder badge | Charter badge |
+| Private founders channel | Yes |
+| 30-day guarantee | Yes |
 
 ### NOT Included:
-- ❌ Direct access to James
-- ❌ Launch party / team events
-- ❌ "Built by" page
-- ❌ Launch spotlight
-- ❌ 1-on-1 onboarding
+- Direct access to James
+- Personal onboarding call
+- Founder calls
+- "Built by" page
+- Launch spotlight
+- Founder events
 
 ---
 
@@ -113,17 +113,16 @@ Three tiers, released in stages. Early = Cheapest. Early = Most Access.
 |---------|----------------|-----------------|------------------|
 | **Spots** | 50 | 75 | 100 |
 | **Revenue Share** | 25% | 20% | 15% |
-| **Direct access to James** | ✅ Daily Slack | ❌ | ❌ |
-| **Founder events** | ✅ Invited | ❌ | ❌ |
-| **Founder calls** | Monthly | Quarterly | ❌ |
-| **"Built by" page** | Name + photo + link | Name only | ❌ |
-| **Personal onboarding** | ✅ With founder | ❌ | ❌ |
-| **Launch spotlight** | Featured | Mentioned | ❌ |
-| **Badge** | 🥇 Genesis | 🥈 Founding | 🥉 Charter |
-| **Lifetime Pro** | ✅ | ✅ | ✅ |
-| **Founders channel** | ✅ | ✅ | ✅ |
+| **Direct access to James** | Yes (daily Slack) | No | No |
+| **Personal onboarding call** | Yes (with founder) | No | No |
+| **Founder calls** | Monthly | Quarterly | No |
+| **Founder events** | Invited | No | No |
+| **"Built by" page** | Name + photo + link | Name only | No |
+| **Launch spotlight** | Featured | Mentioned | No |
+| **Lifetime Pro** | Yes | Yes | Yes |
+| **Founders channel** | Yes | Yes | Yes |
 | **Early access** | 1st | 2nd | 3rd |
-| **30-day guarantee** | ✅ | ✅ | ✅ |
+| **30-day guarantee** | Yes | Yes | Yes |
 
 ---
 
@@ -180,7 +179,7 @@ Three tiers, released in stages. Early = Cheapest. Early = Most Access.
 ## Key Messaging
 
 ### Genesis:
-> "50 spots. Direct line to me. 25% of everything you refer, forever. You're not buying software - you're joining the founding team."
+> "50 spots. Direct access to me. 25% on every referral, forever. You're not buying software — you're joining the founding team."
 
 ### Founding:
 > "The Genesis founders are in. Now it's your turn. Lifetime access. 20% revenue share. Help us build the future."
@@ -199,13 +198,19 @@ A: As long as Slydes exists, you have Pro access. No monthly payments, ever.
 A: Genesis founders get early access January 2026. Founding and Charter follow in order.
 
 **Q: How does revenue share work?**
-A: You get a unique referral link. Anyone who signs up through your link and pays - you get your percentage of their subscription, forever.
+A: You get a unique referral link. Anyone who signs up through your link and pays — you get your percentage of their subscription, forever.
 
 **Q: What if I'm not satisfied?**
 A: 30-day money-back guarantee. Full refund, no questions asked.
 
 **Q: Can I upgrade from Charter to Genesis?**
-A: No. Genesis is first-come, first-served. Once it's gone, it's gone.
+A: No. Genesis is first-come, first-served. Once it's gone, it's gone forever.
+
+**Q: What is "Direct access to James"?**
+A: Genesis founders get added to a private Slack channel where James is active daily. You can ask questions, give feedback, and get direct responses.
+
+**Q: What are founder events?**
+A: When we hit milestones (launch, funding, etc.), Genesis founders are invited to celebrate with us. Location and timing will vary.
 
 ---
 
@@ -224,3 +229,5 @@ A: No. Genesis is first-come, first-served. Once it's gone, it's gone.
 
 *Document created: December 11, 2025*
 *Last updated: December 11, 2025*
+
+

@@ -224,11 +224,11 @@ export function AnimatedLightRays({ children }: { children?: ReactNode }) {
 // ============================================
 export function AnimatedAurora({ children }: { children?: ReactNode }) {
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden bg-future-black">
       <motion.div
-        className="absolute -top-1/2 left-0 right-0 h-full"
+        className="absolute -top-1/2 left-0 right-0 h-full z-0"
         style={{
-          background: 'linear-gradient(180deg, transparent 0%, rgba(37, 99, 235, 0.1) 30%, rgba(6, 182, 212, 0.08) 50%, rgba(139, 92, 246, 0.05) 70%, transparent 100%)',
+          background: 'linear-gradient(180deg, transparent 0%, rgba(37, 99, 235, 0.15) 30%, rgba(6, 182, 212, 0.12) 50%, rgba(139, 92, 246, 0.08) 70%, transparent 100%)',
           filter: 'blur(60px)',
         }}
         animate={{
@@ -242,9 +242,9 @@ export function AnimatedAurora({ children }: { children?: ReactNode }) {
         }}
       />
       <motion.div
-        className="absolute -top-1/4 left-1/4 right-0 h-3/4"
+        className="absolute -top-1/4 left-1/4 right-0 h-3/4 z-0"
         style={{
-          background: 'linear-gradient(180deg, transparent 0%, rgba(6, 182, 212, 0.08) 40%, rgba(37, 99, 235, 0.06) 60%, transparent 100%)',
+          background: 'linear-gradient(180deg, transparent 0%, rgba(6, 182, 212, 0.12) 40%, rgba(37, 99, 235, 0.10) 60%, transparent 100%)',
           filter: 'blur(80px)',
         }}
         animate={{
@@ -267,16 +267,15 @@ export function AnimatedAurora({ children }: { children?: ReactNode }) {
 // ============================================
 export function MeshGradient({ children }: { children?: ReactNode }) {
   return (
-    <div className="relative">
+    <div className="relative bg-white">
       <div 
-        className="absolute inset-0"
+        className="absolute inset-0 z-0"
         style={{
           background: `
-            radial-gradient(at 20% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
-            radial-gradient(at 80% 30%, rgba(6, 182, 212, 0.12) 0%, transparent 40%),
+            radial-gradient(at 20% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 50%),
+            radial-gradient(at 80% 30%, rgba(6, 182, 212, 0.10) 0%, transparent 40%),
             radial-gradient(at 40% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-            radial-gradient(at 90% 90%, rgba(37, 99, 235, 0.1) 0%, transparent 40%),
-            linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(248, 250, 252, 0.5) 100%)
+            radial-gradient(at 90% 90%, rgba(37, 99, 235, 0.08) 0%, transparent 40%)
           `,
         }}
       />
@@ -296,16 +295,16 @@ export function AnimatedSpotlight({ children, position = 'right' }: { children?:
   }
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20">
       <motion.div
-        className={`absolute top-1/2 -translate-y-1/2 ${positionStyles[position]} w-[600px] h-[600px]`}
+        className={`absolute top-1/2 -translate-y-1/2 ${positionStyles[position]} w-[600px] h-[600px] z-0`}
         style={{
-          background: 'radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, rgba(37, 99, 235, 0.1) 30%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(37, 99, 235, 0.20) 0%, rgba(37, 99, 235, 0.08) 30%, transparent 70%)',
           filter: 'blur(40px)',
         }}
         animate={{
           scale: [1, 1.2, 1],
-          opacity: [0.6, 1, 0.6],
+          opacity: [0.5, 0.8, 0.5],
         }}
         transition={{
           duration: 4,
@@ -380,21 +379,22 @@ export function AnimatedWaveLines({ children }: { children?: ReactNode }) {
 }
 
 // ============================================
-// GRID FADE - Animated grid with fade
+// GRID FADE - Animated grid with fade (edges only)
 // ============================================
 export function AnimatedGridFade({ children }: { children?: ReactNode }) {
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden bg-gray-50">
+      {/* Grid in corners/edges only - fades to nothing in center where text is */}
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 z-0"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(37, 99, 235, 0.05) 1px, transparent 1px)
+            linear-gradient(rgba(37, 99, 235, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(37, 99, 235, 0.06) 1px, transparent 1px)
           `,
           backgroundSize: '50px 50px',
-          maskImage: 'radial-gradient(ellipse at center, black 20%, transparent 70%)',
-          WebkitMaskImage: 'radial-gradient(ellipse at center, black 20%, transparent 70%)',
+          maskImage: 'radial-gradient(ellipse at center, transparent 40%, black 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, transparent 40%, black 100%)',
         }}
         animate={{
           backgroundPosition: ['0px 0px', '50px 50px'],
@@ -415,21 +415,21 @@ export function AnimatedGridFade({ children }: { children?: ReactNode }) {
 // ============================================
 export function AnimatedHeroBackground({ children }: { children?: ReactNode }) {
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden bg-white">
       {/* Mesh gradient base */}
       <div 
-        className="absolute inset-0"
+        className="absolute inset-0 z-0"
         style={{
           background: `
-            radial-gradient(at 80% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 50%),
-            radial-gradient(at 20% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%)
+            radial-gradient(at 80% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+            radial-gradient(at 20% 80%, rgba(6, 182, 212, 0.12) 0%, transparent 50%)
           `,
         }}
       />
       
       {/* Animated blob */}
       <motion.div
-        className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-leader-blue/10 blur-[100px]"
+        className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-leader-blue/20 blur-[100px] z-0"
         animate={{
           x: [0, 30, 0],
           y: [0, -30, 0],
@@ -441,10 +441,25 @@ export function AnimatedHeroBackground({ children }: { children?: ReactNode }) {
           ease: "easeInOut",
         }}
       />
+
+      {/* Second blob - bottom left */}
+      <motion.div
+        className="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full bg-cyan-400/15 blur-[80px] z-0"
+        animate={{
+          x: [0, -20, 0],
+          y: [0, 20, 0],
+          scale: [1, 1.05, 1],
+        }}
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
       
       {/* Noise overlay */}
       <div 
-        className="absolute inset-0 opacity-[0.015]"
+        className="absolute inset-0 opacity-[0.02] z-0"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
         }}
@@ -454,3 +469,5 @@ export function AnimatedHeroBackground({ children }: { children?: ReactNode }) {
     </div>
   )
 }
+
+

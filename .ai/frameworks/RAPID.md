@@ -40,9 +40,9 @@ RAPID is a prompt engineering framework that translates your tired-brain, rough 
 
 | Keywords | Project |
 |----------|---------|
+| slydes, mobile-first, vertical scroll, tiktok-style, saas | Slydes |
 | lodges, booking, loch ness, ancarraig | Ancarraig Lodges |
 | land rover, service, automotive, forres | Native Automotive |
-| 4x4, hire, vehicle, wildtrax | WildTrax |
 | football, stadium, hotel, team theming | FootballStays |
 
 ---
@@ -73,9 +73,9 @@ James knows what's wrong. He can see it. But translating that visual/intuitive u
 
 | Trigger Words | Project | Tech Stack | Key Concerns |
 |---------------|---------|------------|--------------|
+| slydes, mobile-first, vertical scroll, tiktok-style, saas, business sites | Slydes | Next.js, Framer Motion, TypeScript | Mobile conversions, vertical scroll UX, waitlist signups, showcase demos |
 | lodges, booking, accommodation, cabins, Loch Ness, Ancarraig | Ancarraig Lodges | Next.js, Sanity CMS, booking system | Direct bookings, conversion, premium aesthetic |
 | Land Rover, service, automotive, Forres, garage, workshop | Native Automotive | Next.js, Sanity CMS | Trust signals, service booking, local SEO |
-| 4x4, hire, rental, vehicle, expedition | WildTrax | Next.js, Sanity CMS | Booking flow, vehicle showcase, adventure aesthetic |
 | football, stadium, hotel, affiliate, team theming | FootballStays | Next.js, dynamic theming | 40+ stadium scale, team colors, affiliate conversion |
 
 ### James's Tech Stack - Always Assume
@@ -2100,9 +2100,9 @@ Deliver finished, working solutions only.
 
 | Keywords | Project |
 |----------|---------|
+| slydes, mobile-first, vertical scroll, tiktok-style, saas, business sites | Slydes |
 | lodges, booking, loch ness, cabins, accommodation, ancarraig | Ancarraig Lodges |
 | land rover, service, automotive, forres, garage, workshop | Native Automotive |
-| 4x4, hire, vehicle, rental, expedition, wildtrax | WildTrax |
 | football, stadium, hotel, affiliate, team theming | FootballStays |
 
 ## Quality Gates Cheat Sheet

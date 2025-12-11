@@ -157,7 +157,7 @@ Use RAPID for:
 
 **Quick Reference:**
 - **Input Patterns:** "broken" → Bug Fix, "looks shit" → UI/UX Fix, "slow" → Performance
-- **Project Detection:** Auto-detect Ancarraig, Native, WildTrax, FootballStays
+- **Project Detection:** Auto-detect project context from keywords
 - **Templates:** Bug Fix, UI/UX Fix, UI/UX Investigation, Large Build, Performance
 - **Specialized:** Contrast Fix, Responsive Fix, Animation Fix, Depth & Polish
 - **Standards:** Glassmorphism, 60fps Framer Motion, WCAG AA, Mobile-first
@@ -416,8 +416,8 @@ These frameworks have been extracted and universalized from:
 - **SOPHIA:** FootballStays projects
 - **TOUCH:** Mobile-native web transformation framework
 - **RAPID:** Cursor IDE prompt engineering framework
-- **Z-Pattern:** WildTrax project
-- **DEMX:** WildTrax project (rapid design variation system)
+- **Z-Pattern:** Desktop layout patterns for conversion
+- **DEMX:** Rapid design variation system with AIDA scoring
 
 All frameworks have been made universal and can be applied to any project, regardless of tech stack or domain.
 

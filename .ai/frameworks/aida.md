@@ -25,11 +25,11 @@ A marketing framework for structuring content, pages, and user journeys to guide
 - Immediate understanding of what you offer
 - Strong opening statement
 
-**For WildTrax:**
-- "Wake Up Anywhere"
-- Hero image: Dramatic Scottish landscape with Defender
-- Subheading: "Land Rover + roof tent + all the gear"
-- Price shown immediately (transparency builds trust)
+**For Slydes:**
+- "Built for 2030"
+- Hero video: Mobile-native vertical scroll demo
+- Subheading: "TikTok-style business sites that convert"
+- Clear pricing shown (transparency builds trust)
 
 **Best Practices:**
 - ✅ Compelling headline (not generic)
@@ -51,11 +51,11 @@ A marketing framework for structuring content, pages, and user journeys to guide
 - Problem-solving information
 - Why this matters to them
 
-**For WildTrax:**
-- What's included (roof tent, awning, gear)
-- Day/Night lifestyle (explore by day, camp by night)
-- Scotland's right to roam explained
-- No gear to buy, no packing lists
+**For Slydes:**
+- What's included (design, build, hosting, analytics)
+- Mobile-first philosophy (TikTok-style vertical scroll)
+- Why vertical scroll converts better
+- No coding required, no maintenance hassles
 
 **Best Practices:**
 - ✅ Address user needs/pain points
@@ -78,11 +78,11 @@ A marketing framework for structuring content, pages, and user journeys to guide
 - Risk reversal (guarantees, policies)
 - Emotional connection
 
-**For WildTrax:**
-- "Where You'll Wake Up" accordion gallery (Lochside, Highland Tracks, Coastal, Forest)
-- Customer testimonial with specific story ("deer outside our tent in Glen Coe")
-- 5-star rating display
-- Aspirational location imagery
+**For Slydes:**
+- "Who's Using Slydes" showcase (7 real businesses + "Your Business" CTA)
+- Customer testimonial with specific results ("3x mobile conversions in 30 days")
+- Live demo phones with real sites
+- Aspirational business success stories
 
 **Best Practices:**
 - ✅ Show, don't just tell
@@ -106,12 +106,12 @@ A marketing framework for structuring content, pages, and user journeys to guide
 - Clear next steps
 - Trust signals
 
-**For WildTrax:**
-- "Check Availability" (primary CTA)
-- Vehicle selection with pricing
+**For Slydes:**
+- "Join the Waitlist" (primary CTA)
+- Plan selection with pricing
 - "What happens next?" process explanation
-- Phone number for human contact
-- Alternative options (Lodge & Landy, just hire)
+- Email/chat for human contact
+- Alternative options (demo request, consultation call)
 
 **Best Practices:**
 - ✅ Clear, action-oriented language
@@ -170,104 +170,103 @@ A marketing framework for structuring content, pages, and user journeys to guide
 
 ---
 
-## WildTrax Page Scores
+## Slydes Page Scores
 
-### Camping Page (Current)
+### Homepage (Current)
 
-**ATTENTION (Score: 21/25):**
-- ✅ "Wake Up Anywhere" - compelling, aspirational (5/5)
-- ✅ Full-bleed landscape hero image (5/5)
-- ✅ "Land Rover + roof tent + all the gear" - clear value (5/5)
-- ✅ Price shown immediately £165/day (4/5)
-- ⚠️ Could add video background for more impact (2/5)
+**ATTENTION (Score: 23/25):**
+- ✅ "Built for 2030" - bold, differentiating (5/5)
+- ✅ Full-screen video hero with demo (5/5)
+- ✅ "TikTok-style business sites" - clear value (5/5)
+- ✅ Pricing visible in nav/early sections (4/5)
+- ✅ Video background creates motion (4/5)
 
-**INTEREST (Score: 19/25):**
-- ✅ Day/Night lifestyle cards (4/5)
-- ✅ Hero features (tent, awning) (4/5)
-- ✅ Checklist of included gear (4/5)
-- ⚠️ Leans feature-heavy, could show more benefits (3/5)
-- ⚠️ Missing: what does it FEEL like? (4/5)
+**INTEREST (Score: 21/25):**
+- ✅ Why vertical scroll section (5/5)
+- ✅ Mobile-first philosophy explained (4/5)
+- ✅ Features grid with benefits (4/5)
+- ✅ Addresses pain points (slow mobile sites) (4/5)
+- ⚠️ Could show more specific benefits (4/5)
 
-**DESIRE (Score: 23/25):**
-- ✅ Accordion gallery is highly aspirational (5/5)
-- ✅ Specific testimonial with story detail (5/5)
-- ✅ 5-star rating displayed (4/5)
-- ✅ Full-bleed testimonial image (5/5)
-- ⚠️ Could add more testimonials (4/5)
+**DESIRE (Score: 24/25):**
+- ✅ Showcase section with 8 real businesses (5/5)
+- ✅ Live phone mockups you can scroll (5/5)
+- ✅ "Your Business" CTA card (conversion-focused) (5/5)
+- ✅ Video testimonials planned (4/5)
+- ✅ Aspirational business success messaging (5/5)
 
-**ACTION (Score: 17/25):**
-- ✅ Vehicle cards with pricing (4/5)
-- ✅ "What happens next" reduces anxiety (4/5)
-- ✅ Phone number for human contact (3/5)
-- ⚠️ No urgency messaging (2/5)
-- ⚠️ Missing deposit/cancellation info (4/5)
+**ACTION (Score: 19/25):**
+- ✅ "Join Waitlist" CTA prominent (4/5)
+- ✅ Multiple CTA opportunities throughout (4/5)
+- ✅ Process explanation clear (4/5)
+- ⚠️ No urgency messaging yet (3/5)
+- ⚠️ Could add "Early Bird" pricing incentive (4/5)
 
-**Total: 80/100** ✅ (Meets target, room for improvement)
+**Total: 87/100** ✅ (Good - close to excellent)
 
-### Camping Page - Improvement Targets
+### Homepage - Improvement Targets
 
-To reach 90/100:
-1. **Attention +2**: Add subtle video background or animation
-2. **Interest +3**: Add "Imagine this..." emotional copy, show the experience
-3. **Action +5**: Add urgency ("Summer 2025: 73% booked"), show deposit amount, add "Most Popular" badge
+To reach 95/100:
+1. **Interest +2**: Add specific ROI examples, show conversion data
+2. **Action +6**: Add urgency ("First 50 customers: 50% off"), show starting price, add "Most Popular Plan" badge
 
 ---
 
-### Homepage (Target Structure)
+### Pricing Page (Target Structure)
 
 **ATTENTION (Target: 23/25):**
-- Hero video with emotional hook
-- Clear value prop: "Adventure Vehicle Hire in Scotland"
-- Three offerings immediately visible
-- Primary CTA prominent
+- Hero: "Simple Pricing. No Surprises."
+- Clear value prop: "Complete mobile-first sites from £997"
+- Three plans immediately visible
+- Transparent pricing
 
 **INTEREST (Target: 22/25):**
-- Three offerings explained (Hire, Camping, Stays)
-- Why WildTrax? differentiators
-- Trust signals (reviews, experience)
+- Three plans explained (Starter, Pro, Enterprise)
+- Why Slydes? differentiators vs traditional builders
+- ROI calculator or comparison chart
 
 **DESIRE (Target: 22/25):**
-- Featured vehicles
-- Route previews
-- Ancarraig Lodge partnership
-- Customer testimonials
+- Customer success stories per plan level
+- Before/After conversion stats
+- Case studies with specific results
+- "Most Popular" badge on Pro plan
 
 **ACTION (Target: 23/25):**
-- Multiple CTAs per section
-- Clear next steps
-- Contact options
+- "Start Now" CTA per plan
+- Free demo option
+- Consultation booking
 - Trust signals throughout
 
 **Target Total: 90/100**
 
 ---
 
-### Vehicles Page (Target Structure)
+### Showcase Page (Target Structure)
 
 **ATTENTION (Target: 22/25):**
-- Fleet hero image
-- "Classic Land Rovers for Scottish Adventures"
-- Vehicle count and availability
+- Hero: "Real Businesses. Real Results."
+- Grid of live customer sites
+- Industry variety showcased
 
 **INTEREST (Target: 23/25):**
-- Vehicle specifications
-- What's included
-- Why Defenders?
-- Insurance/support info
+- Industry-specific examples
+- Conversion improvements shown
+- Mobile vs desktop stats
+- Interactive phone mockups
 
-**DESIRE (Target: 21/25):**
-- Vehicle gallery
-- Customer photos
-- Route suggestions
-- Testimonials
+**DESIRE (Target: 24/25):**
+- Scrollable live demos
+- Customer testimonials with metrics
+- "Your Business" CTA card
+- Success story details
 
 **ACTION (Target: 22/25):**
-- "Check Availability" per vehicle
-- Comparison helper
-- Enquiry form
-- Phone contact
+- "Get Your Site" CTA prominent
+- Industry-specific landing pages
+- Request demo per example
+- Waitlist signup
 
-**Target Total: 88/100**
+**Target Total: 91/100**
 
 ---
 

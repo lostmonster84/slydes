@@ -1,7 +1,7 @@
 # Framework Map & Integration Guide
 
-> **Quick reference for all WildTrax frameworks**
-> Last updated: 2025-12-08
+> **Quick reference for all available frameworks**
+> Last updated: 2024-12-11
 
 ---
 
@@ -36,7 +36,7 @@
 
 ┌─────────────────────────────────────────────────────────────────┐
 │                  PROJECT-SPECIFIC FRAMEWORKS                     │
-│                   (WildTrax/Native only)                         │
+│                   (Project-specific implementations)             │
 └─────────────────────────────────────────────────────────────────┘
 
     DESIGN UI                  CONTENT

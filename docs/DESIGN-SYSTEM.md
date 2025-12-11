@@ -654,3 +654,5 @@ className="text-gray-600 hover:text-gray-900 transition-colors"
 **Remember**: Every design decision should ask: "Does this feel like 2030 or 2020?"
 
 **Built for 2030.** 🚀
+
+

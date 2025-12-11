@@ -266,7 +266,7 @@ APEX: testimonials section on homepage with admin management
 Context:
 - Homepage exists at src/app/page.tsx
 - No testimonials system currently
-- Design system available (WildTrax theme)
+- Design system available (Slydes theme: Future Black, Leader Blue, Electric Cyan)
 - Admin system exists at /admin/*
 
 Objective:
@@ -330,8 +330,8 @@ Acceptance Criteria:
 #### STAGE 4: STRUCTURE CONTENT (AIDA)
 ```
 Attention (24/25): ⭐⭐⭐⭐⭐
-- Headline: "Highland Adventures That Changed Lives"
-- Subheadline: "Real stories from adventurers who explored Scotland with WildTrax"
+- Headline: "Mobile Sites That Transform Businesses"
+- Subheadline: "Real results from businesses who switched to Slydes"
 - Score: Immediate impact, emotionally resonant
 
 Interest (22/25): ⭐⭐⭐⭐

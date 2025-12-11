@@ -1,8 +1,8 @@
 # TikTok Mobile Framework
 
-> **Mobile-first immersive scroll experiences for WildTrax**
+> **Mobile-first immersive scroll experiences for modern web apps**
 >
-> **Created**: 2025-12-04
+> **Created**: 2024-12-04
 >
 > **Purpose**: Reusable patterns for TikTok/Reels-style vertical scroll journeys
 
@@ -12,7 +12,7 @@
 
 **Users spend hours on TikTok/Instagram Reels because vertical video is immersive and matches mobile-native behavior.**
 
-WildTrax mobile experiences should meet users where their attention already lives: full-screen, swipeable, visual-first content that hooks attention in 3 seconds.
+Modern mobile experiences should meet users where their attention already lives: full-screen, swipeable, visual-first content that hooks attention in 3 seconds.
 
 ---
 
@@ -319,20 +319,20 @@ The **middleware** (`src/middleware.ts`) automatically detects devices and redir
 
 **Mobile Device (iPhone/Android):**
 ```
-User visits: wildtrax.co.uk/camping
+User visits: example.com/product
       ↓
 Middleware detects mobile User-Agent
       ↓
-Auto-redirects to: wildtrax.co.uk/m/camping (TikTok experience)
+Auto-redirects to: example.com/m/product (TikTok experience)
 ```
 
 **Desktop Device:**
 ```
-User visits: wildtrax.co.uk/camping
+User visits: example.com/product
       ↓
 Middleware detects desktop User-Agent
       ↓
-Stays on: wildtrax.co.uk/camping (Desktop multi-section layout)
+Stays on: example.com/product (Desktop multi-section layout)
 ```
 
 ---
@@ -505,8 +505,8 @@ Once deployed to Vercel:
 
 **On Mobile Phone** (iPhone/Android):
 ```
-1. Client opens: wildtrax.co.uk/camping
-2. Auto-redirects to: wildtrax.co.uk/m/camping
+1. Client opens: example.com/product
+2. Auto-redirects to: example.com/m/product
 3. Sees TikTok experience
 4. Tests vertical swipe, haptic feedback (vibration)
 5. Tests in Safari (iOS) and Chrome (Android)
@@ -514,14 +514,14 @@ Once deployed to Vercel:
 
 **On Desktop** (their laptop):
 ```
-1. Client opens: wildtrax.co.uk/camping
+1. Client opens: example.com/product
 2. No redirect (stays on desktop version)
 3. Sees multi-section layout with DotTimeline
 ```
 
 **If Client Wants Mobile Experience on Desktop**:
 ```
-Send direct mobile URL: wildtrax.co.uk/m/camping
+Send direct mobile URL: example.com/m/product
 ```
 
 ---
@@ -579,7 +579,7 @@ Send direct mobile URL: wildtrax.co.uk/m/camping
 | **Daily dev (fastest)** | `localhost:3000/m/camping` | ON (iPhone 14 Pro) | Coding, hot reload |
 | **Test redirect flow** | `localhost:3000/camping` | ON (iPhone 14 Pro) | QA, client demo prep |
 | **Desktop dev** | `localhost:3000/camping` | OFF | Desktop experience |
-| **Client mobile preview** | `wildtrax.co.uk/m/camping` | N/A (use real phone) | Final demo |
+| **Client mobile preview** | `example.com/m/product` | N/A (use real phone) | Final demo |
 
 ---
 
@@ -698,13 +698,13 @@ window.dispatchEvent(new CustomEvent('tiktok-scroll', {
 
 #### Advanced: Custom Device Profiles
 
-**Create "WildTrax Mobile" preset** for consistent testing:
+**Create custom mobile preset** for consistent testing:
 
 1. DevTools → Settings (gear icon)
 2. Devices → "Add custom device..."
 3. Configure:
 ```
-Device Name: WildTrax Mobile (iPhone 14 Pro)
+Device Name: Custom Mobile (iPhone 14 Pro)
 Width: 393
 Height: 852
 Device pixel ratio: 3
@@ -1163,7 +1163,7 @@ export function CinematicSection() {
 
   return (
     <div
-      className="tiktok-section bg-wildtrax-black"
+      className="tiktok-section bg-black"
       onClick={handleDoubleTap}
       onTouchEnd={handleDoubleTap}
     >
@@ -1180,7 +1180,7 @@ export function CinematicSection() {
         {/* Like counter */}
         <div className="flex flex-col items-center gap-1">
           <motion.div whileTap={{ scale: 1.2 }}>
-            <Heart className="w-8 h-8 fill-wildtrax-red text-wildtrax-red" />
+            <Heart className="w-8 h-8 fill-red-600 text-red-600" />
           </motion.div>
           <motion.span key={likeCount} initial={{ scale: 1.2 }} animate={{ scale: 1 }}>
             {formatCount(likeCount)}
@@ -1188,7 +1188,7 @@ export function CinematicSection() {
         </div>
 
         {/* Instagram link */}
-        <motion.a href="https://instagram.com/wildtrax_scotland/" target="_blank" whileTap={{ scale: 0.9 }}>
+        <motion.a href="https://instagram.com/yourbrand/" target="_blank" whileTap={{ scale: 0.9 }}>
           <Instagram className="w-7 h-7 text-white" />
           <span className="text-white/60 text-[10px]">Follow</span>
         </motion.a>
@@ -1204,7 +1204,7 @@ export function CinematicSection() {
             animate={{ scale: 1.5, opacity: 0, y: -100 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
-            <Heart className="w-20 h-20 fill-wildtrax-red" />
+            <Heart className="w-20 h-20 fill-red-600" />
           </motion.div>
         ))}
       </AnimatePresence>
@@ -1455,7 +1455,7 @@ const steps = [
 - **Background**: Full-screen image or dark gradient (`from-gray-900 to-black`)
 - **Text**: White primary, `white/60` supporting, `white/40` hints
 - **Accent**: World-specific (use from PortalContext - `world.accent`)
-  - **Camping**: `#a31a31` (WildTrax red)
+  - **Camping**: `#a31a31` (Brand red example)
   - **Hire/Just Drive**: `#C9A227` (Rich amber/gold)
   - **Lodge**: `#8B9A6B` (Heritage sage/olive)
 - **CTAs**: Accent color on dark, or white on accent
@@ -1682,13 +1682,13 @@ When video content is available:
 
 ---
 
-## 📊 Case Study: WildTrax Camping - The 8-Section Revolution
+## 📊 Case Study Example: Product Page - The 8-Section Revolution
 
 ### Executive Summary
 
 **Challenge**: Traditional mobile websites force users to learn custom navigation patterns while competing against apps optimized for billion-hour attention spans (TikTok, Instagram Reels).
 
-**Solution**: Rebuild WildTrax Camping as an 8-section TikTok-style vertical scroll experience using the AIDA framework.
+**Solution**: Rebuild product pages as 8-section TikTok-style vertical scroll experiences using the AIDA framework.
 
 **Result**: 100% AIDA score, 95% section completion rate, predicted 200-300% conversion increase.
 
@@ -2164,10 +2164,10 @@ Background video plays/pauses based on scroll position (like Apple product pages
 
 ---
 
-**Philosophy**: Meet users where their attention lives. TikTok proved vertical scroll is the native mobile language. WildTrax speaks it fluently.
+**Philosophy**: Meet users where their attention lives. TikTok proved vertical scroll is the native mobile language. Modern web apps should speak it fluently.
 
 ---
 
 _Last updated: 2025-12-04_
-_Case Study: WildTrax Camping (Dec 2024)_
+_Framework: TikTok Mobile (Dec 2024)_
 _Framework Version: 1.0_

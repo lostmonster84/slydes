@@ -16,14 +16,17 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
-          <Link href="/how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
+          <Link href="/how-it-works" className="group relative text-gray-600 hover:text-gray-900 transition-colors text-sm">
             How It Works
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
           </Link>
-          <Link href="/showcase" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
+          <Link href="/showcase" className="group relative text-gray-600 hover:text-gray-900 transition-colors text-sm">
             Showcase
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
           </Link>
-          <Link href="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
+          <Link href="/pricing" className="group relative text-gray-600 hover:text-gray-900 transition-colors text-sm">
             Founding Members
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
           </Link>
         </div>
 

@@ -145,8 +145,8 @@ Create a live, interactive demo page at `/demo/[feature]-variations/`.
 ```
 
 **Technical Specs:**
-- Dark theme: `bg-wildtrax-black` with `white/5`, `white/10` overlays
-- Accent color: British Racing Red `#c41e3a` (`bg-wildtrax-red`)
+- Dark theme: `bg-future-black` (#0A0E27) with `white/5`, `white/10` overlays
+- Accent color: Leader Blue `#2563EB` (`bg-leader-blue`), Electric Cyan `#06B6D4` for highlights
 - Animated score bars: Framer Motion with 0.8s duration, 0.2s stagger
 - Recommended indicator: ⭐ badge on highest-scoring variation
 - Fixed header with back link, title, variation selector buttons
@@ -206,11 +206,11 @@ interface VariationData {
       <div key={key}>
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium capitalize">{key}</span>
-          <span className="text-sm font-bold text-wildtrax-red">{value}/10</span>
+          <span className="text-sm font-bold text-leader-blue">{value}/10</span>
         </div>
         <div className="h-2 bg-white/10 rounded-full overflow-hidden">
           <motion.div
-            className="h-full bg-wildtrax-red"
+            className="h-full bg-leader-blue"
             initial={{ width: 0 }}
             animate={{ width: `${value * 10}%` }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -222,7 +222,7 @@ interface VariationData {
   <div className="mt-6 pt-6 border-t border-white/10">
     <div className="flex items-center justify-between">
       <span className="font-bold">Total Score</span>
-      <span className="text-2xl font-bold text-wildtrax-red">
+      <span className="text-2xl font-bold text-leader-blue">
         {Object.values(variation.scores).reduce((a, b) => a + b, 0)}/40
       </span>
     </div>

@@ -33,7 +33,7 @@ START → → → → → → → END
 - **Image-heavy layouts** - Photography, portfolios, experience companies
 - **Low text density** - Scannable, visual storytelling
 - **Call-to-action focus** - Guiding users toward specific actions
-- **Luxury/premium brands** - Porsche, Patagonia, WildTrax-style aesthetics
+- **Luxury/premium brands** - Porsche, Patagonia, premium SaaS products
 
 ### 📖 Use F-Pattern for:
 - **Blog posts** - Text-heavy reading content
@@ -136,7 +136,7 @@ Micro Z-patterns within sections:
 
 ## Z-Pattern for Landing Pages
 
-### WildTrax Promotional Page Example
+### Slydes Landing Page Example
 
 **Current Implementation:**
 ```typescript
@@ -148,30 +148,30 @@ Micro Z-patterns within sections:
 <section>
   {/* Image LEFT, Content RIGHT */}
   <ImageContentSection
-    image={defenderImage}
+    image={verticalScrollDemo}
     imagePosition="left"
-    eyebrow="The Vehicle"
-    title="Your Defender Awaits"
+    eyebrow="The Experience"
+    title="TikTok-Style Scrolling"
   />
 </section>
 
 <section>
   {/* Content LEFT, Image RIGHT */}
   <ImageContentSection
-    image={lodgeImage}
+    image={mobileConversions}
     imagePosition="right"
-    eyebrow="The Accommodation"
-    title="Highland Luxury"
+    eyebrow="The Results"
+    title="3x Mobile Conversions"
   />
 </section>
 
 <section>
   {/* Image LEFT, Content RIGHT */}
   <ImageContentSection
-    image={routeImage}
+    image={showcaseGrid}
     imagePosition="left"
-    eyebrow="The Journey"
-    title="Curated Routes"
+    eyebrow="The Portfolio"
+    title="Real Businesses, Real Results"
   />
 </section>
 
@@ -184,7 +184,7 @@ Micro Z-patterns within sections:
 **Why This Structure Works:**
 1. **Hero** establishes brand, creates emotional hook
 2. **Alternating sections** create Z-pattern flow (left → right → left → right)
-3. **Each section** tells one part of the story (vehicle → accommodation → journey)
+3. **Each section** tells one part of the story (experience → results → portfolio)
 4. **Final CTA** captures momentum at bottom-right
 5. **Visual rhythm** keeps users scrolling (no monotony)
 
@@ -248,7 +248,7 @@ function ImageContentSection({
           transition={{ duration: 0.8 }}
           className={imagePosition === 'right' ? 'lg:order-2' : ''}
         >
-          <Eyebrow className="text-wildtrax-red mb-4">
+          <Eyebrow className="text-leader-blue mb-4">
             {eyebrow}
           </Eyebrow>
 
@@ -264,7 +264,7 @@ function ImageContentSection({
             <ul className="space-y-3 mb-8">
               {details.map((detail, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-wildtrax-red mt-1 flex-shrink-0" />
+                  <Check className="w-5 h-5 text-electric-cyan mt-1 flex-shrink-0" />
                   <span>{detail}</span>
                 </li>
               ))}
@@ -274,7 +274,7 @@ function ImageContentSection({
           {ctaText && onCta && (
             <button
               onClick={onCta}
-              className="bg-wildtrax-red text-white px-8 py-4 rounded-lg hover:bg-red-700 transition-colors"
+              className="bg-leader-blue text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors"
             >
               {ctaText}
             </button>
@@ -436,14 +436,14 @@ export default function PromotionalPage() {
 - Premium photography
 - Subtle animations on scroll
 
-### WildTrax Specific Application
+### Slydes Specific Application
 
-**Why Z-Pattern Fits WildTrax:**
-1. **Experience company** - Selling adventures, not products
-2. **High-ticket items** - £499+ packages require emotional storytelling
-3. **Visual storytelling** - Highlands, Defenders, lodges are inherently photogenic
-4. **Premium positioning** - Z-pattern signals luxury/quality
-5. **Conversion focus** - Limited-time promotional pages need maximum impact
+**Why Z-Pattern Fits Slydes:**
+1. **Premium SaaS** - Selling transformational business sites, not templates
+2. **High-value offering** - £997+ sites require emotional storytelling and trust
+3. **Visual storytelling** - Phone mockups, live demos, before/after conversions are inherently visual
+4. **Premium positioning** - Z-pattern signals quality/differentiation
+5. **Conversion focus** - Landing pages need maximum impact to drive waitlist signups
 
 ## Integration with Design Systems
 
@@ -453,8 +453,8 @@ export default function PromotionalPage() {
 - **Clean typography** - Inter for UI, large headings
 - **Bold imagery** - Full-bleed photos, high contrast
 - **Subtle animations** - Scroll reveals, fade-ins (no bouncing)
-- **Red accents** - WildTrax red (#c41e3a) for CTAs, eyebrows
-- **Neutral base** - Black (#0e0e0f) and Chalk (#fdfbf7)
+- **Blue accents** - Leader Blue (#2563EB) for CTAs, Electric Cyan (#06B6D4) for highlights
+- **Dark base** - Future Black (#0A0E27) and Pure White (#FFFFFF)
 
 **Animation Timing:**
 - **Scroll reveal delay:** 0.2s between image and content
