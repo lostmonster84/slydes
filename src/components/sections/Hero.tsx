@@ -35,7 +35,7 @@ export function Hero() {
             
             {/* Headline */}
             <motion.h1 
-              className="mb-6 text-balance text-4xl md:text-5xl lg:text-6xl"
+              className="font-display mb-6 text-balance text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}

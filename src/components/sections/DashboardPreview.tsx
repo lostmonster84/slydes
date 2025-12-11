@@ -129,7 +129,7 @@ export function DashboardPreview() {
               {/* Frames within current slide - HORIZONTAL navigation */}
               <div className="mt-6 pt-4 border-t border-gray-200">
                 <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                  Frames in "{currentSlide.name}"
+                  Frames in &ldquo;{currentSlide.name}&rdquo;
                   <span className="text-gray-400 font-normal normal-case ml-1">(swipe left/right)</span>
                 </div>
                 <div className="space-y-1">

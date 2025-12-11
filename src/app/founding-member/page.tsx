@@ -80,7 +80,7 @@ export default function FoundingMemberPage() {
                   Welcome, <span className="gradient-text">Founding Member!</span>
                 </h1>
                 <p className="text-gray-600 mb-8 text-lg">
-                  You're officially part of the team building the future of mobile-first business sites.
+                  You&apos;re officially part of the team building the future of mobile-first business sites.
                 </p>
                 
                 {memberNumber && (

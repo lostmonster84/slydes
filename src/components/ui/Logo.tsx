@@ -2,82 +2,133 @@
 
 import Link from 'next/link'
 
+// ============================================
+// SLYDES.IO LOGO - RISING CARDS
+// ============================================
+// Three frames rising upward with increasing opacity
+// Bottom frame faded, top frame bold
+// Suggests "swipe up to reveal" - the core product action
+// AIDA Score: 35/40
+// ============================================
+
+interface LogoMarkProps {
+  size?: number
+  className?: string
+}
+
 interface LogoProps {
   className?: string
   showDomain?: boolean
   size?: 'sm' | 'md' | 'lg'
+  dark?: boolean
 }
 
-export function Logo({ className = '', showDomain = false, size = 'md' }: LogoProps) {
-  const sizeClasses = {
+// The Logo Mark - Rising Cards
+export function LogoMark({ size = 32, className = '' }: LogoMarkProps) {
+  return (
+    <svg 
+      width={size} 
+      height={size} 
+      viewBox="0 0 64 64" 
+      fill="none" 
+      className={className}
+    >
+      <defs>
+        <linearGradient id="slydes-gradient" x1="50%" y1="100%" x2="50%" y2="0%">
+          <stop offset="0%" stopColor="#06B6D4" />
+          <stop offset="100%" stopColor="#2563EB" />
+        </linearGradient>
+      </defs>
+      {/* Bottom frame - faded, represents "below" */}
+      <rect x="14" y="36" width="36" height="24" rx="4" fill="#2563EB" opacity="0.2" />
+      {/* Middle frame - medium opacity */}
+      <rect x="12" y="22" width="40" height="28" rx="5" fill="#2563EB" opacity="0.5" />
+      {/* Top frame - bold, the "current" slide */}
+      <rect x="10" y="6" width="44" height="32" rx="6" fill="url(#slydes-gradient)" />
+      {/* Notch on top frame */}
+      <rect x="24" y="6" width="16" height="4" rx="2" fill="white" opacity="0.3" />
+    </svg>
+  )
+}
+
+// Full Logo with Mark + Wordmark
+export function Logo({ 
+  className = '', 
+  showDomain = true, 
+  size = 'md',
+  dark = false 
+}: LogoProps) {
+  const sizes = {
+    sm: { icon: 24, text: 'text-lg', gap: 'gap-2' },
+    md: { icon: 32, text: 'text-xl', gap: 'gap-2.5' },
+    lg: { icon: 40, text: 'text-2xl', gap: 'gap-3' },
+  }
+  const s = sizes[size]
+
+  return (
+    <Link 
+      href="/" 
+      className={`flex items-center ${s.gap} hover:opacity-80 transition-opacity ${className}`}
+    >
+      <LogoMark size={s.icon} />
+      <span className={`font-display font-bold tracking-tight ${s.text}`}>
+        <span className={dark ? 'text-white' : 'text-future-black'}>
+          Slydes
+        </span>
+        {showDomain && (
+          <span className={dark ? 'text-white/40' : 'text-gray-400'}>.io</span>
+        )}
+      </span>
+    </Link>
+  )
+}
+
+// Wordmark only (no icon)
+export function LogoWordmark({ 
+  className = '', 
+  showDomain = true, 
+  size = 'md',
+  dark = false 
+}: LogoProps) {
+  const sizes = {
     sm: 'text-lg',
     md: 'text-xl',
-    lg: 'text-3xl',
+    lg: 'text-2xl',
   }
 
   return (
     <Link 
       href="/" 
-      className={`font-bold tracking-tight hover:opacity-80 transition-opacity ${sizeClasses[size]} ${className}`}
+      className={`font-display font-bold tracking-tight hover:opacity-80 transition-opacity ${sizes[size]} ${className}`}
     >
-      <span className="text-future-black">
+      <span className={dark ? 'text-white' : 'text-future-black'}>
         Slydes
       </span>
       {showDomain && (
-        <span className="text-gray-400 font-normal">.io</span>
+        <span className={dark ? 'text-white/40' : 'text-gray-400'}>.io</span>
       )}
     </Link>
   )
 }
 
-// Gradient version - ONLY use if explicitly asked
-export function LogoGradient({ className = '', size = 'md' }: LogoProps) {
-  const sizeClasses = {
-    sm: 'text-lg',
-    md: 'text-xl',
-    lg: 'text-3xl',
+// Gradient wordmark variant
+export function LogoGradient({ className = '', size = 'md' }: Omit<LogoProps, 'dark' | 'showDomain'>) {
+  const sizes = {
+    sm: { icon: 24, text: 'text-lg', gap: 'gap-2' },
+    md: { icon: 32, text: 'text-xl', gap: 'gap-2.5' },
+    lg: { icon: 40, text: 'text-2xl', gap: 'gap-3' },
   }
+  const s = sizes[size]
 
   return (
     <Link 
       href="/" 
-      className={`font-bold tracking-tight hover:opacity-90 transition-opacity ${sizeClasses[size]} ${className}`}
+      className={`flex items-center ${s.gap} hover:opacity-90 transition-opacity ${className}`}
     >
-      <span className="bg-gradient-to-r from-future-black via-leader-blue to-electric-cyan bg-clip-text text-transparent">
-        Slydes
+      <LogoMark size={s.icon} />
+      <span className={`font-display font-bold tracking-tight bg-gradient-to-r from-leader-blue to-[#06B6D4] bg-clip-text text-transparent ${s.text}`}>
+        Slydes.io
       </span>
     </Link>
   )
 }
-
-// Mark only (for favicon, app icon, etc)
-export function LogoMark({ className = '', size = 24 }: { className?: string; size?: number }) {
-  return (
-    <svg 
-      width={size} 
-      height={size} 
-      viewBox="0 0 32 32" 
-      fill="none" 
-      className={className}
-    >
-      {/* Stylized S */}
-      <defs>
-        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0A0E27" />
-          <stop offset="50%" stopColor="#2563EB" />
-          <stop offset="100%" stopColor="#06B6D4" />
-        </linearGradient>
-      </defs>
-      
-      <path 
-        d="M24 8C24 8 20 4 14 4C8 4 4 8 4 12C4 16 8 18 14 20C20 22 24 24 24 28C24 32 20 36 14 36C8 36 4 32 4 32"
-        stroke="url(#logoGradient)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        fill="none"
-        transform="translate(2, -2) scale(0.85)"
-      />
-    </svg>
-  )
-}
-
