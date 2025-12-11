@@ -101,8 +101,8 @@ export default function ShowcasePage() {
               className="mb-8"
             >
               <div className="flex items-center gap-3 mb-2">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-semibold">
-                  <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-semibold">
+                  <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
                   BETA
                 </span>
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-semibold">
@@ -129,10 +129,10 @@ export default function ShowcasePage() {
                 {/* Right - Content */}
                 <div className="order-1 lg:order-2">
                   <div className="flex flex-wrap items-center gap-2 mb-4">
-                    <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold uppercase tracking-wide">
+                    <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold uppercase tracking-wide">
                       Rentals
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
                       +40% mobile bookings
                     </span>
                     <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">
@@ -149,19 +149,19 @@ export default function ShowcasePage() {
 
                   <div className="space-y-3 mb-8">
                     <div className="flex items-center gap-3">
-                      <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span className="text-gray-700">Full-screen vehicle showcase videos</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span className="text-gray-700">TikTok-style vertical scrolling</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span className="text-gray-700">Built and live in one day</span>
@@ -172,7 +172,7 @@ export default function ShowcasePage() {
                     href="https://wildtrax.co.uk/m/camping" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 font-semibold transition-colors"
+                    className="inline-flex items-center gap-2 text-leader-blue hover:text-blue-700 font-semibold transition-colors"
                   >
                     View live Slyde (Beta)
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

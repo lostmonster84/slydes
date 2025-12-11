@@ -59,10 +59,10 @@ const variantContent: Record<string, {
     ],
   },
 
-  // 2. LUXURY RENTALS - Villa Serenità (Amalfi Coast)
+  // 2. RENTALS - WildTrax style (RED accent for WildTrax brand)
   rentals: {
-    accentColor: 'bg-emerald-500',
-    gradient: 'from-emerald-600 to-teal-700',
+    accentColor: 'bg-red-600',
+    gradient: 'from-red-700 to-red-900',
     slides: [
       {
         title: 'Villa Serenità',
