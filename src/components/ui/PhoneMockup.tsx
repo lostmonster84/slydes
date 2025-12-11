@@ -16,7 +16,7 @@ interface SlideContent {
 
 interface PhoneMockupProps {
   className?: string
-  variant: 'hospitality' | 'rentals' | 'experiences' | 'wellness' | 'realestate' | 'events' | 'fitness' | 'automotive'
+  variant: 'hospitality' | 'rentals' | 'experiences' | 'wellness' | 'realestate' | 'events' | 'fitness' | 'automotive' | 'wildtrax'
 }
 
 // 8 INDUSTRIES - All aspirational, luxury, premium
@@ -59,8 +59,41 @@ const variantContent: Record<string, {
     ],
   },
 
-  // 2. RENTALS - WildTrax (REAL Land Rover Defender footage)
+  // 2. LUXURY RENTALS - Villa Serenità (Amalfi Coast)
   rentals: {
+    accentColor: 'bg-emerald-500',
+    gradient: 'from-emerald-600 to-teal-700',
+    slides: [
+      {
+        title: 'Villa Serenità',
+        subtitle: 'Amalfi Coast, Italy',
+        cta: 'Check Availability',
+        ctaIcon: 'book',
+        rating: 4.9,
+        reviews: 1243,
+        tag: '🏆 Luxury Collection',
+        videoSrc: 'https://videos.pexels.com/video-files/7578550/7578550-uhd_2560_1440_30fps.mp4',
+      },
+      {
+        title: 'The Grand Suite',
+        subtitle: 'Sea view • Private terrace',
+        cta: 'View Property',
+        ctaIcon: 'view',
+        tag: '⭐ Editor\'s Choice',
+        videoSrc: 'https://videos.pexels.com/video-files/7578545/7578545-uhd_2560_1440_30fps.mp4',
+      },
+      {
+        title: 'Reserve Your Stay',
+        subtitle: 'Flexible cancellation',
+        cta: 'Book Now',
+        ctaIcon: 'book',
+        videoSrc: 'https://videos.pexels.com/video-files/7578542/7578542-uhd_2560_1440_30fps.mp4',
+      },
+    ],
+  },
+
+  // 9. WILDTRAX - Real Land Rover Defender footage (RED accent)
+  wildtrax: {
     accentColor: 'bg-red-600',
     gradient: 'from-red-700 to-red-900',
     slides: [

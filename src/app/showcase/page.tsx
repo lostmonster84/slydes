@@ -123,7 +123,7 @@ export default function ShowcasePage() {
               <div className="grid lg:grid-cols-2 gap-8 p-8 lg:p-12 items-center">
                 {/* Left - Phone Mockup */}
                 <div className="flex justify-center order-2 lg:order-1">
-                  <PhoneMockup variant="rentals" />
+                  <PhoneMockup variant="wildtrax" />
                 </div>
 
                 {/* Right - Content */}
