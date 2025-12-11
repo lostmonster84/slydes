@@ -1,11 +1,16 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { AnimatedSpotlight } from '@/components/ui/BackgroundAnimations'
 
 export function SocialProof() {
   return (
-    <section className="py-24 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20">
-      <div className="max-w-6xl mx-auto px-6">
+    <section className="py-24 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 relative overflow-hidden">
+      {/* Spotlight effect on the right (where the phone is) */}
+      <AnimatedSpotlight position="right">
+        <div className="absolute inset-0" />
+      </AnimatedSpotlight>
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         {/* Simple stats row */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

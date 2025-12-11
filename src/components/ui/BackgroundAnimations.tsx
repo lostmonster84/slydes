@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ReactNode } from 'react'
+import { ReactNode, useMemo } from 'react'
 
 // ============================================
 // GRADIENT BLOBS - Slow floating color shapes
@@ -39,7 +39,7 @@ export function AnimatedGradientBlobs({ children }: { children?: ReactNode }) {
       />
       {/* Blob 3 - Center, purple hint */}
       <motion.div
-        className="absolute top-1/3 left-1/3 w-[400px] h-[400px] rounded-full bg-purple-400/8 blur-[100px]"
+        className="absolute top-1/3 left-1/3 w-[400px] h-[400px] rounded-full bg-purple-400/10 blur-[100px]"
         animate={{
           x: [0, 50, -30, 0],
           y: [0, -30, 40, 0],
@@ -59,14 +59,15 @@ export function AnimatedGradientBlobs({ children }: { children?: ReactNode }) {
 // PARTICLE FIELD - Floating dots
 // ============================================
 export function AnimatedParticleField({ children, count = 25 }: { children?: ReactNode; count?: number }) {
-  const particles = Array.from({ length: count }, (_, i) => ({
+  // Use deterministic positions based on index to avoid hydration mismatch
+  const particles = useMemo(() => Array.from({ length: count }, (_, i) => ({
     id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 3 + 1,
-    duration: Math.random() * 20 + 15,
-    delay: Math.random() * 5,
-  }))
+    x: ((i * 17) % 100),  // Pseudo-random but deterministic
+    y: ((i * 23) % 100),
+    size: (i % 3) + 2,
+    duration: 15 + (i % 10) * 2,
+    delay: (i % 5),
+  })), [count])
 
   return (
     <div className="relative overflow-hidden">
@@ -133,9 +134,10 @@ export function AnimatedRadarPulse({ children }: { children?: ReactNode }) {
 // ============================================
 // NOISE TEXTURE - Animated film grain
 // ============================================
-export function AnimatedNoiseTexture({ children, opacity = 0.03 }: { children?: ReactNode; opacity?: number }) {
+export function AnimatedNoiseTexture({ children, opacity = 0.04 }: { children?: ReactNode; opacity?: number }) {
   return (
     <div className="relative">
+      {/* Static noise layer */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -143,19 +145,20 @@ export function AnimatedNoiseTexture({ children, opacity = 0.03 }: { children?: 
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
         }}
       />
+      {/* Subtle animated overlay - slower for performance */}
       <motion.div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          opacity: opacity * 0.5,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          opacity: opacity * 0.3,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise2)'/%3E%3C/svg%3E")`,
         }}
         animate={{
-          x: [0, 10, 0],
-          y: [0, -10, 0],
+          opacity: [opacity * 0.2, opacity * 0.4, opacity * 0.2],
         }}
         transition={{
-          duration: 0.1,
+          duration: 3,
           repeat: Infinity,
+          ease: "easeInOut",
         }}
       />
       <div className="relative z-10">{children}</div>
@@ -321,33 +324,56 @@ export function AnimatedSpotlight({ children, position = 'right' }: { children?:
 export function AnimatedWaveLines({ children }: { children?: ReactNode }) {
   return (
     <div className="relative overflow-hidden">
-      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-        {[0, 1, 2].map((i) => (
-          <motion.path
-            key={i}
-            d="M0,50 Q25,30 50,50 T100,50 T150,50 T200,50"
-            fill="none"
-            stroke="rgba(37, 99, 235, 0.1)"
-            strokeWidth="1"
-            style={{
-              transform: `translateY(${30 + i * 20}%)`,
-            }}
-            animate={{
-              d: [
-                "M0,50 Q25,30 50,50 T100,50 T150,50 T200,50",
-                "M0,50 Q25,70 50,50 T100,50 T150,50 T200,50",
-                "M0,50 Q25,30 50,50 T100,50 T150,50 T200,50",
-              ],
-            }}
-            transition={{
-              duration: 5 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.5,
-            }}
-          />
-        ))}
-      </svg>
+      {/* Wave 1 */}
+      <motion.div
+        className="absolute left-0 right-0 h-[2px] top-[30%]"
+        style={{
+          background: 'linear-gradient(90deg, transparent 0%, rgba(37, 99, 235, 0.15) 50%, transparent 100%)',
+        }}
+        animate={{
+          scaleY: [1, 1.5, 1],
+          opacity: [0.3, 0.6, 0.3],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+      {/* Wave 2 */}
+      <motion.div
+        className="absolute left-0 right-0 h-[1px] top-[50%]"
+        style={{
+          background: 'linear-gradient(90deg, transparent 0%, rgba(6, 182, 212, 0.12) 50%, transparent 100%)',
+        }}
+        animate={{
+          scaleY: [1, 2, 1],
+          opacity: [0.2, 0.5, 0.2],
+        }}
+        transition={{
+          duration: 5,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
+      />
+      {/* Wave 3 */}
+      <motion.div
+        className="absolute left-0 right-0 h-[1px] top-[70%]"
+        style={{
+          background: 'linear-gradient(90deg, transparent 0%, rgba(37, 99, 235, 0.1) 50%, transparent 100%)',
+        }}
+        animate={{
+          scaleY: [1, 1.8, 1],
+          opacity: [0.25, 0.45, 0.25],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
+      />
       <div className="relative z-10">{children}</div>
     </div>
   )

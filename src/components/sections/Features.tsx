@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { MeshGradient } from '@/components/ui/BackgroundAnimations'
 
 const features = [
   {
@@ -32,8 +33,11 @@ const itemVariants = {
 
 export function Features() {
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-4xl mx-auto px-6">
+    <section className="py-24 bg-white relative overflow-hidden">
+      <MeshGradient>
+        <div className="absolute inset-0" />
+      </MeshGradient>
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
