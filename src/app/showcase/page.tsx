@@ -101,9 +101,12 @@ export default function ShowcasePage() {
               className="mb-8"
             >
               <div className="flex items-center gap-3 mb-2">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  LIVE NOW
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-semibold">
+                  <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                  BETA
+                </span>
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-semibold">
+                  Founding Member
                 </span>
               </div>
               <h2 className="text-2xl font-bold">Featured Showcase</h2>
@@ -125,12 +128,15 @@ export default function ShowcasePage() {
 
                 {/* Right - Content */}
                 <div className="order-1 lg:order-2">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold uppercase tracking-wide">
+                  <div className="flex flex-wrap items-center gap-2 mb-4">
+                    <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold uppercase tracking-wide">
                       Rentals
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                    <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
                       +40% mobile bookings
+                    </span>
+                    <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">
+                      Work in Progress
                     </span>
                   </div>
                   
@@ -143,19 +149,19 @@ export default function ShowcasePage() {
 
                   <div className="space-y-3 mb-8">
                     <div className="flex items-center gap-3">
-                      <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span className="text-gray-700">Full-screen vehicle showcase videos</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span className="text-gray-700">TikTok-style vertical scrolling</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span className="text-gray-700">Built and live in one day</span>
@@ -166,9 +172,9 @@ export default function ShowcasePage() {
                     href="https://wildtrax.co.uk/m/camping" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-leader-blue hover:text-blue-700 font-semibold transition-colors"
+                    className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 font-semibold transition-colors"
                   >
-                    View live Slyde
+                    View live Slyde (Beta)
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
@@ -281,6 +287,47 @@ export default function ShowcasePage() {
                   </div>
                 </motion.div>
               ))}
+
+              {/* 8th Card - YOUR BUSINESS CTA */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.35 }}
+                viewport={{ once: true }}
+                className="group bg-gradient-to-b from-leader-blue to-blue-700 rounded-2xl border border-leader-blue overflow-hidden hover:shadow-lg hover:shadow-leader-blue/25 transition-all cursor-pointer"
+              >
+                <Link href="/founding-member" className="block h-full">
+                  {/* Mini Phone Preview */}
+                  <div className="p-4 flex justify-center bg-gradient-to-b from-blue-600/50 to-transparent">
+                    <div className="relative w-[100px] h-[180px] bg-white/10 backdrop-blur rounded-[1.5rem] p-1.5 shadow-lg transform group-hover:scale-105 transition-transform border-2 border-dashed border-white/40">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-3 bg-white/20 rounded-b-lg z-10" />
+                      <div className="relative w-full h-full bg-white/5 rounded-[1.25rem] overflow-hidden flex flex-col items-center justify-center">
+                        <span className="text-white/90 text-[10px] font-bold text-center leading-tight">Your<br />Business</span>
+                        <div className="mt-2 w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
+                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-white/30 rounded-full" />
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-semibold text-white/80 uppercase tracking-wide">
+                        Your Industry
+                      </span>
+                      <span className="text-xs font-medium text-white bg-white/20 px-2 py-0.5 rounded-full">
+                        Join
+                      </span>
+                    </div>
+                    <h4 className="font-semibold text-sm mb-1 text-white">This could be you</h4>
+                    <p className="text-white/80 text-xs leading-relaxed">Be the first in your industry. Shape how Slydes serves your market.</p>
+                  </div>
+                </Link>
+              </motion.div>
             </div>
           </div>
         </section>

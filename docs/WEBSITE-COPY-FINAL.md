@@ -772,3 +772,4 @@ The Slydes Team
 *Slydes.io Website Copy*  
 *Final and ready to build*  
 *Let's ship it! 🚀*
+
