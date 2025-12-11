@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import Stripe from 'stripe'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,61 +16,64 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // TODO: Integrate with Stripe
-    // When Stripe is configured, this will:
-    // 1. Create a Stripe checkout session
-    // 2. Return the checkout URL
-    // 3. User is redirected to Stripe to pay
-    // 4. After payment, webhook updates database
-    
-    // For now, log the signup and return success
-    console.log('Founding member signup:', { name, email, company, useCase })
+    // Check if Stripe is configured
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.log('Stripe not configured, mock signup:', { name, email, company, useCase })
+      return NextResponse.json({
+        success: true,
+        message: 'Founding member registered (Stripe not yet configured)',
+      })
+    }
 
-    // Example Stripe integration (uncomment when ready):
-    /*
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
-    
+    // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
           price_data: {
-            currency: 'usd',
+            currency: 'gbp',
             product_data: {
               name: 'Slydes Founding Member',
-              description: 'Lifetime Pro access to Slydes',
+              description: 'Lifetime Pro access + 20% revenue share on referrals',
+              images: ['https://slydes.io/og-image.png'], // Update with actual OG image
             },
-            unit_amount: 29900, // $299 in cents
+            unit_amount: 49900, // £499 in pence
           },
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/founding-member/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/founding-member`,
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://slydes.io'}/founding-member/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://slydes.io'}/founding-member`,
       customer_email: email,
       metadata: {
         name,
         company: company || '',
         useCase,
+        memberType: 'founding_member',
       },
+      // Allow promotion codes if you set them up
+      allow_promotion_codes: true,
+      // Collect billing address for invoicing
+      billing_address_collection: 'required',
     })
 
     return NextResponse.json({ url: session.url })
-    */
-
-    // For demo, return success without payment
-    return NextResponse.json({
-      success: true,
-      message: 'Founding member registered (Stripe not yet configured)',
-    })
 
   } catch (error) {
     console.error('Checkout error:', error)
+    
+    // More specific error handling
+    if (error instanceof Stripe.errors.StripeError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      )
+    }
+    
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     )
   }
 }
-

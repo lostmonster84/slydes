@@ -50,54 +50,30 @@ export default function PricingPage() {
                 <h3 className="text-xl font-semibold mb-2">Founding Member</h3>
                 <p className="text-gray-400 mb-6">Lifetime access, one-time payment</p>
                 
-                <div className="flex items-baseline gap-2 mb-6">
-                  <span className="text-5xl font-bold">$299</span>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-5xl font-bold">£499</span>
                   <span className="text-gray-400">one-time</span>
                 </div>
+                <p className="text-gray-500 text-sm mb-6">€599 / $629 USD</p>
 
                 <ul className="space-y-3 mb-8">
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-leader-blue mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Unlimited Slydes</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-leader-blue mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>All frame types</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-leader-blue mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Custom domain</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-leader-blue mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Remove Slydes branding</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-leader-blue mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Priority support</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-leader-blue mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Roadmap input</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="w-5 h-5 text-leader-blue mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Founding member badge</span>
-                  </li>
+                  {[
+                    'Lifetime Pro access',
+                    '20% revenue share on referrals',
+                    'Your voice matters - monthly founder calls',
+                    'Private founders channel',
+                    '1-on-1 onboarding call',
+                    'Launch spotlight for your business',
+                    'Founder badge forever',
+                    '30-day money-back guarantee',
+                  ].map((item) => (
+                    <li key={item} className="flex items-start">
+                      <svg className="w-5 h-5 text-leader-blue mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
                 </ul>
 
                 <Link href="/founding-member">
@@ -131,7 +107,7 @@ export default function PricingPage() {
                   {/* Free */}
                   <div className="pb-6 border-b border-gray-100">
                     <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-2xl font-bold text-gray-400">$0</span>
+                      <span className="text-2xl font-bold text-gray-400">£0</span>
                       <span className="text-gray-400">/month</span>
                     </div>
                     <p className="text-sm text-gray-400">Free tier: 1 Slyde, 10 frames, Slydes branding</p>
@@ -140,7 +116,7 @@ export default function PricingPage() {
                   {/* Pro */}
                   <div className="pb-6 border-b border-gray-100">
                     <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-2xl font-bold text-gray-400">$29</span>
+                      <span className="text-2xl font-bold text-gray-400">£39</span>
                       <span className="text-gray-400">/month</span>
                     </div>
                     <p className="text-sm text-gray-400">Pro: Unlimited Slydes, custom domain, no branding</p>
@@ -149,7 +125,7 @@ export default function PricingPage() {
                   {/* Agency */}
                   <div>
                     <div className="flex items-baseline gap-2 mb-2">
-                      <span className="text-2xl font-bold text-gray-400">$99</span>
+                      <span className="text-2xl font-bold text-gray-400">£129</span>
                       <span className="text-gray-400">/month</span>
                     </div>
                     <p className="text-sm text-gray-400">Agency: Team access, white-label, client management</p>
@@ -160,7 +136,7 @@ export default function PricingPage() {
                   <p className="text-sm text-gray-500">
                     Save money by becoming a founding member today.
                     <br />
-                    <span className="font-medium text-gray-700">$299 one-time vs $348/year</span>
+                    <span className="font-medium text-gray-700">£499 one-time vs £468/year</span>
                   </p>
                 </div>
               </motion.div>

@@ -32,10 +32,11 @@ export function FoundersClub() {
 
             <ul className="space-y-4 mb-8">
               {[
-                { title: 'Lifetime Pro access', desc: 'Worth $29/month forever' },
-                { title: 'Priority support', desc: 'Direct access to the team' },
-                { title: 'Shape the roadmap', desc: 'Your feedback drives development' },
-                { title: 'Founding member badge', desc: 'Be recognized as an early supporter' },
+                { title: 'Lifetime Pro access', desc: 'Worth £39/month forever' },
+                { title: '20% revenue share', desc: 'Earn on every referral, forever' },
+                { title: 'Your voice matters', desc: 'Monthly founder calls + feature input' },
+                { title: 'Private founders channel', desc: 'Direct line to the team' },
+                { title: 'Founder badge forever', desc: 'Visible on your Slyde' },
               ].map((item, index) => (
                 <motion.li 
                   key={item.title}
@@ -68,10 +69,13 @@ export function FoundersClub() {
             <div className="text-center mb-8">
               <p className="text-gray-400 text-sm mb-2">One-time payment</p>
               <div className="flex items-baseline justify-center mb-2">
-                <span className="text-6xl font-bold text-white">$299</span>
+                <span className="text-6xl font-bold text-white">£499</span>
               </div>
               <p className="text-gray-500 text-sm">
-                Regular price after launch: $29/month
+                €599 / $629 USD
+              </p>
+              <p className="text-gray-600 text-xs mt-1">
+                Regular: £39/month (£468/year)
               </p>
             </div>
 

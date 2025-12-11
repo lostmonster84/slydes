@@ -171,11 +171,14 @@ export default function FoundingMemberPage() {
               <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-lg mb-6">
                 <div className="text-center mb-4">
                   <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-5xl font-bold">$299</span>
+                    <span className="text-5xl font-bold">£499</span>
                     <span className="text-gray-500">one-time</span>
                   </div>
                   <p className="text-sm text-gray-500 mt-1">
-                    Regular: $29/month ($348/year)
+                    €599 / $629 USD
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Regular: £39/month (£468/year)
                   </p>
                 </div>
                 
@@ -196,10 +199,13 @@ export default function FoundingMemberPage() {
                 <ul className="space-y-4">
                   {[
                     { title: 'Lifetime Pro access', desc: 'Unlimited Slydes, forever' },
-                    { title: 'Priority support', desc: 'Direct access to the team' },
-                    { title: 'Shape the roadmap', desc: 'Your feedback matters' },
-                    { title: 'Founding badge', desc: 'Early supporter recognition' },
-                    { title: '30-day guarantee', desc: 'Full refund, no questions' },
+                    { title: '20% revenue share', desc: 'Earn 20% on every referral, forever' },
+                    { title: 'Your voice matters', desc: 'Monthly founder calls + direct input on features' },
+                    { title: 'Private founders channel', desc: 'Direct line to the team and other founders' },
+                    { title: '1-on-1 onboarding call', desc: 'Personal setup with the founding team' },
+                    { title: 'Launch spotlight', desc: 'We feature your business at launch' },
+                    { title: 'Founder badge forever', desc: 'Visible on your Slyde + Hall of Fame' },
+                    { title: '30-day guarantee', desc: 'Full refund, no questions asked' },
                   ].map((item, i) => (
                     <motion.li 
                       key={item.title}
@@ -326,7 +332,7 @@ export default function FoundingMemberPage() {
                     size="lg"
                     className="w-full animate-pulse-glow"
                   >
-                    {isSubmitting ? 'Processing...' : 'Claim Your Spot — $299'}
+                    {isSubmitting ? 'Processing...' : 'Claim Your Spot — £499'}
                   </Button>
 
                   {/* Trust indicators */}
