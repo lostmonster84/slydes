@@ -3,6 +3,21 @@
 // Browse live at: /demo/components
 // ============================================
 
+// Background Animations
+export {
+  AnimatedGradientBlobs,
+  AnimatedParticleField,
+  AnimatedRadarPulse,
+  AnimatedNoiseTexture,
+  AnimatedLightRays,
+  AnimatedAurora,
+  MeshGradient,
+  AnimatedSpotlight,
+  AnimatedWaveLines,
+  AnimatedGridFade,
+  AnimatedHeroBackground,
+} from './BackgroundAnimations'
+
 // Editor Mockups
 export { 
   EditorSideBySide, 

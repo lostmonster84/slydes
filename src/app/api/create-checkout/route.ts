@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+// Lazy initialization - only create Stripe instance when needed
+function getStripe() {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return null
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY)
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,8 +22,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const stripe = getStripe()
+
     // Check if Stripe is configured
-    if (!process.env.STRIPE_SECRET_KEY) {
+    if (!stripe) {
       console.log('Stripe not configured, mock signup:', { name, email, company, useCase })
       return NextResponse.json({
         success: true,

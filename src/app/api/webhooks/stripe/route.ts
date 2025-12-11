@@ -1,11 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
+// Lazy initialization - only create Stripe instance when needed
+function getStripe() {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return null
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY)
+}
 
 export async function POST(request: NextRequest) {
+  const stripe = getStripe()
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+
+  if (!stripe || !webhookSecret) {
+    console.log('Stripe not configured, skipping webhook')
+    return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 })
+  }
+
   try {
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')
@@ -89,11 +101,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-}
-
-// Stripe webhooks need the raw body, so disable body parsing
-export const config = {
-  api: {
-    bodyParser: false,
-  },
 }
