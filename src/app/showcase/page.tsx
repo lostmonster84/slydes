@@ -191,7 +191,7 @@ export default function ShowcasePage() {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/20 text-electric-cyan text-sm font-medium mb-8">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/20 text-white text-sm font-medium mb-8">
                 <span className="w-2 h-2 bg-electric-cyan rounded-full animate-pulse" />
                 Founding Member Opportunity
               </span>
