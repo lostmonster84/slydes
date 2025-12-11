@@ -21,8 +21,8 @@ export function FoundersClub() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-leader-blue/20 text-leader-blue text-sm font-medium mb-4">
-              <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-leader-blue/20 text-white text-sm font-medium mb-4">
+              <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
               Genesis Founders. Limited to {totalSpots}.
             </span>
             
@@ -35,7 +35,7 @@ export function FoundersClub() {
 
             <ul className="space-y-4 mb-8">
               {[
-                { title: 'Direct access to James', desc: 'Private Slack channel with James in the room every day' },
+                { title: 'Direct access to the founder', desc: 'Private Slack channel with James (founder) in the room every day' },
                 { title: '25% revenue share forever', desc: 'Highest tier. Earn on every referral for as long as they stay' },
                 { title: 'Monthly founder calls', desc: 'Group calls to shape what we build next' },
                 { title: 'Personal onboarding call', desc: '1-on-1 setup with the founder' },

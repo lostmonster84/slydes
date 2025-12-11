@@ -231,3 +231,4 @@ A: When we hit milestones (launch, funding, etc.), Genesis founders are invited 
 *Last updated: December 11, 2025*
 
 
+

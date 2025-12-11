@@ -212,7 +212,7 @@ export default function FoundingMemberPage() {
                 </h3>
                 <ul className="space-y-4">
                   {[
-                    { title: 'Direct access to James', desc: 'Private Slack channel with James in the room every day' },
+                    { title: 'Direct access to the founder', desc: 'Private Slack channel with James (founder) in the room every day' },
                     { title: '25% revenue share forever', desc: 'Highest tier. Earn on every referral for as long as they stay' },
                     { title: 'Monthly founder calls', desc: 'Group calls to shape what we build next' },
                     { title: 'Personal onboarding call', desc: '1-on-1 setup call with the founder' },

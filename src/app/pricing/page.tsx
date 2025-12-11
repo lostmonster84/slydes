@@ -21,7 +21,7 @@ export default function PricingPage() {
       status: 'active',
       highlight: true,
       features: [
-        { name: 'Direct access to James (daily Slack)', included: true, exclusive: true },
+        { name: 'Direct access to the founder (daily Slack)', included: true, exclusive: true },
         { name: 'Personal onboarding call', included: true, exclusive: true },
         { name: 'Monthly founder calls', included: true, exclusive: true },
         { name: '"Built by" page (name + photo)', included: true, exclusive: true },
@@ -44,7 +44,7 @@ export default function PricingPage() {
       status: 'upcoming',
       highlight: false,
       features: [
-        { name: 'Direct access to James', included: false },
+        { name: 'Direct access to the founder', included: false },
         { name: 'Personal onboarding call', included: false },
         { name: 'Quarterly founder calls', included: true },
         { name: '"Built by" page (name only)', included: true },
@@ -67,7 +67,7 @@ export default function PricingPage() {
       status: 'upcoming',
       highlight: false,
       features: [
-        { name: 'Direct access to James', included: false },
+        { name: 'Direct access to the founder', included: false },
         { name: 'Personal onboarding call', included: false },
         { name: 'Founder calls', included: false },
         { name: '"Built by" page', included: false },
