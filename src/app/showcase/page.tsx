@@ -179,46 +179,10 @@ export default function ShowcasePage() {
           </div>
         </section>
 
-        {/* CTA Section - Be First - ALIVE WITH ENERGY */}
-        <section className="py-24 relative overflow-hidden">
-          {/* Animated gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-leader-blue via-purple-600 to-electric-cyan" />
-          
-          {/* Animated mesh overlay */}
-          <div 
-            className="absolute inset-0 opacity-30"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }}
-          />
-          
-          {/* Floating orbs for depth */}
-          <motion.div 
-            className="absolute top-10 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl"
-            animate={{ 
-              x: [0, 30, 0],
-              y: [0, -20, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div 
-            className="absolute bottom-10 right-10 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl"
-            animate={{ 
-              x: [0, -40, 0],
-              y: [0, 30, 0],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl"
-            animate={{ 
-              scale: [1, 1.3, 1],
-              opacity: [0.1, 0.2, 0.1],
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          />
+        {/* CTA Section - Be First */}
+        <section className="py-24 relative overflow-hidden bg-future-black">
+          {/* Subtle blue glow - NOT a gradient, just atmospheric */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-leader-blue/20 rounded-full blur-[120px]" />
           
           <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
             <motion.div
@@ -227,47 +191,31 @@ export default function ShowcasePage() {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <motion.span 
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-medium mb-6 border border-white/20"
-                animate={{ scale: [1, 1.02, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/20 text-electric-cyan text-sm font-medium mb-8">
+                <span className="w-2 h-2 bg-electric-cyan rounded-full animate-pulse" />
                 Founding Member Opportunity
-              </motion.span>
+              </span>
               
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 drop-shadow-lg">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
                 Your industry isn&apos;t here yet.
                 <br />
-                <span className="text-white/90">That means </span>
-                <span className="text-yellow-300">you could be first.</span>
+                <span className="text-electric-cyan">That means you could be first.</span>
               </h2>
               
-              <p className="text-white/80 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
                 Founding members don&apos;t just get Slydes early—they shape how we serve their 
-                market. <span className="text-white font-semibold">Be the showcase for your industry.</span>
+                market. Be the showcase for your industry.
               </p>
               
               <Link href="/founding-member">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button size="lg" className="bg-white text-leader-blue hover:bg-gray-100 font-bold text-lg px-8 py-4 shadow-2xl">
-                    Become a Founding Member →
-                  </Button>
-                </motion.div>
+                <Button size="lg" className="animate-pulse-glow">
+                  Become a Founding Member
+                </Button>
               </Link>
               
-              {/* Social proof nudge */}
-              <motion.p 
-                className="mt-6 text-white/60 text-sm"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
+              <p className="mt-8 text-gray-500 text-sm">
                 Join 12 founding members already shaping Slydes
-              </motion.p>
+              </p>
             </motion.div>
           </div>
         </section>
