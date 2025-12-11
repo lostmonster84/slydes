@@ -10,13 +10,9 @@ export function FoundersClub() {
   const totalSpots = 50
 
   return (
-    <section className="py-24 bg-future-black relative overflow-hidden">
-      {/* Aurora northern lights effect */}
-      <AnimatedAurora>
-        <div className="absolute inset-0" />
-      </AnimatedAurora>
-      
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+    <AnimatedAurora>
+      <section className="py-24 bg-future-black relative overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left - What You Get */}
           <motion.div
@@ -137,7 +133,8 @@ export function FoundersClub() {
         >
           Genesis is <span className="text-white">the only tier</span> with direct access to me. Once it&apos;s gone, it&apos;s <span className="text-leader-blue">gone forever</span>.
         </motion.p>
-      </div>
-    </section>
+        </div>
+      </section>
+    </AnimatedAurora>
   )
 }
