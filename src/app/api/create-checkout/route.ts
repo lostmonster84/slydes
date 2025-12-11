@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       console.log('Stripe not configured, mock signup:', { name, email, company, useCase })
       return NextResponse.json({
         success: true,
-        message: 'Founding member registered (Stripe not yet configured)',
+        message: 'Founder registered (Stripe not yet configured)',
       })
     }
 
@@ -41,8 +41,8 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: 'gbp',
             product_data: {
-              name: 'Slydes Founding Member',
-              description: 'Lifetime Pro access + 20% revenue share on referrals',
+              name: 'Slydes Founder',
+              description: 'Lifetime Pro access + 25% revenue share on referrals',
               images: ['https://slydes.io/og-image.png'], // Update with actual OG image
             },
             unit_amount: 49900, // £499 in pence
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         name,
         company: company || '',
         useCase,
-        memberType: 'founding_member',
+        memberType: 'founder',
       },
       // Allow promotion codes if you set them up
       allow_promotion_codes: true,

@@ -43,7 +43,7 @@ function HeroContent() {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button size="lg" className="animate-pulse-glow">
-                Become a Founding Member
+                Become a Founder
               </Button>
               <Button variant="secondary" size="lg">
                 See Showcase

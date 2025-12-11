@@ -11,7 +11,7 @@ export function FoundersClub() {
 
   return (
     <AnimatedAurora>
-      <section className="py-24 relative overflow-hidden">
+      <section className="py-12 md:py-24 relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left - What You Get */}
@@ -23,12 +23,12 @@ export function FoundersClub() {
           >
             <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-leader-blue/20 text-white text-sm font-medium mb-4">
               <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-              Genesis Founders. Limited to {totalSpots}.
+              Founders. Limited to {totalSpots}.
             </span>
             
             <h2 className="text-white mb-4">The inner circle.<br /><span className="gradient-text">The originals.</span></h2>
             <p className="text-gray-400 text-lg mb-8">
-              50 founders. Direct access to me. 25% on every referral, forever. Lifetime Pro access included.
+              50 founders. Direct access to the founder (James). 25% on every referral, forever. Lifetime Pro access included.
               <br />
               <span className="text-gray-500">You are not just buying software. You are joining the founding team.</span>
             </p>
@@ -70,7 +70,7 @@ export function FoundersClub() {
             viewport={{ once: true }}
           >
             <div className="text-center mb-6">
-              <p className="text-leader-blue text-sm font-medium mb-2">Genesis Founder. One-time payment.</p>
+              <p className="text-leader-blue text-sm font-medium mb-2">Founder. One-time payment.</p>
               <div className="flex items-baseline justify-center mb-2">
                 <span className="text-6xl font-bold text-white">£499</span>
               </div>
@@ -96,17 +96,17 @@ export function FoundersClub() {
 
             <Link href="/founding-member" className="block mb-6">
               <Button size="lg" className="w-full animate-pulse-glow">
-                Become a Genesis Founder
+                Become a Founder
               </Button>
             </Link>
 
             {/* Future pricing note */}
             <div className="text-center mb-6 p-4 bg-gray-900/50 rounded-xl border border-gray-700/30">
-              <p className="text-gray-500 text-xs mb-2">After Genesis sells out:</p>
+              <p className="text-gray-500 text-xs mb-2">After Founders sells out:</p>
               <div className="flex justify-center gap-4 text-sm">
-                <span className="text-gray-400">Founding: <span className="text-white">£999</span></span>
+                <span className="text-gray-400">Builders: <span className="text-white">£999</span></span>
                 <span className="text-gray-600">|</span>
-                <span className="text-gray-400">Charter: <span className="text-white">£1,499</span></span>
+                <span className="text-gray-400">Members: <span className="text-white">£1,499</span></span>
               </div>
             </div>
 
@@ -131,7 +131,7 @@ export function FoundersClub() {
           viewport={{ once: true }}
           className="text-center text-gray-500 text-sm mt-8"
         >
-          Genesis is <span className="text-white">the only tier</span> with direct access to me. Once it&apos;s gone, it&apos;s <span className="text-leader-blue">gone forever</span>.
+          Founders is <span className="text-white">the only tier</span> with direct access to the founder (James). Once it&apos;s gone, it&apos;s <span className="text-leader-blue">gone forever</span>.
         </motion.p>
         </div>
       </section>

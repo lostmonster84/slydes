@@ -78,7 +78,7 @@ export default function FoundingMemberPage() {
                 </motion.div>
                 
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">
-                  Welcome, <span className="gradient-text">Genesis Founder!</span>
+                  Welcome, <span className="gradient-text">Founder!</span>
                 </h1>
                 <p className="text-gray-600 mb-8 text-lg">
                   You&apos;re now part of the inner circle. Let&apos;s build something legendary together.
@@ -91,9 +91,9 @@ export default function FoundingMemberPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
                   >
-                    <p className="text-gray-400 text-sm mb-1">Your Genesis Founder number</p>
+                    <p className="text-gray-400 text-sm mb-1">Your Founder number</p>
                     <p className="text-5xl font-bold text-white">#{memberNumber}</p>
-                    <p className="text-gray-500 text-xs mt-2">of 50 Genesis Founders</p>
+                    <p className="text-gray-500 text-xs mt-2">of 50 Founders</p>
                   </motion.div>
                 )}
 
@@ -102,7 +102,7 @@ export default function FoundingMemberPage() {
                   <ul className="space-y-3 text-gray-600">
                     {[
                       'Check your email for confirmation and receipt',
-                      'I\'ll personally add you to our private Genesis Slack channel',
+                      'I\'ll personally add you to our private Founders Slack channel',
                       'I\'ll reach out to schedule your 1-on-1 onboarding call',
                       'You\'ll get first access when we launch',
                       'Your 25% referral link will be in your welcome email',
@@ -146,10 +146,10 @@ export default function FoundingMemberPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Genesis Badge */}
+            {/* Founders Badge */}
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-medium mb-6">
               <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
-              Genesis Founders. Only {spotsRemaining} of {totalSpots} spots left.
+              Founders. Only {spotsRemaining} of {totalSpots} spots left.
             </span>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
@@ -158,7 +158,7 @@ export default function FoundingMemberPage() {
             </h1>
             
             <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-4">
-              50 founders. Direct access to me. 25% on every referral, forever. Lifetime Pro access included.
+              50 founders. Direct access to the founder (James). 25% on every referral, forever. Lifetime Pro access included.
             </p>
             <p className="text-gray-500 max-w-xl mx-auto">
               You are not just buying software. You are joining the founding team.
@@ -178,7 +178,7 @@ export default function FoundingMemberPage() {
               <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-lg">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <p className="text-leader-blue text-sm font-medium mb-1">Genesis Founder</p>
+                    <p className="text-leader-blue text-sm font-medium mb-1">Founder</p>
                     <div className="flex items-baseline gap-2">
                       <span className="text-5xl font-bold">£499</span>
                       <span className="text-gray-500">one-time</span>
@@ -205,10 +205,10 @@ export default function FoundingMemberPage() {
                 </div>
               </div>
 
-              {/* Genesis Exclusive Benefits */}
+              {/* Founders Exclusive Benefits */}
               <div className="bg-white rounded-2xl p-6 border border-gray-200">
                 <h3 className="font-semibold mb-4 text-lg flex items-center gap-2">
-                  <span className="text-leader-blue">✦</span> Genesis Exclusive
+                  <span className="text-leader-blue">✦</span> Founders Exclusive
                 </h3>
                 <ul className="space-y-4">
                   {[
@@ -270,7 +270,7 @@ export default function FoundingMemberPage() {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="bg-white rounded-3xl p-6 md:p-8 border border-gray-200 shadow-xl sticky top-28">
-                <h2 className="text-xl font-semibold mb-2 text-center">Claim your Genesis spot</h2>
+                <h2 className="text-xl font-semibold mb-2 text-center">Claim your Founder spot</h2>
                 <p className="text-gray-500 text-sm text-center mb-6">Join the 50 founders building Slydes</p>
                 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -366,7 +366,7 @@ export default function FoundingMemberPage() {
                   size="lg"
                   className="w-full animate-pulse-glow"
                 >
-                  {isSubmitting ? 'Processing...' : 'Become a Genesis Founder'}
+                  {isSubmitting ? 'Processing...' : 'Become a Founder'}
                 </Button>
 
                   {/* Trust indicators */}
@@ -395,21 +395,21 @@ export default function FoundingMemberPage() {
             className="mt-16 text-center"
           >
             <div className="inline-block bg-gray-50 rounded-2xl p-6 border border-gray-200 max-w-2xl">
-              <h3 className="font-medium mb-3">What happens after Genesis sells out?</h3>
+              <h3 className="font-medium mb-3">What happens after Founders sells out?</h3>
               <div className="grid md:grid-cols-2 gap-4 text-sm">
                 <div className="bg-white rounded-xl p-4 border border-gray-100">
-                  <p className="text-gray-500 mb-1">Founding Members</p>
+                  <p className="text-gray-500 mb-1">Builders</p>
                   <p className="text-2xl font-bold">£999</p>
                   <p className="text-gray-400 text-xs">75 spots • 20% revenue share</p>
                 </div>
                 <div className="bg-white rounded-xl p-4 border border-gray-100">
-                  <p className="text-gray-500 mb-1">Charter Members</p>
+                  <p className="text-gray-500 mb-1">Members</p>
                   <p className="text-2xl font-bold">£1,499</p>
                   <p className="text-gray-400 text-xs">100 spots • 15% revenue share</p>
                 </div>
               </div>
               <p className="text-gray-500 text-sm mt-4">
-                Price goes up. Perks go down. <span className="text-leader-blue font-medium">Genesis is the only tier with direct access to me.</span>
+                Price goes up. Perks go down. <span className="text-leader-blue font-medium">Founders is the only tier with direct access to the founder (James).</span>
               </p>
             </div>
           </motion.div>
@@ -422,7 +422,7 @@ export default function FoundingMemberPage() {
             className="mt-8 text-center"
           >
             <p className="text-gray-500 text-sm">
-              Once these {totalSpots} spots are gone, Genesis is <span className="font-medium text-gray-900">closed forever</span>.
+              Once these {totalSpots} spots are gone, Founders is <span className="font-medium text-gray-900">closed forever</span>.
             </p>
           </motion.div>
         </div>

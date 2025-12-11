@@ -25,7 +25,7 @@ export function Header() {
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
           </Link>
           <Link href="/pricing" className="group relative text-gray-600 hover:text-gray-900 transition-colors text-sm">
-            Founding Members
+            Founders
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
           </Link>
         </div>
@@ -33,14 +33,16 @@ export function Header() {
         {/* CTA Button */}
         <div className="hidden md:block">
           <Link href="/founding-member">
-            <Button>Become a Founding Member</Button>
+            <Button>Become a Founder</Button>
           </Link>
         </div>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-gray-600"
+          className="md:hidden text-gray-600 min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+          style={{ touchAction: 'manipulation' }}
         >
           <svg
             className="w-6 h-6"
@@ -63,30 +65,37 @@ export function Header() {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200">
-          <div className="px-6 py-4 space-y-4">
+          <div className="px-6 py-4 space-y-2">
             <Link
               href="/how-it-works"
-              className="block text-gray-600 hover:text-gray-900 transition-colors"
+              className="block min-h-[44px] flex items-center text-gray-600 active:text-gray-900 active:bg-gray-50 transition-colors touch-manipulation rounded-lg px-2 -mx-2"
               onClick={() => setMobileMenuOpen(false)}
+              style={{ touchAction: 'manipulation' }}
             >
               How It Works
             </Link>
             <Link
               href="/showcase"
-              className="block text-gray-600 hover:text-gray-900 transition-colors"
+              className="block min-h-[44px] flex items-center text-gray-600 active:text-gray-900 active:bg-gray-50 transition-colors touch-manipulation rounded-lg px-2 -mx-2"
               onClick={() => setMobileMenuOpen(false)}
+              style={{ touchAction: 'manipulation' }}
             >
               Showcase
             </Link>
             <Link
               href="/pricing"
-              className="block text-gray-600 hover:text-gray-900 transition-colors"
+              className="block min-h-[44px] flex items-center text-gray-600 active:text-gray-900 active:bg-gray-50 transition-colors touch-manipulation rounded-lg px-2 -mx-2"
               onClick={() => setMobileMenuOpen(false)}
+              style={{ touchAction: 'manipulation' }}
             >
-              Founding Members
+              Founders
             </Link>
-            <Link href="/founding-member" onClick={() => setMobileMenuOpen(false)}>
-              <Button className="w-full">Become a Founding Member</Button>
+            <Link 
+              href="/founding-member" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block mt-4"
+            >
+              <Button className="w-full">Become a Founder</Button>
             </Link>
           </div>
         </div>

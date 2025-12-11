@@ -77,7 +77,7 @@ export function IndustrySelector() {
   const currentIndustry = industries.find(i => i.id === activeIndustry) || industries[0]
 
   return (
-    <section className="py-24 bg-gray-50">
+    <section className="py-12 md:py-24 bg-gray-50">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div 
           className="text-center mb-12"
@@ -95,29 +95,54 @@ export function IndustrySelector() {
           </p>
         </motion.div>
 
-        {/* Industry Tabs */}
+        {/* Industry Tabs - Mobile: Horizontal Scroll, Desktop: Centered */}
         <motion.div 
-          className="flex justify-center gap-2 mb-16"
+          className="mb-12 md:mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           viewport={{ once: true }}
         >
-          {industries.map((industry) => (
-            <button
-              key={industry.id}
-              onClick={() => setActiveIndustry(industry.id)}
-              className={`
-                px-6 py-3 rounded-full text-sm font-medium transition-all duration-300
-                ${activeIndustry === industry.id
-                  ? 'bg-future-black text-white shadow-lg'
-                  : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-                }
-              `}
-            >
-              {industry.label}
-            </button>
-          ))}
+          {/* Mobile: Horizontal Scrollable */}
+          <div className="md:hidden overflow-x-auto -mx-6 px-6 scrollbar-hide">
+            <div className="flex gap-2 pb-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              {industries.map((industry) => (
+                <button
+                  key={industry.id}
+                  onClick={() => setActiveIndustry(industry.id)}
+                  className={`
+                    flex-shrink-0 min-h-[44px] px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 touch-manipulation
+                    ${activeIndustry === industry.id
+                      ? 'bg-future-black text-white shadow-lg'
+                      : 'bg-white text-gray-600 active:bg-gray-100 border border-gray-200'
+                    }
+                  `}
+                  style={{ touchAction: 'manipulation' }}
+                >
+                  {industry.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          {/* Desktop: Centered Grid */}
+          <div className="hidden md:flex justify-center flex-wrap gap-2">
+            {industries.map((industry) => (
+              <button
+                key={industry.id}
+                onClick={() => setActiveIndustry(industry.id)}
+                className={`
+                  min-h-[44px] px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300
+                  ${activeIndustry === industry.id
+                    ? 'bg-future-black text-white shadow-lg'
+                    : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                  }
+                `}
+              >
+                {industry.label}
+              </button>
+            ))}
+          </div>
         </motion.div>
 
         {/* Content Grid */}

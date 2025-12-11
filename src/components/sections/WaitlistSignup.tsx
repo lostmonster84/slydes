@@ -42,7 +42,7 @@ export function WaitlistSignup() {
   }
 
   return (
-    <section id="waitlist" className="py-20 bg-gray-50">
+    <section id="waitlist" className="py-12 md:py-20 bg-gray-50">
       <div className="max-w-4xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -92,7 +92,10 @@ export function WaitlistSignup() {
                   placeholder="First name (optional)"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/20 outline-none transition-all"
+                  className="flex-1 min-h-[48px] px-4 text-base rounded-xl border border-gray-200 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/20 outline-none transition-all touch-manipulation"
+                  style={{ fontSize: '16px', touchAction: 'manipulation' }}
+                  inputMode="text"
+                  autoComplete="given-name"
                 />
                 <input
                   type="email"
@@ -100,7 +103,10 @@ export function WaitlistSignup() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="flex-[2] px-4 py-3 rounded-xl border border-gray-200 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/20 outline-none transition-all"
+                  className="flex-[2] min-h-[48px] px-4 text-base rounded-xl border border-gray-200 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/20 outline-none transition-all touch-manipulation"
+                  style={{ fontSize: '16px', touchAction: 'manipulation' }}
+                  inputMode="email"
+                  autoComplete="email"
                 />
               </div>
               

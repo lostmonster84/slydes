@@ -195,3 +195,18 @@ html {
   background: rgba(37, 99, 235, 0.2);
   color: #0A0E27;
 }
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch manipulation - remove 300ms delay */
+.touch-manipulation {
+  touch-action: manipulation;
+}

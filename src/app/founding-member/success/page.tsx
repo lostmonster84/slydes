@@ -38,7 +38,7 @@ function SuccessContent() {
             </motion.div>
             
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              Welcome, <span className="gradient-text">Founding Member!</span>
+              Welcome, <span className="gradient-text">Founder!</span>
             </h1>
             <p className="text-gray-600 mb-8 text-lg">
               You&apos;re officially part of the team building the future of mobile-first business sites.

@@ -23,7 +23,7 @@ export function Hero() {
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-medium mb-6">
                 <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
-                Now accepting founding members
+                Now accepting founders
               </span>
             </motion.div>
             
@@ -57,7 +57,7 @@ export function Hero() {
             >
               <Link href="/founding-member">
                 <Button size="lg" className="w-full sm:w-auto animate-pulse-glow">
-                  Become a Founding Member
+                  Become a Founder
                 </Button>
               </Link>
               <Link href="/showcase">
@@ -73,7 +73,7 @@ export function Hero() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              Join 50 founding members shaping the future of mobile-first business sites.
+              Join 50 founders shaping the future of mobile-first business sites.
             </motion.p>
 
             <motion.p

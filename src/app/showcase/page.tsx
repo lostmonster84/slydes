@@ -106,7 +106,7 @@ export default function ShowcasePage() {
                   BETA
                 </span>
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-semibold">
-                  Founding Member
+                  Founder
                 </span>
               </div>
               <h2 className="text-2xl font-bold">Featured Showcase</h2>
@@ -198,7 +198,7 @@ export default function ShowcasePage() {
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/20 text-white text-sm font-medium mb-8">
                 <span className="w-2 h-2 bg-electric-cyan rounded-full animate-pulse" />
-                Founding Member Opportunity
+                Founder Opportunity
               </span>
               
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
@@ -208,12 +208,12 @@ export default function ShowcasePage() {
               </h2>
               
               <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-                Founding members do not just get Slydes early. They shape how we serve their market and become the showcase for their industry.
+                Founders do not just get Slydes early. They shape how we serve their market and become the showcase for their industry.
               </p>
               
               <Link href="/founding-member">
                 <Button size="lg" className="animate-pulse-glow">
-                  Become a Founding Member
+                  Become a Founder
                 </Button>
               </Link>
               
@@ -347,7 +347,7 @@ export default function ShowcasePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/founding-member">
                   <Button size="lg">
-                    Become a Founding Member
+                    Become a Founder
                   </Button>
                 </Link>
                 <Link href="/how-it-works">

@@ -7,16 +7,16 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 export default function PricingPage() {
-  const genesisRemaining = 47
-  const genesisTotalSpots = 50
+  const foundersRemaining = 47
+  const foundersTotalSpots = 50
 
   const tiers = [
     {
-      name: 'Genesis Founder',
+      name: 'Founder',
       price: '£499',
       priceAlt: '€599 / $629',
-      spots: genesisTotalSpots,
-      remaining: genesisRemaining,
+      spots: foundersTotalSpots,
+      remaining: foundersRemaining,
       revenueShare: '25%',
       status: 'active',
       highlight: true,
@@ -35,7 +35,7 @@ export default function PricingPage() {
       ],
     },
     {
-      name: 'Founding Member',
+      name: 'Builder',
       price: '£999',
       priceAlt: '€1,149 / $1,249',
       spots: 75,
@@ -58,7 +58,7 @@ export default function PricingPage() {
       ],
     },
     {
-      name: 'Charter Member',
+      name: 'Member',
       price: '£1,499',
       priceAlt: '€1,749 / $1,899',
       spots: 100,
@@ -98,7 +98,7 @@ export default function PricingPage() {
                 <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
                 Early bird pricing. Price steps up as tiers sell out.
               </span>
-              <h1 className="mb-4">Founding Member Pricing</h1>
+              <h1 className="mb-4">Founder Pricing</h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                 Three tiers released in stages. Early is the cheapest and comes with the most access.
               </p>
@@ -191,7 +191,7 @@ export default function PricingPage() {
                   {tier.status === 'active' ? (
                     <Link href="/founding-member">
                       <Button size="lg" className="w-full">
-                        Claim Genesis Spot
+                        Claim Founder Spot
                       </Button>
                     </Link>
                   ) : (
@@ -200,7 +200,7 @@ export default function PricingPage() {
                       className="w-full bg-gray-200 text-gray-500 cursor-not-allowed hover:bg-gray-200"
                       disabled
                     >
-                      Opens when {index === 1 ? 'Genesis' : 'Founding'} sells out
+                      Opens when {index === 1 ? 'Founders' : 'Builders'} sells out
                     </Button>
                   )}
                 </motion.div>
@@ -246,23 +246,23 @@ export default function PricingPage() {
                 },
                 {
                   q: 'When will I get access?',
-                  a: 'Genesis founders get early access first, before anyone else. We\'re targeting January 2026 for early access.',
+                  a: 'Founders get early access first, before anyone else. We\'re targeting January 2026 for early access.',
                 },
                 {
                   q: 'How does revenue share work?',
-                  a: 'You get a unique referral link. Anyone who signs up through your link and pays - you get your percentage of their subscription, forever. Genesis gets 25%, Founding gets 20%, Charter gets 15%.',
+                  a: 'You get a unique referral link. Anyone who signs up through your link and pays - you get your percentage of their subscription, forever. Founders get 25%, Builders get 20%, Members get 15%.',
                 },
                 {
                   q: 'What if I\'m not satisfied?',
                   a: '30-day money-back guarantee. Full refund, no questions asked.',
                 },
                 {
-                  q: 'Can I upgrade from Charter to Genesis?',
-                  a: 'No. Genesis is first-come, first-served. Once it\'s gone, it\'s gone forever. The perks don\'t come back.',
+                  q: 'Can I upgrade from Member to Founder?',
+                  a: 'No. Founders is first-come, first-served. Once it\'s gone, it\'s gone forever. The perks don\'t come back.',
                 },
                 {
                   q: 'What\'s the difference between tiers?',
-                  a: 'Genesis is the inner circle with daily Slack access to James, a personal onboarding call, monthly group calls, and 25% revenue share. Later tiers get less access and lower revenue share, but still include lifetime Pro.',
+                  a: 'Founders is the inner circle with daily Slack access to the founder, a personal onboarding call, monthly group calls, and 25% revenue share. Later tiers get less access and lower revenue share, but still include lifetime Pro.',
                 },
               ].map((faq, index) => (
                 <motion.div
@@ -289,15 +289,15 @@ export default function PricingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <p className="text-leader-blue font-medium mb-4">Genesis is open now</p>
+              <p className="text-leader-blue font-medium mb-4">Founders is open now</p>
               <h2 className="mb-6">Ready to join the inner circle?</h2>
               <Link href="/founding-member">
                 <Button size="lg">
-                  Become a Genesis Founder
+                  Become a Founder
                 </Button>
               </Link>
               <p className="text-gray-500 text-sm mt-4">
-                Only {genesisRemaining} of {genesisTotalSpots} spots remaining
+                Only {foundersRemaining} of {foundersTotalSpots} spots remaining
               </p>
             </motion.div>
           </div>

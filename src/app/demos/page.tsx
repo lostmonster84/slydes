@@ -390,7 +390,7 @@ export default function DemosPage() {
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/20 text-white text-sm font-medium mb-8">
                 <span className="w-2 h-2 bg-electric-cyan rounded-full animate-pulse" />
-                Founding Member Spots Available
+                Founder Spots Available
               </span>
 
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
@@ -400,14 +400,14 @@ export default function DemosPage() {
               </h2>
               
               <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-                Founding members get priority access, input on features, and lifetime pricing. 
+                Founders get priority access, input on features, and lifetime pricing. 
                 Limited spots available.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/founding-member">
                   <Button size="lg" className="animate-pulse-glow">
-                    Become a Founding Member
+                    Become a Founder
                   </Button>
                 </Link>
                 <Link href="/how-it-works">
