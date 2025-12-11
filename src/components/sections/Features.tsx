@@ -6,15 +6,15 @@ import { MeshGradient } from '@/components/ui/BackgroundAnimations'
 const features = [
   {
     title: 'Mobile-native by default',
-    description: 'Built for how people actually use their phones. Vertical scrolling, thumb-friendly navigation, full-screen video.',
+    description: 'Built for how people actually use their phones. Vertical scrolling, thumb-friendly navigation, and full-screen video keep people moving toward your booking or checkout.',
   },
   {
     title: 'Visual editor, live preview',
-    description: 'What you see is what you get. Edit with a live iPhone preview. No code required, ever.',
+    description: 'What you see is what you get. Edit with a live iPhone preview so you know exactly what customers will see. No code required, ever.',
   },
   {
     title: 'One click to publish',
-    description: 'Get a shareable link instantly. Works on every phone, no app download needed. Track views and engagement.',
+    description: 'Get a shareable link instantly. It works on every phone with no app to download so more people reach your calls to action. Track views and engagement from day one.',
   },
 ]
 
@@ -34,7 +34,7 @@ const itemVariants = {
 export function Features() {
   return (
     <MeshGradient>
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

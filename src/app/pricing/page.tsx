@@ -96,11 +96,11 @@ export default function PricingPage() {
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-medium mb-6">
                 <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
-                Early bird pricing — Price goes UP as tiers sell out
+                Early bird pricing. Price steps up as tiers sell out.
               </span>
               <h1 className="mb-4">Founding Member Pricing</h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Three tiers. Released in stages. Early = cheapest. Early = most access.
+                Three tiers released in stages. Early is the cheapest and comes with the most access.
               </p>
             </motion.div>
           </div>
@@ -262,7 +262,7 @@ export default function PricingPage() {
                 },
                 {
                   q: 'What\'s the difference between tiers?',
-                  a: 'Genesis is the inner circle - direct access to James, launch party invites, weekly calls, highest revenue share. Later tiers get less access and lower revenue share, but still lifetime Pro.',
+                  a: 'Genesis is the inner circle with daily Slack access to James, a personal onboarding call, monthly group calls, and 25% revenue share. Later tiers get less access and lower revenue share, but still include lifetime Pro.',
                 },
               ].map((faq, index) => (
                 <motion.div
@@ -293,7 +293,7 @@ export default function PricingPage() {
               <h2 className="mb-6">Ready to join the inner circle?</h2>
               <Link href="/founding-member">
                 <Button size="lg">
-                  Become a Genesis Founder — £499
+                  Become a Genesis Founder
                 </Button>
               </Link>
               <p className="text-gray-500 text-sm mt-4">

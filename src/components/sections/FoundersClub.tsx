@@ -11,7 +11,7 @@ export function FoundersClub() {
 
   return (
     <AnimatedAurora>
-      <section className="py-24 bg-future-black relative overflow-hidden">
+      <section className="py-24 relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left - What You Get */}
@@ -23,21 +23,21 @@ export function FoundersClub() {
           >
             <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-leader-blue/20 text-leader-blue text-sm font-medium mb-4">
               <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
-              Genesis Founders — Limited to {totalSpots}
+              Genesis Founders. Limited to {totalSpots}.
             </span>
             
             <h2 className="text-white mb-4">The inner circle.<br /><span className="gradient-text">The originals.</span></h2>
             <p className="text-gray-400 text-lg mb-8">
-              50 founders. Direct access to me. 25% on every referral, forever.
+              50 founders. Direct access to me. 25% on every referral, forever. Lifetime Pro access included.
               <br />
-              <span className="text-gray-500">You&apos;re not buying software — you&apos;re joining the founding team.</span>
+              <span className="text-gray-500">You are not just buying software. You are joining the founding team.</span>
             </p>
 
             <ul className="space-y-4 mb-8">
               {[
-                { title: 'Direct access to James', desc: 'Private Slack channel — I\'m there daily' },
-                { title: '25% revenue share forever', desc: 'Highest tier — earn on every referral' },
-                { title: 'Monthly founder calls', desc: 'Group calls to shape what we build' },
+                { title: 'Direct access to James', desc: 'Private Slack channel with James in the room every day' },
+                { title: '25% revenue share forever', desc: 'Highest tier. Earn on every referral for as long as they stay' },
+                { title: 'Monthly founder calls', desc: 'Group calls to shape what we build next' },
                 { title: 'Personal onboarding call', desc: '1-on-1 setup with the founder' },
                 { title: '"Built by" founders page', desc: 'Your name, photo, and business featured' },
               ].map((item, index) => (
@@ -70,7 +70,7 @@ export function FoundersClub() {
             viewport={{ once: true }}
           >
             <div className="text-center mb-6">
-              <p className="text-leader-blue text-sm font-medium mb-2">Genesis Founder — One-time payment</p>
+              <p className="text-leader-blue text-sm font-medium mb-2">Genesis Founder. One-time payment.</p>
               <div className="flex items-baseline justify-center mb-2">
                 <span className="text-6xl font-bold text-white">£499</span>
               </div>

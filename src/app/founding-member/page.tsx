@@ -149,7 +149,7 @@ export default function FoundingMemberPage() {
             {/* Genesis Badge */}
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-medium mb-6">
               <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
-              Genesis Founders — Only {spotsRemaining} of {totalSpots} spots left
+              Genesis Founders. Only {spotsRemaining} of {totalSpots} spots left.
             </span>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
@@ -158,10 +158,10 @@ export default function FoundingMemberPage() {
             </h1>
             
             <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-4">
-              50 founders. Direct access to me. 25% on every referral, forever.
+              50 founders. Direct access to me. 25% on every referral, forever. Lifetime Pro access included.
             </p>
             <p className="text-gray-500 max-w-xl mx-auto">
-              You&apos;re not buying software — you&apos;re joining the founding team.
+              You are not just buying software. You are joining the founding team.
             </p>
           </motion.div>
 
@@ -212,11 +212,11 @@ export default function FoundingMemberPage() {
                 </h3>
                 <ul className="space-y-4">
                   {[
-                    { title: 'Direct access to James', desc: 'Private Slack channel — I\'m there daily' },
-                    { title: '25% revenue share forever', desc: 'Highest tier — earn on every referral' },
+                    { title: 'Direct access to James', desc: 'Private Slack channel with James in the room every day' },
+                    { title: '25% revenue share forever', desc: 'Highest tier. Earn on every referral for as long as they stay' },
                     { title: 'Monthly founder calls', desc: 'Group calls to shape what we build next' },
                     { title: 'Personal onboarding call', desc: '1-on-1 setup call with the founder' },
-                    { title: 'Invited to founder events', desc: 'Launch celebrations, meetups when they happen' },
+                    { title: 'Invited to founder events', desc: 'Launch celebrations and meetups when they happen' },
                     { title: '"Built by" founders page', desc: 'Your name, photo, and business featured' },
                   ].map((item, i) => (
                     <motion.li 
@@ -360,14 +360,14 @@ export default function FoundingMemberPage() {
                   </div>
 
                   {/* Submit */}
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    size="lg"
-                    className="w-full animate-pulse-glow"
-                  >
-                    {isSubmitting ? 'Processing...' : 'Become a Genesis Founder — £499'}
-                  </Button>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  size="lg"
+                  className="w-full animate-pulse-glow"
+                >
+                  {isSubmitting ? 'Processing...' : 'Become a Genesis Founder'}
+                </Button>
 
                   {/* Trust indicators */}
                   <div className="flex items-center justify-center gap-4 pt-2 text-gray-400 text-xs">

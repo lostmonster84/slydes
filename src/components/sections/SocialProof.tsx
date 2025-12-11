@@ -2,11 +2,12 @@
 
 import { motion } from 'framer-motion'
 import { AnimatedSpotlight } from '@/components/ui/BackgroundAnimations'
+import { PhoneMockup } from '@/components/ui/PhoneMockup'
 
 export function SocialProof() {
   return (
     <AnimatedSpotlight position="right">
-      <section className="py-24 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 relative overflow-hidden">
+      <section className="py-24 relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 relative z-10">
         {/* Simple stats row */}
         <motion.div
@@ -81,64 +82,9 @@ export function SocialProof() {
               </div>
             </div>
 
-            {/* Mobile mockup */}
+            {/* Mobile mockup - Using the WildTrax variant with RED theme */}
             <div className="relative flex justify-center">
-              {/* Phone frame */}
-              <div className="relative w-[280px] h-[570px] bg-gray-900 rounded-[3rem] p-3 shadow-2xl">
-                {/* Notch */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-900 rounded-b-2xl z-10"></div>
-                
-                {/* Screen */}
-                <div className="relative w-full h-full bg-gray-100 rounded-[2.5rem] overflow-hidden">
-                  {/* WildTrax mobile preview - Full-screen vertical layout */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-900 to-black">
-                    {/* Hero vehicle image placeholder */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-white/20 text-6xl">🚙</div>
-                      </div>
-                    </div>
-                    
-                    {/* Content overlay */}
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                      <div className="mb-6">
-                        <div className="text-xs text-white/60 mb-1 uppercase tracking-wide">Available Now</div>
-                        <h4 className="text-xl font-bold mb-2">Land Rover Defender</h4>
-                        <p className="text-sm text-white/80 mb-4">Perfect for Highland adventures. Full off-road capability.</p>
-                        
-                        {/* Quick stats */}
-                        <div className="flex gap-4 text-xs mb-6">
-                          <div>
-                            <div className="text-white/60">Seats</div>
-                            <div className="font-semibold">5</div>
-                          </div>
-                          <div>
-                            <div className="text-white/60">Per Day</div>
-                            <div className="font-semibold">£150</div>
-                          </div>
-                          <div>
-                            <div className="text-white/60">Type</div>
-                            <div className="font-semibold">4x4</div>
-                          </div>
-                        </div>
-
-                        {/* CTA Button */}
-                        <button className="w-full bg-white text-gray-900 rounded-full py-3 px-6 font-semibold text-sm">
-                          Book Now
-                        </button>
-                      </div>
-
-                      {/* Swipe indicator */}
-                      <div className="flex justify-center items-center gap-2 pt-4 border-t border-white/10">
-                        <svg className="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                        </svg>
-                        <span className="text-xs text-white/60">Swipe for more</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <PhoneMockup variant="wildtrax" />
             </div>
           </div>
         </motion.div>

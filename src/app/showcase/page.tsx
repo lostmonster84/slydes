@@ -84,7 +84,7 @@ export default function ShowcasePage() {
                 See Slydes <span className="gradient-text">in action</span>
               </h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Real businesses transforming their mobile presence. Your industry could be next.
+                See how real businesses use Slydes to turn mobile visitors into bookings and leads. Your industry can be next.
               </p>
             </motion.div>
           </div>
@@ -141,10 +141,9 @@ export default function ShowcasePage() {
                   </div>
                   
                   <h3 className="text-3xl font-bold mb-4">WildTrax 4x4</h3>
-                  <p className="text-gray-600 text-lg mb-6 leading-relaxed">
-                    Highland vehicle rentals and guided tours transformed their mobile experience. 
-                    Full-screen video backgrounds, instant booking CTAs, and a seamless 
-                    swipe-to-explore interface.
+              <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+                    WildTrax used Slydes to rebuild their mobile experience and increase bookings from phone visitors. 
+                    Full-screen video backgrounds, instant booking CTAs, and a seamless swipe-to-explore interface.
                   </p>
 
                   <div className="space-y-3 mb-8">
@@ -209,8 +208,7 @@ export default function ShowcasePage() {
               </h2>
               
               <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-                Founding members don&apos;t just get Slydes early—they shape how we serve their 
-                market. Be the showcase for your industry.
+                Founding members do not just get Slydes early. They shape how we serve their market and become the showcase for their industry.
               </p>
               
               <Link href="/founding-member">

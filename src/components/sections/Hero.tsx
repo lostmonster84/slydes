@@ -9,7 +9,7 @@ import { motion } from 'framer-motion'
 export function Hero() {
   return (
     <AnimatedHeroBackground>
-      <section className="pt-24 md:pt-32 pb-16 md:pb-24 min-h-[90vh] md:min-h-screen flex items-center overflow-hidden relative bg-white">
+      <section className="pt-24 md:pt-32 pb-16 md:pb-24 min-h-[90vh] md:min-h-screen flex items-center overflow-hidden relative">
         <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-20 items-center">
           {/* Left Column - Content */}
@@ -44,7 +44,8 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              TikTok-style vertical scrolling for businesses. 
+              Your current website was built for desktops. 
+              Slydes turns your content into TikTok-style vertical stories that feel native on any phone. 
               Built in minutes, not months.
             </motion.p>
             
@@ -73,6 +74,21 @@ export function Hero() {
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               Join 50 founding members shaping the future of mobile-first business sites.
+            </motion.p>
+
+            <motion.p
+              className="text-sm text-gray-500 mt-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              Not ready yet?{' '}
+              <a 
+                href="#waitlist" 
+                className="text-leader-blue hover:underline font-medium"
+              >
+                Join the waitlist
+              </a>
             </motion.p>
           </div>
 
