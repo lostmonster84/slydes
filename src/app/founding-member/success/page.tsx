@@ -10,7 +10,7 @@ import { Suspense } from 'react'
 
 function SuccessContent() {
   const searchParams = useSearchParams()
-  const sessionId = searchParams.get('session_id')
+  const sessionId = searchParams?.get('session_id')
   
   // In production, you'd verify the session_id with Stripe
   // and fetch the actual member number from your database
