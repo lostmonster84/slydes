@@ -25,8 +25,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/examples" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  Examples
+                <Link href="/showcase" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                  Showcase
                 </Link>
               </li>
               <li>

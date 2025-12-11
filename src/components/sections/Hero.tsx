@@ -65,9 +65,9 @@ export function Hero() {
                   Become a Founding Member
                 </Button>
               </Link>
-              <Link href="/examples">
+              <Link href="/showcase">
                 <Button variant="secondary" size="lg" className="w-full sm:w-auto hover-lift">
-                  See Examples
+                  See Showcase
                 </Button>
               </Link>
             </motion.div>

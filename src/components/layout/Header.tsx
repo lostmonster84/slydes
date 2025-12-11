@@ -19,8 +19,8 @@ export function Header() {
           <Link href="/how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
             How It Works
           </Link>
-          <Link href="/examples" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
-            Examples
+          <Link href="/showcase" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
+            Showcase
           </Link>
           <Link href="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
             Founding Members
@@ -69,11 +69,11 @@ export function Header() {
               How It Works
             </Link>
             <Link
-              href="/examples"
+              href="/showcase"
               className="block text-gray-600 hover:text-gray-900 transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Examples
+              Showcase
             </Link>
             <Link
               href="/pricing"
