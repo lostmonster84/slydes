@@ -179,13 +179,13 @@ export default function HowItWorksPage() {
             >
               <h2 className="mb-4">Ready to build your first Slyde?</h2>
               <p className="text-gray-600 mb-8 max-w-xl mx-auto">
-                Join our founding members and get lifetime access 
-                to the future of mobile-first business sites.
+                Join our Founding Partners and earn 25% commission for life 
+                on every subscriber you refer.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/founding-member">
                   <Button size="lg">
-                    Become a Founding Member
+                    Become a Founding Partner
                   </Button>
                 </Link>
                 <Link href="/showcase">

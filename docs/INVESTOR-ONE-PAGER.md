@@ -66,7 +66,7 @@
 
 | Stream | Launch | Description |
 |--------|--------|-------------|
-| **Subscriptions** | Now | $99-$199/month (businesses pay for premium features) |
+| **Subscriptions** | Now | $19/month Pro tier (analytics, leads, no branding) |
 | **Transaction Fees** | 2026 | 3-5% of bookings facilitated through Consumer App |
 | **Featured Listings** | 2026 | Businesses pay for top placement in discovery feed |
 | **Enterprise** | 2025 | Custom solutions for chains & franchises |
@@ -102,7 +102,7 @@
 - ✅ Complete brand & product vision
 - ✅ Website MVP in development
 - ✅ Strategic documentation complete
-- ✅ Founding Member program designed
+- ✅ Influencer Program designed (50 Founding Partners)
 - 🔄 First customers in pipeline
 
 ### Near-Term Milestones
@@ -210,7 +210,7 @@ Founder & CEO, Slydes
 
 ---
 
-*Built for 2030. Are you in?*
+*Built for the Future. Are you in?*
 
 
 

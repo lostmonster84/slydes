@@ -285,7 +285,7 @@ const variantContent: Record<string, {
       },
       {
         title: 'Memberships',
-        subtitle: 'Unlimited access from $199/mo',
+        subtitle: 'Unlimited access from $19/mo',
         cta: 'Join Now',
         ctaIcon: 'arrow',
         // Additional fitness video

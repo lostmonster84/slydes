@@ -28,7 +28,7 @@ function HeroContent() {
           <div className="flex-1 text-center lg:text-left">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-medium mb-6">
               <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
-              Now accepting founding members
+              Now accepting Founding Partners — 25% commission for life
             </span>
             
             <h1 className="font-display mb-6 text-4xl lg:text-5xl font-bold tracking-tight">

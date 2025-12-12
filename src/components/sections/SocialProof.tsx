@@ -27,7 +27,7 @@ export function SocialProof() {
           </div>
           <div className="text-center">
             <div className="text-4xl font-bold gradient-text mb-2">50+</div>
-            <p className="text-gray-600">Founding members</p>
+            <p className="text-gray-600">Founding Partners</p>
           </div>
         </motion.div>
 

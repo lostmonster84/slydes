@@ -12,6 +12,7 @@ const config: Config = {
         // Primary
         'future-black': '#0A0E27',
         'leader-blue': '#2563EB',
+        'electric-cyan': '#22D3EE',
         
         // Grays (for clean UI)
         'gray-50': '#FAFAFA',

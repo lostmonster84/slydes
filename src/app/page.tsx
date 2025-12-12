@@ -20,8 +20,8 @@ export default function HomePage() {
         <HowItWorks />
         <Features />
         <SocialProof />
-        <WaitlistSignup />
         <FoundersClub />
+        <WaitlistSignup />
       </main>
       <Footer />
     </>

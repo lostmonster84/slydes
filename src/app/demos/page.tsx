@@ -389,14 +389,14 @@ export default function DemosPage() {
               viewport={{ once: true }}
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/20 text-white text-sm font-medium mb-8">
-                <span className="w-2 h-2 bg-electric-cyan rounded-full animate-pulse" />
+                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
                 Founder Spots Available
               </span>
 
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
                 Your business could look
                 <br />
-                <span className="text-electric-cyan">this good</span>
+                <span className="text-cyan-400">this good</span>
               </h2>
               
               <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -418,7 +418,7 @@ export default function DemosPage() {
               </div>
 
               <p className="mt-8 text-gray-500 text-sm">
-                Join 12 founding members already building with Slydes
+                Join 12 Founding Partners already earning with Slydes
               </p>
             </motion.div>
           </div>

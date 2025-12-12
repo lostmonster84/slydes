@@ -123,7 +123,7 @@ Plus 4 organized folders:
 1. **Homepage** - Hook visitors in 5 seconds
 2. **How It Works** - 3-step process
 3. **Examples** - Live Slyde showcases
-4. **Pricing** - Transparent ($49-$499/mo)
+4. **Pricing** - Simple (Free / $19/mo Pro)
 5. **Signup** - Zero friction conversion
 6. **Dashboard** - Get first Slyde created ASAP
 
@@ -215,15 +215,15 @@ Plus 4 organized folders:
 
 | Tier | Price | Target | Features |
 |------|-------|--------|----------|
-| **Starter** | $49/mo | Solo | 1 Slyde, 10 frames |
-| **Professional** | $149/mo | Growing | 5 Slydes, unlimited frames |
-| **Enterprise** | $499/mo | Multi-location | Unlimited, white-label |
+| **Free** | $0/mo | Try it out | 1 Slyde, 5 slides, branded outro |
+| **Pro** | $19/mo | Serious users | Unlimited Slydes, analytics, lead capture, no branding |
 
-**All plans include**:
-- 14-day free trial
-- No credit card required
+**Pro includes**:
+- Unlimited everything
+- Analytics dashboard
+- Lead capture forms
+- Remove Slydes branding
 - Cancel anytime
-- Full features unlocked
 
 ---
 

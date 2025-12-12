@@ -33,32 +33,35 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Create Stripe checkout session
+    // Create Stripe checkout session for Pro subscription
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
           price_data: {
-            currency: 'gbp',
+            currency: 'usd',
             product_data: {
-              name: 'Slydes Founder',
-              description: 'Lifetime Pro access + 25% revenue share on referrals',
-              images: ['https://slydes.io/og-image.png'], // Update with actual OG image
+              name: 'Slydes Pro',
+              description: 'Unlimited Slydes, analytics, lead capture, no branding',
+              images: ['https://slydes.io/og-image.png'],
             },
-            unit_amount: 49900, // £499 in pence
+            unit_amount: 1900, // $19 in cents
+            recurring: {
+              interval: 'month',
+            },
           },
           quantity: 1,
         },
       ],
-      mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://slydes.io'}/founding-member/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://slydes.io'}/founding-member`,
+      mode: 'subscription',
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://slydes.io'}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://slydes.io'}/pricing`,
       customer_email: email,
       metadata: {
         name,
         company: company || '',
         useCase,
-        memberType: 'founder',
+        memberType: 'pro',
       },
       // Allow promotion codes if you set them up
       allow_promotion_codes: true,

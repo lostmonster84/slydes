@@ -188,7 +188,7 @@ Font: Inter Black
 Color: Future Black (#0A0E27) or Leader Blue (#2563EB) on light
        Pure White (#FFFFFF) on dark backgrounds
 Style: ALL CAPS, letter-spacing: -2%
-Tagline below: "Built for 2030."
+Tagline below: "Built for the Future."
 ```
 
 **Icon/Favicon**:
@@ -337,7 +337,7 @@ Join the businesses leading the field. Create your first Slyde in 10 minutes.
 
 The future is mobile. The future is immersive. The future is Slydes.
 
-**Built for 2030.**"
+**Built for the Future.**"
 
 ---
 

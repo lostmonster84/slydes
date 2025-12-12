@@ -26,7 +26,7 @@
 **Deliverables**:
 - ✅ Full website at slydes.io
 - ✅ Vision manifesto (The Case for Slydes)
-- ✅ Founding Member signup flow
+- ✅ Waitlist signup flow
 - ✅ Waitlist capture
 - ✅ Payment integration (Stripe)
 - ✅ Showcase page with demo Slydes
@@ -34,7 +34,7 @@
 **Success Criteria**:
 - Website live and performant
 - 100+ waitlist signups in first week
-- First 3 Founding Members purchased
+- First 5 Founding Partners onboarded (influencer program)
 
 ---
 
@@ -199,7 +199,7 @@
 **Deliverables**:
 - Automated signup flow (no human touchpoint needed)
 - Free tier launched (1 Slyde, basic features)
-- Paid tier launched ($99/mo - unlimited Slydes, analytics)
+- Pro tier launched ($19/mo - unlimited Slydes, analytics, lead capture)
 - In-app upsells (upgrade prompts)
 - Customer success automation (welcome emails, tips, engagement nudges)
 
@@ -348,13 +348,13 @@
 **Deliverables**:
 - CTA buttons link to booking systems (OpenTable, Calendly, etc.)
 - Track booking attribution (which Slydes drive bookings)
-- Revenue share agreements with businesses (optional)
+- Transaction fee model (3-5% on bookings facilitated)
 - In-app booking pilot (for select partners)
 
 **Success Criteria**:
 - 100 bookings attributed to Slydes app (first month)
 - Businesses see clear ROI from app traffic
-- 10 businesses opt into revenue share model
+- 10 businesses using in-app booking
 
 ---
 
@@ -495,7 +495,7 @@
 
 ### Bootstrap (2025)
 **Strategy**: Self-funded or angel investors
-- Founding Member revenue ($50K-$100K)
+- Influencer Program distribution (50 Founding Partners)
 - Early MRR funds development
 - Lean team, contract work
 - **Goal**: Get to $200K MRR without dilution

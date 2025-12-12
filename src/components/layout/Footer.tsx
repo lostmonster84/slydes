@@ -3,12 +3,12 @@ import { Logo } from '@/components/ui/Logo'
 
 export function Footer() {
   return (
-    <footer className="bg-gray-50 border-t border-gray-200">
+    <footer className="bg-future-black">
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Logo and tagline */}
         <div className="mb-12">
-          <Logo size="lg" />
-          <p className="text-gray-500 text-sm mt-2 max-w-xs">
+          <Logo size="lg" dark={true} />
+          <p className="text-gray-400 text-sm mt-2 max-w-xs">
             Mobile-first sites that customers actually use.
           </p>
         </div>
@@ -17,21 +17,21 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Product Column */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Product</h3>
+            <h3 className="text-sm font-semibold text-white mb-4">Product</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/how-it-works" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link href="/how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href="/showcase" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link href="/showcase" className="text-sm text-gray-400 hover:text-white transition-colors">
                   Showcase
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  Pricing
+                <Link href="/founding-member" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Partners
                 </Link>
               </li>
             </ul>
@@ -39,20 +39,15 @@ export function Footer() {
 
           {/* Company Column */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Company</h3>
+            <h3 className="text-sm font-semibold text-white mb-4">Company</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link href="/contact" className="text-sm text-gray-400 hover:text-white transition-colors">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="/investors" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <Link href="/investors" className="text-sm text-gray-400 hover:text-white transition-colors">
                   Investors
                 </Link>
               </li>
@@ -61,16 +56,16 @@ export function Footer() {
 
           {/* Resources Column */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Resources</h3>
+            <h3 className="text-sm font-semibold text-white mb-4">Resources</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  Documentation
+                <Link href="/how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  How It Works
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  Help Center
+                <Link href="/contact" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Help & Support
                 </Link>
               </li>
             </ul>
@@ -78,24 +73,24 @@ export function Footer() {
 
           {/* Legal Column */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Legal</h3>
+            <h3 className="text-sm font-semibold text-white mb-4">Legal</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  Privacy
-                </Link>
+                <span className="text-sm text-gray-500 cursor-default">
+                  Privacy Policy
+                </span>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  Terms
-                </Link>
+                <span className="text-sm text-gray-500 cursor-default">
+                  Terms of Service
+                </span>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Row */}
-        <div className="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-gray-500">
             © 2025 Slydes. All rights reserved.
           </p>
@@ -106,7 +101,7 @@ export function Footer() {
               href="https://twitter.com/slydes"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-500 hover:text-white transition-colors"
               aria-label="Twitter"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -117,7 +112,7 @@ export function Footer() {
               href="https://linkedin.com/company/slydes"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-500 hover:text-white transition-colors"
               aria-label="LinkedIn"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

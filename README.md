@@ -1,6 +1,6 @@
 # Slydes.io Marketing Website
 
-Built for 2030.
+Built for the Future.
 
 ## Tech Stack
 

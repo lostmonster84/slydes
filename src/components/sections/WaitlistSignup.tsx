@@ -61,12 +61,12 @@ export function WaitlistSignup() {
 
           {/* Headline */}
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Not ready to commit?
+            Want updates instead?
           </h2>
           
           <p className="text-lg text-gray-600 mb-8 max-w-xl mx-auto">
-            No problem. Get early access, product updates, and exclusive launch discounts. 
-            No spam, just the good stuff.
+            Not an influencer? No problem. Get early access and product updates. 
+            Be first to know when we launch.
           </p>
 
           {/* Form */}

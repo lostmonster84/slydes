@@ -4,7 +4,7 @@
 >
 > **Based on**: BRAND-GUIDELINES.md + WEBSITE-WIREFRAME.md  
 > **Voice**: Bold, confident, leader energy  
-> **Message**: "Built for 2030"
+> **Message**: "Built for the Future"
 
 ---
 
@@ -14,7 +14,7 @@
 
 **Headline** (H1):
 ```
-Built for 2030.
+Built for the Future.
 ```
 
 **Subheading** (H2):
@@ -71,7 +71,7 @@ Vertical scrolling, TikTok-style
 Immersive video and content
 Users engage, share, convert
 
-Built for 2030.
+Built for the Future.
 ```
 
 ---
@@ -404,7 +404,7 @@ Perfect for testing and personal projects.
 **Tier 2: Pro** (Recommended badge)
 ```
 **Pro**
-$29/month
+$19/month
 
 For businesses ready to engage customers.
 
@@ -422,7 +422,7 @@ For businesses ready to engage customers.
 **Tier 3: Agency**
 ```
 **Agency**
-$99/month
+$19/month
 
 For agencies building Slydes for clients.
 
@@ -652,7 +652,7 @@ Cookie Policy
 
 **Bottom Row**:
 ```
-© 2025 Slydes. Built for 2030.
+© 2025 Slydes. Built for the Future.
 
 [Twitter] [LinkedIn] [YouTube]
 ```
@@ -745,7 +745,7 @@ The Slydes Team
 - Short sentences
 - Active voice
 - "You" and "we" language (partnership)
-- Future-forward ("Built for 2030")
+- Future-forward ("Built for the Future")
 
 **Avoid**:
 - Corporate jargon

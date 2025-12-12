@@ -39,7 +39,7 @@ export default function DashboardPage() {
                 <p className="text-gray-600">
                   <span className="font-semibold text-future-black">Dashboard launching January 2026.</span>
                   <br />
-                  <span className="text-sm">Founding members get early access.</span>
+                  <span className="text-sm">Founding Partners earn 25% commission for life.</span>
                 </p>
               </div>
             </motion.div>

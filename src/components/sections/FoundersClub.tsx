@@ -26,21 +26,23 @@ export function FoundersClub() {
               Founding Partners. Limited to {totalSpots}.
             </span>
             
-            <h2 className="text-white mb-4">Build with us.<br /><span className="gradient-text">Grow with us.</span></h2>
-            <p className="text-gray-400 text-lg mb-8">
+            <h2 className="text-white mb-4">Promote Slydes.<br /><span className="gradient-text">Earn 25% for life.</span></h2>
+            <p className="text-gray-300 text-lg mb-4">
               We&apos;re selecting 50 influencers and creators to become Founding Partners. 
-              You bring the audience. We build your Slyde. Together, we grow.
-              <br />
-              <span className="text-gray-500">No payment required. Your audience is your contribution.</span>
+              You promote Slydes. You earn commission on every conversion. Simple.
+            </p>
+            <p className="text-cyan-400 font-medium mb-8">
+              25% of every subscriber you refer. Forever.
             </p>
 
             <ul className="space-y-4 mb-8">
               {[
-                { title: 'Custom Slyde built for you', desc: 'White-glove build of your mobile experience, tailored to your brand' },
-                { title: 'Lifetime Pro access', desc: 'Full access to Slydes Pro features, forever' },
+                { title: '25% commission for life', desc: 'Earn $4.75/month per subscriber you refer — recurring, not one-time' },
+                { title: 'Lifetime Pro access', desc: 'Full access to Slydes Pro features, free forever' },
+                { title: 'Unique referral link + dashboard', desc: 'Track clicks, signups, conversions, and earnings in real-time' },
                 { title: 'Direct access to the founder', desc: 'Private Slack channel with James in the room every day' },
                 { title: 'Featured in our showcase', desc: 'Your Slyde featured as an example of what\'s possible' },
-                { title: 'Founding Partner status', desc: 'Recognition as one of the original 50 who built Slydes' },
+                { title: 'Monthly payouts', desc: 'Paid on the 1st via Stripe Connect or PayPal' },
               ].map((item, index) => (
                 <motion.li 
                   key={item.title}
@@ -55,14 +57,14 @@ export function FoundersClub() {
                   </svg>
                   <div>
                     <span className="text-white font-medium">{item.title}</span>
-                    <p className="text-gray-500 text-sm">{item.desc}</p>
+                    <p className="text-gray-400 text-sm">{item.desc}</p>
                   </div>
                 </motion.li>
               ))}
             </ul>
           </motion.div>
 
-          {/* Right - Application Card */}
+          {/* Right - Earnings Card */}
           <motion.div 
             className="bg-gray-800/50 rounded-3xl p-8 border border-gray-700/50 backdrop-blur-sm"
             initial={{ opacity: 0, y: 20 }}
@@ -71,17 +73,18 @@ export function FoundersClub() {
             viewport={{ once: true }}
           >
             <div className="text-center mb-6">
-              <p className="text-leader-blue text-sm font-medium mb-2">Founding Partner</p>
+              <p className="text-leader-blue text-sm font-medium mb-2">Founding Partner Commission</p>
               <div className="flex items-baseline justify-center mb-2">
-                <span className="text-5xl font-bold text-white">Free</span>
+                <span className="text-5xl font-bold text-white">25%</span>
+                <span className="text-gray-300 ml-2">for life</span>
               </div>
-              <p className="text-gray-500 text-sm">For selected partners</p>
+              <p className="text-gray-300 text-sm">On every subscriber you refer</p>
             </div>
 
             {/* Progress bar */}
             <div className="mb-6">
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400">{totalSpots - spotsRemaining} selected</span>
+                <span className="text-gray-300">{totalSpots - spotsRemaining} selected</span>
                 <span className="text-white font-medium">{spotsRemaining} spots left</span>
               </div>
               <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
@@ -103,18 +106,19 @@ export function FoundersClub() {
 
             {/* What we ask */}
             <div className="text-center mb-6 p-4 bg-gray-900/50 rounded-xl border border-gray-700/30">
-              <p className="text-gray-400 text-xs mb-2">What we ask in return:</p>
-              <p className="text-gray-300 text-sm">Share your Slydes journey with your audience</p>
+              <p className="text-gray-300 text-xs mb-2">What we ask:</p>
+              <p className="text-gray-300 text-sm">Share your referral link &amp; post about Slydes quarterly</p>
             </div>
 
             {/* Who we're looking for */}
             <div className="pt-4 border-t border-gray-700/50">
-              <div className="flex justify-center gap-4 text-gray-500 text-xs">
-                <span>10k+ audience</span>
-                <span>•</span>
-                <span>Real business</span>
-                <span>•</span>
-                <span>Builder mindset</span>
+              <p className="text-gray-300 text-xs text-center mb-2">Perfect for creators in:</p>
+              <div className="flex flex-wrap justify-center gap-2 text-gray-300 text-xs">
+                <span className="bg-gray-800 px-2 py-1 rounded">Food</span>
+                <span className="bg-gray-800 px-2 py-1 rounded">Travel</span>
+                <span className="bg-gray-800 px-2 py-1 rounded">Real Estate</span>
+                <span className="bg-gray-800 px-2 py-1 rounded">Lifestyle</span>
+                <span className="bg-gray-800 px-2 py-1 rounded">Business</span>
               </div>
             </div>
           </motion.div>
@@ -126,9 +130,9 @@ export function FoundersClub() {
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
           viewport={{ once: true }}
-          className="text-center text-gray-500 text-sm mt-8"
+          className="text-center text-gray-400 text-sm mt-8"
         >
-          We review every application personally. <span className="text-white">Quality over quantity.</span>
+          10K-500K followers. Engaged audiences. <span className="text-white">Quality over quantity.</span>
         </motion.p>
         </div>
       </section>

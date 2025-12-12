@@ -214,7 +214,7 @@ npm run dev
 
 ---
 
-**Built for 2030** 🚀
+**Built for the Future** 🚀
 
 
 

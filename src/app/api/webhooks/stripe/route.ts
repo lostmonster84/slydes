@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         const { name, company, useCase, memberType } = session.metadata || {}
         const email = session.customer_email
 
-        console.log('🎉 New founding member!', {
+        console.log('🎉 New Pro subscriber!', {
           name,
           email,
           company,
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
         })
 
         // TODO: Add to your database
-        // await db.foundingMembers.create({
+        // await db.subscribers.create({
         //   data: {
         //     name,
         //     email,
@@ -64,19 +64,17 @@ export async function POST(request: NextRequest) {
         //     useCase,
         //     stripeSessionId: session.id,
         //     stripeCustomerId: session.customer as string,
-        //     memberNumber: await getNextMemberNumber(),
-        //     paidAt: new Date(),
+        //     stripeSubscriptionId: session.subscription as string,
+        //     tier: 'pro',
+        //     subscribedAt: new Date(),
         //   }
         // })
 
         // TODO: Send welcome email
-        // await sendWelcomeEmail({ name, email, memberNumber })
+        // await sendWelcomeEmail({ name, email })
 
-        // TODO: Add to Slack channel invite list
-        // await addToSlackInviteList(email)
-
-        // TODO: Create referral code for revenue share
-        // await createReferralCode({ email, memberNumber })
+        // TODO: Provision Pro access
+        // await provisionProAccess(email)
 
         break
       }

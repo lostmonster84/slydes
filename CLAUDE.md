@@ -216,7 +216,7 @@ What are we tackling? 🚀
 
 **Key Achievements**:
 - Brand identity defined (Future Black, Leader Blue, Electric Cyan)
-- "Built for 2030" positioning (not 2020)
+- "Built for the Future" positioning (not 2020)
 - Website wireframe complete (6 pages, video-first)
 - Launch strategy mapped (3-month GTM)
 - Practice what we preach philosophy
@@ -303,14 +303,14 @@ What are we tackling? 🚀
 - Added tertiary "Join waitlist" link to Hero section
 - Connected to Resend API (audience ID: 29817019-d28f-4bbe-8a64-3f4c64d6b8fc)
 - Low-friction conversion path for hesitant visitors
-- AIDA-optimized: Two conversion paths now (waitlist + founding member)
+- AIDA-optimized: Conversion paths (waitlist → Free → Pro)
 
 **Session 3 Learnings**:
 - James reveals FULL vision incrementally (started with B2B SaaS, revealed two-sided platform)
 - "Case for Slides" should BE a Slyde (practice what we preach)
 - Info icon = business-level info (persistent), not slide-specific
 - Share icon = viral distribution (Instagram, WhatsApp, copy link)
-- Waitlist needed for AIDA funnel (not everyone ready for £499 commitment)
+- Waitlist needed for AIDA funnel (low-commitment entry point)
 - Documentation is investor-grade when comprehensive and numbers-driven
 - James thinks big picture first, then drills into details
 
@@ -348,7 +348,7 @@ What are we tackling? 🚀
 - Electric Cyan (#06B6D4)
 - Pure White (#FFFFFF)
 
-**Message**: "Built for 2030"
+**Message**: "Built for the Future"
 
 **Voice**: Bold, confident, leader energy
 
@@ -497,7 +497,7 @@ Let's knock this out! 🚀
    - Lead by example
    - Be the standard
 
-4. **"Built for 2030"**
+4. **"Built for the Future"**
    - Forward-thinking
    - Not incremental, transformational
 

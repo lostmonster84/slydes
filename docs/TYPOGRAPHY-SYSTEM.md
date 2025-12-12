@@ -1,6 +1,6 @@
 # Slydes Typography System
 
-> **"Built for 2030"** 
+> **"Built for the Future"** 
 > Our typography is bold, distinctive, and unmistakably modern.
 
 **Last Updated**: December 11, 2025  
@@ -37,7 +37,7 @@ Typography is **80% of our brand touchpoints**:
 
 **Why it wins:**
 - Highly distinctive geometric sans-serif
-- "Space" in the name literally = "Built for 2030"
+- "Space" in the name literally = "Built for the Future"
 - Strong personality without being weird
 - Geometric shapes match our Rising Cards logo mark
 - Great for grabbing attention
@@ -204,7 +204,7 @@ Use: API examples, technical docs
 ```tsx
 // Hero Headline
 <h1 className="font-display text-6xl md:text-7xl font-bold tracking-tight text-future-black">
-  Built for 2030.
+  Built for the Future.
 </h1>
 
 // Section Title
@@ -287,7 +287,7 @@ Use: API examples, technical docs
 ```tsx
 <section className="py-20">
   <h1 className="font-display text-7xl font-bold tracking-tight text-future-black mb-6">
-    Built for 2030.
+    Built for the Future.
   </h1>
   <p className="text-xl text-gray-600 max-w-2xl">
     Mobile-first experiences that actually convert. 
@@ -327,14 +327,14 @@ Use: API examples, technical docs
 ```tsx
 <div className="bg-white rounded-2xl p-8 border border-gray-200">
   <h3 className="font-display text-2xl font-bold tracking-tight text-future-black mb-2">
-    Founding Member
+    Pro
   </h3>
   <div className="flex items-baseline gap-2 mb-4">
-    <span className="font-mono text-5xl font-bold text-leader-blue">$49</span>
+    <span className="font-mono text-5xl font-bold text-leader-blue">$19</span>
     <span className="text-gray-500">/month</span>
   </div>
   <p className="text-gray-600 mb-6">
-    Lock in lifetime access at launch pricing.
+    Unlimited Slydes, analytics, lead capture, no branding.
   </p>
   <button className="w-full bg-leader-blue text-white font-sans font-semibold py-3 rounded-lg">
     Join Waitlist
@@ -421,7 +421,7 @@ COLORS:
 
 **Remember**: Typography is 80% of our visual brand. Use it consistently, use it confidently.
 
-**Built for 2030.** 🚀
+**Built for the Future.** 🚀
 
 
 

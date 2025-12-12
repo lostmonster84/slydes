@@ -187,10 +187,10 @@ slydes.io/
 │                                                           │
 │              Simple, Transparent Pricing                 │
 │                                                           │
-│         $49/mo    |    $149/mo    |    $499/mo          │
-│        Starter    |  Professional  |   Enterprise        │
+│            Free         |        $19/mo                 │
+│         Try it out      |          Pro                  │
 │                                                           │
-│              [See Full Pricing Details →]                │
+│                    [Start Free →]                        │
 └─────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────┐
@@ -368,24 +368,23 @@ slydes.io/
 └─────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────┐
-│                 PRICING CARDS (3-Column)                 │
+│                 PRICING CARDS (2-Column)                 │
 │                                                           │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │   STARTER    │  │ PROFESSIONAL │  │  ENTERPRISE  │  │
-│  │              │  │              │  │              │  │
-│  │    $49/mo    │  │   $149/mo    │  │   $499/mo    │  │
-│  │              │  │              │  │              │  │
-│  │ • 1 Slyde    │  │ • 5 Slydes   │  │ • Unlimited  │  │
-│  │ • 10 frames  │  │ • Unlimited  │  │ • White-label│  │
-│  │ • Basic      │  │ • Priority   │  │ • API access │  │
-│  │   analytics  │  │   support    │  │ • Dedicated  │  │
-│  │ • Email      │  │ • Analytics  │  │   manager    │  │
-│  │   support    │  │   dashboard  │  │ • Custom     │  │
-│  │              │  │ • Custom     │  │   domain     │  │
-│  │              │  │   domain     │  │              │  │
-│  │              │  │              │  │              │  │
-│  │ [Start Free] │  │ [Start Free] │  │ [Contact Us] │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
+│       ┌──────────────────┐  ┌──────────────────┐        │
+│       │      FREE        │  │       PRO        │        │
+│       │                  │  │                  │        │
+│       │      $0/mo       │  │     $19/mo       │        │
+│       │                  │  │                  │        │
+│       │ • 1 Slyde        │  │ • Unlimited      │        │
+│       │ • 5 slides       │  │   Slydes         │        │
+│       │ • Slydes         │  │ • Analytics      │        │
+│       │   branding       │  │ • Lead capture   │        │
+│       │                  │  │ • No branding    │        │
+│       │                  │  │ • Priority       │        │
+│       │                  │  │   support        │        │
+│       │                  │  │                  │        │
+│       │  [Start Free]    │  │  [Go Pro]        │        │
+│       └──────────────────┘  └──────────────────┘        │
 │                                                           │
 │         14-day free trial • No credit card required      │
 └─────────────────────────────────────────────────────────┘

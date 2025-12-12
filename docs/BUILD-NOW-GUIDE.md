@@ -134,7 +134,7 @@ export function Footer() {
         </div>
         <div className="mt-12 pt-8 border-t border-steel-gray/20">
           <p className="text-steel-gray text-sm">
-            © 2025 Slydes. Built for 2030.
+            © 2025 Slydes. Built for the Future.
           </p>
         </div>
       </div>
@@ -177,7 +177,7 @@ export function Hero() {
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-b from-future-black to-deep-slate">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <h1 className="text-6xl md:text-8xl font-bold mb-6">
-          Built for 2030.
+          Built for the Future.
         </h1>
         <p className="text-xl md:text-2xl text-steel-gray mb-8 max-w-2xl mx-auto">
           Mobile-first business sites that customers actually engage with.

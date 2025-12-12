@@ -25,7 +25,7 @@ Slydes is a **two-sided platform** that transforms how businesses showcase thems
 **Features**:
 - Brand & vision communication
 - Waitlist capture
-- Founding member signup
+- Founding Partner application (influencer program)
 - Partner onboarding portal
 - Business showcase (proof of concept)
 
@@ -261,7 +261,7 @@ Creates more content    ←  →  Discovers more businesses
 1. Sees competitor's Slyde or Slydes marketing
 2. Visits slydes.io
 3. Experiences the vision through immersive demos
-4. Signs up for waitlist / Founding Member
+4. Signs up for waitlist
 
 **Onboarding** (Phase 1 - Manual):
 1. Receives welcome email
@@ -331,12 +331,12 @@ Creates more content    ←  →  Discovers more businesses
 **Revenue Streams**:
 
 **Phase 1** (MVP):
-- Founding Member tiers ($497-$4,997 one-time)
-- Subscription plans ($29-$199/month)
+- Influencer Program (50 Founding Partners for distribution)
+- Subscription plans (Free + $19/month Pro)
 
 **Phase 2** (Partner App):
 - Free tier (limited features)
-- Pro tier ($99/month - unlimited Slydes, analytics)
+- Pro tier ($19/month - unlimited Slydes, analytics, lead capture)
 - Enterprise tier ($299/month - white label, priority support)
 
 **Phase 3** (Consumer App):
@@ -356,7 +356,7 @@ Creates more content    ←  →  Discovers more businesses
 - ✅ Manual onboarding process
 - ✅ First 10-20 customer Slydes live
 - ✅ Case studies & social proof
-- ✅ Founding Member program
+- ✅ Influencer Program (Founding Partners)
 
 **Success Metrics**:
 - 100 paying customers
@@ -446,7 +446,7 @@ Creates more content    ←  →  Discovers more businesses
 **Risk**: Asking businesses to pay too early could stunt growth
 **Mitigation**:
 - Freemium model in Phase 2 (free tier to attract volume)
-- Founding Member program creates early revenue
+- Influencer Program creates early distribution (not revenue)
 - Clear value proposition (views, bookings, analytics)
 
 ---
@@ -504,7 +504,7 @@ Planning a weekend trip, you open your phone: **Slydes App → Discover → Book
 
 **Immediate** (This Week):
 - Finalize website copy & design
-- Launch waitlist & Founding Member tiers
+- Launch waitlist & Influencer Program
 - Begin customer outreach (first 100)
 
 **Short-Term** (Q1 2025):

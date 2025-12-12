@@ -1,6 +1,6 @@
 # Slydes Design System
 
-> **"Built for 2030"** 
+> **"Built for the Future"** 
 > Our design is bold, modern, and unmistakably premium.
 
 **Last Updated**: December 11, 2025  
@@ -16,7 +16,60 @@
 2. **Show, Don't Tell** - Use real mockups, not screenshots or illustrations
 3. **Premium but Approachable** - Clean, modern, confident, not cold
 4. **Consistent Visual Language** - Rising Cards logo + Space Grotesk + clean layouts
-5. **Built for 2030** - Forward-thinking, not incremental
+5. **Built for the Future** - Forward-thinking, not incremental
+
+---
+
+## ⚠️ Contrast Rules (IMPORTANT)
+
+> **Rule**: Text must ALWAYS be readable against its background. No exceptions.
+
+### Text Color by Background
+
+| Background Type | Background Classes | Min Body Text | Min Heading | Placeholder |
+|-----------------|-------------------|---------------|-------------|-------------|
+| **Light** | `bg-white`, `bg-gray-50`, `bg-gray-100` | `text-gray-600` | `text-gray-900` | `placeholder-gray-400` |
+| **Medium** | `bg-gray-200`, `bg-gray-300` | `text-gray-700` | `text-gray-900` | `placeholder-gray-500` |
+| **Dark** | `bg-gray-800`, `bg-gray-900`, `bg-future-black` | `text-gray-300` | `text-white` | `placeholder-gray-400` |
+
+### Input Styling by Context
+
+**Light Context** (white/gray-50 backgrounds):
+```tsx
+className="bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400"
+```
+
+**Dark Context** (gray-800/gray-900/future-black backgrounds):
+```tsx
+className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400"
+```
+
+### Quick Reference
+
+❌ **NEVER USE** on dark backgrounds:
+- `text-gray-500` or darker for body text
+- `text-gray-600` or darker for any text
+- `placeholder-gray-500` or darker
+
+✅ **ALWAYS USE** on dark backgrounds:
+- `text-gray-300` minimum for body text
+- `text-gray-400` minimum for secondary text
+- `text-white` for headings and emphasis
+- `placeholder-gray-400` for inputs
+
+### Use the Components
+
+To avoid mistakes, use the pre-built input components:
+
+```tsx
+import { Input, DarkInput, Textarea, DarkTextarea } from '@/components/ui/Input'
+
+// Light backgrounds
+<Input placeholder="Your name" />
+
+// Dark backgrounds  
+<DarkInput placeholder="Your name" />
+```
 
 ---
 
@@ -653,7 +706,7 @@ className="text-gray-600 hover:text-gray-900 transition-colors"
 
 **Remember**: Every design decision should ask: "Does this feel like 2030 or 2020?"
 
-**Built for 2030.** 🚀
+**Built for the Future.** 🚀
 
 
 

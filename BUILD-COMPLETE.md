@@ -242,7 +242,7 @@ In production (Vercel):
 **All copy is from**: `docs/WEBSITE-COPY-FINAL.md`
 
 **Key Headlines**:
-- "Built for 2030."
+- "Built for the Future."
 - "Are you building for 2020 or 2030?"
 - "Stop building for the past."
 - "Your customers are on their phones. Are you building for them?"
@@ -410,7 +410,7 @@ npm run dev
 
 ---
 
-*Built for 2030.*  
+*Built for the Future.*  
 *Status: READY* ✅  
 *Energy: MAXIMUM* 🔥  
 

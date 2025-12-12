@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Slydes - Mobile sites that customers actually use',
-  description: 'TikTok-style vertical scrolling for businesses. Built in minutes, not months. Join 50 founding members building the future of mobile-first business sites.',
+  description: 'TikTok-style vertical video storefronts for businesses. Built in minutes, not months. Free to start, $19/mo for Pro.',
   keywords: ['mobile-first', 'business sites', 'TikTok-style', 'vertical scrolling', 'microsites', 'mobile website builder'],
   authors: [{ name: 'Slydes' }],
   manifest: '/manifest.json',

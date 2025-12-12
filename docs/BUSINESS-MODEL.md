@@ -31,66 +31,57 @@ Slydes operates as a **two-sided platform** connecting businesses (supply) with 
 
 ---
 
-#### PHASE 1: MVP (Q1 2025)
+#### PRICING MODEL: SIMPLIFIED TWO-TIER
 
-**Founding Member Program** (One-Time)
-
-| Tier | Price | Features | Value | Target |
-|------|-------|----------|-------|--------|
-| **Seed** | $497 | Early adopter badge, Slyde link, 1 year free, priority support | $1,788 value | First 100 customers |
-| **Sprout** | $1,497 | Everything in Seed + onboarding consultation, analytics, featured showcase | $3,588 value | Serious businesses |
-| **Bloom** | $4,997 | Everything in Sprout + white-label option, custom domain, quarterly reviews | $9,588 value | Premium brands |
-
-**Why One-Time Works**:
-- Generates immediate cash flow ($50K-$100K in Q1)
-- Creates urgency (limited spots)
-- Funds initial development
-- **Transition to monthly after Year 1**
-
-**Projected Revenue (Q1 2025)**:
-- 80 Seed members: $39,760
-- 15 Sprout members: $22,455
-- 5 Bloom members: $24,985
-- **Total: $87,200** (one-time)
-
----
-
-#### PHASE 2: MONTHLY SUBSCRIPTIONS (Q2 2025+)
-
-**Freemium Model**
+**Freemium Model** (Free + Pro only)
 
 | Tier | Price | Features | Target Customer |
 |------|-------|----------|-----------------|
-| **Free** | $0 | 1 Slyde (3 slides max), basic analytics, watermark | New signups, tire-kickers |
-| **Pro** | $99/mo | Unlimited Slydes, full analytics, no watermark, priority support | Most businesses (80%) |
-| **Premium** | $199/mo | Everything in Pro + custom domain, white-label, A/B testing, API access | Larger businesses (15%) |
-| **Enterprise** | Custom | Custom features, dedicated support, SLA, multi-location management | Chains, franchises (5%) |
+| **Free** | $0 | 1 Slyde (5 slides max), mandatory Slydes outro branding, no analytics | Testing, early creators |
+| **Pro** | $19/mo or $190/yr | Unlimited Slydes, full analytics, lead capture, no branding, custom domain | Most businesses (100%) |
 
-**Annual Discount**: 20% off (2 months free)
-- Pro Annual: $950/year (vs $1,188)
-- Premium Annual: $1,910/year (vs $2,388)
+**Annual Discount**: 17% off (2 months free)
+- Pro Annual: $190/year (vs $228)
 
+---
+
+#### DISTRIBUTION: INFLUENCER PROGRAM
+
+**Founding Partners** (50 influencers)
+
+| What They Get | Details |
+|---------------|---------|
+| Lifetime Pro Access | Free forever |
+| 25% Commission | On every Pro subscriber they refer, for life |
+| Early Access | First to use new features |
+
+**Why This Works**:
+- Influencers have audience reach we don't
+- Commission = aligned incentives (they earn when we earn)
+- 25% is generous but sustainable (75% margin on referred customers)
+- Distribution > one-time revenue at this stage
+
+See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 ---
 
 **Free Tier Strategy**:
 - **Purpose**: Low barrier to entry, viral growth
-- **Limitation**: Watermark ("Powered by Slydes") creates organic marketing
-- **Conversion Goal**: 20% upgrade to Pro within 30 days
-- **Acceptable**: 80% stay free (they're still content for Consumer App)
+- **Limitation**: Mandatory outro slide ("Built with Slydes") = organic marketing
+- **Conversion Goal**: 20-25% upgrade to Pro within 30 days
+- **Acceptable**: 75-80% stay free (they're still marketing for us)
 
 ---
 
-**Projected MRR (End of Q3 2025)**:
+**Projected MRR (End of 2025)**:
 
 | Tier | Customers | MRR/Customer | Total MRR |
 |------|-----------|--------------|-----------|
-| Free | 2,000 | $0 | $0 |
-| Pro | 800 | $99 | $79,200 |
-| Premium | 150 | $199 | $29,850 |
-| Enterprise | 50 | $500 avg | $25,000 |
-| **Total** | **3,000** | — | **$134,050** |
+| Free | 8,000 | $0 | $0 (viral growth engine) |
+| Pro Monthly | 800 | $19 | $15,200 |
+| Pro Annual | 1,200 | $15.83 | $19,000 |
+| **Total Paid** | **2,000** | — | **$34,200** |
 
-**ARR at Q3 2025**: ~$1.6M
+**ARR at End of 2025**: ~$410K
 
 ---
 
@@ -242,16 +233,18 @@ Slydes operates as a **two-sided platform** connecting businesses (supply) with 
 
 ## TOTAL REVENUE PROJECTIONS
 
-### 2025 PROJECTIONS
+### 2025 PROJECTIONS (Launch Year)
 
-| Quarter | MRR | One-Time | Total Revenue | ARR Run-Rate |
-|---------|-----|----------|---------------|--------------|
-| **Q1** | $50K | $87K | $137K | $600K |
-| **Q2** | $100K | $0 | $100K | $1.2M |
-| **Q3** | $200K | $0 | $200K | $2.4M |
-| **Q4** | $350K | $0 | $350K | $4.2M |
+| Quarter | Paying Customers | MRR | ARR Run-Rate |
+|---------|------------------|-----|--------------|
+| **Q1** | 200 | $3.8K | $46K |
+| **Q2** | 600 | $11.4K | $137K |
+| **Q3** | 1,200 | $22.8K | $274K |
+| **Q4** | 2,000 | $38K | $456K |
 
-**Total 2025 Revenue**: ~$1.5M
+**Total 2025 Subscription Revenue**: ~$200K
+**Free Users by EOY**: 8,000+ (viral growth engine)
+**Founding Partners**: 50 influencers driving distribution (25% commission)
 
 ---
 
@@ -421,19 +414,19 @@ Slydes operates as a **two-sided platform** connecting businesses (supply) with 
 ### Cash Flow Strategy
 
 **Year 1** (2025):
-- Founding Member revenue: $87K (immediate cash)
-- Monthly subscriptions ramp: $50K → $350K
-- Burn: ~$500K (team + infrastructure)
-- **Funding Need**: $400K (angel or bootstrap)
+- Influencer program drives distribution (50 Founding Partners, 25% commission)
+- Monthly subscriptions ramp: $0 → $38K MRR
+- Burn: ~$300K (lean team + infrastructure)
+- **Funding Need**: $250K (angel or bootstrap)
 
 **Year 2** (2026):
-- MRR: $350K → $875K
-- Burn: ~$2M (team scale, Consumer App dev)
-- Transaction revenue starts: +$2.4M
-- **Funding Need**: Seed round $1-2M
+- MRR: $38K → $150K
+- Transaction revenue starts: +$500K-$1M
+- Burn: ~$1M (team scale, Consumer App dev)
+- **Funding Need**: Seed round $500K-$1M
 
 **Year 3** (2027):
-- MRR: $875K → $2.4M
+- MRR: $150K → $500K
 - Transaction + featured listings: +$9.6M
 - Operating profit: Breakeven or positive
 - **Funding**: Series A ($5-10M) for international expansion

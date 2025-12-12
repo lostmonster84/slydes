@@ -39,7 +39,7 @@ const fontVariations: FontVariation[] = [
     pros: ['Excellent readability', 'Great at all sizes', 'Variable font support', 'Free & open source'],
     cons: ['Very common in SaaS', 'Safe but not distinctive', 'Might feel generic'],
     scores: { attention: 6, interest: 6, desire: 6, action: 7 },
-    reasoning: 'Solid foundation but doesn\'t scream "Built for 2030". Every other SaaS uses Inter. We blend in, not stand out.'
+    reasoning: 'Solid foundation but doesn\'t scream "Built for the Future". Every other SaaS uses Inter. We blend in, not stand out.'
   },
   {
     id: '2',
@@ -87,7 +87,7 @@ const fontVariations: FontVariation[] = [
     pros: ['Warm yet professional', 'Great readability', 'Google Fonts', 'Versatile'],
     cons: ['Not as distinctive', 'Middle-ground feel'],
     scores: { attention: 7, interest: 7, desire: 7, action: 7 },
-    reasoning: 'Nice balance of professional and friendly. But might not be bold enough for "Built for 2030".'
+    reasoning: 'Nice balance of professional and friendly. But might not be bold enough for "Built for the Future".'
   },
   {
     id: '6',
@@ -99,7 +99,7 @@ const fontVariations: FontVariation[] = [
     pros: ['Highly distinctive', 'Strong personality', 'Google Fonts available', 'Great for logos'],
     cons: ['Might be too "techy"', 'Harder to read in long text'],
     scores: { attention: 9, interest: 8, desire: 8, action: 7 },
-    reasoning: 'Maximum distinctiveness. The name alone ("Space") aligns with "Built for 2030". This is the one.'
+    reasoning: 'Maximum distinctiveness. The name alone ("Space") aligns with "Built for the Future". This is the one.'
   }
 ]
 
@@ -212,7 +212,7 @@ export default function TypographyAnalysis() {
                 className="text-5xl font-bold mb-4"
                 style={{ fontFamily: selected.fontFamily }}
               >
-                Built for 2030.
+                Built for the Future.
               </h1>
               <p 
                 className="text-xl text-white/60"
@@ -357,7 +357,7 @@ export default function TypographyAnalysis() {
               className="text-center text-2xl font-bold text-[#0A0E27]"
               style={{ fontFamily: selected.fontFamily }}
             >
-              Built for 2030.
+              Built for the Future.
             </p>
           </div>
 

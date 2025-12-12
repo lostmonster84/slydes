@@ -173,7 +173,7 @@ Early adopters report significant improvements:
 • 3.6 hours saved per site in design time
 • 99.99% accuracy between editor preview and mobile reality
 
-Slydes offers three tiers: Starter ($49/mo), Professional ($149/mo), and Enterprise ($499/mo). All plans include a 14-day free trial with no credit card required.
+Slydes offers two tiers: Free (1 Slyde, 5 slides, branded outro) and Pro ($19/mo - unlimited everything, analytics, lead capture, no branding).
 
 For more information: slydes.io
 
@@ -481,8 +481,8 @@ If you have questions, just reply. I read every email.
 **Goal**: Get agencies to resell Slydes
 
 **Offer**:
-- 30% revenue share
-- White-label option (Enterprise tier)
+- Wholesale pricing ($10/client/month vs $19 retail)
+- White-label option (future Enterprise tier)
 - Co-marketing support
 
 **Target Agencies**:
@@ -517,7 +517,7 @@ Interested?"
 
 **Value Prop**:
 - "Add mobile-first landing pages to your platform"
-- Revenue share on referrals
+- Integration partnership (mutual promotion)
 - Co-marketing opportunities
 
 ---

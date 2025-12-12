@@ -164,5 +164,5 @@ Check the main docs:
 
 **Status**: 🔥 Ready to deploy!
 
-Built for 2030. Let's go! 🚀
+Built for the Future. Let's go! 🚀
 

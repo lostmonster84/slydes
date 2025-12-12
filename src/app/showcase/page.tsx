@@ -178,7 +178,7 @@ export default function ShowcasePage() {
               viewport={{ once: true }}
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/20 text-white text-sm font-medium mb-8">
-                <span className="w-2 h-2 bg-electric-cyan rounded-full animate-pulse" />
+                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
                 Founder Opportunity
               </span>
               
@@ -187,7 +187,7 @@ export default function ShowcasePage() {
               </h2>
               
               <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-                Founding members don&apos;t just get Slydes early - they become the showcase for their market.
+                Founding Partners don&apos;t just get Slydes free - they earn 25% commission on every referral, for life.
               </p>
               
               <Link href="/founding-member">
@@ -197,7 +197,7 @@ export default function ShowcasePage() {
               </Link>
               
               <p className="mt-8 text-gray-500 text-sm">
-                Join 12 founding members already shaping Slydes
+                Join 12 Founding Partners already earning with Slydes
               </p>
             </motion.div>
           </div>
@@ -320,8 +320,8 @@ export default function ShowcasePage() {
             >
               <h2 className="mb-4">Ready to transform your mobile presence?</h2>
               <p className="text-gray-600 mb-8 max-w-xl mx-auto">
-                Join our founding members and create mobile experiences that 
-                customers actually use.
+                Join our Founding Partners and earn 25% commission for life 
+                on every subscriber you refer.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/founding-member">

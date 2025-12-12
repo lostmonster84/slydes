@@ -1,7 +1,7 @@
 # THE CASE FOR SLYDES
 ## Why Vertical Video is the Future of Business
 
-> **"Built for 2030. Not 2020."**
+> **"Built for the Future. Not 2020."**
 
 ---
 
@@ -326,7 +326,7 @@ The only question is: **Are you ready to lead?**
 
 **Then join the movement.**
 
-🔥 **Built for 2030. Are you?**
+🔥 **Built for the Future. Are you?**
 
 
 

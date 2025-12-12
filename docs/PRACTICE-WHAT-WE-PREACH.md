@@ -121,15 +121,15 @@ Interactive: "Try building a frame right now" (no signup)
 **Frame 6: PRICING**
 ```
 Clean, simple cards
-$49 / $149 / $499
+Free / $19/mo Pro
 "Start Free" button (Leader Blue gradient)
-Trust signals: No card required, 14-day trial
+Trust signals: No card required, upgrade anytime
 ```
 
 **Frame 7: ACTION**
 ```
 Full-screen CTA
-"Ready to build for 2030?"
+"Ready to build for the future?"
 [Start Free] button
 Below: "Join 200+ businesses leading the field"
 ```
