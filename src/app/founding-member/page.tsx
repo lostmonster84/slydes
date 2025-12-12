@@ -122,11 +122,12 @@ export default function FoundingPartnerPage() {
       if (response.ok) {
         setIsSuccess(true)
       } else {
-        alert('Something went wrong. Please try again.')
+        const data = await response.json()
+        alert(data.error || 'Something went wrong. Please try again.')
       }
     } catch (error) {
       console.error('Error:', error)
-      setIsSuccess(true) // Show success anyway for now
+      alert('Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
     }

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy init to avoid build-time errors when env var not set
+const getResend = () => new Resend(process.env.RESEND_API_KEY)
 
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'james@lostmonter.io'
 
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
     }
 
     // Send notification email
-    await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: 'Slydes Investors <investors@mail.slydes.io>',
       to: CONTACT_EMAIL,
       subject: `Investor Enquiry: ${name}${company ? ` (${company})` : ''}`,
@@ -44,6 +45,14 @@ export async function POST(request: Request) {
       `,
       replyTo: email,
     })
+
+    if (error) {
+      console.error('Resend error:', error)
+      return NextResponse.json(
+        { error: 'Failed to send enquiry. Please try again.' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({
       success: true,
