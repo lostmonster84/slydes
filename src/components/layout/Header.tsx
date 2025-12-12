@@ -37,7 +37,7 @@ export function Header() {
         {/* CTA Button */}
         <div className="hidden md:block">
           <Link href="/founding-member">
-            <Button>Become a Founder</Button>
+            <Button>Become a Partner</Button>
           </Link>
         </div>
 
@@ -107,7 +107,7 @@ export function Header() {
               onClick={() => setMobileMenuOpen(false)}
               className="block mt-4"
             >
-              <Button className="w-full">Become a Founder</Button>
+              <Button className="w-full">Become a Partner</Button>
             </Link>
           </div>
         </div>

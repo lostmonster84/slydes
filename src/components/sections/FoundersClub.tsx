@@ -23,23 +23,24 @@ export function FoundersClub() {
           >
             <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-leader-blue/20 text-white text-sm font-medium mb-4">
               <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-              Founders. Limited to {totalSpots}.
+              Founding Partners. Limited to {totalSpots}.
             </span>
             
-            <h2 className="text-white mb-4">The inner circle.<br /><span className="gradient-text">The originals.</span></h2>
+            <h2 className="text-white mb-4">Build with us.<br /><span className="gradient-text">Grow with us.</span></h2>
             <p className="text-gray-400 text-lg mb-8">
-              50 founders. Direct access to the founder (James). 25% on every referral, forever. Lifetime Pro access included.
+              We&apos;re selecting 50 influencers and creators to become Founding Partners. 
+              You bring the audience. We build your Slyde. Together, we grow.
               <br />
-              <span className="text-gray-500">You are not just buying software. You are joining the founding team.</span>
+              <span className="text-gray-500">No payment required. Your audience is your contribution.</span>
             </p>
 
             <ul className="space-y-4 mb-8">
               {[
-                { title: 'Direct access to the founder', desc: 'Private Slack channel with James (founder) in the room every day' },
-                { title: '25% revenue share forever', desc: 'Highest tier. Earn on every referral for as long as they stay' },
-                { title: 'Monthly founder calls', desc: 'Group calls to shape what we build next' },
-                { title: 'Personal onboarding call', desc: '1-on-1 setup with the founder' },
-                { title: '"Built by" founders page', desc: 'Your name, photo, and business featured' },
+                { title: 'Custom Slyde built for you', desc: 'White-glove build of your mobile experience, tailored to your brand' },
+                { title: 'Lifetime Pro access', desc: 'Full access to Slydes Pro features, forever' },
+                { title: 'Direct access to the founder', desc: 'Private Slack channel with James in the room every day' },
+                { title: 'Featured in our showcase', desc: 'Your Slyde featured as an example of what\'s possible' },
+                { title: 'Founding Partner status', desc: 'Recognition as one of the original 50 who built Slydes' },
               ].map((item, index) => (
                 <motion.li 
                   key={item.title}
@@ -61,7 +62,7 @@ export function FoundersClub() {
             </ul>
           </motion.div>
 
-          {/* Right - Pricing Card */}
+          {/* Right - Application Card */}
           <motion.div 
             className="bg-gray-800/50 rounded-3xl p-8 border border-gray-700/50 backdrop-blur-sm"
             initial={{ opacity: 0, y: 20 }}
@@ -70,18 +71,18 @@ export function FoundersClub() {
             viewport={{ once: true }}
           >
             <div className="text-center mb-6">
-              <p className="text-leader-blue text-sm font-medium mb-2">Founder. One-time payment.</p>
+              <p className="text-leader-blue text-sm font-medium mb-2">Founding Partner</p>
               <div className="flex items-baseline justify-center mb-2">
-                <span className="text-6xl font-bold text-white">£499</span>
+                <span className="text-5xl font-bold text-white">Free</span>
               </div>
-              <p className="text-gray-500 text-sm">€599 / $629 USD</p>
+              <p className="text-gray-500 text-sm">For selected partners</p>
             </div>
 
             {/* Progress bar */}
             <div className="mb-6">
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400">{totalSpots - spotsRemaining} claimed</span>
-                <span className="text-white font-medium">{spotsRemaining} remaining</span>
+                <span className="text-gray-400">{totalSpots - spotsRemaining} selected</span>
+                <span className="text-white font-medium">{spotsRemaining} spots left</span>
               </div>
               <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
                 <motion.div 
@@ -95,35 +96,31 @@ export function FoundersClub() {
             </div>
 
             <Link href="/founding-member" className="block mb-6">
-              <Button size="lg" className="w-full animate-pulse-glow">
-                Become a Founder
+              <Button size="lg" className="w-full">
+                Apply to Partner
               </Button>
             </Link>
 
-            {/* Future pricing note */}
+            {/* What we ask */}
             <div className="text-center mb-6 p-4 bg-gray-900/50 rounded-xl border border-gray-700/30">
-              <p className="text-gray-500 text-xs mb-2">After Founders sells out:</p>
-              <div className="flex justify-center gap-4 text-sm">
-                <span className="text-gray-400">Builders: <span className="text-white">£999</span></span>
-                <span className="text-gray-600">|</span>
-                <span className="text-gray-400">Members: <span className="text-white">£1,499</span></span>
-              </div>
+              <p className="text-gray-400 text-xs mb-2">What we ask in return:</p>
+              <p className="text-gray-300 text-sm">Share your Slydes journey with your audience</p>
             </div>
 
-            {/* Trust indicators */}
+            {/* Who we're looking for */}
             <div className="pt-4 border-t border-gray-700/50">
-              <div className="flex justify-center gap-6 text-gray-500 text-xs">
-                <span>Secure payment</span>
+              <div className="flex justify-center gap-4 text-gray-500 text-xs">
+                <span>10k+ audience</span>
                 <span>•</span>
-                <span>30-day refund</span>
+                <span>Real business</span>
                 <span>•</span>
-                <span>Lifetime access</span>
+                <span>Builder mindset</span>
               </div>
             </div>
           </motion.div>
         </div>
 
-        {/* Bottom urgency message */}
+        {/* Bottom message */}
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -131,7 +128,7 @@ export function FoundersClub() {
           viewport={{ once: true }}
           className="text-center text-gray-500 text-sm mt-8"
         >
-          Founders is <span className="text-white">the only tier</span> with direct access to the founder (James). Once it&apos;s gone, it&apos;s <span className="text-leader-blue">gone forever</span>.
+          We review every application personally. <span className="text-white">Quality over quantity.</span>
         </motion.p>
         </div>
       </section>

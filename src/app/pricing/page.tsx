@@ -293,7 +293,7 @@ export default function PricingPage() {
               <h2 className="mb-6">Ready to join the inner circle?</h2>
               <Link href="/founding-member">
                 <Button size="lg">
-                  Become a Founder
+                  Become a Partner
                 </Button>
               </Link>
               <p className="text-gray-500 text-sm mt-4">

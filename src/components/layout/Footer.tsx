@@ -47,13 +47,13 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  Blog
+                <Link href="/contact" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                  Contact
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  Contact
+                <Link href="/investors" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                  Investors
                 </Link>
               </li>
             </ul>

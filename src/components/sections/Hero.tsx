@@ -57,7 +57,7 @@ export function Hero() {
             >
               <Link href="/founding-member">
                 <Button size="lg" className="w-full sm:w-auto animate-pulse-glow">
-                  Become a Founder
+                  Become a Partner
                 </Button>
               </Link>
               <Link href="/showcase">

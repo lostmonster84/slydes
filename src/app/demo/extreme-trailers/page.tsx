@@ -373,7 +373,7 @@ export default function ExtremeTrailersDemo() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/founding-member">
                   <Button size="lg">
-                    Become a Founder
+                    Become a Partner
                   </Button>
                 </Link>
                 <Link href="/showcase">

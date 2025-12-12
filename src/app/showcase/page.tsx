@@ -192,7 +192,7 @@ export default function ShowcasePage() {
               
               <Link href="/founding-member">
                 <Button size="lg" className="animate-pulse-glow">
-                  Become a Founder
+                  Become a Partner
                 </Button>
               </Link>
               
@@ -326,7 +326,7 @@ export default function ShowcasePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/founding-member">
                   <Button size="lg">
-                    Become a Founder
+                    Become a Partner
                   </Button>
                 </Link>
                 <Link href="/how-it-works">
