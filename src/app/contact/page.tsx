@@ -242,52 +242,6 @@ export default function ContactPage() {
               )}
             </motion.div>
 
-            {/* Alternative Contact Methods */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-16 pt-12 border-t border-gray-200"
-            >
-              <h3 className="text-lg font-semibold text-gray-900 text-center mb-8">
-                Or reach us directly
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Email */}
-                <a
-                  href="mailto:hello@slydes.io"
-                  className="group flex items-center gap-4 p-6 rounded-2xl bg-white border border-gray-200 hover:border-leader-blue/30 hover:shadow-lg hover:shadow-leader-blue/5 transition-all"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-leader-blue/10 flex items-center justify-center group-hover:bg-leader-blue/20 transition-colors">
-                    <svg className="w-6 h-6 text-leader-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Email us at</p>
-                    <p className="font-semibold text-gray-900 group-hover:text-leader-blue transition-colors">hello@slydes.io</p>
-                  </div>
-                </a>
-
-                {/* Twitter/X */}
-                <a
-                  href="https://twitter.com/slydes"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-4 p-6 rounded-2xl bg-white border border-gray-200 hover:border-leader-blue/30 hover:shadow-lg hover:shadow-leader-blue/5 transition-all"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-leader-blue/10 flex items-center justify-center group-hover:bg-leader-blue/20 transition-colors">
-                    <svg className="w-6 h-6 text-leader-blue" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Follow us on</p>
-                    <p className="font-semibold text-gray-900 group-hover:text-leader-blue transition-colors">@slydes</p>
-                  </div>
-                </a>
-              </div>
-            </motion.div>
           </div>
         </section>
       </main>
