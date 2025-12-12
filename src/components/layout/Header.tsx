@@ -28,6 +28,10 @@ export function Header() {
             Founders
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
           </Link>
+          <Link href="/contact" className="group relative text-gray-600 hover:text-gray-900 transition-colors text-sm">
+            Contact
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
+          </Link>
         </div>
 
         {/* CTA Button */}
@@ -89,6 +93,14 @@ export function Header() {
               style={{ touchAction: 'manipulation' }}
             >
               Founders
+            </Link>
+            <Link
+              href="/contact"
+              className="block min-h-[44px] flex items-center text-gray-600 active:text-gray-900 active:bg-gray-50 transition-colors touch-manipulation rounded-lg px-2 -mx-2"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ touchAction: 'manipulation' }}
+            >
+              Contact
             </Link>
             <Link 
               href="/founding-member" 
