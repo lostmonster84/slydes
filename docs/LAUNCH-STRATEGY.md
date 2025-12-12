@@ -145,7 +145,7 @@ Perfect for restaurants, hotels, tour operators - anyone selling experiences, no
 • 11 pre-built frame types (Hook, Action, Social Proof, etc.)
 • WYSIWYG editor (drag to position, see exact mobile result)
 • Live in 10 minutes
-• $49/month
+• $19/month
 
 No rebuilding your site. No $10k agency. Just immersive mobile experiences.
 
@@ -361,7 +361,7 @@ Here's what you can do right now:
 • See examples (real businesses using Slydes)
 • Book a demo (I'll walk you through it)
 
-No credit card. No setup fees. Just your email.
+No credit card. No setup fees. Start with free tier.
 
 Let's kill your boring website together.
 
@@ -407,7 +407,7 @@ But you haven't started your trial yet.
 Here's what you're missing:
 • Video-first mobile site (not desktop-adapted)
 • 10-minute setup (not 10-week rebuild)
-• $49/month (not $10k agency)
+• $19/month (not $10k agency)
 
 14-day free trial. No card required.
 

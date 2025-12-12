@@ -394,20 +394,21 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 **When does Slydes become profitable?**
 
 **Fixed Costs**: $175K/month (Phase 3, fully staffed)
-**Gross Profit per Customer**: $81/month
+**Gross Profit per Customer**: $14/month
 
-**Break-Even Point**:
-- $175K / $81 = **2,160 customers**
-- At $99/month average = **$214K MRR**
+**Break-Even Point (Subscription Only)**:
+- $175K / $14 = **12,500 customers**
+- At $19/month = **$238K MRR**
 
 **Timeline**:
-- Q3 2025: ~$200K MRR (1,000 customers) — Close but not profitable
-- Q1 2026: ~$500K MRR (5,000 customers) — **Profitable**
+- Q4 2025: ~$38K MRR (2,000 customers) — Not profitable yet
+- Q2 2026: ~$95K MRR (5,000 customers) — Still building
+- Q4 2026: ~$238K MRR (12,500 customers) — **Break-even**
 
 **With transaction revenue in Phase 3**:
-- Gross profit: $129/customer
-- Break-even: $175K / $129 = **1,357 customers**
-- Much faster path to profitability
+- Gross profit: $62/customer
+- Break-even: $175K / $62 = **2,823 customers**
+- Transaction revenue is KEY to profitability
 
 ---
 
@@ -438,14 +439,14 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 ### Why Our Pricing Works
 
 **Positioned Between**:
-- **Too Cheap**: Squarespace ($16/mo) — commodity
+- **Too Cheap**: Linktree ($9/mo) — too simple
 - **Too Expensive**: Custom dev ($10K-50K) — inaccessible
-- **Sweet Spot**: $99-199/mo — affordable but premium
+- **Sweet Spot**: $19/mo — accessible + premium features
 
 **Value Perception**:
 - Traditional website: $5K-$20K upfront + $100/mo hosting
-- Slydes: $0 upfront + $99/mo (easier sell)
-- ROI: If 1 booking/month from Slyde = $500 revenue → Slydes pays for itself 5x
+- Slydes: $0 upfront + $19/mo (easy yes)
+- ROI: If 1 booking/month from Slyde = $500 revenue → Slydes pays for itself 26x
 
 ---
 
@@ -453,23 +454,19 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 **Free Tier**:
 - **Purpose**: Remove friction, let businesses try risk-free
-- **Watermark**: "Powered by Slydes" = organic marketing
-- **Upgrade Trigger**: Remove watermark ($99/mo) = vanity upgrade
+- **Limitation**: 1 Slyde, 5 slides, mandatory "Built with Slydes" outro
+- **Upgrade Trigger**: Remove branding + unlimited Slydes ($19/mo) = easy decision
 
-**Pro Tier ($99)**:
-- **Anchor**: Most popular (80% of customers)
-- **Perceived Value**: "Unlimited Slydes" sounds huge
-- **Reality**: Most use 3-5 Slydes (low cost to serve)
+**Pro Tier ($19/mo or $190/yr)**:
+- **Anchor**: Main tier (90%+ of paid customers)
+- **Perceived Value**: Unlimited Slydes, analytics, no branding
+- **Reality**: Most use 3-5 Slydes (low cost to serve, high perceived value)
+- **Annual Discount**: 17% off encourages commitment
 
-**Premium Tier ($199)**:
-- **Signaling**: "I'm a premium brand" (ego play)
-- **Features**: White-label, custom domain (status symbols)
-- **Margin**: Highest profit (minimal extra cost to deliver)
-
-**Enterprise (Custom)**:
+**Enterprise (Future)**:
 - **Psychology**: "If you have to ask, it's not for you"
-- **Qualification**: Only serious, high-value customers inquire
-- **Margin**: Highest (negotiated based on value)
+- **Qualification**: Multi-location businesses, white-label needs
+- **Margin**: Highest (negotiated based on # locations)
 
 ---
 
@@ -478,15 +475,15 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 **Strategy**: Grandfather existing customers, raise prices for new signups
 
 **2025**: 
-- Free, Pro ($99), Premium ($199)
+- Free, Pro ($19/mo or $190/yr)
 
 **2026** (After Consumer App Launch):
-- Free, Pro ($129), Premium ($249)
-- Existing customers stay at $99/$199
+- Free, Pro ($29/mo or $290/yr)
+- Existing customers stay at $19
 - **Why**: Added value (discovery traffic from Consumer App)
 
 **2027**:
-- Free, Pro ($149), Premium ($299)
+- Free, Pro ($39/mo or $390/yr)
 - **Why**: Network effect = more valuable (harder to leave)
 
 ---
@@ -565,12 +562,12 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 **Target: >100%**
 
 **How**:
-- Start: Customer pays $99/mo (Pro)
-- Month 6: Upgrades to Premium ($199/mo) — +101% expansion
-- Month 12: Adds transaction revenue ($50/mo) — +25% expansion
-- **Year 1 NRR**: 126% (incredible)
+- Start: Customer pays $19/mo (Pro)
+- Month 12: Adds transaction revenue ($50/mo through bookings)
+- Revenue per customer grows from $19 to $69
+- **Year 1 NRR**: 363% (incredible expansion)
 
-Even if 5% churn, expansion revenue offsets it.
+Even with 5% churn, transaction revenue more than offsets it.
 
 ---
 

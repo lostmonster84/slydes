@@ -303,9 +303,9 @@ But your website was built for 2020. It's slow on mobile. It doesn't engage. It 
 
 That's not a tech problem. That's a business problem.
 
-**Are you building for 2020 or 2030?**
+**Are you building for the past or the future?**
 
-Because your customers are already in 2030. Your website needs to catch up."
+Because your customers are already in the future. Your website needs to catch up."
 
 **Act 3: The Solution (Slydes)**
 
@@ -327,9 +327,9 @@ No developer. No $10k rebuild. Just immersive mobile experiences that actually w
 
 "So here's the question:
 
-**Are you building for 2020 or 2030?**
+**Are you building for the past or the future?**
 
-Your customers are already in 2030. Mobile-first. Video-driven. Immersive experiences.
+Your customers are already in the future. Mobile-first. Video-driven. Immersive experiences.
 
 **Old school websites are OUT. Slydes are IN.**
 
