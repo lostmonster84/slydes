@@ -294,15 +294,15 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 ### Lifetime Value (LTV)
 
 **Average Customer**:
-- Monthly subscription: $99 (Pro tier average)
+- Monthly subscription: $19 (Pro tier)
 - Average retention: 24 months (before churn)
-- **LTV = $99 × 24 = $2,376**
+- **LTV = $19 × 24 = $456**
 
 **With Transaction Revenue** (Phase 3):
-- Monthly subscription: $99
+- Monthly subscription: $19
 - Transaction fees: $50/month (from bookings)
 - Average retention: 36 months (stickier with transaction integration)
-- **LTV = ($99 + $50) × 36 = $5,364**
+- **LTV = ($19 + $50) × 36 = $2,484**
 
 ---
 
@@ -310,13 +310,13 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 | Phase | LTV | CAC | Ratio | Assessment |
 |-------|-----|-----|-------|------------|
-| **Phase 1** | $2,376 | $200 | 11.9:1 | 🟢 Excellent |
-| **Phase 2** | $2,376 | $100 | 23.8:1 | 🟢 Outstanding |
-| **Phase 3** | $5,364 | $50 | 107:1 | 🟢 Incredible (network effect) |
+| **Phase 1** | $456 | $200 | 2.3:1 | 🟡 Acceptable (early stage) |
+| **Phase 2** | $456 | $100 | 4.6:1 | 🟢 Good |
+| **Phase 3** | $2,484 | $50 | 49.7:1 | 🟢 Excellent (network effect) |
 
 **Healthy SaaS**: LTV:CAC >3:1
 
-**Slydes**: LTV:CAC >10:1 (even in early phases)
+**Slydes**: LTV:CAC improves dramatically with transaction revenue in Phase 3
 
 ---
 
@@ -326,18 +326,18 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 **Phase 1**:
 - CAC: $200
-- Monthly profit per customer: $70 (after costs)
-- Payback: **3 months**
+- Monthly profit per customer: $15 (after costs)
+- Payback: **13 months**
 
 **Phase 2**:
 - CAC: $100
-- Monthly profit: $70
-- Payback: **1.5 months**
+- Monthly profit: $15
+- Payback: **7 months**
 
 **Phase 3**:
 - CAC: $50
-- Monthly profit: $105 (subscription + transaction)
-- Payback: **0.5 months (2 weeks)**
+- Monthly profit: $65 (subscription + transaction)
+- Payback: **0.8 months (~3 weeks)**
 
 **Healthy SaaS**: <12 months
 **Slydes**: <3 months (exceptional)
@@ -372,16 +372,16 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 ### Gross Margin
 
 **Phase 1-2** (Subscription Only):
-- Revenue per customer: $99/month
-- Variable cost: $18/month
-- Gross profit: $81/month
-- **Gross Margin: 82%**
+- Revenue per customer: $19/month
+- Variable cost: $5/month
+- Gross profit: $14/month
+- **Gross Margin: 74%**
 
 **Phase 3** (Subscription + Transaction):
-- Revenue per customer: $149/month ($99 subscription + $50 transaction)
-- Variable cost: $20/month (slightly higher with transaction processing)
-- Gross profit: $129/month
-- **Gross Margin: 87%**
+- Revenue per customer: $69/month ($19 subscription + $50 transaction)
+- Variable cost: $7/month (slightly higher with transaction processing)
+- Gross profit: $62/month
+- **Gross Margin: 90%**
 
 **Target: 70%+ gross margin** (exceptional for SaaS)
 

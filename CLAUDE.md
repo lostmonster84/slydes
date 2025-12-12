@@ -216,7 +216,7 @@ What are we tackling? 🚀
 
 **Key Achievements**:
 - Brand identity defined (Future Black, Leader Blue, Electric Cyan)
-- "Built for the Future" positioning (not 2020)
+- "Built for the Future" positioning (not 2030)
 - Website wireframe complete (6 pages, video-first)
 - Launch strategy mapped (3-month GTM)
 - Practice what we preach philosophy
@@ -329,12 +329,59 @@ What are we tackling? 🚀
 - Any visual business can use Slydes (not just experiences)
 - "Slyde it" becomes the new "Google it" for business discovery
 
+**Session 3 Amendments** (Post-Session Updates):
+
+**Brand & Messaging Refinements**:
+- Changed "Built for 2030" → "Built for the Future" (more timeless, less date-specific)
+- Updated across all docs (THE-CASE-FOR-SLYDES, INVESTOR-ONE-PAGER, CLAUDE.md)
+- More forward-thinking positioning without year constraint
+
+**Program Structure Changes**:
+- "Founding Member" → "Founding Partner" (consistent terminology)
+- Shifted from paid program tiers → Influencer Program (50 Founding Partners)
+- Influencer Program = distribution strategy (25% lifetime commission), not revenue generator
+- Free tier = viral growth engine (mandatory outro branding)
+- Pro tier = $19/mo or $190/yr (simplified from old multi-tier model)
+
+**Pricing Model Simplification**:
+- Old: Free + Pro ($99) + Premium ($199) + Enterprise (custom)
+- New: Free + Pro ($19/mo or $190/yr)
+- Lower barrier to entry ($19 vs $99)
+- Annual discount: 17% off ($190 vs $228)
+- Projected: 2,000 paying customers by end of 2025 ($34K MRR)
+
+**Waitlist Positioning & Copy**:
+- Moved WaitlistSignup AFTER FoundersClub (catches people who scrolled past high-commitment)
+- Copy changed: "Not ready to commit?" → "Want updates instead?"
+- Subtext: "Not an influencer? No problem. Get early access and product updates."
+- Better AIDA flow: High commitment first → Low commitment second
+
+**UX Improvements**:
+- Mobile form inputs: Added touch-friendly sizing (min-h-[48px], fontSize: 16px)
+- Added autocomplete attributes (given-name, email)
+- Added inputMode for better mobile keyboards
+- Better mobile experience (touch-manipulation CSS)
+
+**Documentation Updates**:
+- Updated BUSINESS-MODEL.md with new pricing structure
+- Updated PRODUCT-ROADMAP.md with Influencer Program milestones
+- Updated PLATFORM-OVERVIEW.md with new onboarding flow
+- Updated INVESTOR-ONE-PAGER.md with $19/mo pricing
+- Updated STRATEGIC-DOCS-INDEX.md with new doc references
+
+**Key Strategic Shift**:
+- From: One-time Founding Member revenue ($87K Q1)
+- To: Influencer Program for distribution (50 partners, 25% commission)
+- Focus: Growth > immediate revenue (viral free tier + low-cost Pro)
+- Philosophy: Distribution through influencers > direct sales at this stage
+
 **Next Steps**:
 - Test waitlist signup (restart dev server with RESEND_API_KEY)
 - Use investor one-pager for actual pitches
 - Build "Case for Slydes" immersive Slyde at /vision
 - Continue website refinements
 - Start customer outreach with new documentation
+- Recruit 50 Founding Partners (influencer program)
 
 ---
 
@@ -352,7 +399,11 @@ What are we tackling? 🚀
 
 **Voice**: Bold, confident, leader energy
 
-**Target**: $223M TAM, 100 customers Month 3
+**Target**: $223M TAM, 2,000 paying customers by end of 2025
+
+**Pricing**: Free tier + $19/mo Pro (or $190/yr)
+
+**Distribution**: Influencer Program (50 Founding Partners, 25% commission)
 
 ---
 

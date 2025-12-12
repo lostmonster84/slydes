@@ -22,15 +22,50 @@ Open [http://localhost:3000](http://localhost:3000)
 Create a `.env` file in the root directory:
 
 ```env
+# Required for all email functionality
 RESEND_API_KEY=re_your_api_key_here
+
+# Site URL (used for Stripe redirects)
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Optional: Override default contact email (defaults to james@lostmonter.io)
+CONTACT_EMAIL=james@lostmonter.io
+
+# Optional: Override partner application email (defaults to james@lostmonter.io)
+PARTNER_EMAIL=james@lostmonter.io
+
+# Required for investor page password protection
+INVESTOR_PAGE_PASSWORD=your_secure_password
+
+# Required for Stripe payments (Founding Member checkout)
+STRIPE_SECRET_KEY=sk_test_your_key_here
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
 ```
+
+### Email Configuration
+
+All emails are sent via **Resend** using the verified domain `mail.slydes.io`:
+
+| Form | From Address | Destination |
+|------|--------------|-------------|
+| Contact Form | `contact@mail.slydes.io` | `CONTACT_EMAIL` env var |
+| Investor Enquiry | `investors@mail.slydes.io` | `CONTACT_EMAIL` env var |
+| Partner Application | `contact@mail.slydes.io` | `PARTNER_EMAIL` env var |
+| Waitlist | N/A (adds to Resend Audience) | Audience ID: `29817019-d28f-4bbe-8a64-3f4c64d6b8fc` |
 
 ### Getting a Resend API Key
 
 1. Sign up at [resend.com](https://resend.com)
-2. Create a new API key
-3. Add to `.env` file
+2. Verify your domain (`mail.slydes.io`)
+3. Create a new API key
+4. Add to `.env` file
+
+### Getting Stripe Keys
+
+1. Sign up at [stripe.com](https://stripe.com)
+2. Go to Developers → API Keys
+3. Copy the Secret Key to `STRIPE_SECRET_KEY`
+4. Set up a webhook endpoint and copy the signing secret to `STRIPE_WEBHOOK_SECRET`
 
 ---
 
@@ -98,8 +133,19 @@ vercel --prod
 ### Environment Variables on Vercel
 
 Add these in your Vercel project settings:
-- `RESEND_API_KEY`
-- `NEXT_PUBLIC_SITE_URL`
+
+**Required:**
+- `RESEND_API_KEY` - For all email functionality
+- `NEXT_PUBLIC_SITE_URL` - Set to `https://slydes.io`
+- `INVESTOR_PAGE_PASSWORD` - Password for investor materials access
+
+**For Stripe Payments:**
+- `STRIPE_SECRET_KEY` - Stripe secret key
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret
+
+**Optional (have defaults):**
+- `CONTACT_EMAIL` - Override contact form destination (default: `james@lostmonter.io`)
+- `PARTNER_EMAIL` - Override partner application destination (default: `james@lostmonter.io`)
 
 ### Custom Domain
 
