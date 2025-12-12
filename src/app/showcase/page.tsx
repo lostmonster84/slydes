@@ -7,47 +7,25 @@ import { PhoneMockup } from '@/components/ui/PhoneMockup'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-// Coming soon industries - match IndustrySelector from home page
-const comingSoonIndustries = [
+// Demo examples - showing what's possible with Slydes
+const demoExamples = [
   {
     id: 'hospitality',
     title: 'Maison Lumière',
-    label: 'Hospitality',
+    label: 'Restaurant',
     variant: 'hospitality' as const,
     description: 'Video menus, chef recommendations, and instant table reservations.',
     color: 'from-amber-600 to-amber-800',
+    isDemo: true,
   },
   {
-    id: 'experiences',
-    title: 'Azure Charters',
-    label: 'Experiences',
-    variant: 'experiences' as const,
-    description: 'Cinematic adventure showcases with instant booking.',
-    color: 'from-sky-600 to-sky-800',
-  },
-  {
-    id: 'wellness',
-    title: 'Velvet Spa',
-    label: 'Wellness',
-    variant: 'wellness' as const,
-    description: 'Luxury treatment showcases with online booking.',
-    color: 'from-purple-600 to-purple-800',
-  },
-  {
-    id: 'realestate',
-    title: 'Prestige Estates',
-    label: 'Real Estate',
-    variant: 'realestate' as const,
-    description: 'Video property tours with instant scheduling.',
-    color: 'from-slate-600 to-slate-800',
-  },
-  {
-    id: 'events',
-    title: 'The Glass House',
-    label: 'Events',
-    variant: 'events' as const,
-    description: 'Venue showcases with availability and quotes.',
-    color: 'from-rose-600 to-rose-800',
+    id: 'rentals',
+    title: 'Villa Serenità',
+    label: 'Vacation Rentals',
+    variant: 'rentals' as const,
+    description: 'Immersive property tours with direct booking integration.',
+    color: 'from-emerald-600 to-emerald-800',
+    isDemo: true,
   },
   {
     id: 'fitness',
@@ -56,14 +34,48 @@ const comingSoonIndustries = [
     variant: 'fitness' as const,
     description: 'Class previews with live schedule and signups.',
     color: 'from-orange-600 to-orange-800',
+    isDemo: true,
   },
   {
     id: 'automotive',
     title: 'Apex Motors',
-    label: 'Automotive',
+    label: 'Car Hire',
     variant: 'automotive' as const,
     description: 'Premium video fleet showcase with reservations.',
     color: 'from-zinc-700 to-zinc-900',
+    isDemo: true,
+  },
+]
+
+// Real projects in development
+const realProjects = [
+  {
+    id: 'wildtrax',
+    title: 'WildTrax 4x4',
+    label: 'Adventure Rentals',
+    variant: 'wildtrax' as const,
+    description: 'Land Rover Defender hire in the Scottish Highlands.',
+    color: 'from-red-700 to-red-900',
+    status: 'In Development',
+    url: 'https://wildtrax.co.uk/m/camping',
+  },
+  {
+    id: 'lunadomes',
+    title: 'Luna Domes',
+    label: 'Glamping',
+    variant: 'lunadomes' as const,
+    description: 'Luxury geodesic domes with private hot tubs in West Kent.',
+    color: 'from-amber-700 to-rose-800',
+    status: 'Coming Soon',
+  },
+  {
+    id: 'extremetrailers',
+    title: 'Extreme Trailers',
+    label: 'Marine Equipment',
+    variant: 'extremetrailers' as const,
+    description: 'British-made boat and jet ski trailers.',
+    color: 'from-cyan-700 to-blue-900',
+    status: 'Coming Soon',
   },
 ]
 
@@ -224,7 +236,7 @@ export default function ShowcasePage() {
           </div>
         </section>
 
-        {/* Coming Soon Section */}
+        {/* Real Projects Section */}
         <section className="py-16 bg-white">
           <div className="max-w-6xl mx-auto px-6">
             <motion.div
@@ -235,35 +247,35 @@ export default function ShowcasePage() {
               className="text-center mb-12"
             >
               <div className="flex items-center justify-center gap-3 mb-4">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-semibold">
-                  🚀 COMING SOON
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
+                  🚀 Real Projects
                 </span>
               </div>
-              <h2 className="mb-4">Industries we&apos;re building for</h2>
+              <h2 className="mb-4">Projects we&apos;re building</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                These industries are next on our roadmap. Founding members in these 
-                spaces will shape how Slydes serves their market.
+                Real businesses using Slydes. These are actual client projects 
+                currently in development.
               </p>
             </motion.div>
 
-            {/* Industry Cards Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {comingSoonIndustries.map((industry, index) => (
+            {/* Real Projects Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {realProjects.map((project, index) => (
                 <motion.div
-                  key={industry.id}
+                  key={project.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.05 }}
                   viewport={{ once: true }}
-                  className="group bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden hover:border-leader-blue/30 hover:shadow-md transition-all"
+                  className="group bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden hover:border-green-300 hover:shadow-md transition-all"
                 >
                   {/* Mini Phone Preview */}
                   <div className="p-4 flex justify-center bg-gradient-to-b from-gray-100 to-gray-50">
                     <div className="relative w-[100px] h-[180px] bg-gray-900 rounded-[1.5rem] p-1.5 shadow-lg transform group-hover:scale-105 transition-transform">
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-3 bg-gray-900 rounded-b-lg z-10" />
-                      <div className={`relative w-full h-full bg-gradient-to-b ${industry.color} rounded-[1.25rem] overflow-hidden`}>
+                      <div className={`relative w-full h-full bg-gradient-to-b ${project.color} rounded-[1.25rem] overflow-hidden`}>
                         <div className="h-full w-full flex flex-col items-center justify-center p-2">
-                          <span className="text-white text-[10px] font-bold text-center leading-tight">{industry.title}</span>
+                          <span className="text-white text-[10px] font-bold text-center leading-tight">{project.title}</span>
                         </div>
                       </div>
                       <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gray-600 rounded-full" />
@@ -274,23 +286,88 @@ export default function ShowcasePage() {
                   <div className="p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                        {industry.label}
+                        {project.label}
                       </span>
-                      <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
-                        Open
+                      <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                        {project.status}
                       </span>
                     </div>
-                    <h4 className="font-semibold text-sm mb-1">{industry.title}</h4>
-                    <p className="text-gray-600 text-xs leading-relaxed">{industry.description}</p>
+                    <h4 className="font-semibold text-sm mb-1">{project.title}</h4>
+                    <p className="text-gray-600 text-xs leading-relaxed">{project.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Demo Examples Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-6xl mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-semibold">
+                  💡 Demo Examples
+                </span>
+              </div>
+              <h2 className="mb-4">What&apos;s possible with Slydes</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                These demos show what Slydes can do for different industries. 
+                <strong> Your industry can be next.</strong>
+              </p>
+            </motion.div>
+
+            {/* Demo Cards Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {demoExamples.map((demo, index) => (
+                <motion.div
+                  key={demo.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  viewport={{ once: true }}
+                  className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-amber-300 hover:shadow-md transition-all"
+                >
+                  {/* Mini Phone Preview */}
+                  <div className="p-4 flex justify-center bg-gradient-to-b from-gray-100 to-gray-50">
+                    <div className="relative w-[100px] h-[180px] bg-gray-900 rounded-[1.5rem] p-1.5 shadow-lg transform group-hover:scale-105 transition-transform">
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-3 bg-gray-900 rounded-b-lg z-10" />
+                      <div className={`relative w-full h-full bg-gradient-to-b ${demo.color} rounded-[1.25rem] overflow-hidden`}>
+                        <div className="h-full w-full flex flex-col items-center justify-center p-2">
+                          <span className="text-white text-[10px] font-bold text-center leading-tight">{demo.title}</span>
+                        </div>
+                      </div>
+                      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gray-600 rounded-full" />
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        {demo.label}
+                      </span>
+                      <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+                        Demo
+                      </span>
+                    </div>
+                    <h4 className="font-semibold text-sm mb-1">{demo.title}</h4>
+                    <p className="text-gray-600 text-xs leading-relaxed">{demo.description}</p>
                   </div>
                 </motion.div>
               ))}
 
-              {/* 8th Card - YOUR BUSINESS CTA */}
+              {/* YOUR BUSINESS CTA Card */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.35 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
                 viewport={{ once: true }}
                 className="group bg-gradient-to-b from-leader-blue to-blue-700 rounded-2xl border border-leader-blue overflow-hidden hover:shadow-lg hover:shadow-leader-blue/25 transition-all cursor-pointer"
               >

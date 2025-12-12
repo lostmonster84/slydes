@@ -4,10 +4,11 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PhoneMockup } from '@/components/ui/PhoneMockup'
 
+// Only industries with unique video content - honest demos
 const industries = [
   {
     id: 'hospitality',
-    label: 'Hospitality',
+    label: 'Restaurant',
     title: 'Maison Lumière',
     variant: 'hospitality' as const,
     description: 'Your menu comes alive. Video previews of signature dishes, chef\'s recommendations, and instant reservations—a digital experience as refined as your cuisine.',
@@ -15,43 +16,11 @@ const industries = [
   },
   {
     id: 'rentals',
-    label: 'Rentals',
+    label: 'Vacation Rentals',
     title: 'Villa Serenità',
     variant: 'rentals' as const,
     description: 'Let guests experience your property before they book. Immersive video tours, real reviews, and seamless reservation—all in one stunning mobile experience.',
     features: ['Virtual property tours', 'Direct booking integration', 'Guest reviews & ratings'],
-  },
-  {
-    id: 'experiences',
-    label: 'Experiences',
-    title: 'Azure Charters',
-    variant: 'experiences' as const,
-    description: 'Curated adventures deserve cinematic presentation. Showcase your experiences with stunning video, instant booking, and the social proof that drives conversions.',
-    features: ['Cinematic video showcase', 'Instant booking', 'Real-time availability'],
-  },
-  {
-    id: 'wellness',
-    label: 'Wellness',
-    title: 'Velvet Spa',
-    variant: 'wellness' as const,
-    description: 'Luxury wellness experiences begin with the first impression. Showcase treatments, ambiance, and transformations with video that converts browsers to bookings.',
-    features: ['Treatment showcases', 'Online booking', 'Gift card integration'],
-  },
-  {
-    id: 'realestate',
-    label: 'Real Estate',
-    title: 'Prestige Estates',
-    variant: 'realestate' as const,
-    description: 'Luxury properties demand luxury presentation. Video walkthroughs, virtual tours, and instant inquiry—help buyers fall in love before they visit.',
-    features: ['Video property tours', 'Instant scheduling', 'Agent direct connect'],
-  },
-  {
-    id: 'events',
-    label: 'Events',
-    title: 'The Glass House',
-    variant: 'events' as const,
-    description: 'Venues sell emotion. Showcase your space with video that captures the atmosphere, features past events, and makes booking seamless.',
-    features: ['Venue video tours', 'Availability calendar', 'Quote requests'],
   },
   {
     id: 'fitness',
@@ -63,11 +32,19 @@ const industries = [
   },
   {
     id: 'automotive',
-    label: 'Automotive',
+    label: 'Car Hire',
     title: 'Apex Motors',
     variant: 'automotive' as const,
     description: 'Exotic cars deserve exotic presentation. Video walkarounds, engine sounds, and instant reservations—the premium experience your clients expect.',
     features: ['Video fleet showcase', 'Instant reservations', 'Concierge service'],
+  },
+  {
+    id: 'wildtrax',
+    label: 'Adventure',
+    title: 'WildTrax 4x4',
+    variant: 'wildtrax' as const,
+    description: 'Real Land Rover Defenders, real Scottish adventures. This is an actual Slydes project we\'re building—see the future of mobile-first business sites.',
+    features: ['Full-screen video showcase', 'Instant booking', 'Real customer project'],
   },
 ]
 
@@ -86,12 +63,20 @@ export function IndustrySelector() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
+          {/* Demo badge */}
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-700 text-sm font-medium mb-6">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            Demo Examples
+          </span>
+          
           <h2 className="mb-4">
-            Built for <span className="gradient-text">your industry</span>
+            Built for <span className="gradient-text">any industry</span>
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Whether you run a restaurant, rental business, or service company—Slydes 
-            helps you create mobile experiences that convert.
+            These demos show what&apos;s possible. Slydes works for restaurants, rentals, fitness studios, 
+            car hire, and <strong>any business</strong> that wants a mobile-first experience.
           </p>
         </motion.div>
 
