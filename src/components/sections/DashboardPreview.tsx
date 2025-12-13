@@ -55,7 +55,7 @@ export function DashboardPreview() {
   }
 
   return (
-    <section className="py-24 bg-gradient-to-b from-white via-blue-50/20 to-white overflow-hidden">
+    <section className="py-24 bg-[#0A0E27] overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -64,10 +64,10 @@ export function DashboardPreview() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="mb-4">
+          <h2 className="mb-4 text-white">
             Build with <span className="gradient-text">drag-and-drop slides</span>
           </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-white/70 text-lg max-w-2xl mx-auto">
             Swipe up and down between slides. Swipe left and right through frames within each slide.
           </p>
         </motion.div>
@@ -174,14 +174,14 @@ export function DashboardPreview() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
           viewport={{ once: true }}
-          className="text-center mt-8 flex items-center justify-center gap-6 text-sm text-gray-500"
+          className="text-center mt-8 flex items-center justify-center gap-6 text-sm text-white/60"
         >
           <span className="flex items-center gap-2">
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded bg-gray-100 text-xs font-mono">↑↓</span>
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded bg-white/10 text-xs font-mono text-white/80">↑↓</span>
             Slides
           </span>
           <span className="flex items-center gap-2">
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded bg-gray-100 text-xs font-mono">←→</span>
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded bg-white/10 text-xs font-mono text-white/80">←→</span>
             Frames
           </span>
         </motion.div>

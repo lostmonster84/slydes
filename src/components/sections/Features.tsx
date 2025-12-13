@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { MeshGradient } from '@/components/ui/BackgroundAnimations'
 
 const features = [
   {
@@ -33,9 +32,8 @@ const itemVariants = {
 
 export function Features() {
   return (
-    <MeshGradient>
-      <section className="py-12 md:py-24 relative overflow-hidden">
-        <div className="max-w-4xl mx-auto px-6 relative z-10">
+    <section className="py-12 md:py-24 relative overflow-hidden bg-[#0A0E27]">
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -43,10 +41,10 @@ export function Features() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="mb-4">
+          <h2 className="mb-4 text-white">
             Why <span className="gradient-text">Slydes</span>?
           </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-white/70 text-lg max-w-2xl mx-auto">
             Your website was built for desktops. Your customers are on phones.
             Slydes bridges that gap.
           </p>
@@ -64,15 +62,14 @@ export function Features() {
               key={feature.title}
               variants={itemVariants}
               transition={{ duration: 0.5 }}
-              className="bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all duration-300"
+              className="bg-white/5 rounded-2xl p-8 border border-white/10 hover:border-white/20 hover:bg-white/[0.07] transition-all duration-300"
             >
-              <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+              <h3 className="text-xl font-semibold mb-3 text-white">{feature.title}</h3>
+              <p className="text-white/70 leading-relaxed">{feature.description}</p>
             </motion.div>
           ))}
         </motion.div>
-        </div>
-      </section>
-    </MeshGradient>
+      </div>
+    </section>
   )
 }
