@@ -1,49 +1,97 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Logo } from '@/components/ui/Logo'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
+  
+  // Only the homepage has a dark hero
+  const isHomepage = pathname === '/'
+  // Use dark styling on homepage when not scrolled, OR when mobile menu is open
+  const useDarkMode = (isHomepage && !scrolled) || mobileMenuOpen
+  // Header background should be dark when menu is open (on any page)
+  const headerIsDark = mobileMenuOpen || (isHomepage && !scrolled)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
-      <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        headerIsDark 
+          ? 'bg-future-black border-b border-white/10' 
+          : 'bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm'
+      }`}
+    >
+      <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Logo />
+        <Logo dark={useDarkMode} />
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
-          <Link href="/how-it-works" className="group relative text-gray-600 hover:text-gray-900 transition-colors text-sm">
+          <Link 
+            href="/how-it-works" 
+            className={`group relative transition-colors text-sm ${
+              useDarkMode ? 'text-white/80 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
             How It Works
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
+            <span className={`absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
+              useDarkMode ? 'bg-white' : 'bg-leader-blue'
+            }`} />
           </Link>
-          <Link href="/showcase" className="group relative text-gray-600 hover:text-gray-900 transition-colors text-sm">
+          <Link 
+            href="/showcase" 
+            className={`group relative transition-colors text-sm ${
+              useDarkMode ? 'text-white/80 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
             Showcase
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
+            <span className={`absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
+              useDarkMode ? 'bg-white' : 'bg-leader-blue'
+            }`} />
           </Link>
-          <Link href="/founding-member" className="group relative text-gray-600 hover:text-gray-900 transition-colors text-sm">
-            Partners
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
-          </Link>
-          <Link href="/contact" className="group relative text-gray-600 hover:text-gray-900 transition-colors text-sm">
+          <Link 
+            href="/contact" 
+            className={`group relative transition-colors text-sm ${
+              useDarkMode ? 'text-white/80 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
             Contact
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-leader-blue transition-all duration-300 group-hover:w-full" />
+            <span className={`absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
+              useDarkMode ? 'bg-white' : 'bg-leader-blue'
+            }`} />
           </Link>
         </div>
 
         {/* CTA Button */}
         <div className="hidden md:block">
-          <Link href="/founding-member">
-            <Button>Become a Partner</Button>
-          </Link>
+          <a href="/#waitlist">
+            <Button 
+              className={useDarkMode ? '!bg-white !text-future-black hover:!bg-gray-100' : ''}
+            >
+              Join Waitlist
+            </Button>
+          </a>
         </div>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-gray-600 min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation"
+          className={`md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation ${
+            useDarkMode ? 'text-white' : 'text-gray-600'
+          }`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
           style={{ touchAction: 'manipulation' }}
@@ -66,52 +114,103 @@ export function Header() {
         </button>
       </nav>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
-          <div className="px-6 py-4 space-y-2">
-            <Link
-              href="/how-it-works"
-              className="block min-h-[44px] flex items-center text-gray-600 active:text-gray-900 active:bg-gray-50 transition-colors touch-manipulation rounded-lg px-2 -mx-2"
-              onClick={() => setMobileMenuOpen(false)}
-              style={{ touchAction: 'manipulation' }}
+      {/* Mobile Menu - Full Screen Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed inset-x-0 top-16 bottom-0 z-[100] overflow-y-auto"
+            style={{ backgroundColor: '#0A0E27' }}
+          >
+            <motion.nav 
+              className="flex flex-col min-h-full px-8 pt-8 pb-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2, delay: 0.1 }}
             >
-              How It Works
-            </Link>
-            <Link
-              href="/showcase"
-              className="block min-h-[44px] flex items-center text-gray-600 active:text-gray-900 active:bg-gray-50 transition-colors touch-manipulation rounded-lg px-2 -mx-2"
-              onClick={() => setMobileMenuOpen(false)}
-              style={{ touchAction: 'manipulation' }}
-            >
-              Showcase
-            </Link>
-            <Link
-              href="/founding-member"
-              className="block min-h-[44px] flex items-center text-gray-600 active:text-gray-900 active:bg-gray-50 transition-colors touch-manipulation rounded-lg px-2 -mx-2"
-              onClick={() => setMobileMenuOpen(false)}
-              style={{ touchAction: 'manipulation' }}
-            >
-              Partners
-            </Link>
-            <Link
-              href="/contact"
-              className="block min-h-[44px] flex items-center text-gray-600 active:text-gray-900 active:bg-gray-50 transition-colors touch-manipulation rounded-lg px-2 -mx-2"
-              onClick={() => setMobileMenuOpen(false)}
-              style={{ touchAction: 'manipulation' }}
-            >
-              Contact
-            </Link>
-            <Link 
-              href="/founding-member" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="block mt-4"
-            >
-              <Button className="w-full">Become a Partner</Button>
-            </Link>
-          </div>
-        </div>
-      )}
+              {/* Main Links */}
+              <div className="space-y-2">
+                {[
+                  { href: '/how-it-works', label: 'How It Works' },
+                  { href: '/showcase', label: 'Showcase' },
+                  { href: '/contact', label: 'Contact' },
+                ].map((link, i) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 + i * 0.05 }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-4 text-3xl font-bold text-white hover:text-electric-cyan transition-colors touch-manipulation"
+                      style={{ touchAction: 'manipulation' }}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Divider */}
+              <motion.div 
+                className="my-8 h-px bg-white/10"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              />
+
+              {/* Secondary Links */}
+              <motion.div
+                className="space-y-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.35 }}
+              >
+                <Link
+                  href="/affiliates"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-lg text-white/60 hover:text-white transition-colors"
+                >
+                  Affiliate Program
+                </Link>
+                <Link
+                  href="/investors"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-lg text-white/60 hover:text-white transition-colors"
+                >
+                  Investors
+                </Link>
+              </motion.div>
+
+              {/* CTA at bottom */}
+              <motion.div 
+                className="mt-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+              >
+                <a 
+                  href="/#waitlist" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block"
+                >
+                  <Button size="lg" className="w-full text-lg">
+                    Join Waitlist
+                  </Button>
+                </a>
+                <p className="text-center text-white/40 text-sm mt-4">
+                  No spam. Just launch updates.
+                </p>
+              </motion.div>
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   )
 }

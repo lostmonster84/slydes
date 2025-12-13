@@ -694,12 +694,9 @@ export function PhoneMockup({
             </motion.div>
           </div>
           
-          {/* Home indicator */}
+          {/* Home indicator - inside screen only */}
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-28 h-1 bg-white/30 rounded-full z-10" />
         </div>
-        
-        {/* Physical home indicator on frame */}
-        <div className="absolute -bottom-0 left-1/2 -translate-x-1/2 w-28 h-1 bg-gray-600 rounded-full" />
       </div>
     </motion.div>
   )

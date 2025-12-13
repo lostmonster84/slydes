@@ -30,8 +30,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/founding-member" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  Partners
+                <Link href="/affiliates" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Affiliate Program
                 </Link>
               </li>
             </ul>

@@ -1,0 +1,56 @@
+{"location":"admin/waitlist/page.tsx:TOP","message":"Module loaded","data":{},"timestamp":1765639748477,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639748486,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:TOP","message":"Module loaded","data":{},"timestamp":1765639748648,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639748651,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639748652,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:USE_EFFECT","message":"useEffect triggered","data":{},"timestamp":1765639748654,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:FETCH_START","message":"fetchData called","data":{},"timestamp":1765639748654,"sessionId":"debug-session","hypothesisId":"H4"}
+{"location":"admin/waitlist/page.tsx:FETCH_RESPONSE","message":"API response received","data":{"ok":false,"status":401},"timestamp":1765639748915,"sessionId":"debug-session","hypothesisId":"H4"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639748915,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639748916,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639765048,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639765048,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639765113,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639765113,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639810818,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:TOP","message":"Module loaded","data":{},"timestamp":1765639810913,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639810917,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639810917,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:USE_EFFECT","message":"useEffect triggered","data":{},"timestamp":1765639810919,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:FETCH_START","message":"fetchData called","data":{},"timestamp":1765639810919,"sessionId":"debug-session","hypothesisId":"H4"}
+{"location":"admin/waitlist/page.tsx:FETCH_RESPONSE","message":"API response received","data":{"ok":false,"status":401},"timestamp":1765639810931,"sessionId":"debug-session","hypothesisId":"H4"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639810932,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639810932,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639821530,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639821530,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639821617,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639821617,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:TOP","message":"Module loaded","data":{},"timestamp":1765639853724,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639853726,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639853727,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:TOP","message":"Module loaded","data":{},"timestamp":1765639857328,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639857340,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:TOP","message":"Module loaded","data":{},"timestamp":1765639857407,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639857410,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639857410,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:USE_EFFECT","message":"useEffect triggered","data":{},"timestamp":1765639857412,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:FETCH_START","message":"fetchData called","data":{},"timestamp":1765639857412,"sessionId":"debug-session","hypothesisId":"H4"}
+{"location":"admin/waitlist/page.tsx:FETCH_RESPONSE","message":"API response received","data":{"ok":false,"status":401},"timestamp":1765639857426,"sessionId":"debug-session","hypothesisId":"H4"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639857426,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639857427,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:HANDLE_LOGIN","message":"Login attempt","data":{"passwordLength":0,"passwordValue":"..."},"timestamp":1765639867425,"sessionId":"debug-session","hypothesisId":"H_PASSWORD"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639867427,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639867427,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639867472,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639867472,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639891732,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:TOP","message":"Module loaded","data":{},"timestamp":1765639891807,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639891810,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639891810,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:FETCH_START","message":"fetchData called","data":{},"timestamp":1765639891812,"sessionId":"debug-session","hypothesisId":"H4"}
+{"location":"admin/waitlist/page.tsx:USE_EFFECT","message":"useEffect triggered","data":{},"timestamp":1765639891812,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:FETCH_RESPONSE","message":"API response received","data":{"ok":false,"status":401},"timestamp":1765639891823,"sessionId":"debug-session","hypothesisId":"H4"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639891824,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639891824,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639926685,"sessionId":"debug-session","hypothesisId":"H2"}
+{"location":"admin/waitlist/page.tsx:COMPONENT_RENDER","message":"Component rendering","data":{},"timestamp":1765639926686,"sessionId":"debug-session","hypothesisId":"H2"}

@@ -2,110 +2,248 @@
 
 import { Button } from '@/components/ui/Button'
 import { PhoneMockup } from '@/components/ui/PhoneMockup'
-import { AnimatedHeroBackground } from '@/components/ui/BackgroundAnimations'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect } from 'react'
+
+const SUBHEADS = [
+  // Always: call out the lie → make the pain obvious → Slydes is the fix.
+  { main: "Your 'mobile site' is just desktop shrunk down.", punch: "Slydes are built for phones." },
+  { main: "Responsive is the minimum.", punch: "Slydes are the upgrade." },
+  { main: "Your customers swipe. Your site scrolls.", punch: "Slydes swipe." },
+  { main: "Stop shipping desktop to phones.", punch: "Ship a Slyde." },
+  { main: "A website isn't a mobile strategy.", punch: "A Slyde is." },
+  { main: "Desktop-first is dead.", punch: "Slydes are vertical-first." },
+
+  // More core lines (no fluff)
+  { main: "Mobile-first isn't a breakpoint.", punch: "It's Slydes." },
+  { main: "If it doesn't work on a phone, it doesn't work.", punch: "Slydes work where it counts." },
+  { main: "Your website looks fine. It feels slow.", punch: "Slydes feel instant." },
+  { main: "Scrolling isn't engaging.", punch: "Slydes are." },
+  { main: "Your homepage isn't your funnel anymore.", punch: "Your Slyde is." },
+  { main: "Your best content is trapped in desktop pages.", punch: "Slydes set it free." },
+  { main: "Stop sending customers to menus they can't use.", punch: "Send a Slyde." },
+  { main: "Desktop design is the wrong starting line.", punch: "Start with a Slyde." },
+  { main: "A redesign won't fix the format.", punch: "Slydes change the format." },
+  { main: "Most sites are built to read.", punch: "Slydes are built to convert." },
+  { main: "Clicks are friction.", punch: "Slydes cut the friction." },
+  { main: "Your website explains. Your Slyde sells.", punch: "That's the difference." },
+  { main: "Your customers decide in seconds.", punch: "Slydes win those seconds." },
+  { main: "Stop shipping brochures.", punch: "Ship Slydes." },
+  { main: "Mobile-friendly isn't mobile-first.", punch: "Slydes are mobile-first." },
+  { main: "Your site is built for a mouse.", punch: "Slydes are built for hands." },
+]
 
 export function Hero() {
+  const [subheadIndex, setSubheadIndex] = useState(0)
+  const [mounted, setMounted] = useState(false)
+
+  // Set random start index + begin rotation after mount (avoids hydration mismatch)
+  useEffect(() => {
+    setSubheadIndex(Math.floor(Math.random() * SUBHEADS.length))
+    setMounted(true)
+    
+    const interval = setInterval(() => {
+      setSubheadIndex((prev) => (prev + 1) % SUBHEADS.length)
+    }, 6000) // 6 seconds between rotations
+    return () => clearInterval(interval)
+  }, [])
   return (
-    <AnimatedHeroBackground>
-      <section className="pt-24 md:pt-32 pb-16 md:pb-24 min-h-[90vh] md:min-h-screen flex items-center overflow-hidden relative">
-        <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-20 items-center">
-          {/* Left Column - Content */}
-          <div className="flex-1 text-center lg:text-left">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex justify-center lg:justify-start"
-            >
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-medium mb-6">
-                <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
-                Now accepting founders
-              </span>
-            </motion.div>
-            
-            {/* Headline */}
-            <motion.h1 
-              className="font-display mb-6 text-balance text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <span className="block">Mobile sites that</span>
-              <span className="block gradient-text">customers actually use</span>
-            </motion.h1>
-            
-            <motion.p 
-              className="text-lg md:text-xl text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              Your current website was built for desktops. 
-              Slydes turns your content into TikTok-style vertical stories that feel native on any phone. 
-              Built in minutes, not months.
-            </motion.p>
-            
-            <motion.div 
-              className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <Link href="/founding-member">
-                <Button size="lg" className="w-full sm:w-auto animate-pulse-glow">
-                  Become a Partner
-                </Button>
-              </Link>
-              <Link href="/showcase">
-                <Button variant="secondary" size="lg" className="w-full sm:w-auto hover-lift">
-                  See Showcase
-                </Button>
-              </Link>
-            </motion.div>
-            
-            <motion.p 
-              className="text-sm text-gray-500"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              Join 50 founders shaping the future of mobile-first business sites.
-            </motion.p>
+    <section className="relative min-h-screen overflow-hidden bg-[#030712]">
+      {/* === BACKGROUND === */}
+      <div className="absolute inset-0">
+        {/* Soft vignette */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse 120% 100% at 50% 0%, transparent 0%, transparent 40%, rgba(0,0,0,0.3) 100%)',
+          }}
+        />
+        
+        {/* Noise texture */}
+        <div 
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          }}
+        />
 
-            <motion.p
-              className="text-sm text-gray-500 mt-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            >
-              Not ready yet?{' '}
-              <a 
-                href="#waitlist" 
-                className="text-leader-blue hover:underline font-medium"
-              >
-                Join the waitlist
-              </a>
-            </motion.p>
-          </div>
-
-          {/* Right Column - Phone Mockup - SAME COMPONENT AS EVERYWHERE ELSE */}
+        {/* Spotlight glow - positioned behind phone */}
+        <div className="absolute inset-0 flex items-end justify-center pointer-events-none pb-[5%]">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="flex-shrink-0 mt-8 lg:mt-0"
+            className="relative w-[500px] h-[500px]"
+            animate={{ scale: [1, 1.03, 1] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
           >
-            <PhoneMockup 
-              variant="hospitality"
+            <div 
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: `radial-gradient(circle at 50% 50%, 
+                  rgba(37, 99, 235, 0.25) 0%, 
+                  rgba(37, 99, 235, 0.12) 30%, 
+                  rgba(37, 99, 235, 0.04) 55%, 
+                  transparent 80%
+                )`,
+                filter: 'blur(50px)',
+              }}
             />
           </motion.div>
         </div>
       </div>
+
+      {/* === CONTENT === */}
+      <div className="relative z-10 pt-20 md:pt-24 pb-12 md:pb-16 min-h-screen flex flex-col items-center justify-start px-6">
+        
+        {/* 1. BADGE - Urgency */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-4"
+        >
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-white/90 text-sm font-medium">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+            </span>
+            Launching soon
+          </span>
+        </motion.div>
+        
+        {/* 2. HEADLINE - THE statement */}
+        <motion.h1 
+          className="font-display text-center mb-4 text-balance text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          <span className="text-white">Old school websites are </span>
+          <span className="text-white/50">OUT</span>
+          <span className="text-white">.</span>
+          <br />
+          <span className="text-white">Slydes are </span>
+          <span className="bg-gradient-to-r from-leader-blue via-electric-cyan to-purple-400 bg-clip-text text-transparent">IN</span>
+          <span className="text-white">.</span>
+        </motion.h1>
+        
+        {/* 3. SUBHEAD - Slot machine with staggered left-to-right roll */}
+        <div className="mb-6 max-w-xl" style={{ perspective: '800px' }}>
+          <AnimatePresence mode="wait">
+            <motion.p 
+              key={subheadIndex}
+              className="text-center text-lg md:text-xl text-white/70 leading-relaxed flex flex-wrap justify-center gap-x-[0.3em]"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              {SUBHEADS[subheadIndex].main.split(' ').map((word, i) => (
+                <motion.span
+                  key={`main-${i}`}
+                  className="inline-block"
+                  style={{ transformStyle: 'preserve-3d' }}
+                  variants={{
+                    hidden: { rotateX: 90, opacity: 0, y: 10 },
+                    visible: { rotateX: 0, opacity: 1, y: 0 },
+                    exit: { rotateX: -90, opacity: 0, y: -10 }
+                  }}
+                  transition={{ 
+                    duration: 0.4,
+                    delay: i * 0.05,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+              {' '}
+              {SUBHEADS[subheadIndex].punch.split(' ').map((word, i) => (
+                <motion.span
+                  key={`punch-${i}`}
+                  className="inline-block text-white font-semibold"
+                  style={{ transformStyle: 'preserve-3d' }}
+                  variants={{
+                    hidden: { rotateX: 90, opacity: 0, y: 10 },
+                    visible: { rotateX: 0, opacity: 1, y: 0 },
+                    exit: { rotateX: -90, opacity: 0, y: -10 }
+                  }}
+                  transition={{ 
+                    duration: 0.4,
+                    delay: (SUBHEADS[subheadIndex].main.split(' ').length + i) * 0.05,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.p>
+          </AnimatePresence>
+        </div>
+        
+        {/* 4. CTA - Single, bold, above fold */}
+        <motion.div 
+          className="mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <a href="#waitlist">
+            <Button size="lg" className="shadow-lg shadow-leader-blue/30 px-10 text-base">
+              Get Early Access →
+            </Button>
+          </a>
+        </motion.div>
+
+        {/* CTA support - risk reversal */}
+        <motion.p
+          className="text-sm text-white/50 -mt-2 mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.35 }}
+        >
+          No credit card. No spam. Just early access.
+        </motion.p>
+
+        {/* 5. Secondary link - not a competing button */}
+        <motion.p
+          className="text-sm text-white/50 mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          or{' '}
+          <Link href="/showcase" className="text-white/70 hover:text-white underline underline-offset-2">
+            see it in action
+          </Link>
+        </motion.p>
+        
+        {/* 6. PHONE - THE STAR */}
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          className="mb-6"
+        >
+          <div className="animate-phone-float">
+            <PhoneMockup 
+              variant="hospitality"
+              className="scale-[0.85] md:scale-95"
+            />
+          </div>
+        </motion.div>
+        
+        {/* 7. THE CLOSER - Invite conversation */}
+        <motion.p
+          className="text-center text-sm md:text-base text-white/60 max-w-md"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          Got an industry we haven't covered?{' '}
+          <a href="#contact" className="text-white/90 font-medium hover:text-white underline underline-offset-2">
+            Let's talk.
+          </a>
+        </motion.p>
+      </div>
     </section>
-    </AnimatedHeroBackground>
   )
 }

@@ -5,7 +5,7 @@ import { Resend } from 'resend'
 const getResend = () => new Resend(process.env.RESEND_API_KEY)
 
 // Email to receive contact form submissions
-const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'james@lostmonter.io'
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'james@lostmonster.io'
 
 export async function POST(request: NextRequest) {
   try {
