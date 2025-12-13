@@ -27,13 +27,24 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Determine header background:
+  // - Homepage + not scrolled + menu closed = transparent (blends with hero)
+  // - Homepage + not scrolled + menu open = solid dark
+  // - Homepage + scrolled = white
+  // - Other pages = white
+  const getHeaderClasses = () => {
+    if (mobileMenuOpen) {
+      return 'bg-[#0A0E27] border-b border-white/10'
+    }
+    if (isHomepage && !scrolled) {
+      return 'bg-transparent' // No border, blends with hero
+    }
+    return 'bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm'
+  }
+
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        headerIsDark 
-          ? 'bg-future-black border-b border-white/10' 
-          : 'bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${getHeaderClasses()}`}
     >
       <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
