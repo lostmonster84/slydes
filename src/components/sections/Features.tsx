@@ -64,19 +64,12 @@ export function Features() {
                       {/* Dynamic Island */}
                       <div className="absolute top-3 left-1/2 -translate-x-1/2 w-20 h-6 bg-black rounded-full" />
                       
-                      {/* Swipe indicator */}
-                      <motion.div 
-                        className="absolute left-1/2 -translate-x-1/2 top-1/3"
-                        animate={{ y: [0, -15, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                      >
-                        <div className="flex flex-col items-center">
-                          <svg className="w-8 h-8 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                          </svg>
-                          <span className="text-[8px] text-white/40 mt-1">Swipe up</span>
-                        </div>
-                      </motion.div>
+                      {/* Slide dots indicator - shows there's more content */}
+                      <div className="absolute top-14 left-1/2 -translate-x-1/2 flex gap-1.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                      </div>
                       
                       <div className="text-xs font-bold mb-1">Chef&apos;s Table</div>
                       <div className="text-[10px] text-white/80 mb-3">12-course omakase</div>
