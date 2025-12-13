@@ -72,20 +72,20 @@ export function DashboardPreview() {
           </p>
         </motion.div>
 
-        {/* Dashboard mockup - DARK MODE */}
+        {/* Dashboard mockup - macOS DARK MODE (neutral grays) */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
-          className="bg-[#1a1f36] rounded-2xl border border-white/10 shadow-2xl shadow-black/50 overflow-hidden"
+          className="bg-[#1e1e1e] rounded-2xl border border-[#3a3a3a] shadow-2xl shadow-black/50 overflow-hidden"
         >
           {/* macOS-style toolbar - DARK */}
-          <div className="bg-[#12152a] border-b border-white/10 px-6 py-4 flex items-center justify-between">
+          <div className="bg-[#323232] border-b border-[#3a3a3a] px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+              <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+              <div className="w-3 h-3 rounded-full bg-[#28c840]" />
             </div>
             <div className="text-sm font-medium text-white/70">Highland Bites - Slydes Editor</div>
             <button className="px-4 py-1.5 bg-leader-blue text-white text-sm rounded-lg font-medium hover:bg-leader-blue/90 transition-colors">
@@ -94,8 +94,8 @@ export function DashboardPreview() {
           </div>
 
           <div className="grid md:grid-cols-[280px_1fr] min-h-[520px]">
-            {/* Slides sidebar - DARK */}
-            <div className="bg-[#12152a] border-r border-white/10 p-4 overflow-y-auto">
+            {/* Slides sidebar - macOS dark sidebar */}
+            <div className="bg-[#2d2d2d] border-r border-[#3a3a3a] p-4 overflow-y-auto">
               <div className="text-xs font-semibold text-white/50 uppercase tracking-wide mb-3">
                 Slides
                 <span className="text-white/30 font-normal normal-case ml-1">(swipe up/down)</span>
@@ -119,15 +119,15 @@ export function DashboardPreview() {
                     </div>
                   </button>
                 ))}
-                <div className="pt-2 border-t border-white/10 mt-3">
+                <div className="pt-2 border-t border-[#3a3a3a] mt-3">
                   <button className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/40 text-sm border border-dashed border-white/20 hover:border-white/30 transition-colors">
                     + Add Slide
                   </button>
                 </div>
               </div>
 
-              {/* Frames within current slide - DARK */}
-              <div className="mt-6 pt-4 border-t border-white/10">
+              {/* Frames within current slide */}
+              <div className="mt-6 pt-4 border-t border-[#3a3a3a]">
                 <div className="text-xs font-semibold text-white/50 uppercase tracking-wide mb-3">
                   Frames in &ldquo;{currentSlide.name}&rdquo;
                   <span className="text-white/30 font-normal normal-case ml-1">(swipe left/right)</span>
@@ -150,13 +150,13 @@ export function DashboardPreview() {
               </div>
             </div>
 
-            {/* Preview area - DARK with subtle glow */}
-            <div className="bg-[#0d1022] flex items-center justify-center p-8 relative">
+            {/* Preview area - darker content area */}
+            <div className="bg-[#1e1e1e] flex items-center justify-center p-8 relative">
               {/* Subtle spotlight glow behind phone */}
               <div 
                 className="absolute inset-0 flex items-center justify-center pointer-events-none"
                 style={{
-                  background: 'radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.15) 0%, transparent 60%)',
+                  background: 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 60%)',
                 }}
               />
               <AnimatePresence mode="wait">
