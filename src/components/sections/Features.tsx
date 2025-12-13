@@ -62,19 +62,22 @@ export function Features() {
                     {/* Screen */}
                     <div className="w-full h-full bg-gradient-to-br from-amber-500 to-orange-600 rounded-[2.25rem] flex flex-col justify-end p-4 text-white relative overflow-hidden">
                       {/* Dynamic Island */}
-                      <div className="absolute top-3 left-1/2 -translate-x-1/2 w-20 h-6 bg-black rounded-full" />
+                      <div className="absolute top-3 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full" />
                       
-                      {/* Slide dots indicator - shows there's more content */}
-                      <div className="absolute top-14 left-1/2 -translate-x-1/2 flex gap-1.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                      {/* Hero image area */}
+                      <div className="absolute top-12 left-3 right-3 bottom-24 rounded-xl overflow-hidden">
+                        <div className="w-full h-full bg-gradient-to-b from-black/20 to-transparent" />
+                        {/* Food image placeholder - styled like a photo */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="text-4xl">🍣</div>
+                        </div>
                       </div>
                       
-                      <div className="text-xs font-bold mb-1">Chef&apos;s Table</div>
-                      <div className="text-[10px] text-white/80 mb-3">12-course omakase</div>
+                      {/* Content at bottom */}
+                      <div className="text-sm font-bold mb-0.5">Chef&apos;s Table</div>
+                      <div className="text-[10px] text-white/80 mb-2">12-course omakase · $285</div>
                       <div className="w-full bg-white/20 backdrop-blur rounded-full py-2 text-[10px] text-center font-medium">
-                        View Menu
+                        Book Now
                       </div>
                       
                       {/* Home indicator */}
