@@ -72,33 +72,33 @@ export function DashboardPreview() {
           </p>
         </motion.div>
 
-        {/* Dashboard mockup */}
+        {/* Dashboard mockup - DARK MODE */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
-          className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden"
+          className="bg-[#1a1f36] rounded-2xl border border-white/10 shadow-2xl shadow-black/50 overflow-hidden"
         >
-          {/* macOS-style toolbar */}
-          <div className="bg-gray-50 border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+          {/* macOS-style toolbar - DARK */}
+          <div className="bg-[#12152a] border-b border-white/10 px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-red-400" />
-              <div className="w-3 h-3 rounded-full bg-yellow-400" />
-              <div className="w-3 h-3 rounded-full bg-green-400" />
+              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500" />
+              <div className="w-3 h-3 rounded-full bg-green-500" />
             </div>
-            <div className="text-sm font-medium text-gray-700">Highland Bites - Slydes Editor</div>
+            <div className="text-sm font-medium text-white/70">Highland Bites - Slydes Editor</div>
             <button className="px-4 py-1.5 bg-leader-blue text-white text-sm rounded-lg font-medium hover:bg-leader-blue/90 transition-colors">
               Publish
             </button>
           </div>
 
           <div className="grid md:grid-cols-[280px_1fr] min-h-[520px]">
-            {/* Slides sidebar - VERTICAL navigation */}
-            <div className="bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
-              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            {/* Slides sidebar - DARK */}
+            <div className="bg-[#12152a] border-r border-white/10 p-4 overflow-y-auto">
+              <div className="text-xs font-semibold text-white/50 uppercase tracking-wide mb-3">
                 Slides
-                <span className="text-gray-400 font-normal normal-case ml-1">(swipe up/down)</span>
+                <span className="text-white/30 font-normal normal-case ml-1">(swipe up/down)</span>
               </div>
               <div className="space-y-2">
                 {slides.map((slide, index) => (
@@ -108,29 +108,29 @@ export function DashboardPreview() {
                     className={`w-full text-left rounded-lg transition-all duration-200 ${
                       activeSlide === index
                         ? 'bg-leader-blue text-white shadow-md'
-                        : 'hover:bg-white text-gray-700 border border-transparent hover:border-gray-200'
+                        : 'hover:bg-white/5 text-white/70 border border-transparent hover:border-white/10'
                     }`}
                   >
                     <div className="px-3 py-2.5">
                       <span className="text-sm font-medium block">{slide.name}</span>
-                      <span className={`text-xs ${activeSlide === index ? 'text-white/70' : 'text-gray-400'}`}>
+                      <span className={`text-xs ${activeSlide === index ? 'text-white/70' : 'text-white/40'}`}>
                         {slide.frames.length} frames
                       </span>
                     </div>
                   </button>
                 ))}
-                <div className="pt-2 border-t border-gray-200 mt-3">
-                  <button className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-white text-gray-500 text-sm border border-dashed border-gray-300 hover:border-gray-400 transition-colors">
+                <div className="pt-2 border-t border-white/10 mt-3">
+                  <button className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/40 text-sm border border-dashed border-white/20 hover:border-white/30 transition-colors">
                     + Add Slide
                   </button>
                 </div>
               </div>
 
-              {/* Frames within current slide - HORIZONTAL navigation */}
-              <div className="mt-6 pt-4 border-t border-gray-200">
-                <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              {/* Frames within current slide - DARK */}
+              <div className="mt-6 pt-4 border-t border-white/10">
+                <div className="text-xs font-semibold text-white/50 uppercase tracking-wide mb-3">
                   Frames in &ldquo;{currentSlide.name}&rdquo;
-                  <span className="text-gray-400 font-normal normal-case ml-1">(swipe left/right)</span>
+                  <span className="text-white/30 font-normal normal-case ml-1">(swipe left/right)</span>
                 </div>
                 <div className="space-y-1">
                   {currentSlide.frames.map((frame, index) => (
@@ -139,8 +139,8 @@ export function DashboardPreview() {
                       onClick={() => setActiveFrame(index)}
                       className={`w-full text-left px-3 py-2 rounded-md text-sm transition-all ${
                         activeFrame === index
-                          ? 'bg-gray-200 text-gray-900 font-medium'
-                          : 'text-gray-600 hover:bg-gray-100'
+                          ? 'bg-white/10 text-white font-medium'
+                          : 'text-white/60 hover:bg-white/5'
                       }`}
                     >
                       {frame.name}
@@ -150,8 +150,15 @@ export function DashboardPreview() {
               </div>
             </div>
 
-            {/* Preview area with ACTUAL phone mockup */}
-            <div className="bg-gradient-to-br from-gray-100 via-blue-50/30 to-purple-50/30 flex items-center justify-center p-8">
+            {/* Preview area - DARK with subtle glow */}
+            <div className="bg-[#0d1022] flex items-center justify-center p-8 relative">
+              {/* Subtle spotlight glow behind phone */}
+              <div 
+                className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                style={{
+                  background: 'radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.15) 0%, transparent 60%)',
+                }}
+              />
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`${activeSlide}-${activeFrame}`}
@@ -159,7 +166,7 @@ export function DashboardPreview() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.25 }}
-                  className="animate-phone-float"
+                  className="animate-phone-float relative z-10"
                 >
                   <PhoneMockup variant="hospitality" />
                 </motion.div>
