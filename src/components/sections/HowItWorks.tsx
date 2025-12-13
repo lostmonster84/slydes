@@ -2,176 +2,66 @@
 
 import { motion } from 'framer-motion'
 import { AnimatedGridFade } from '@/components/ui/BackgroundAnimations'
+import { EditorFrameStack } from '@/components/ui/EditorMockups'
+import { CompositionDarkMode } from '@/components/ui/Compositions'
+import { BackgroundDotGrid } from '@/components/ui/BackgroundEffects'
 
 const steps = [
   {
     number: '01',
-    title: 'Build your slides',
-    description: 'Stack vertical slides like TikTok. Add horizontal frames within each slide for carousels so people swipe through more of your offer.',
-    details: ['Hook frames to capture attention', 'Gallery frames for showcasing', 'Action frames for conversions'],
+    title: 'Choose your frames',
+    description: 'Pick from 11 pre-built frame types. Welcome screens, social proof, CTAs, galleries—each designed to convert mobile visitors.',
+    details: ['Hook frames to capture attention', 'Social proof to build trust', 'Action frames for conversions'],
   },
   {
     number: '02',
     title: 'Add your content',
-    description: 'Upload videos, add text, customize colors. See changes live in the phone preview so you ship with confidence.',
+    description: 'Upload videos, add text, customize colors. Our visual editor shows you exactly how it looks on mobile—no guessing.',
     details: ['Drag-and-drop interface', 'Live iPhone preview', 'Video backgrounds'],
   },
   {
     number: '03',
     title: 'Share your link',
-    description: 'Publish with one click. Share your Slyde from your Instagram bio, QR codes, or emails so visitors land in a mobile experience that converts.',
+    description: 'One click to publish. Get a shareable link instantly. Add it to your Instagram bio, print it as a QR code, or embed it anywhere.',
     details: ['Instant publishing', 'Works on every phone', 'Analytics built in'],
   },
 ]
 
-// Step 01 Visual: Frame Stack
-function FrameStackVisual() {
-  return (
-    <div className="relative w-[200px] h-[280px]">
-      {/* Stacked frames */}
-      {[2, 1, 0].map((i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-xl border shadow-lg"
-          style={{
-            width: 160,
-            height: 220,
-            left: 20 + i * 12,
-            top: 30 - i * 12,
-            zIndex: 3 - i,
-            background: i === 0 ? 'linear-gradient(135deg, #2563EB 0%, #06B6D4 100%)' : '#fff',
-            borderColor: i === 0 ? 'transparent' : '#e5e7eb',
-          }}
-          initial={{ opacity: 0, y: 20, rotate: -3 + i * 2 }}
-          whileInView={{ opacity: 1, y: 0, rotate: -3 + i * 2 }}
-          transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
-          viewport={{ once: true }}
-        >
-          {i === 0 && (
-            <div className="p-4 text-white h-full flex flex-col justify-end">
-              <div className="text-[10px] opacity-70 mb-1">Welcome</div>
-              <div className="text-sm font-semibold mb-2">Highland Bites</div>
-              <div className="w-full bg-white/20 rounded-full py-1.5 text-[10px] text-center font-medium">
-                View Menu
-              </div>
-            </div>
-          )}
-          {i === 1 && (
-            <div className="p-3">
-              <div className="w-full h-16 bg-gray-100 rounded-lg mb-2" />
-              <div className="h-2 bg-gray-200 rounded w-3/4 mb-1" />
-              <div className="h-2 bg-gray-100 rounded w-1/2" />
-            </div>
-          )}
-          {i === 2 && (
-            <div className="p-3">
-              <div className="w-full h-12 bg-gray-50 rounded-lg mb-2" />
-              <div className="h-2 bg-gray-100 rounded w-2/3" />
-            </div>
-          )}
-        </motion.div>
-      ))}
-    </div>
-  )
-}
-
-// Step 02 Visual: Mini Editor
-function EditorVisual() {
-  return (
-    <motion.div
-      className="w-[240px] bg-[#1e1e1e] rounded-xl border border-[#3a3a3a] shadow-2xl overflow-hidden"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      viewport={{ once: true }}
-    >
-      {/* Toolbar */}
-      <div className="bg-[#323232] px-3 py-2 flex items-center gap-1.5 border-b border-[#3a3a3a]">
-        <div className="w-2 h-2 rounded-full bg-[#ff5f57]" />
-        <div className="w-2 h-2 rounded-full bg-[#febc2e]" />
-        <div className="w-2 h-2 rounded-full bg-[#28c840]" />
-        <span className="text-[8px] text-white/50 ml-2">Slydes Editor</span>
-      </div>
-      {/* Content */}
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-16 bg-[#2d2d2d] p-2 border-r border-[#3a3a3a]">
-          <div className="text-[6px] text-white/40 mb-1">SLIDES</div>
-          <div className="space-y-1">
-            <div className="h-4 bg-leader-blue rounded text-[6px] text-white flex items-center px-1">Welcome</div>
-            <div className="h-4 bg-white/5 rounded text-[6px] text-white/60 flex items-center px-1">Menu</div>
-            <div className="h-4 bg-white/5 rounded text-[6px] text-white/60 flex items-center px-1">Contact</div>
-          </div>
-        </div>
-        {/* Preview */}
-        <div className="flex-1 p-3 flex items-center justify-center">
-          <div className="w-12 h-24 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg shadow-lg flex flex-col justify-end p-1.5">
-            <div className="text-[5px] text-white/80">Chef&apos;s Table</div>
-            <div className="w-full bg-amber-400 rounded-full py-0.5 text-[4px] text-center text-amber-900 font-medium mt-1">
-              View
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  )
-}
-
-// Step 03 Visual: Before/After
+// Step 03 Visual: Before/After (same as How It Works page)
 function BeforeAfterVisual() {
   return (
-    <div className="flex gap-3 items-end">
-      {/* Before */}
-      <motion.div
-        className="opacity-50"
-        initial={{ opacity: 0, x: -20 }}
-        whileInView={{ opacity: 0.5, x: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        viewport={{ once: true }}
-      >
-        <div className="text-[8px] text-gray-400 text-center mb-1">Before</div>
-        <div className="w-[60px] h-[120px] bg-gray-300 rounded-lg p-1">
-          <div className="w-full h-full bg-gray-200 rounded flex items-center justify-center">
-            <span className="text-gray-400 text-[6px]">Old Site</span>
+    <div className="flex gap-4 items-end">
+      {/* Before - smaller, faded */}
+      <div className="opacity-50">
+        <div className="text-[10px] text-gray-400 text-center mb-2">Before</div>
+        <div className="w-[80px] h-[160px] bg-gray-300 rounded-xl p-1">
+          <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
+            <span className="text-gray-400 text-[8px]">Old Site</span>
           </div>
         </div>
-      </motion.div>
-      
+      </div>
       {/* Arrow */}
-      <motion.div
-        className="pb-14"
-        initial={{ opacity: 0, scale: 0.5 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3, delay: 0.3 }}
-        viewport={{ once: true }}
-      >
-        <svg className="w-6 h-6 text-leader-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="pb-20">
+        <svg className="w-8 h-8 text-leader-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
         </svg>
-      </motion.div>
-      
-      {/* After */}
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        viewport={{ once: true }}
-      >
-        <div className="text-[8px] text-leader-blue text-center mb-1 font-medium">With Slydes</div>
+      </div>
+      {/* After - larger, prominent with glow */}
+      <div>
+        <div className="text-[10px] text-leader-blue text-center mb-2 font-medium">With Slydes</div>
         <div className="relative">
-          <div className="absolute inset-0 bg-leader-blue/20 blur-xl rounded-full scale-110" />
-          <div className="w-[90px] h-[180px] bg-gray-900 rounded-xl p-1 shadow-lg shadow-leader-blue/20 relative">
-            <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex flex-col justify-end p-2 text-white">
-              <div className="text-[5px] text-white/60">Available Now</div>
-              <div className="text-[8px] font-bold mb-0.5">Land Rover</div>
-              <div className="text-[5px] text-white/70 mb-1.5">Highland adventures</div>
-              <div className="w-full bg-white text-gray-900 rounded-full py-1 text-[6px] font-semibold text-center">
-                Book Now
-              </div>
+          {/* Glow */}
+          <div className="absolute inset-0 bg-leader-blue/20 blur-2xl rounded-full scale-110" />
+          <div className="w-[120px] h-[240px] bg-gray-900 rounded-2xl p-1.5 shadow-lg shadow-leader-blue/20 relative">
+            <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl flex flex-col justify-end p-3 text-white">
+              <div className="text-[7px] text-white/60">Available Now</div>
+              <div className="text-[10px] font-bold mb-1">Land Rover Defender</div>
+              <div className="text-[6px] text-white/70 mb-2">Highland adventures await</div>
+              <div className="w-full bg-white text-gray-900 rounded-full py-1 text-[7px] font-semibold text-center">Book Now</div>
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }
@@ -226,8 +116,27 @@ export function HowItWorks() {
 
                   {/* Visual */}
                   <div className={`flex justify-center ${index % 2 === 1 ? 'md:col-start-1' : ''}`}>
-                    {step.number === '01' && <FrameStackVisual />}
-                    {step.number === '02' && <EditorVisual />}
+                    {step.number === '01' && (
+                      <BackgroundDotGrid>
+                        <EditorFrameStack />
+                      </BackgroundDotGrid>
+                    )}
+                    {step.number === '02' && (
+                      <div className="relative">
+                        {/* Line grid background */}
+                        <div className="absolute -inset-8 -z-10 overflow-hidden rounded-3xl">
+                          <div 
+                            className="w-full h-full opacity-10"
+                            style={{
+                              backgroundImage: `linear-gradient(#2563EB 1px, transparent 1px), linear-gradient(90deg, #2563EB 1px, transparent 1px)`,
+                              backgroundSize: '40px 40px',
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-transparent to-gray-50" />
+                        </div>
+                        <CompositionDarkMode />
+                      </div>
+                    )}
                     {step.number === '03' && <BeforeAfterVisual />}
                   </div>
                 </div>
