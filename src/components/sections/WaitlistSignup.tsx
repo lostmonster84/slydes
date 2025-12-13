@@ -63,7 +63,7 @@ export function WaitlistSignup() {
   }
 
   return (
-    <section id="waitlist" className="py-12 md:py-20 bg-[#0A0E27]">
+    <section id="waitlist" className="py-12 md:py-20 bg-gray-50">
       <div className="max-w-4xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,7 @@ export function WaitlistSignup() {
           className="text-center"
         >
           {/* Badge */}
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-electric-cyan text-sm font-medium mb-6">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-medium mb-6">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -81,11 +81,11 @@ export function WaitlistSignup() {
           </span>
 
           {/* Headline */}
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Get Early Access
           </h2>
           
-          <p className="text-lg text-white/70 mb-8 max-w-xl mx-auto">
+          <p className="text-lg text-gray-600 mb-8 max-w-xl mx-auto">
             Be the first to transform your mobile presence. 
             Join the waitlist and we&apos;ll let you know when we&apos;re ready for you.
           </p>
@@ -95,15 +95,15 @@ export function WaitlistSignup() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-8 max-w-md mx-auto"
+              className="bg-green-50 border border-green-200 rounded-2xl p-8 max-w-md mx-auto"
             >
-              <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">You&apos;re in!</h3>
-              <p className="text-white/70">{message}</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">You&apos;re in!</h3>
+              <p className="text-gray-600">{message}</p>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="max-w-lg mx-auto">
@@ -114,7 +114,7 @@ export function WaitlistSignup() {
                   placeholder="First name (optional)"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="flex-1 min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white placeholder:text-white/50"
+                  className="flex-1 min-h-[48px] px-4 text-base rounded-xl border border-gray-200 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/20 outline-none transition-all touch-manipulation bg-white text-gray-900 placeholder:text-gray-400"
                   style={{ fontSize: '16px', touchAction: 'manipulation' }}
                   inputMode="text"
                   autoComplete="given-name"
@@ -125,7 +125,7 @@ export function WaitlistSignup() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="flex-[2] min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white placeholder:text-white/50"
+                  className="flex-[2] min-h-[48px] px-4 text-base rounded-xl border border-gray-200 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/20 outline-none transition-all touch-manipulation bg-white text-gray-900 placeholder:text-gray-400"
                   style={{ fontSize: '16px', touchAction: 'manipulation' }}
                   inputMode="email"
                   autoComplete="email"
@@ -137,11 +137,11 @@ export function WaitlistSignup() {
                 <select
                   value={industry}
                   onChange={(e) => setIndustry(e.target.value)}
-                  className="w-full min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white appearance-none cursor-pointer"
+                  className="w-full min-h-[48px] px-4 text-base rounded-xl border border-gray-200 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/20 outline-none transition-all touch-manipulation bg-white text-gray-900 appearance-none cursor-pointer"
                   style={{ fontSize: '16px', touchAction: 'manipulation' }}
                 >
                   {INDUSTRIES.map((ind) => (
-                    <option key={ind.value} value={ind.value} disabled={ind.value === ''} className="bg-[#0A0E27] text-white">
+                    <option key={ind.value} value={ind.value} disabled={ind.value === ''}>
                       {ind.label}
                     </option>
                   ))}
@@ -161,7 +161,7 @@ export function WaitlistSignup() {
                     placeholder="Tell us your industry"
                     value={otherIndustry}
                     onChange={(e) => setOtherIndustry(e.target.value)}
-                    className="w-full min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white placeholder:text-white/50"
+                    className="w-full min-h-[48px] px-4 text-base rounded-xl border border-gray-200 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/20 outline-none transition-all touch-manipulation bg-white text-gray-900 placeholder:text-gray-400"
                     style={{ fontSize: '16px', touchAction: 'manipulation' }}
                     inputMode="text"
                   />
@@ -171,7 +171,7 @@ export function WaitlistSignup() {
               <Button 
                 type="submit" 
                 size="lg" 
-                className="w-full sm:w-auto px-8 !bg-white !text-future-black hover:!bg-white/90"
+                className="w-full sm:w-auto px-8"
                 disabled={status === 'loading'}
               >
                 {status === 'loading' ? (
@@ -200,7 +200,7 @@ export function WaitlistSignup() {
           )}
 
           {/* Trust note */}
-          <p className="text-sm text-white/50 mt-6">
+          <p className="text-sm text-gray-500 mt-6">
             🔒 No spam, ever. Just launch updates.
           </p>
         </motion.div>
