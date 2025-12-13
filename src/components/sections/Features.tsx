@@ -43,7 +43,7 @@ export function Features() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <span className="text-xs text-leader-blue font-medium uppercase tracking-wide">Core Feature</span>
+                <span className="text-xs text-white/80 font-medium uppercase tracking-wide">Core Feature</span>
               </div>
               
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">Mobile-native by default</h3>
