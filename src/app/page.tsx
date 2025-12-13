@@ -16,12 +16,12 @@ export default function HomePage() {
       <main>
         <Hero />
         <IndustrySelector />
-        <DashboardPreview />
-        <HowItWorks />
         <Features />
+        <HowItWorks />
+        <DashboardPreview />
         <SocialProof />
-        <FoundersClub />
         <WaitlistSignup />
+        <FoundersClub />
       </main>
       <Footer />
     </>

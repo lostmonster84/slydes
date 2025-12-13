@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { AnimatedAurora } from '@/components/ui/BackgroundAnimations'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -10,9 +9,8 @@ export function FoundersClub() {
   const totalSpots = 50
 
   return (
-    <AnimatedAurora>
-      <section className="py-12 md:py-24 relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 relative z-10">
+    <section className="py-12 md:py-24 relative overflow-hidden bg-gray-50">
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left - What You Get */}
           <motion.div
@@ -21,17 +19,17 @@ export function FoundersClub() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-leader-blue/20 text-white text-sm font-medium mb-4">
-              <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-medium mb-4">
+              <span className="w-2 h-2 bg-leader-blue rounded-full animate-pulse" />
               Founding Partners. Limited to {totalSpots}.
             </span>
             
-            <h2 className="text-white mb-4">Promote Slydes.<br /><span className="gradient-text">Earn 25% for life.</span></h2>
-            <p className="text-gray-300 text-lg mb-4">
+            <h2 className="text-gray-900 mb-4">Promote Slydes.<br /><span className="gradient-text">Earn 25% for life.</span></h2>
+            <p className="text-gray-600 text-lg mb-4">
               We&apos;re selecting 50 influencers and creators to become Founding Partners. 
               You promote Slydes. You earn commission on every conversion. Simple.
             </p>
-            <p className="text-cyan-400 font-medium mb-8">
+            <p className="text-leader-blue font-medium mb-8">
               25% of every subscriber you refer. Forever.
             </p>
 
@@ -56,8 +54,8 @@ export function FoundersClub() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   <div>
-                    <span className="text-white font-medium">{item.title}</span>
-                    <p className="text-gray-400 text-sm">{item.desc}</p>
+                    <span className="text-gray-900 font-medium">{item.title}</span>
+                    <p className="text-gray-500 text-sm">{item.desc}</p>
                   </div>
                 </motion.li>
               ))}
@@ -66,7 +64,7 @@ export function FoundersClub() {
 
           {/* Right - Earnings Card */}
           <motion.div 
-            className="bg-gray-800/50 rounded-3xl p-8 border border-gray-700/50 backdrop-blur-sm"
+            className="bg-white rounded-3xl p-8 border border-gray-200 shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -75,19 +73,19 @@ export function FoundersClub() {
             <div className="text-center mb-6">
               <p className="text-leader-blue text-sm font-medium mb-2">Founding Partner Commission</p>
               <div className="flex items-baseline justify-center mb-2">
-                <span className="text-5xl font-bold text-white">25%</span>
-                <span className="text-gray-300 ml-2">for life</span>
+                <span className="text-5xl font-bold text-gray-900">25%</span>
+                <span className="text-gray-500 ml-2">for life</span>
               </div>
-              <p className="text-gray-300 text-sm">On every subscriber you refer</p>
+              <p className="text-gray-500 text-sm">On every subscriber you refer</p>
             </div>
 
             {/* Progress bar */}
             <div className="mb-6">
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-300">{totalSpots - spotsRemaining} selected</span>
-                <span className="text-white font-medium">{spotsRemaining} spots left</span>
+                <span className="text-gray-500">{totalSpots - spotsRemaining} selected</span>
+                <span className="text-gray-900 font-medium">{spotsRemaining} spots left</span>
               </div>
-              <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                 <motion.div 
                   className="h-full bg-leader-blue"
                   initial={{ width: 0 }}
@@ -98,27 +96,27 @@ export function FoundersClub() {
               </div>
             </div>
 
-            <Link href="/founding-member" className="block mb-6">
+            <Link href="/affiliates" className="block mb-6">
               <Button size="lg" className="w-full">
                 Apply to Partner
               </Button>
             </Link>
 
             {/* What we ask */}
-            <div className="text-center mb-6 p-4 bg-gray-900/50 rounded-xl border border-gray-700/30">
-              <p className="text-gray-300 text-xs mb-2">What we ask:</p>
-              <p className="text-gray-300 text-sm">Share your referral link &amp; post about Slydes quarterly</p>
+            <div className="text-center mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+              <p className="text-gray-500 text-xs mb-2">What we ask:</p>
+              <p className="text-gray-600 text-sm">Share your referral link &amp; post about Slydes quarterly</p>
             </div>
 
             {/* Who we're looking for */}
-            <div className="pt-4 border-t border-gray-700/50">
-              <p className="text-gray-300 text-xs text-center mb-2">Perfect for creators in:</p>
-              <div className="flex flex-wrap justify-center gap-2 text-gray-300 text-xs">
-                <span className="bg-gray-800 px-2 py-1 rounded">Food</span>
-                <span className="bg-gray-800 px-2 py-1 rounded">Travel</span>
-                <span className="bg-gray-800 px-2 py-1 rounded">Real Estate</span>
-                <span className="bg-gray-800 px-2 py-1 rounded">Lifestyle</span>
-                <span className="bg-gray-800 px-2 py-1 rounded">Business</span>
+            <div className="pt-4 border-t border-gray-100">
+              <p className="text-gray-500 text-xs text-center mb-2">Perfect for creators in:</p>
+              <div className="flex flex-wrap justify-center gap-2 text-gray-600 text-xs">
+                <span className="bg-gray-100 px-2 py-1 rounded">Food</span>
+                <span className="bg-gray-100 px-2 py-1 rounded">Travel</span>
+                <span className="bg-gray-100 px-2 py-1 rounded">Real Estate</span>
+                <span className="bg-gray-100 px-2 py-1 rounded">Lifestyle</span>
+                <span className="bg-gray-100 px-2 py-1 rounded">Business</span>
               </div>
             </div>
           </motion.div>
@@ -130,12 +128,11 @@ export function FoundersClub() {
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
           viewport={{ once: true }}
-          className="text-center text-gray-400 text-sm mt-8"
+          className="text-center text-gray-500 text-sm mt-8"
         >
-          10K-500K followers. Engaged audiences. <span className="text-white">Quality over quantity.</span>
+          10K-500K followers. Engaged audiences. <span className="text-gray-900 font-medium">Quality over quantity.</span>
         </motion.p>
-        </div>
-      </section>
-    </AnimatedAurora>
+      </div>
+    </section>
   )
 }
