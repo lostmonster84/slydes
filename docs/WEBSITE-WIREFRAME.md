@@ -145,7 +145,7 @@ slydes.io/
 │  │ [Icon]   │      │ [Icon]   │      │ [Icon]  │       │
 │  └──────────┘      └──────────┘      └──────────┘       │
 │                                                           │
-│  Email signup → Add frames (hook, action, etc) → Publish │
+│  Email signup → Add slydes (hook, action, etc) → Publish │
 │                                                           │
 │              [Start Your First Slyde (Free) →]           │
 └─────────────────────────────────────────────────────────┘
@@ -170,7 +170,7 @@ slydes.io/
 │              Why Businesses Choose Slydes                │
 │                                                           │
 │  ┌────────┐      ┌────────┐      ┌────────┐            │
-│  │ WYSIWYG│      │ Mobile │      │ 11 Frame│            │
+│  │ WYSIWYG│      │ Mobile │      │ 11 Slyde│            │
 │  │ Editor │      │  First │      │  Types  │            │
 │  │        │      │        │      │         │            │
 │  │ See     │      │ Built  │      │ Hook,   │            │
@@ -186,9 +186,10 @@ slydes.io/
 │                 PRICING TEASER                           │
 │                                                           │
 │              Simple, Transparent Pricing                 │
+│          (See PAY-TIERS.md for source of truth)         │
 │                                                           │
-│            Free         |        $19/mo                 │
-│         Try it out      |          Pro                  │
+│            Free         |        £25/mo                 │
+│         Try it out      |        Creator                │
 │                                                           │
 │                    [Start Free →]                        │
 └─────────────────────────────────────────────────────────┘
@@ -254,7 +255,7 @@ slydes.io/
 │  [Left: Text]                                            │
 │  [Right: Video of editor in action]                      │
 │                                                           │
-│  Pick from 11 frame types:                               │
+│  Pick from 11 slyde types:                               │
 │  • Hook (opening hero)                                   │
 │  • Social Proof (reviews)                                │
 │  • Action (CTA)                                          │
@@ -291,7 +292,7 @@ slydes.io/
 │         Try Building a Slyde (No Signup Required)        │
 │                                                           │
 │  [Embedded interactive demo - simplified editor]         │
-│  [User can add a frame, see preview update]              │
+│  [User can add a slyde, see preview update]              │
 │                                                           │
 │              [Start Your Real Slyde →]                   │
 └─────────────────────────────────────────────────────────┘
@@ -369,39 +370,26 @@ slydes.io/
 
 ┌─────────────────────────────────────────────────────────┐
 │                 PRICING CARDS (2-Column)                 │
+│          (See PAY-TIERS.md for source of truth)         │
 │                                                           │
 │       ┌──────────────────┐  ┌──────────────────┐        │
-│       │      FREE        │  │       PRO        │        │
+│       │      FREE        │  │     CREATOR      │        │
 │       │                  │  │                  │        │
-│       │      $0/mo       │  │     $19/mo       │        │
+│       │      £0/mo       │  │     £25/mo       │        │
 │       │                  │  │                  │        │
-│       │ • 1 Slyde        │  │ • Unlimited      │        │
-│       │ • 5 slides       │  │   Slydes         │        │
-│       │ • Slydes         │  │ • Analytics      │        │
-│       │   branding       │  │ • Lead capture   │        │
-│       │                  │  │ • No branding    │        │
-│       │                  │  │ • Priority       │        │
-│       │                  │  │   support        │        │
+│       │ • 1 Slyde        │  │ • Up to 10       │        │
+│       │ • Slydes         │  │   Slydes         │        │
+│       │   watermark      │  │ • Analytics      │        │
+│       │ • No analytics   │  │ • No watermark   │        │
+│       │                  │  │ • More media     │        │
 │       │                  │  │                  │        │
-│       │  [Start Free]    │  │  [Go Pro]        │        │
+│       │  [Start Free]    │  │  [Upgrade]       │        │
 │       └──────────────────┘  └──────────────────┘        │
 │                                                           │
-│         14-day free trial • No credit card required      │
+│              No credit card required to start            │
 └─────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────┐
-│                  COMPARISON TABLE                        │
-│                                                           │
-│  Feature             | Starter | Pro | Enterprise        │
-│  ────────────────────┼─────────┼─────┼─────────────     │
-│  Number of Slydes    |    1    |  5  |  Unlimited       │
-│  Frames per Slyde    |   10    | ∞   |  ∞               │
-│  Custom domain       |    ❌   | ✅  |  ✅              │
-│  Analytics           | Basic   | ✅  |  Advanced        │
-│  Support             | Email   | Pri |  Dedicated       │
-│  White-label         |    ❌   | ❌  |  ✅              │
-│  API access          |    ❌   | ❌  |  ✅              │
-└─────────────────────────────────────────────────────────┘
+(Future tiers Pro & Agency in FUTURE-PRICING.md - not in MVP)
 
 ┌─────────────────────────────────────────────────────────┐
 │                       FAQ                                │
@@ -518,7 +506,7 @@ slydes.io/
 │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐   │
 │  │    1    │  │    2    │  │    3    │  │    4    │   │
 │  │ Choose  │→ │  Add    │→ │  Edit   │→ │   Go    │   │
-│  │ Template│  │ Frames  │  │ Content │  │  Live   │   │
+│  │ Template│  │ Slydes  │  │ Content │  │  Live   │   │
 │  │         │  │         │  │         │  │         │   │
 │  │   ✓     │  │         │  │         │  │         │   │
 │  └─────────┘  └─────────┘  └─────────┘  └─────────┘   │
@@ -657,7 +645,7 @@ section: 96px vertical, 24px horizontal
     ↓
 11. Choose template (restaurant)
     ↓
-12. Add frames, upload content (5 min)
+12. Add slydes, upload content (5 min)
     ↓
 13. See live preview in iPhone mockup
     ↓
@@ -681,7 +669,7 @@ section: 96px vertical, 24px horizontal
    ↓
 4. Choose "Start from scratch"
    ↓
-5. Add "Hook" frame
+5. Add "Hook" slyde
    ↓
 6. Upload hero video
    ↓
@@ -691,7 +679,7 @@ section: 96px vertical, 24px horizontal
    ↓
 9. See live preview update
    ↓
-10. Add "Action" frame
+10. Add "Action" slyde
     ↓
 11. Add CTA button
     ↓
@@ -727,7 +715,7 @@ section: 96px vertical, 24px horizontal
 - Password strength indicator
 
 **First Slyde creation**:
-- Templates (pre-populated frames)
+- Templates (pre-populated slydes)
 - Suggested content based on business type
 - Interactive tutorial overlay
 - Success celebration when published
@@ -761,7 +749,7 @@ section: 96px vertical, 24px horizontal
 - Close-up of swipe gestures
 - Full-screen immersive content
 - Cut to business owner smiling
-- End frame: "Try Slydes Free"
+- End slyde: "Try Slydes Free"
 
 **Style**: Fast cuts, energetic, mobile POV
 

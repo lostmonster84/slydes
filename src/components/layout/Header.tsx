@@ -74,8 +74,19 @@ export function Header() {
               useDarkMode ? 'bg-white' : 'bg-leader-blue'
             }`} />
           </Link>
-          <Link 
-            href="/contact" 
+          <Link
+            href="/pricing"
+            className={`group relative transition-colors text-sm ${
+              useDarkMode ? 'text-white/80 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Pricing
+            <span className={`absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full ${
+              useDarkMode ? 'bg-white' : 'bg-leader-blue'
+            }`} />
+          </Link>
+          <Link
+            href="/contact"
             className={`group relative transition-colors text-sm ${
               useDarkMode ? 'text-white/80 hover:text-white' : 'text-gray-600 hover:text-gray-900'
             }`}
@@ -90,10 +101,10 @@ export function Header() {
         {/* CTA Button */}
         <div className="hidden md:block">
           <a href="/#waitlist">
-            <Button 
+            <Button
               className={useDarkMode ? '!bg-white !text-future-black hover:!bg-gray-100' : ''}
             >
-              Join Waitlist
+              Create your first Slyde
             </Button>
           </a>
         </div>
@@ -147,6 +158,7 @@ export function Header() {
                 {[
                   { href: '/how-it-works', label: 'How It Works' },
                   { href: '/showcase', label: 'Showcase' },
+                  { href: '/pricing', label: 'Pricing' },
                   { href: '/contact', label: 'Contact' },
                 ].map((link, i) => (
                   <motion.div
@@ -199,23 +211,23 @@ export function Header() {
               </motion.div>
 
               {/* CTA at bottom */}
-              <motion.div 
+              <motion.div
                 className="mt-auto"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.4 }}
               >
-                <a 
-                  href="/#waitlist" 
+                <a
+                  href="/#waitlist"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block"
                 >
                   <Button size="lg" className="w-full text-lg">
-                    Join Waitlist
+                    Create your first Slyde
                   </Button>
                 </a>
                 <p className="text-center text-white/40 text-sm mt-4">
-                  No spam. Just launch updates.
+                  No credit card. Live in minutes.
                 </p>
               </motion.div>
             </motion.nav>

@@ -350,7 +350,7 @@ export default function ExtremeTrailersDemo() {
                 <div className="text-4xl mb-3">📞</div>
                 <h4 className="font-bold mb-2">Action-Focused</h4>
                 <p className="text-sm text-gray-600">
-                  Multiple CTAs throughout: call, email, browse parts, get custom quotes. Every slide converts.
+                  Multiple CTAs throughout: call, email, browse parts, get custom quotes. Every slyde converts.
                 </p>
               </motion.div>
             </div>

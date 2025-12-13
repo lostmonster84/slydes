@@ -18,16 +18,16 @@ export function SocialProof() {
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
         >
           <div className="text-center">
-            <div className="text-4xl font-bold gradient-text mb-2">10min</div>
-            <p className="text-gray-600">Average build time</p>
+            <div className="text-4xl font-bold gradient-text mb-2">Minutes</div>
+            <p className="text-gray-600">to publish</p>
           </div>
           <div className="text-center">
-            <div className="text-4xl font-bold gradient-text mb-2">3x</div>
-            <p className="text-gray-600">Higher engagement vs traditional sites</p>
+            <div className="text-4xl font-bold gradient-text mb-2">Deeper</div>
+            <p className="text-gray-600">engagement than mobile pages</p>
           </div>
           <div className="text-center">
-            <div className="text-4xl font-bold gradient-text mb-2">50+</div>
-            <p className="text-gray-600">Founding Partners</p>
+            <div className="text-4xl font-bold gradient-text mb-2">Measured</div>
+            <p className="text-gray-600">by swipe depth and actions taken</p>
           </div>
         </motion.div>
 
@@ -45,10 +45,10 @@ export function SocialProof() {
                 Case Study
               </div>
               <h3 className="text-2xl font-bold mb-4">
-                WildTrax built their mobile experience in <span className="gradient-text">under an hour</span>
+                From mobile clicks to <span className="gradient-text">booked cars</span>.
               </h3>
               <p className="text-gray-600 mb-6">
-                Instead of spending months on a custom mobile app, WildTrax used Slydes to create an immersive vehicle showcase that works on every phone.
+                WildTrax replaced traditional mobile pages with Slydes and turned browsing into decisions. Less friction. More bookings.
               </p>
               <div className="space-y-3 mb-8">
                 <div className="flex items-center gap-3">

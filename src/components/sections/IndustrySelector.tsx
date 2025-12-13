@@ -72,11 +72,11 @@ export function IndustrySelector() {
           </span>
           
           <h2 className="mb-4">
-            Built for <span className="gradient-text">any industry</span>
+            Built for <span className="gradient-text">mobile-first businesses</span>.
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            These demos show what&apos;s possible. Slydes works for restaurants, rentals, fitness studios, 
-            car hire, and <strong>any business</strong> that wants a mobile-first experience.
+            Slydes works best where decisions are visual, time-sensitive, and made on phones.
+            <br /><strong>If mobile traffic matters, this format works.</strong>
           </p>
         </motion.div>
 

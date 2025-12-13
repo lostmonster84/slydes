@@ -292,14 +292,14 @@ npm install framer-motion react-hook-form
 
 **1. Hero Demo** (30 seconds):
 - Screen recording of Slydes editor
-- Show: Create frame → Add content → Preview on phone → Publish
+- Show: Create slide → Add content → Preview on phone → Publish
 - Format: MP4, 1920x1080, optimized for web
 - Location: Homepage hero
 
 **2. How It Works** (3 x 15 seconds):
 - Three separate videos, one per step
 - Step 1: Sign up + create project
-- Step 2: Build frames (drag-and-drop)
+- Step 2: Build slides (drag-and-drop)
 - Step 3: Publish + share link
 - Format: MP4, 1280x720
 

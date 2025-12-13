@@ -6,70 +6,84 @@
 
 ## Overview
 
-Simple two-tier model: **Free** and **Pro**.
+Simple two-tier model: **Free** and **Creator**.
 
 No intermediate tiers. No complexity. Free to try, pay when you need more.
 
 ---
 
+## Currency
+
+**Primary**: GBP (£)
+**Display**: Auto-detect user location, show local currency
+
+| Currency | Creator Monthly | Creator Annual |
+|----------|-----------------|----------------|
+| GBP (£)  | £25/month       | £250/year      |
+| USD ($)  | $29/month       | $290/year      |
+| EUR (€)  | €27/month       | €270/year      |
+
+Implementation: Currency switcher in pricing UI. Store preference.
+
+---
+
 ## Tier Breakdown
 
-### Free Tier — $0/month
+### Free Tier — £0/month
 
 **Purpose**: Let users experience Slydes, drive viral growth through branded outro.
 
 | Feature | Limit |
 |---------|-------|
-| Slydes | 1 |
-| Slides per Slyde | 5 |
-| Video backgrounds | ✓ |
-| Basic analytics | ✗ |
-| Lead capture | ✗ |
-| Custom domain | ✗ |
-| **Slydes branding** | **Required** |
+| Published Slydes | 1 |
+| Full mobile experience | ✓ |
+| Shareable public link | ✓ |
+| Core creation tools | ✓ |
+| Analytics | ✗ |
+| Multiple Slydes | ✗ |
+| Advanced media limits | ✗ |
+| **Slydes watermark** | **Required** |
 
-**Mandatory Outro Slide**: Every free Slyde ends with:
-> "Built with Slydes. Built for the Future."
+**Mandatory Watermark**: Every free Slyde displays Slydes branding.
 
 This drives organic discovery and viral growth.
 
 ---
 
-### Pro Tier — $19/month (or $190/year)
+### Creator Tier — £25/month (or £250/year)
 
-**Purpose**: Full-featured access for serious businesses.
+**Purpose**: For people who care about results. When Slydes becomes more than an experiment.
 
 | Feature | Included |
 |---------|----------|
-| Slydes | Unlimited |
-| Slides per Slyde | Unlimited |
-| Video backgrounds | ✓ |
-| Analytics dashboard | ✓ |
-| Lead capture forms | ✓ |
-| Custom domain | ✓ |
-| Remove Slydes branding | ✓ |
-| Priority support | ✓ |
+| Published Slydes | Up to 10 |
+| No Slydes watermark | ✓ |
+| Increased video/media limits | ✓ |
+| Basic analytics | ✓ |
+| - Views | ✓ |
+| - Swipe depth | ✓ |
+| - Completion rate | ✓ |
+| Faster publishing workflows | ✓ |
 
-**Annual discount**: $190/year = ~17% savings ($15.83/month effective)
+**Annual discount**: £250/year = ~17% savings (£20.83/month effective)
 
 ---
 
 ## Upgrade Triggers
 
-What makes free users upgrade:
+What makes free users upgrade (from MVP-MONETISATION.md):
 
-1. **More Slydes** — Need more than 1 Slyde
-2. **More slides** — Need more than 5 slides per Slyde
-3. **Remove branding** — Want professional appearance
-4. **Analytics** — Want to track performance
-5. **Lead capture** — Want to collect customer info
+1. **Second Slyde** — Attempts to create more than 1
+2. **Analytics** — Clicks analytics or similar
+3. **Watermark** — Wants to remove branding
+4. **Media limits** — Hits video/storage cap
 
 ---
 
 ## Pricing Philosophy
 
-- **Free tier = trial period** — No time limit, feature-limited instead
-- **$19/month = accessible** — Low barrier for small businesses
+- **Free tier = prove the format** — No time limit, feature-limited instead
+- **£25/month = clarity** — Pay when attention matters
 - **Annual option** — Reward commitment with savings
 - **No enterprise tier (yet)** — Keep it simple at launch
 
@@ -77,10 +91,17 @@ What makes free users upgrade:
 
 ## Commission for Partners
 
-Founding Partners earn **25% commission for life** on referred Pro subscribers:
-- $19/month × 25% = **$4.75/month per subscriber**
+Founding Partners earn **25% commission for life** on referred Creator subscribers:
+- £25/month × 25% = **£6.25/month per subscriber**
 - Recurring as long as subscriber stays active
 
 ---
 
-*Last updated: December 12, 2025*
+## Future Tiers (NOT IN MVP)
+
+See [FUTURE-PRICING.md](./FUTURE-PRICING.md) for Pro (£59/month) and Agency (£149/month) tiers.
+These only ship when behaviour justifies it.
+
+---
+
+*Last updated: December 14, 2025*

@@ -4,55 +4,42 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PhoneMockup } from '@/components/ui/PhoneMockup'
 
-// Accurate product structure: Sections > Slides > Frames
-const slides = [
-  { 
-    id: 'welcome', 
-    name: 'Welcome',
-    frames: [
-      { id: 'hero', name: 'Hero Video' },
-      { id: 'about', name: 'About Us' },
-      { id: 'location', name: 'Location' },
-    ],
+// Simple slyde structure - vertical swipe only
+const slydes = [
+  {
+    id: 'hero',
+    name: 'Hero Video',
     gradient: 'from-amber-600 to-orange-700',
-    title: 'Highland Bites',
-    subtitle: 'Welcome to our restaurant',
   },
-  { 
-    id: 'menu', 
-    name: 'Menu',
-    frames: [
-      { id: 'starters', name: 'Starters' },
-      { id: 'mains', name: 'Mains' },
-      { id: 'desserts', name: 'Desserts' },
-    ],
+  {
+    id: 'about',
+    name: 'About Us',
     gradient: 'from-rose-600 to-pink-700',
-    title: 'Our Menu',
-    subtitle: 'Swipe to explore dishes',
   },
-  { 
-    id: 'contact', 
-    name: 'Contact',
-    frames: [
-      { id: 'book', name: 'Book a Table' },
-      { id: 'hours', name: 'Opening Hours' },
-    ],
+  {
+    id: 'menu',
+    name: 'Menu Highlights',
     gradient: 'from-emerald-600 to-teal-700',
-    title: 'Get in Touch',
-    subtitle: 'Book your table today',
+  },
+  {
+    id: 'reviews',
+    name: 'Reviews',
+    gradient: 'from-purple-600 to-indigo-700',
+  },
+  {
+    id: 'location',
+    name: 'Find Us',
+    gradient: 'from-cyan-600 to-blue-700',
+  },
+  {
+    id: 'book',
+    name: 'Book Now',
+    gradient: 'from-leader-blue to-electric-cyan',
   },
 ]
 
 export function DashboardPreview() {
   const [activeSlide, setActiveSlide] = useState(0)
-  const [activeFrame, setActiveFrame] = useState(0)
-
-  const currentSlide = slides[activeSlide]
-
-  const handleSlideChange = (index: number) => {
-    setActiveSlide(index)
-    setActiveFrame(0) // Reset frame when slide changes
-  }
 
   return (
     <section className="py-24 bg-[#0A0E27] overflow-hidden">
@@ -65,10 +52,10 @@ export function DashboardPreview() {
           className="text-center mb-12"
         >
           <h2 className="mb-4 text-white">
-            Build with <span className="gradient-text">drag-and-drop slides</span>
+            A Slyde is a <span className="gradient-text">flow</span>, not a page.
           </h2>
           <p className="text-white/70 text-lg max-w-2xl mx-auto">
-            Swipe up and down between slides. Swipe left and right through frames within each slide.
+            Swipe through slydes to move forward. Each slyde captures attention and drives action.
           </p>
         </motion.div>
 
@@ -94,17 +81,17 @@ export function DashboardPreview() {
           </div>
 
           <div className="grid md:grid-cols-[280px_1fr] min-h-[520px]">
-            {/* Slides sidebar - macOS dark sidebar */}
+            {/* Slydes sidebar - macOS dark sidebar */}
             <div className="bg-[#2d2d2d] border-r border-[#3a3a3a] p-4 overflow-y-auto">
               <div className="text-xs font-semibold text-white/50 uppercase tracking-wide mb-3">
-                Slides
+                Slydes
                 <span className="text-white/30 font-normal normal-case ml-1">(swipe up/down)</span>
               </div>
               <div className="space-y-2">
-                {slides.map((slide, index) => (
+                {slydes.map((slyde, index) => (
                   <button
-                    key={slide.id}
-                    onClick={() => handleSlideChange(index)}
+                    key={slyde.id}
+                    onClick={() => setActiveSlide(index)}
                     className={`w-full text-left rounded-lg transition-all duration-200 ${
                       activeSlide === index
                         ? 'bg-leader-blue text-white shadow-md'
@@ -112,40 +99,17 @@ export function DashboardPreview() {
                     }`}
                   >
                     <div className="px-3 py-2.5">
-                      <span className="text-sm font-medium block">{slide.name}</span>
+                      <span className="text-sm font-medium block">{slyde.name}</span>
                       <span className={`text-xs ${activeSlide === index ? 'text-white/70' : 'text-white/40'}`}>
-                        {slide.frames.length} frames
+                        Slyde {index + 1} of {slydes.length}
                       </span>
                     </div>
                   </button>
                 ))}
                 <div className="pt-2 border-t border-[#3a3a3a] mt-3">
                   <button className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-white/5 text-white/40 text-sm border border-dashed border-white/20 hover:border-white/30 transition-colors">
-                    + Add Slide
+                    + Add Slyde
                   </button>
-                </div>
-              </div>
-
-              {/* Frames within current slide */}
-              <div className="mt-6 pt-4 border-t border-[#3a3a3a]">
-                <div className="text-xs font-semibold text-white/50 uppercase tracking-wide mb-3">
-                  Frames in &ldquo;{currentSlide.name}&rdquo;
-                  <span className="text-white/30 font-normal normal-case ml-1">(swipe left/right)</span>
-                </div>
-                <div className="space-y-1">
-                  {currentSlide.frames.map((frame, index) => (
-                    <button
-                      key={frame.id}
-                      onClick={() => setActiveFrame(index)}
-                      className={`w-full text-left px-3 py-2 rounded-md text-sm transition-all ${
-                        activeFrame === index
-                          ? 'bg-white/10 text-white font-medium'
-                          : 'text-white/60 hover:bg-white/5'
-                      }`}
-                    >
-                      {frame.name}
-                    </button>
-                  ))}
                 </div>
               </div>
             </div>
@@ -153,7 +117,7 @@ export function DashboardPreview() {
             {/* Preview area - darker content area */}
             <div className="bg-[#1e1e1e] flex items-center justify-center p-8 relative">
               {/* Subtle spotlight glow behind phone */}
-              <div 
+              <div
                 className="absolute inset-0 flex items-center justify-center pointer-events-none"
                 style={{
                   background: 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 60%)',
@@ -161,7 +125,7 @@ export function DashboardPreview() {
               />
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={`${activeSlide}-${activeFrame}`}
+                  key={activeSlide}
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
@@ -175,22 +139,16 @@ export function DashboardPreview() {
           </div>
         </motion.div>
 
-        {/* How it works hint */}
+        {/* How it works hint - simplified to vertical only */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
           viewport={{ once: true }}
-          className="text-center mt-8 flex items-center justify-center gap-6 text-sm text-white/60"
+          className="text-center mt-8 flex items-center justify-center gap-2 text-sm text-white/60"
         >
-          <span className="flex items-center gap-2">
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded bg-white/10 text-xs font-mono text-white/80">↑↓</span>
-            Slides
-          </span>
-          <span className="flex items-center gap-2">
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded bg-white/10 text-xs font-mono text-white/80">←→</span>
-            Frames
-          </span>
+          <span className="inline-flex items-center justify-center w-6 h-6 rounded bg-white/10 text-xs font-mono text-white/80">↑↓</span>
+          <span>Swipe to navigate slydes</span>
         </motion.div>
       </div>
     </section>

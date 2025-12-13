@@ -29,11 +29,6 @@ export function Footer() {
                   Showcase
                 </Link>
               </li>
-              <li>
-                <Link href="/affiliates" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  Affiliate Program
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -54,18 +49,13 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Resources Column */}
+          {/* Partners Column */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4">Resources</h3>
+            <h3 className="text-sm font-semibold text-white mb-4">Partners</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  How It Works
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  Help & Support
+                <Link href="/affiliates" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Earn commission by referring customers
                 </Link>
               </li>
             </ul>

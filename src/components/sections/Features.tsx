@@ -14,11 +14,11 @@ export function Features() {
           className="text-center mb-12"
         >
           <h2 className="mb-4 text-white">
-            Why <span className="gradient-text">Slydes</span>?
+            Websites are <span className="gradient-text">broken on mobile</span>.
           </h2>
           <p className="text-white/70 text-lg max-w-2xl mx-auto">
-            Your website was built for desktops. Your customers are on phones.
-            Slydes bridges that gap.
+            Mobile behaviour has changed. The web hasn&apos;t.<br />
+            People swipe, glance, and decide. Pages make them scroll, search, and leave.
           </p>
         </motion.div>
 
@@ -46,9 +46,10 @@ export function Features() {
                 <span className="text-xs text-white/80 font-medium uppercase tracking-wide">Core Feature</span>
               </div>
               
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">Mobile-native by default</h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">Phones aren&apos;t desktops.</h3>
               <p className="text-white/70 mb-6 leading-relaxed">
-                Built for how people actually use their phones. Vertical scrolling, thumb-friendly navigation, and full-screen video.
+                Swipe-first flows. Thumb-led navigation. Full-screen content.<br />
+                Designed for momentum, not menus.
               </p>
               
               {/* Phone demo - LARGER */}
@@ -117,13 +118,14 @@ export function Features() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Visual editor</h3>
+                  <h3 className="text-lg font-bold text-white">Build it exactly as they&apos;ll see it</h3>
                   <p className="text-xs text-white/50">Live preview</p>
                 </div>
               </div>
-              
+
               <p className="text-white/70 text-sm mb-4">
-                What you see is what you get. Edit with a live iPhone preview. No code required, ever.
+                Create on mobile, preview instantly, publish when it feels right.<br />
+                No code. No guesswork.
               </p>
               
               {/* Mini editor preview - TALLER */}
@@ -137,7 +139,7 @@ export function Features() {
                 <div className="flex min-h-[100px]">
                   {/* Sidebar */}
                   <div className="w-16 bg-[#2d2d2d] p-2 border-r border-[#3a3a3a]">
-                    <div className="text-[6px] text-white/30 mb-1.5 uppercase">Slides</div>
+                    <div className="text-[6px] text-white/30 mb-1.5 uppercase">Slydes</div>
                     <div className="space-y-1">
                       <div className="h-4 bg-leader-blue rounded text-[6px] text-white flex items-center px-1.5">Welcome</div>
                       <div className="h-4 bg-white/5 rounded text-[6px] text-white/40 flex items-center px-1.5">Menu</div>
@@ -185,13 +187,14 @@ export function Features() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">One click publish</h3>
+                  <h3 className="text-lg font-bold text-white">Publish is one tap. Sharing is the point.</h3>
                   <p className="text-xs text-white/50">Instant sharing</p>
                 </div>
               </div>
-              
+
               <p className="text-white/70 text-sm mb-4">
-                Get a shareable link instantly. Works on every phone. Track views from day one.
+                Get a link instantly.<br />
+                Drop it in your bio, QR, ads, or messages and track what happens.
               </p>
               
               {/* Share link preview - ENHANCED */}

@@ -12,19 +12,19 @@ import { motion } from 'framer-motion'
 const steps = [
   {
     number: '01',
-    title: 'Choose your frames',
-    description: 'Pick from 11 pre-built frame types. Welcome screens, social proof, CTAs, galleries—each designed to convert mobile visitors.',
+    title: 'Start with a proven flow',
+    description: 'Pick slydes built to do one job: move attention forward. Each slyde type is designed to convert mobile visitors.',
     details: [
-      'Hook frames to capture attention',
+      'Hook slydes to capture attention',
       'Social proof to build trust',
-      'Action frames for conversions',
-      'Gallery frames for showcasing',
+      'Action slydes for conversions',
+      'Gallery slydes for showcasing',
     ],
   },
   {
     number: '02',
-    title: 'Add your content',
-    description: 'Upload videos, add text, customize colors. Our visual editor shows you exactly how it looks on mobile—no guessing.',
+    title: 'Drop in your content. Make it feel alive.',
+    description: 'Video first. Text second. Everything built for the phone screen.',
     details: [
       'Drag-and-drop interface',
       'Live iPhone preview',
@@ -34,8 +34,8 @@ const steps = [
   },
   {
     number: '03',
-    title: 'Share your link',
-    description: 'One click to publish. Get a shareable link instantly. Add it to your Instagram bio, print it as a QR code, or embed it anywhere.',
+    title: 'Share it where attention already is',
+    description: 'Bio links. QR codes. Ads. WhatsApp. SMS. Anywhere people tap, Slydes should open.',
     details: [
       'Instant publishing',
       'Works on every phone',
@@ -58,10 +58,9 @@ export default function HowItWorksPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="mb-4">From idea to live in <span className="gradient-text">10 minutes</span></h1>
+              <h1 className="mb-4">From idea to live in <span className="gradient-text">minutes</span>.</h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                No code. No designer. No months of development. 
-                Just drag, drop, and publish.
+                No code. No agency. Just build the flow and publish the link.
               </p>
             </motion.div>
           </div>
@@ -100,7 +99,7 @@ export default function HowItWorksPage() {
 
                   {/* Visual */}
                   <div className={`${index % 2 === 1 ? 'md:order-1' : ''} flex justify-center`}>
-                    {/* Step 01: Frame Stack - shows multiple layered frames */}
+                    {/* Step 01: Slyde Stack - shows multiple layered slydes */}
                     {step.number === '01' && (
                       <BackgroundDotGrid>
                         <EditorFrameStack />

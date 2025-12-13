@@ -123,7 +123,7 @@ Plus 4 organized folders:
 1. **Homepage** - Hook visitors in 5 seconds
 2. **How It Works** - 3-step process
 3. **Examples** - Live Slyde showcases
-4. **Pricing** - Simple (Free / $19/mo Pro)
+4. **Pricing** - Simple (Free / Creator £25/mo - see PAY-TIERS.md)
 5. **Signup** - Zero friction conversion
 6. **Dashboard** - Get first Slyde created ASAP
 
@@ -213,16 +213,18 @@ Plus 4 organized folders:
 
 ### Pricing
 
+> **See [PAY-TIERS.md](./PAY-TIERS.md) for source of truth on pricing.**
+
 | Tier | Price | Target | Features |
 |------|-------|--------|----------|
-| **Free** | $0/mo | Try it out | 1 Slyde, 5 slides, branded outro |
-| **Pro** | $19/mo | Serious users | Unlimited Slydes, analytics, lead capture, no branding |
+| **Free** | £0/mo | Try the format | 1 Slyde, watermark, no analytics |
+| **Creator** | £25/mo | Serious users | Up to 10 Slydes, analytics, no watermark |
 
-**Pro includes**:
-- Unlimited everything
-- Analytics dashboard
-- Lead capture forms
-- Remove Slydes branding
+**Creator includes**:
+- Up to 10 published Slydes
+- Basic analytics (views, swipe depth, completion)
+- No Slydes watermark
+- Increased media limits
 - Cancel anytime
 
 ---
@@ -255,10 +257,10 @@ Plus 4 organized folders:
 - ✅ iPhone device mockup
 - ✅ Drag-and-drop reordering
 - ✅ Auto-save on changes
-- ✅ Enable/disable frames
-- ✅ Custom frame labeling
+- ✅ Enable/disable slides
+- ✅ Custom slide labeling
 
-**Frame Types** (11 total):
+**Slyde Types** (11 total):
 - ✅ welcome, doorCard, hook
 - ✅ socialProof, howItWorks, who
 - ✅ what, choose, cinematic
@@ -276,7 +278,7 @@ Plus 4 organized folders:
 - ✅ Next.js 15 (App Router)
 - ✅ Sanity CMS (custom admin)
 - ✅ Vercel hosting
-- ✅ API routes (slydes, frames)
+- ✅ API routes (slydes, slides)
 
 ---
 

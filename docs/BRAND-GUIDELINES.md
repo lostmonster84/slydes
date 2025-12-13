@@ -61,7 +61,7 @@
 > **"Old school websites are OUT. Slydes are IN."**
 
 **Secondary options**:
-- "Slides sliding into your inbox" (playful)
+- "Slydes sliding into your inbox" (playful)
 - "The future is mobile. The future is Slydes."
 - "If you're a cool business, you need Slydes."
 - "Stop boring your customers. Start immersing them."
@@ -313,7 +313,7 @@ Because your customers are already in the future. Your website needs to catch up
 
 Mobile-first. Video-driven. TikTok-style vertical scrolling.
 
-Your customers land on your Slyde and they're immediately immersed. Full-screen video of your product. Swipeable frames that tell your story. Social proof that builds trust. A CTA that actually converts.
+Your customers land on your Slyde and they're immediately immersed. Full-screen video of your product. Swipeable slides that tell your story. Social proof that builds trust. A CTA that actually converts.
 
 It's not a website. It's an experience.
 

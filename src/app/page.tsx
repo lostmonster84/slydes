@@ -7,7 +7,6 @@ import { HowItWorks } from '@/components/sections/HowItWorks'
 import { Features } from '@/components/sections/Features'
 import { SocialProof } from '@/components/sections/SocialProof'
 import { WaitlistSignup } from '@/components/sections/WaitlistSignup'
-import { FoundersClub } from '@/components/sections/FoundersClub'
 
 export default function HomePage() {
   return (
@@ -21,7 +20,6 @@ export default function HomePage() {
         <DashboardPreview />
         <SocialProof />
         <WaitlistSignup />
-        <FoundersClub />
       </main>
       <Footer />
     </>

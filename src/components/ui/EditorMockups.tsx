@@ -183,7 +183,7 @@ export function EditorBeforeAfter() {
 }
 
 /**
- * Frame stack: Multiple frames visible in layers
+ * Slyde stack: Multiple slydes visible in layers
  */
 export function EditorFrameStack() {
   return (
@@ -199,7 +199,7 @@ export function EditorFrameStack() {
         </div>
       </div>
       <div className="absolute bottom-0 right-0 bg-leader-blue text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-        3 frames
+        6 slydes
       </div>
     </div>
   )

@@ -199,7 +199,7 @@
 **Deliverables**:
 - Automated signup flow (no human touchpoint needed)
 - Free tier launched (1 Slyde, basic features)
-- Pro tier launched ($19/mo - unlimited Slydes, analytics, lead capture)
+- Creator tier launched (see PAY-TIERS.md for pricing)
 - In-app upsells (upgrade prompts)
 - Customer success automation (welcome emails, tips, engagement nudges)
 

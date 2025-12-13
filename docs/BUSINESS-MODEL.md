@@ -33,15 +33,17 @@ Slydes operates as a **two-sided platform** connecting businesses (supply) with 
 
 #### PRICING MODEL: SIMPLIFIED TWO-TIER
 
-**Freemium Model** (Free + Pro only)
+> **See [PAY-TIERS.md](./PAY-TIERS.md) for source of truth on pricing and currency conversions.**
+
+**Freemium Model** (Free + Creator)
 
 | Tier | Price | Features | Target Customer |
 |------|-------|----------|-----------------|
-| **Free** | $0 | 1 Slyde (5 slides max), mandatory Slydes outro branding, no analytics | Testing, early creators |
-| **Pro** | $19/mo or $190/yr | Unlimited Slydes, full analytics, lead capture, no branding, custom domain | Most businesses (100%) |
+| **Free** | £0 | 1 Slyde, Slydes watermark, no analytics | Testing, early creators |
+| **Creator** | £25/mo or £250/yr | Up to 10 Slydes, analytics, no watermark, increased media limits | Most businesses (100%) |
 
-**Annual Discount**: 17% off (2 months free)
-- Pro Annual: $190/year (vs $228)
+**Annual Discount**: 17% off
+- Creator Annual: £250/year (vs £300)
 
 ---
 
@@ -74,14 +76,16 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 **Projected MRR (End of 2025)**:
 
+> See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing.
+
 | Tier | Customers | MRR/Customer | Total MRR |
 |------|-----------|--------------|-----------|
-| Free | 8,000 | $0 | $0 (viral growth engine) |
-| Pro Monthly | 800 | $19 | $15,200 |
-| Pro Annual | 1,200 | $15.83 | $19,000 |
-| **Total Paid** | **2,000** | — | **$34,200** |
+| Free | 8,000 | £0 | £0 (viral growth engine) |
+| Creator Monthly | 800 | £25 | £20,000 |
+| Creator Annual | 1,200 | £20.83 | £25,000 |
+| **Total Paid** | **2,000** | — | **£45,000** |
 
-**ARR at End of 2025**: ~$410K
+**ARR at End of 2025**: ~£540K
 
 ---
 
@@ -281,28 +285,30 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 ### Customer Acquisition Cost (CAC)
 
 **Phase 1** (Manual Outreach):
-- Cost per customer: $200 (time, outreach tools, ads)
+- Cost per customer: £160 (time, outreach tools, ads)
 
 **Phase 2** (Self-Service):
-- Cost per customer: $100 (mostly paid ads, some organic)
+- Cost per customer: £80 (mostly paid ads, some organic)
 
 **Phase 3** (Network Effect):
-- Cost per customer: $50 (organic, referrals, consumer app discovery)
+- Cost per customer: £40 (organic, referrals, consumer app discovery)
 
 ---
 
 ### Lifetime Value (LTV)
 
+> See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing.
+
 **Average Customer**:
-- Monthly subscription: $19 (Pro tier)
+- Monthly subscription: £25 (Creator tier)
 - Average retention: 24 months (before churn)
-- **LTV = $19 × 24 = $456**
+- **LTV = £25 × 24 = £600**
 
 **With Transaction Revenue** (Phase 3):
-- Monthly subscription: $19
-- Transaction fees: $50/month (from bookings)
+- Monthly subscription: £25
+- Transaction fees: £40/month (from bookings)
 - Average retention: 36 months (stickier with transaction integration)
-- **LTV = ($19 + $50) × 36 = $2,484**
+- **LTV = (£25 + £40) × 36 = £2,340**
 
 ---
 
@@ -310,9 +316,9 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 | Phase | LTV | CAC | Ratio | Assessment |
 |-------|-----|-----|-------|------------|
-| **Phase 1** | $456 | $200 | 2.3:1 | 🟡 Acceptable (early stage) |
-| **Phase 2** | $456 | $100 | 4.6:1 | 🟢 Good |
-| **Phase 3** | $2,484 | $50 | 49.7:1 | 🟢 Excellent (network effect) |
+| **Phase 1** | £600 | £160 | 3.75:1 | 🟢 Good (early stage) |
+| **Phase 2** | £600 | £80 | 7.5:1 | 🟢 Excellent |
+| **Phase 3** | £2,340 | £40 | 58.5:1 | 🟢 Outstanding (network effect) |
 
 **Healthy SaaS**: LTV:CAC >3:1
 
@@ -325,19 +331,19 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 **How long to recover CAC?**
 
 **Phase 1**:
-- CAC: $200
-- Monthly profit per customer: $15 (after costs)
-- Payback: **13 months**
+- CAC: £160
+- Monthly profit per customer: £20 (after costs)
+- Payback: **8 months**
 
 **Phase 2**:
-- CAC: $100
-- Monthly profit: $15
-- Payback: **7 months**
+- CAC: £80
+- Monthly profit: £20
+- Payback: **4 months**
 
 **Phase 3**:
-- CAC: $50
-- Monthly profit: $65 (subscription + transaction)
-- Payback: **0.8 months (~3 weeks)**
+- CAC: £40
+- Monthly profit: £55 (subscription + transaction)
+- Payback: **0.7 months (~3 weeks)**
 
 **Healthy SaaS**: <12 months
 **Slydes**: <3 months (exceptional)
@@ -371,17 +377,19 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 ### Gross Margin
 
+> See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing.
+
 **Phase 1-2** (Subscription Only):
-- Revenue per customer: $19/month
-- Variable cost: $5/month
-- Gross profit: $14/month
-- **Gross Margin: 74%**
+- Revenue per customer: £25/month
+- Variable cost: £5/month
+- Gross profit: £20/month
+- **Gross Margin: 80%**
 
 **Phase 3** (Subscription + Transaction):
-- Revenue per customer: $69/month ($19 subscription + $50 transaction)
-- Variable cost: $7/month (slightly higher with transaction processing)
-- Gross profit: $62/month
-- **Gross Margin: 90%**
+- Revenue per customer: £65/month (£25 subscription + £40 transaction)
+- Variable cost: £7/month (slightly higher with transaction processing)
+- Gross profit: £58/month
+- **Gross Margin: 89%**
 
 **Target: 70%+ gross margin** (exceptional for SaaS)
 
@@ -398,7 +406,7 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 **Break-Even Point (Subscription Only)**:
 - $175K / $14 = **12,500 customers**
-- At $19/month = **$238K MRR**
+- At £25/month (see PAY-TIERS.md) = **£312K MRR**
 
 **Timeline**:
 - Q4 2025: ~$38K MRR (2,000 customers) — Not profitable yet
@@ -439,29 +447,31 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 ### Why Our Pricing Works
 
 **Positioned Between**:
-- **Too Cheap**: Linktree ($9/mo) — too simple
-- **Too Expensive**: Custom dev ($10K-50K) — inaccessible
-- **Sweet Spot**: $19/mo — accessible + premium features
+- **Too Cheap**: Linktree (£7/mo) — too simple
+- **Too Expensive**: Custom dev (£8K-40K) — inaccessible
+- **Sweet Spot**: £25/mo (see PAY-TIERS.md) — accessible + premium features
 
 **Value Perception**:
-- Traditional website: $5K-$20K upfront + $100/mo hosting
-- Slydes: $0 upfront + $19/mo (easy yes)
-- ROI: If 1 booking/month from Slyde = $500 revenue → Slydes pays for itself 26x
+- Traditional website: £4K-£16K upfront + £80/mo hosting
+- Slydes: £0 upfront + £25/mo (easy yes)
+- ROI: If 1 booking/month from Slyde = £400 revenue → Slydes pays for itself 16x
 
 ---
 
 ### Pricing Psychology
 
+> See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing and tiers.
+
 **Free Tier**:
 - **Purpose**: Remove friction, let businesses try risk-free
-- **Limitation**: 1 Slyde, 5 slides, mandatory "Built with Slydes" outro
-- **Upgrade Trigger**: Remove branding + unlimited Slydes ($19/mo) = easy decision
+- **Limitation**: 1 Slyde, mandatory Slydes watermark
+- **Upgrade Trigger**: Remove branding + more Slydes + analytics = easy decision
 
-**Pro Tier ($19/mo or $190/yr)**:
+**Creator Tier**:
 - **Anchor**: Main tier (90%+ of paid customers)
-- **Perceived Value**: Unlimited Slydes, analytics, no branding
+- **Perceived Value**: Up to 10 Slydes, analytics, no watermark
 - **Reality**: Most use 3-5 Slydes (low cost to serve, high perceived value)
-- **Annual Discount**: 17% off encourages commitment
+- **Annual Discount**: ~17% off encourages commitment
 
 **Enterprise (Future)**:
 - **Psychology**: "If you have to ask, it's not for you"
@@ -474,17 +484,8 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 **Strategy**: Grandfather existing customers, raise prices for new signups
 
-**2025**: 
-- Free, Pro ($19/mo or $190/yr)
-
-**2026** (After Consumer App Launch):
-- Free, Pro ($29/mo or $290/yr)
-- Existing customers stay at $19
-- **Why**: Added value (discovery traffic from Consumer App)
-
-**2027**:
-- Free, Pro ($39/mo or $390/yr)
-- **Why**: Network effect = more valuable (harder to leave)
+> See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing.
+> See [FUTURE-PRICING.md](./FUTURE-PRICING.md) for planned future tiers.
 
 ---
 
@@ -562,10 +563,10 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 **Target: >100%**
 
 **How**:
-- Start: Customer pays $19/mo (Pro)
-- Month 12: Adds transaction revenue ($50/mo through bookings)
-- Revenue per customer grows from $19 to $69
-- **Year 1 NRR**: 363% (incredible expansion)
+- Start: Customer pays £25/mo (Creator - see PAY-TIERS.md)
+- Month 12: Adds transaction revenue (£40/mo through bookings)
+- Revenue per customer grows from £25 to £65
+- **Year 1 NRR**: 260% (incredible expansion)
 
 Even with 5% churn, transaction revenue more than offsets it.
 
@@ -635,6 +636,10 @@ Even with 5% churn, transaction revenue more than offsets it.
 ---
 
 🔥 **Let's print money while building the future of business discovery.**
+
+---
+
+*Pricing source of truth: [PAY-TIERS.md](./PAY-TIERS.md). Revenue projections shown in mixed currencies for investor context.*
 
 
 

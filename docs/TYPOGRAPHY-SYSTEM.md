@@ -199,6 +199,23 @@ Use: API examples, technical docs
 <code className="font-mono text-sm bg-gray-100">
 ```
 
+### Gradient Text Class
+
+Use the `.gradient-text` class for highlighted words in headlines:
+```tsx
+<h2>From idea to live in <span className="gradient-text">minutes</span>.</h2>
+```
+
+Defined in `globals.css`:
+```css
+.gradient-text {
+  background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+```
+
 ### Pre-defined Components
 
 ```tsx
@@ -325,16 +342,17 @@ Use: API examples, technical docs
 
 ### Pricing Card
 ```tsx
+{/* See PAY-TIERS.md for current pricing */}
 <div className="bg-white rounded-2xl p-8 border border-gray-200">
   <h3 className="font-display text-2xl font-bold tracking-tight text-future-black mb-2">
-    Pro
+    Creator
   </h3>
   <div className="flex items-baseline gap-2 mb-4">
-    <span className="font-mono text-5xl font-bold text-leader-blue">$19</span>
+    <span className="font-mono text-5xl font-bold text-leader-blue">£25</span>
     <span className="text-gray-500">/month</span>
   </div>
   <p className="text-gray-600 mb-6">
-    Unlimited Slydes, analytics, lead capture, no branding.
+    Up to 10 Slydes, analytics, no watermark.
   </p>
   <button className="w-full bg-leader-blue text-white font-sans font-semibold py-3 rounded-lg">
     Join Waitlist

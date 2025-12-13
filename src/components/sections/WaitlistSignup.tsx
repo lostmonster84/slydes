@@ -72,22 +72,13 @@ export function WaitlistSignup() {
           viewport={{ once: true }}
           className="text-center"
         >
-          {/* Badge */}
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-electric-cyan text-sm font-medium mb-6">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Launching Soon
-          </span>
-
           {/* Headline */}
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Get Early Access
+            Stop losing mobile attention.
           </h2>
-          
+
           <p className="text-lg text-white/70 mb-8 max-w-xl mx-auto">
-            Be the first to transform your mobile presence. 
-            Join the waitlist and we&apos;ll let you know when we&apos;re ready for you.
+            Create a Slyde and see how fast momentum changes everything.
           </p>
 
           {/* Form */}
@@ -114,7 +105,7 @@ export function WaitlistSignup() {
                   placeholder="First name (optional)"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="flex-1 min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white placeholder:text-white/50"
+                  className="flex-1 min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white placeholder:text-white/70"
                   style={{ fontSize: '16px', touchAction: 'manipulation' }}
                   inputMode="text"
                   autoComplete="given-name"
@@ -125,7 +116,7 @@ export function WaitlistSignup() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="flex-[2] min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white placeholder:text-white/50"
+                  className="flex-[2] min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white placeholder:text-white/70"
                   style={{ fontSize: '16px', touchAction: 'manipulation' }}
                   inputMode="email"
                   autoComplete="email"
@@ -137,7 +128,7 @@ export function WaitlistSignup() {
                 <select
                   value={industry}
                   onChange={(e) => setIndustry(e.target.value)}
-                  className="w-full min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white appearance-none cursor-pointer"
+                  className={`w-full min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 appearance-none cursor-pointer ${industry ? 'text-white' : 'text-white/70'}`}
                   style={{ fontSize: '16px', touchAction: 'manipulation' }}
                 >
                   {INDUSTRIES.map((ind) => (
@@ -161,7 +152,7 @@ export function WaitlistSignup() {
                     placeholder="Tell us your industry"
                     value={otherIndustry}
                     onChange={(e) => setOtherIndustry(e.target.value)}
-                    className="w-full min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white placeholder:text-white/50"
+                    className="w-full min-h-[48px] px-4 text-base rounded-xl border border-white/20 focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/30 outline-none transition-all touch-manipulation bg-white/10 text-white placeholder:text-white/70"
                     style={{ fontSize: '16px', touchAction: 'manipulation' }}
                     inputMode="text"
                   />
@@ -183,7 +174,7 @@ export function WaitlistSignup() {
                     Joining...
                   </span>
                 ) : (
-                  'Join the Waitlist'
+                  'Create your first Slyde'
                 )}
               </Button>
 
@@ -201,7 +192,7 @@ export function WaitlistSignup() {
 
           {/* Trust note */}
           <p className="text-sm text-white/50 mt-6">
-            🔒 No spam, ever. Just launch updates.
+            Live in minutes. No credit card required.
           </p>
         </motion.div>
       </div>

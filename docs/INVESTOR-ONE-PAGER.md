@@ -66,10 +66,12 @@
 
 | Stream | Launch | Description |
 |--------|--------|-------------|
-| **Subscriptions** | Now | $19/month Pro tier (analytics, leads, no branding) |
+| **Subscriptions** | Now | £25/month Creator tier (~$29 USD) — analytics, no watermark |
 | **Transaction Fees** | 2026 | 3-5% of bookings facilitated through Consumer App |
 | **Featured Listings** | 2026 | Businesses pay for top placement in discovery feed |
 | **Enterprise** | 2025 | Custom solutions for chains & franchises |
+
+> See [PAY-TIERS.md](./PAY-TIERS.md) for pricing source of truth and currency conversions.
 
 ### Unit Economics (Target)
 

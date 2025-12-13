@@ -62,7 +62,7 @@ When you visit slydes.io:
 1. You land in FULL-SCREEN immersive mode
 2. Vertical scrolling (like a Slyde)
 3. Video backgrounds (not static images)
-4. Swipeable frames (you experience the product)
+4. Swipeable slides (you experience the product)
 5. Mobile-optimized FIRST (desktop is secondary)
 
 You don't READ about Slydes.
@@ -75,7 +75,7 @@ You EXPERIENCE a Slyde.
 
 ### The Homepage IS The Product
 
-**Frame 1: HOOK**
+**Slide 1: HOOK**
 ```
 Full-screen video background (business using phone)
 Headline: "Are you building for 2020 or 2030?"
@@ -83,7 +83,7 @@ Subtext: "Your customers are already in 2030."
 CTA: "Experience Slydes" (scroll down)
 ```
 
-**Frame 2: THE PROBLEM**
+**Slide 2: THE PROBLEM**
 ```
 Split-screen video comparison:
 Left: Static old website (boring, slow, desktop)
@@ -93,7 +93,7 @@ Headline: "Old School is OUT. Slydes are IN."
 No text. Just visual comparison.
 ```
 
-**Frame 3: THE SOLUTION**
+**Slide 3: THE SOLUTION**
 ```
 Embedded iPhone mockup showing LIVE Slyde
 YOU can swipe through it
@@ -101,32 +101,32 @@ YOU experience the difference
 Headline: "This is what your customers want."
 ```
 
-**Frame 4: SOCIAL PROOF**
+**Slide 4: SOCIAL PROOF**
 ```
 Video testimonials (auto-play, muted, subtitles)
 "200+ businesses ditched their old site"
 Customer logos (fade in/out)
 ```
 
-**Frame 5: HOW IT WORKS**
+**Slide 5: HOW IT WORKS**
 ```
 3-step animated sequence:
 1. Sign up (30 sec animation)
 2. Create (5 min time-lapse)
 3. Go live (instant transition)
 
-Interactive: "Try building a frame right now" (no signup)
+Interactive: "Try building a slide right now" (no signup)
 ```
 
-**Frame 6: PRICING**
+**Slide 6: PRICING**
 ```
 Clean, simple cards
-Free / $19/mo Pro
+Free / £25/mo Creator (see PAY-TIERS.md)
 "Start Free" button (Leader Blue gradient)
 Trust signals: No card required, upgrade anytime
 ```
 
-**Frame 7: ACTION**
+**Slide 7: ACTION**
 ```
 Full-screen CTA
 "Ready to build for the future?"
@@ -234,7 +234,7 @@ Below: "Join 200+ businesses leading the field"
 ### Micro-interactions That Matter
 
 **Scroll Behavior**:
-- Snap to sections (full-screen frames)
+- Snap to sections (full-screen slides)
 - Parallax backgrounds (subtle)
 - Fade in/out animations
 - Progress indicator (side dots)
@@ -283,7 +283,7 @@ Below: "Join 200+ businesses leading the field"
 
 **Engagement**:
 - Time on site: Target > 2 minutes
-- Scroll depth: Target 100% (all frames)
+- Scroll depth: Target 100% (all slides)
 - Video watch time: Target 80%+
 
 **Conversion**:
@@ -304,7 +304,7 @@ Below: "Join 200+ businesses leading the field"
 ### Phase 1: MVP (Week 1-2)
 
 **Homepage only**:
-- 7 frames (as outlined above)
+- 7 slides (as outlined above)
 - Video content created
 - Mobile-optimized
 - CTA to signup
@@ -325,7 +325,7 @@ Below: "Join 200+ businesses leading the field"
 - /how-it-works (animated demo)
 
 **Improvements**:
-- Interactive demo (try building a frame)
+- Interactive demo (try building a slide)
 - Customer testimonials (video)
 - Case studies (results)
 
@@ -379,7 +379,7 @@ Below: "Join 200+ businesses leading the field"
 **A visitor lands on slydes.io**:
 
 1. They're immediately immersed (full-screen video)
-2. They scroll through frames (experiencing a Slyde)
+2. They scroll through slides (experiencing a Slyde)
 3. They think: "Holy shit, this is different"
 4. They try the interactive demo
 5. They sign up for trial

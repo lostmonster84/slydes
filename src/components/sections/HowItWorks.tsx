@@ -9,20 +9,20 @@ import { BackgroundDotGrid } from '@/components/ui/BackgroundEffects'
 const steps = [
   {
     number: '01',
-    title: 'Choose your frames',
-    description: 'Pick from 11 pre-built frame types. Welcome screens, social proof, CTAs, galleries—each designed to convert mobile visitors.',
-    details: ['Hook frames to capture attention', 'Social proof to build trust', 'Action frames for conversions'],
+    title: 'Start with a proven flow',
+    description: 'Pick slydes built to do one job: move attention forward.',
+    details: ['Hook slydes to capture attention', 'Social proof to build trust', 'Action slydes for conversions'],
   },
   {
     number: '02',
-    title: 'Add your content',
-    description: 'Upload videos, add text, customize colors. Our visual editor shows you exactly how it looks on mobile—no guessing.',
+    title: 'Drop in your content. Make it feel alive.',
+    description: 'Video first. Text second. Everything built for the phone screen.',
     details: ['Drag-and-drop interface', 'Live iPhone preview', 'Video backgrounds'],
   },
   {
     number: '03',
-    title: 'Share your link',
-    description: 'One click to publish. Get a shareable link instantly. Add it to your Instagram bio, print it as a QR code, or embed it anywhere.',
+    title: 'Share it where attention already is',
+    description: 'Bio links. QR codes. Ads. WhatsApp. SMS. Anywhere people tap, Slydes should open.',
     details: ['Instant publishing', 'Works on every phone', 'Analytics built in'],
   },
 ]
@@ -79,10 +79,10 @@ export function HowItWorks() {
             className="text-center mb-16"
           >
             <h2 className="mb-4">
-              From idea to live in <span className="gradient-text">10 minutes</span>
+              From idea to live in <span className="gradient-text">minutes</span>.
             </h2>
             <p className="text-gray-600 text-lg">
-              No code. No designer. Just drag, drop, and publish.
+              No code. No agency. Just build the flow and publish the link.
             </p>
           </motion.div>
 

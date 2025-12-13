@@ -18,7 +18,7 @@ They promote Slydes. They earn commission on every conversion. Simple.
 
 | What They Get | Details |
 |---------------|---------|
-| **Lifetime Pro Access** | Free forever. No monthly fees. |
+| **Lifetime Creator Access** | Free forever. No monthly fees. |
 | **25% Commission** | On every paying subscriber they refer, forever. |
 | **Unique Referral Link** | Track all conversions from their audience |
 | **Early Access** | First to use new features |
@@ -33,28 +33,30 @@ They promote Slydes. They earn commission on every conversion. Simple.
 
 1. Partner gets unique referral link: `slydes.io/?ref=partnername`
 2. Someone signs up through their link
-3. When that person upgrades to Pro ($19/mo), partner earns **25% commission**
+3. When that person upgrades to Creator (£25/mo), partner earns **25% commission**
 4. Commission paid monthly via Stripe Connect or PayPal
+
+> See [PAY-TIERS.md](./PAY-TIERS.md) for pricing source of truth and currency conversions.
 
 ### The Math
 
 | Scenario | Partner Earnings |
 |----------|------------------|
-| 10 referrals upgrade to Pro | $47.50/month ($570/year) |
-| 50 referrals upgrade to Pro | $237.50/month ($2,850/year) |
-| 100 referrals upgrade to Pro | $475/month ($5,700/year) |
-| 500 referrals upgrade to Pro | $2,375/month ($28,500/year) |
+| 10 referrals upgrade to Creator | £62.50/month (£750/year) |
+| 50 referrals upgrade to Creator | £312.50/month (£3,750/year) |
+| 100 referrals upgrade to Creator | £625/month (£7,500/year) |
+| 500 referrals upgrade to Creator | £3,125/month (£37,500/year) |
 
-**25% of $19 = $4.75 per subscriber per month, forever.**
+**25% of £25 = £6.25 per subscriber per month, forever.**
 
-An influencer with 100K followers who converts 0.1% = 100 Pro subscribers = **$475/month passive income**.
+An influencer with 100K followers who converts 0.1% = 100 Creator subscribers = **£625/month passive income**.
 
 ---
 
 ## Why 25%?
 
 - **Above industry standard**: Most affiliate programs are 10-20%. We're generous.
-- **Motivating**: $4.75/subscriber/month adds up fast
+- **Motivating**: £6.25/subscriber/month adds up fast
 - **Sustainable for us**: 75% margin on referred customers is still healthy
 - **Forever**: Not a one-time bounty. Ongoing income = ongoing promotion.
 

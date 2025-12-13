@@ -230,7 +230,7 @@ This directory contains the complete strategic documentation for Slydes, from vi
 ### Go-to-Market
 - [LAUNCH-STRATEGY.md](./LAUNCH-STRATEGY.md) — 3-month GTM plan
 - [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) — Founding Partner distribution strategy
-- [PAY-TIERS.md](./PAY-TIERS.md) — Pricing model (Free + Pro at $19/mo)
+- [PAY-TIERS.md](./PAY-TIERS.md) — **Pricing source of truth** (Free + Creator £25/mo)
 - [PRACTICE-WHAT-WE-PREACH.md](./PRACTICE-WHAT-WE-PREACH.md) — Philosophy
 
 ### Process

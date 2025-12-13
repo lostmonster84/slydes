@@ -36,11 +36,12 @@
 
 ### 1. Gradient Text = YES, Gradient Blocks = NO
 ```css
-/* GOOD - Gradient on text */
+/* GOOD - Gradient on text (from globals.css) */
 .gradient-text {
-  background: linear-gradient(135deg, #0A0E27 0%, #2563EB 50%, #06B6D4 100%);
+  background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* BAD - Gradient colored squares */
@@ -208,8 +209,12 @@ Before shipping any page, score each section:
 ```
 Future Black:  #0A0E27
 Leader Blue:   #2563EB
-Electric Cyan: #06B6D4
+Electric Cyan: #22D3EE (note: different from gradient cyan #06B6D4)
 Pure White:    #FFFFFF
+
+Gradient (globals.css .gradient-text):
+- From: #2563EB (Leader Blue)
+- To: #06B6D4 (Cyan - slightly different from electric-cyan)
 
 Backgrounds:
 - White sections: bg-white

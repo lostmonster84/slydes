@@ -370,7 +370,7 @@ export default function DemosPage() {
                 </div>
                 <h3 className="text-xl font-bold mb-2">Instant Conversion</h3>
                 <p className="text-gray-600">
-                  Every slide has a purpose. CTAs, booking buttons, and contact options designed to convert.
+                  Every slyde has a purpose. CTAs, booking buttons, and contact options designed to convert.
                 </p>
               </motion.div>
             </div>

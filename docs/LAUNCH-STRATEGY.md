@@ -142,12 +142,12 @@ Slydes creates TikTok-style vertical scrolling experiences for businesses. Video
 
 Perfect for restaurants, hotels, tour operators - anyone selling experiences, not just products.
 
-• 11 pre-built frame types (Hook, Action, Social Proof, etc.)
+• 11 pre-built slyde types (Hook, Action, Social Proof, etc.)
 • WYSIWYG editor (drag to position, see exact mobile result)
 • Live in 10 minutes
-• $19/month
+• £25/month Creator (see PAY-TIERS.md)
 
-No rebuilding your site. No $10k agency. Just immersive mobile experiences.
+No rebuilding your site. No £10k agency. Just immersive mobile experiences.
 
 Try it free: slydes.io
 
@@ -166,14 +166,14 @@ EDINBURGH, UK - January 15, 2026 - Slydes, a mobile-first web platform, today an
 
 "80% of web traffic is mobile, but most business websites were built for desktop in 2005 and never really adapted," said James McKay, founder of Slydes. "We're not talking about 'mobile responsive.' We're talking about building FOR mobile from day one. That's what Slydes does."
 
-The platform targets hospitality and experience-based businesses—restaurants, hotels, vacation rentals, tour operators—where visual storytelling drives bookings. Instead of text-heavy pages and image galleries, Slydes enables full-screen video backgrounds, swipeable content frames, and mobile-native interactions.
+The platform targets hospitality and experience-based businesses—restaurants, hotels, vacation rentals, tour operators—where visual storytelling drives bookings. Instead of text-heavy pages and image galleries, Slydes enables full-screen video backgrounds, swipeable slides, and mobile-native interactions.
 
 Early adopters report significant improvements:
 • 200% increase in mobile engagement
 • 3.6 hours saved per site in design time
 • 99.99% accuracy between editor preview and mobile reality
 
-Slydes offers two tiers: Free (1 Slyde, 5 slides, branded outro) and Pro ($19/mo - unlimited everything, analytics, lead capture, no branding).
+Slydes offers two tiers: Free (1 Slyde, watermark) and Creator (£25/mo - up to 10 Slydes, analytics, no watermark). See PAY-TIERS.md for details.
 
 For more information: slydes.io
 
@@ -407,7 +407,7 @@ But you haven't started your trial yet.
 Here's what you're missing:
 • Video-first mobile site (not desktop-adapted)
 • 10-minute setup (not 10-week rebuild)
-• $19/month (not $10k agency)
+• £25/month (not £10k agency)
 
 14-day free trial. No card required.
 
@@ -481,8 +481,8 @@ If you have questions, just reply. I read every email.
 **Goal**: Get agencies to resell Slydes
 
 **Offer**:
-- Wholesale pricing ($10/client/month vs $19 retail)
-- White-label option (future Enterprise tier)
+- Wholesale pricing (TBD - see PAY-TIERS.md for retail)
+- White-label option (future Agency tier - see FUTURE-PRICING.md)
 - Co-marketing support
 
 **Target Agencies**:

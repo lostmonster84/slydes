@@ -120,9 +120,9 @@ What you see is what you get. Edit with a live
 iPhone preview. No guessing, no coding.
 ```
 
-**Feature 3: 11 Frame Types**
+**Feature 3: 11 Slyde Types**
 ```
-🧩 **11 Frame Types**
+🧩 **11 Slyde Types**
 
 Welcome screens, hooks, social proof, CTAs—
 everything you need to convert, pre-built.
@@ -229,16 +229,16 @@ No code. No design skills. Just drag, drop, and share.
 
 **Headline**:
 ```
-1. Choose Your Frames
+1. Choose Your Slydes
 ```
 
 **Body**:
 ```
-Pick from 11 pre-built frame types—Welcome, Hook, 
+Pick from 11 pre-built slyde types—Welcome, Hook,
 Social Proof, CTA, and more. Each designed to convert.
 ```
 
-**Visual**: [Screenshot of frame library]
+**Visual**: [Screenshot of slyde library]
 
 ---
 
@@ -385,57 +385,41 @@ Start free. Scale as you grow. Cancel anytime.
 
 ### **Pricing Cards**
 
+> See [PAY-TIERS.md](./PAY-TIERS.md) for source of truth. Currency switcher in UI.
+
 **Tier 1: Free**
 ```
 **Free**
-$0/month
+£0/month
 
-Perfect for testing and personal projects.
+Try the format.
 
-✅ 1 Slyde
-✅ 10 frames max
-✅ Basic analytics
-✅ Slydes.io subdomain
-✅ Community support
+✅ 1 published Slyde
+✅ Full mobile experience
+✅ Shareable public link
+✅ Core creation tools
+✅ Slydes watermark
 
-[Start Free →]
+[Create your first Slyde →]
 ```
 
-**Tier 2: Pro** (Recommended badge)
+**Tier 2: Creator** (Recommended badge)
 ```
-**Pro**
-$19/month
+**Creator**
+£25/month
 
-For businesses ready to engage customers.
+For people who care about results.
 
-✅ Unlimited Slydes
-✅ Unlimited frames
-✅ Advanced analytics
-✅ Custom domain
-✅ Remove Slydes branding
-✅ Priority support
-✅ Video hosting (10GB)
+✅ Up to 10 published Slydes
+✅ No Slydes watermark
+✅ Increased video/media limits
+✅ Basic analytics (views, swipe depth, completion)
+✅ Faster publishing workflows
 
-[Start 14-Day Trial →]
+[Upgrade to Creator →]
 ```
 
-**Tier 3: Agency**
-```
-**Agency**
-$19/month
-
-For agencies building Slydes for clients.
-
-✅ Everything in Pro
-✅ 10 team members
-✅ Client management
-✅ White-label option
-✅ Video hosting (100GB)
-✅ Dedicated support
-✅ Onboarding call
-
-[Contact Sales →]
-```
+**Future tiers (Pro, Agency) — see FUTURE-PRICING.md. Not in MVP.**
 
 ---
 

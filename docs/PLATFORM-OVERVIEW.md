@@ -326,18 +326,19 @@ Creates more content    ←  →  Discovers more businesses
 
 ## MONETIZATION OVERVIEW
 
-(See BUSINESS-MODEL.md for full details)
+(See [BUSINESS-MODEL.md](./BUSINESS-MODEL.md) for full details)
+(See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing)
 
 **Revenue Streams**:
 
 **Phase 1** (MVP):
 - Influencer Program (50 Founding Partners for distribution)
-- Subscription plans (Free + $19/month Pro)
+- Subscription plans (Free + Creator tier - see PAY-TIERS.md)
 
 **Phase 2** (Partner App):
 - Free tier (limited features)
-- Pro tier ($19/month - unlimited Slydes, analytics, lead capture)
-- Enterprise tier ($299/month - white label, priority support)
+- Creator tier (see PAY-TIERS.md for pricing)
+- Enterprise tier (future - see FUTURE-PRICING.md)
 
 **Phase 3** (Consumer App):
 - Featured listings (businesses pay for top placement)

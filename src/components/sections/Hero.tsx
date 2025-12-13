@@ -7,31 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 
 const SUBHEADS = [
-  // Always: call out the lie → make the pain obvious → Slydes is the fix.
-  { main: "Your 'mobile site' is just desktop shrunk down.", punch: "Slydes are built for phones." },
-  { main: "Responsive is the minimum.", punch: "Slydes are the upgrade." },
-  { main: "Your customers swipe. Your site scrolls.", punch: "Slydes swipe." },
-  { main: "Stop shipping desktop to phones.", punch: "Ship a Slyde." },
-  { main: "A website isn't a mobile strategy.", punch: "A Slyde is." },
-  { main: "Desktop-first is dead.", punch: "Slydes are vertical-first." },
-
-  // More core lines (no fluff)
-  { main: "Mobile-first isn't a breakpoint.", punch: "It's Slydes." },
-  { main: "If it doesn't work on a phone, it doesn't work.", punch: "Slydes work where it counts." },
-  { main: "Your website looks fine. It feels slow.", punch: "Slydes feel instant." },
-  { main: "Scrolling isn't engaging.", punch: "Slydes are." },
-  { main: "Your homepage isn't your funnel anymore.", punch: "Your Slyde is." },
-  { main: "Your best content is trapped in desktop pages.", punch: "Slydes set it free." },
-  { main: "Stop sending customers to menus they can't use.", punch: "Send a Slyde." },
-  { main: "Desktop design is the wrong starting line.", punch: "Start with a Slyde." },
-  { main: "A redesign won't fix the format.", punch: "Slydes change the format." },
-  { main: "Most sites are built to read.", punch: "Slydes are built to convert." },
-  { main: "Clicks are friction.", punch: "Slydes cut the friction." },
-  { main: "Your website explains. Your Slyde sells.", punch: "That's the difference." },
-  { main: "Your customers decide in seconds.", punch: "Slydes win those seconds." },
-  { main: "Stop shipping brochures.", punch: "Ship Slydes." },
-  { main: "Mobile-friendly isn't mobile-first.", punch: "Slydes are mobile-first." },
-  { main: "Your site is built for a mouse.", punch: "Slydes are built for hands." },
+  // Phones are for swiping, not scrolling. Slydes turns mobile attention into fast, high-conversion destinations.
+  { main: "Phones are for swiping, not scrolling.", punch: "Slydes turns attention into action." },
+  { main: "Your customers decide in seconds.", punch: "Slydes wins those seconds." },
+  { main: "Mobile traffic deserves better than desktop pages.", punch: "Slydes delivers." },
+  { main: "Scrolling kills momentum.", punch: "Swiping builds it." },
+  { main: "Your website explains.", punch: "Slydes converts." },
+  { main: "Mobile-first isn't a breakpoint.", punch: "It's a format change." },
 ]
 
 export function Hero() {
@@ -106,23 +88,23 @@ export function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
             </span>
-            Launching soon
+            Early access open
           </span>
         </motion.div>
         
         {/* 2. HEADLINE - THE statement */}
-        <motion.h1 
+        <motion.h1
           className="font-display text-center mb-4 text-balance text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <span className="text-white">Old school websites are </span>
-          <span className="text-white/50">OUT</span>
-          <span className="text-white">.</span>
+          <span className="text-white">Stop sending mobile users</span>
           <br />
-          <span className="text-white">Slydes are </span>
-          <span className="bg-gradient-to-r from-leader-blue via-electric-cyan to-purple-400 bg-clip-text text-transparent">IN</span>
+          <span className="text-white">to </span>
+          <span className="text-white/40">websites</span>
+          <span className="text-white">. Send them to </span>
+          <span className="bg-gradient-to-r from-leader-blue to-electric-cyan bg-clip-text text-transparent">Slydes</span>
           <span className="text-white">.</span>
         </motion.h1>
         
@@ -180,7 +162,7 @@ export function Hero() {
         </div>
         
         {/* 4. CTA - Single, bold, above fold */}
-        <motion.div 
+        <motion.div
           className="mb-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -188,7 +170,7 @@ export function Hero() {
         >
           <a href="#waitlist">
             <Button size="lg" className="shadow-lg shadow-leader-blue/30 px-10 text-base">
-              Get Early Access →
+              Create your first Slyde
             </Button>
           </a>
         </motion.div>
@@ -200,7 +182,7 @@ export function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.35 }}
         >
-          No credit card. No spam. Just early access.
+          No credit card. Live in minutes.
         </motion.p>
 
         {/* 5. Secondary link - not a competing button */}
@@ -212,7 +194,7 @@ export function Hero() {
         >
           or{' '}
           <Link href="/showcase" className="text-white/70 hover:text-white underline underline-offset-2">
-            see it in action
+            view demo
           </Link>
         </motion.p>
         
@@ -238,9 +220,9 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          Got an industry we haven't covered?{' '}
+          Got a mobile-first business?{' '}
           <a href="#contact" className="text-white/90 font-medium hover:text-white underline underline-offset-2">
-            Let's talk.
+            We should talk.
           </a>
         </motion.p>
       </div>

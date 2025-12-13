@@ -101,8 +101,8 @@ Psychology: Clean, modern, "the future is clear"
 
 ```
 ELECTRIC CYAN (Energy & Motion)
-Hex: #06B6D4
-RGB: 6, 182, 212
+Hex: #22D3EE
+RGB: 34, 211, 238
 Use: Hover states, highlights, progress indicators
 Psychology: Dynamic, moving forward, "we're in motion"
 
@@ -126,11 +126,12 @@ Psychology: Depth, sophistication, premium
 background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
 ```
 
-**Text Gradient** (Headlines):
+**Text Gradient** (Headlines) - defined in globals.css as `.gradient-text`:
 ```css
-background: linear-gradient(135deg, #0A0E27 0%, #2563EB 50%, #06B6D4 100%);
+background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
 -webkit-background-clip: text;
 -webkit-text-fill-color: transparent;
+background-clip: text;
 ```
 
 ---
@@ -221,25 +222,25 @@ See `/docs/TYPOGRAPHY-SYSTEM.md` for complete typography guidelines.
 
 ### Mobile Mockup Specs
 
-**Device Frame:**
+**Device Frame** (from PhoneMockup.tsx):
 - Width: 280px
-- Height: 570px
+- Height: 580px
 - Border radius: 3rem (48px)
-- Background: Gray 900 (#18181B)
-- Padding: 12px (0.75rem)
-- Shadow: `shadow-2xl`
+- Background: `bg-gradient-to-b from-gray-800 to-gray-900`
+- Padding: 12px (p-3)
+- Shadow: Custom multi-layer shadow
 
 **Notch:**
-- Width: 128px (8rem)
-- Height: 24px (1.5rem)
+- Width: 128px (w-32)
+- Height: 28px (h-7)
 - Position: Absolute top center
-- Border radius bottom: 2xl (1rem)
-- Z-index: 10
+- Border radius bottom: 2xl
+- Z-index: 20
 
 **Screen:**
 - Width: 100%
 - Height: 100%
-- Border radius: 2.5rem (40px)
+- Border radius: 2.25rem (36px)
 - Overflow: hidden
 - Background: Content dependent
 
@@ -449,36 +450,57 @@ See `/docs/TYPOGRAPHY-SYSTEM.md` for complete typography guidelines.
 
 **Used for:** Main conversion actions
 
+**Using Button component** (recommended):
 ```tsx
-<button className="bg-gradient-to-r from-leader-blue to-[#06B6D4] text-white font-semibold px-8 py-4 rounded-xl text-lg hover:opacity-90 transition-opacity">
-  Get Started Free
-</button>
+import { Button } from '@/components/ui/Button'
+
+<Button size="lg">Get Started Free</Button>
+```
+
+**Button.tsx implementation:**
+```tsx
+// Primary variant (default)
+bg-leader-blue text-white
+hover:bg-blue-700 hover:shadow-lg hover:shadow-leader-blue/25
+active:scale-[0.98]
+
+// Sizes
+default: px-5 min-h-[44px] text-sm
+lg: px-7 min-h-[48px] text-base
 ```
 
 **Key Details:**
-- Gradient: Leader Blue → Electric Cyan
+- Background: Solid Leader Blue (not gradient)
 - Text: White, semibold (600)
-- Padding: `px-8 py-4` (32px x 16px)
 - Border radius: `rounded-xl`
-- Size: `text-lg` for prominence
-- Hover: Slight opacity fade
+- Hover: Darker blue + shadow
+- Active: Slight scale down
 
 ### Secondary CTA
 
 **Used for:** Alternative actions
 
+**Using Button component** (recommended):
 ```tsx
-<button className="bg-white text-gray-900 font-semibold px-6 py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
-  See Showcase
-</button>
+import { Button } from '@/components/ui/Button'
+
+<Button variant="secondary">See Showcase</Button>
+```
+
+**Button.tsx implementation:**
+```tsx
+// Secondary variant
+border border-gray-300 text-gray-700 bg-white
+hover:bg-gray-50 hover:border-gray-400 hover:shadow-md
+active:scale-[0.98]
 ```
 
 **Key Details:**
 - Background: White
-- Text: Gray 900 (dark)
-- Border: Gray 200
-- Hover: Light gray background
-- Slightly smaller padding than primary
+- Text: Gray 700
+- Border: Gray 300
+- Hover: Gray 50 background + darker border + shadow
+- Active: Slight scale down
 
 ---
 
