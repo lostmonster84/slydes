@@ -122,18 +122,29 @@ export function Features() {
             
             {/* Mini editor preview */}
             <div className="bg-[#1e1e1e] rounded-lg overflow-hidden border border-[#3a3a3a]">
-              <div className="bg-[#323232] px-2 py-1 flex items-center gap-1">
+              <div className="bg-[#323232] px-2 py-1.5 flex items-center gap-1">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#ff5f57]" />
                 <div className="w-1.5 h-1.5 rounded-full bg-[#febc2e]" />
                 <div className="w-1.5 h-1.5 rounded-full bg-[#28c840]" />
+                <span className="text-[6px] text-white/40 ml-1">Editor</span>
               </div>
-              <div className="p-2 flex items-center justify-center gap-2">
-                <div className="flex-1 space-y-1">
-                  <div className="h-2 bg-leader-blue/50 rounded w-full" />
-                  <div className="h-2 bg-white/10 rounded w-3/4" />
-                  <div className="h-2 bg-white/10 rounded w-1/2" />
+              <div className="flex">
+                {/* Sidebar */}
+                <div className="w-14 bg-[#2d2d2d] p-1.5 border-r border-[#3a3a3a]">
+                  <div className="space-y-1">
+                    <div className="h-3 bg-leader-blue rounded text-[5px] text-white flex items-center px-1">Welcome</div>
+                    <div className="h-3 bg-white/5 rounded text-[5px] text-white/40 flex items-center px-1">Menu</div>
+                  </div>
                 </div>
-                <div className="w-8 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-md" />
+                {/* Preview area */}
+                <div className="flex-1 p-2 flex items-center justify-center bg-[#1a1a1a]">
+                  <div className="w-10 h-20 bg-black rounded-lg p-[2px]">
+                    <div className="w-full h-full bg-gradient-to-br from-amber-500 to-orange-600 rounded-[6px] flex flex-col justify-end p-1">
+                      <div className="text-[4px] text-white font-medium">Chef&apos;s Table</div>
+                      <div className="w-full bg-white/30 rounded-full py-0.5 text-[3px] text-center text-white mt-0.5">View</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
