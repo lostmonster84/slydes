@@ -171,7 +171,7 @@ export function WaitlistSignup() {
               <Button 
                 type="submit" 
                 size="lg" 
-                className="w-full sm:w-auto px-8"
+                className="w-full sm:w-auto px-8 !bg-white !text-future-black hover:!bg-white/90"
                 disabled={status === 'loading'}
               >
                 {status === 'loading' ? (
