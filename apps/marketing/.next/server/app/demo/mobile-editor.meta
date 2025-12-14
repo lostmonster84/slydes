@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/demo/layout,_N_T_/demo/mobile-editor/layout,_N_T_/demo/mobile-editor/page,_N_T_/demo/mobile-editor"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/demo/mobile-editor/__PAGE__",
+    "/demo/mobile-editor",
+    "/demo",
+    "/_index",
+    "/_head"
+  ]
+}

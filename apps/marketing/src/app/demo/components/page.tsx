@@ -240,7 +240,7 @@ export default function ComponentLibraryPage() {
           {/* Usage */}
           <div className="bg-white/5 rounded-xl p-6 border border-white/10">
             <h4 className="text-sm font-bold uppercase tracking-wider text-white/50 mb-4">Usage</h4>
-            <pre className="text-sm text-white/80 overflow-x-auto">
+            <pre className="text-sm text-white/80 whitespace-pre-wrap break-words">
               <code>{`import { ${component.name} } from '@/components/ui/${category.file.split('/').pop()?.replace('.tsx', '')}'
 
 // In your component:

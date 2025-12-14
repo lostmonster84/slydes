@@ -276,9 +276,9 @@ Plus 4 organized folders:
 
 **Infrastructure**:
 - ✅ Next.js 15 (App Router)
-- ✅ Sanity CMS (custom admin)
+- ✅ Supabase (database + auth)
 - ✅ Vercel hosting
-- ✅ API routes (slydes, slides)
+- ✅ API routes (slydes, frames)
 
 ---
 

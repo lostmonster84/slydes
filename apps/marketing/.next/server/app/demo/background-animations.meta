@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/demo/layout,_N_T_/demo/background-animations/layout,_N_T_/demo/background-animations/page,_N_T_/demo/background-animations"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/demo/background-animations/__PAGE__",
+    "/demo/background-animations",
+    "/demo",
+    "/_index",
+    "/_head"
+  ]
+}

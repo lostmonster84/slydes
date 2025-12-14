@@ -263,7 +263,7 @@ export default function BackgroundAnimationsDemo() {
             {/* Usage */}
             <div className="bg-white/5 border-t border-white/10 px-8 py-6">
               <h4 className="text-sm font-bold uppercase tracking-wider text-white/50 mb-3">Usage</h4>
-              <pre className="text-sm text-white/80 bg-future-black/50 p-4 rounded-lg overflow-x-auto">
+              <pre className="text-sm text-white/80 bg-future-black/50 p-4 rounded-lg whitespace-pre-wrap break-words">
                 <code>{`import { ${active.component.name || active.name.replace(/\s/g, '')} } from '@/components/ui/BackgroundAnimations'
 
 <${active.component.name || active.name.replace(/\s/g, '')}>

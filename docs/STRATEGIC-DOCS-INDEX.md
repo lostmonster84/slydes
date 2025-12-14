@@ -222,6 +222,10 @@ This directory contains the complete strategic documentation for Slydes, from vi
 - [LOGO-DEPLOYMENT.md](./LOGO-DEPLOYMENT.md) — Logo variations & usage
 
 ### Product & Development
+- [STRUCTURE.md](./STRUCTURE.md) — **Canonical platform hierarchy** (Home Slyde → Child Slyde → Frame)
+- [HOME-SLYDE-SYSTEM.md](./HOME-SLYDE-SYSTEM.md) — Why the Home Slyde exists (entry point concept)
+- [HOME-SLYDE-BUILD-SPEC.md](./HOME-SLYDE-BUILD-SPEC.md) — How to build a Home Slyde (implementation spec)
+- [EDITOR-DESIGN-SPEC.md](./EDITOR-DESIGN-SPEC.md) — Editor UX/UI specification
 - [WEBSITE-WIREFRAME.md](./WEBSITE-WIREFRAME.md) — slydes.io structure
 - [WEBSITE-COPY-FINAL.md](./WEBSITE-COPY-FINAL.md) — All website copy
 - [SLYDES-WEBSITE-TECH-SPEC.md](./SLYDES-WEBSITE-TECH-SPEC.md) — Technical implementation

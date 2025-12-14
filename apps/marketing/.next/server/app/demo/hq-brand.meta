@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/demo/layout,_N_T_/demo/hq-brand/layout,_N_T_/demo/hq-brand/page,_N_T_/demo/hq-brand"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/demo/hq-brand/__PAGE__",
+    "/demo/hq-brand",
+    "/demo",
+    "/_index",
+    "/_head"
+  ]
+}

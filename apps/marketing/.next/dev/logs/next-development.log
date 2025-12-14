@@ -1,5 +1,1803 @@
-[00:00:01.798] Server  LOG      ✓ Ready in 1654ms
-[00:00:13.788] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-[00:00:18.070] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:18.205] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
-[00:00:19.583] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:00:00.625] Server  LOG      ✓ Ready in 419ms
+[00:00:02.786] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:00:03.485] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:11:05.539] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:05.727] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:19:03.088] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:19:24.858] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:19:46.036] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[00:19:48.178] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:21:36.818] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:21:36.973] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-d..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[00:22:13.001] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:23:51.107] Server  LOG      ✓ Compiled in 233ms
+[00:23:57.748] Server  LOG      ✓ Compiled in 142ms
+[00:24:05.079] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:24:05.221] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:24:05.354] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-d..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[00:24:31.390] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:24:31.537] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:24:52.173] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:25:04.454] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:37:30.299] Server  LOG      ✓ Compiled in 311ms
+[00:37:38.203] Server  LOG      ✓ Compiled in 206ms
+[00:37:48.513] Server  LOG      ✓ Compiled in 214ms
+[00:37:48.595] Browser ERROR   The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useEffect [camping] [camping, linear-gradient(135deg, #2563EB 0%, #06B6D4 100%)]
+[00:38:13.111] Server  LOG      ✓ Compiled in 317ms
+[00:38:41.110] Server  LOG      ✓ Compiled in 235ms
+[00:39:22.572] Server  LOG      ✓ Compiled in 275ms
+[00:39:36.929] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:39:50.350] Server  LOG      ✓ Compiled in 218ms
+[00:40:09.549] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:40:42.276] Server  LOG      ✓ Compiled in 365ms
+[00:41:20.380] Server  LOG      ✓ Compiled in 248ms
+[00:41:43.280] Server  LOG      ✓ Compiled in 165ms
+[00:41:55.951] Server  LOG      ✓ Compiled in 562ms
+[00:42:03.184] Server  LOG      ✓ Compiled in 141ms
+[00:42:28.969] Server  LOG      ✓ Compiled in 173ms
+[00:42:36.460] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:42:36.752] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:42:36.988] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[00:42:36.989] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:44:48.641] Server  LOG      ✓ Compiled in 185ms
+[00:44:57.529] Server  LOG      ✓ Compiled in 246ms
+[00:45:01.955] Server  LOG      ✓ Compiled in 102ms
+[00:45:07.446] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:45:07.582] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-d..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[00:45:10.770] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:45:10.931] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:45:11.151] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[00:45:11.151] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:49:18.020] Server  LOG      ✓ Compiled in 163ms
+[00:50:06.093] Server  LOG      ✓ Compiled in 201ms
+[00:50:12.310] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:50:12.524] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:50:12.720] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[00:50:12.720] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:52:14.225] Server  LOG      ✓ Compiled in 335ms
+[00:52:14.314] Browser ERROR   uncaughtError: ReferenceError: ChevronUp is not defined
+[00:52:38.034] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:52:38.133] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:52:38.135] Server  LOG      ✓ Compiled in 125ms
+[00:52:38.235] Server  ERROR    ⨯ ReferenceError: ChevronUp is not defined
+[00:52:38.242] Browser ERROR   uncaughtError: ReferenceError: ChevronUp is not defined
+[00:52:38.331] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:52:38.500] Browser ERROR   uncaughtError: ReferenceError: ChevronUp is not defined
+[00:53:16.116] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:53:16.218] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:53:16.220] Server  LOG      ✓ Compiled in 195ms
+[00:53:16.311] Browser ERROR   unhandledRejection: Error: No link element found for chunk /_next/static/chunks/%5Broot-of-the-server%5D__b3251be4._.css
+[00:53:16.458] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:53:16.686] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[00:53:16.686] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:53:31.380] Server  LOG      ✓ Compiled in 172ms
+[00:53:43.635] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:53:43.847] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:53:44.045] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[00:53:44.045] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:54:00.215] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[00:57:07.458] Server  LOG      ✓ Compiled in 350ms
+[00:57:20.501] Server  LOG      ✓ Compiled in 240ms
+[00:57:29.306] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:57:29.596] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:57:29.799] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[00:57:29.799] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:00:35.140] Server  LOG      ✓ Compiled in 238ms
+[01:01:40.170] Server  LOG      ✓ Compiled in 242ms
+[01:02:00.870] Server  LOG      ✓ Compiled in 227ms
+[01:02:22.045] Server  LOG      ✓ Compiled in 197ms
+[01:02:29.563] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[01:02:29.777] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:02:29.994] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:02:29.994] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:04:55.926] Server  LOG      ✓ Compiled in 215ms
+[01:05:05.149] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[01:05:05.328] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:05:05.572] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:05:05.572] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:07:36.945] Server  LOG      ✓ Compiled in 275ms
+[01:08:17.238] Server  LOG      ✓ Compiled in 201ms
+[01:08:24.463] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[01:08:24.647] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:08:24.874] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:08:24.875] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:10:29.419] Server  LOG      ✓ Compiled in 193ms
+[01:10:37.394] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[01:10:37.606] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:10:37.794] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:10:37.794] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:11:33.317] Server  LOG      ✓ Compiled in 199ms
+[01:11:41.145] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[01:11:41.406] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:11:41.608] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:11:41.608] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:12:02.653] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:12:02.876] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:12:02.876] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:15:28.966] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:17:35.503] Server  LOG      ✓ Compiled in 277ms
+[01:17:52.102] Server  LOG      ✓ Compiled in 238ms
+[01:18:14.356] Server  LOG      ✓ Compiled in 267ms
+[01:18:48.493] Server  LOG      ✓ Compiled in 236ms
+[01:18:58.117] Server  LOG      ✓ Compiled in 236ms
+[01:19:04.695] Server  LOG      ✓ Compiled in 152ms
+[01:19:12.401] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[01:19:12.642] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:19:12.864] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/edit..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:19:12.864] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:27:13.764] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:27:18.488] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[01:27:34.227] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[01:28:00.957] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[01:28:07.985] Server  ERROR   Contact form error: Error: Missing API key. Pass it to the constructor `new Resend("re_123")`
+[01:29:27.228] Server  LOG        Reload env: .env.local
+[01:31:08.234] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[01:34:18.974] Server  LOG      ✓ Compiled in 283ms
+[01:34:37.247] Server  LOG      ✓ Compiled in 108ms
+[01:34:42.981] Server  LOG      ✓ Compiled in 98ms
+[01:34:48.214] Server  LOG      ✓ Compiled in 109ms
+[01:34:52.981] Server  LOG      ✓ Compiled in 110ms
+[01:34:57.631] Server  LOG      ✓ Compiled in 105ms
+[01:35:02.308] Server  LOG      ✓ Compiled in 166ms
+[01:35:06.947] Server  LOG      ✓ Compiled in 113ms
+[01:35:11.546] Server  LOG      ✓ Compiled in 109ms
+[01:35:28.228] Server  LOG      ✓ Compiled in 145ms
+[01:35:33.308] Server  LOG      ✓ Compiled in 102ms
+[01:35:38.276] Server  LOG      ✓ Compiled in 128ms
+[01:35:43.074] Server  LOG      ✓ Compiled in 95ms
+[01:35:52.418] Server  LOG      ✓ Compiled in 213ms
+[01:35:56.910] Server  LOG      ✓ Compiled in 115ms
+[01:36:30.374] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:36:30.529] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-m..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:36:31.551] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[01:36:54.231] Server  LOG      ✓ Compiled in 145ms
+[01:38:05.334] Server  LOG      ✓ Compiled in 168ms
+[01:43:51.278] Browser ERROR   uncaughtError: ReferenceError: motion is not defined
+[01:43:56.370] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:43:56.445] Server  LOG      ✓ Compiled in 112ms
+[01:43:56.487] Server  ERROR    ⨯ ReferenceError: lens is not defined
+[01:43:56.496] Browser ERROR   uncaughtError: ReferenceError: lens is not defined
+[01:43:56.603] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:43:56.734] Browser ERROR   uncaughtError: ReferenceError: lens is not defined
+[01:44:02.226] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:44:02.309] Server  LOG      ✓ Compiled in 116ms
+[01:44:02.349] Server  ERROR    ⨯ ReferenceError: lens is not defined
+[01:44:02.437] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:44:02.555] Browser ERROR   uncaughtError: ReferenceError: lens is not defined
+[01:44:19.629] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:44:19.747] Server  LOG      ✓ Compiled in 172ms
+[01:44:19.798] Server  ERROR    ⨯ ReferenceError: lens is not defined
+[01:44:19.912] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:44:20.048] Browser ERROR   uncaughtError: ReferenceError: lens is not defined
+[01:44:37.231] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:44:37.320] Server  LOG      ✓ Compiled in 118ms
+[01:44:37.362] Server  ERROR    ⨯ ReferenceError: lens is not defined
+[01:44:37.449] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:44:37.582] Browser ERROR   uncaughtError: ReferenceError: lens is not defined
+[01:45:07.237] Server  LOG      ✓ Compiled in 215ms
+[01:45:07.340] Browser ERROR   ./apps/marketing/src/app/demo/hq-dashboard/page.tsx:692:22
+Parsing ecmascript source code failed
+  690 |                     </div>
+  691 |                   </div>
+> 692 |                     )}
+      |                      ^
+  693 |                   </div>
+  694 |                 </>
+  695 |               )}
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import traces:
+  Client Component Browser:
+    ./apps/marketing/src/app/demo/hq-dashboard/page.tsx [Client Component Browser]
+    ./apps/marketing/src/app/demo/hq-dashboard/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./apps/marketing/src/app/demo/hq-dashboard/page.tsx [Client Component SSR]
+    ./apps/marketing/src/app/demo/hq-dashboard/page.tsx [Server Component]
+[01:46:13.328] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[01:46:13.328] Server  LOG      ✓ Compiled in 256ms
+[01:46:13.706] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:46:13.842] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-d..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:46:25.477] Server  LOG      ✓ Compiled in 195ms
+[01:46:33.833] Server  LOG      ✓ Compiled in 142ms
+[01:50:55.959] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:50:56.122] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-d..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:51:01.191] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:51:01.355] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-a..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:51:26.356] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:51:26.500] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-a..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:52:25.361] Server  LOG      ✓ Compiled in 274ms
+[01:52:29.597] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:52:29.748] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-a..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:52:33.293] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[01:52:40.711] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:52:40.847] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-a..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
+[01:52:42.014] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior

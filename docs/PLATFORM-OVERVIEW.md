@@ -77,7 +77,8 @@ Business owners don't sit at desks. They're on the floor, in the kitchen, at the
 - Download from App Store / Google Play
 - Sign up with email or social
 - Choose industry category
-- Film first Slyde (onboarding walkthrough)
+- Create Home Slyde first (mandatory entry point — see [HOME-SLYDE-BUILD-SPEC.md](./HOME-SLYDE-BUILD-SPEC.md))
+- Add Child Slydes for specific offerings
 - Publish and share link
 - **Total time from download to published: 5 minutes**
 
@@ -275,12 +276,15 @@ Creates more content    ←  →  Discovers more businesses
 1. Downloads Partner App
 2. Quick signup (email/social)
 3. Chooses industry category
-4. Follows guided tutorial (film first Slyde)
-5. Records video(s), adds titles/CTAs
-6. Publishes immediately
-7. Shares link across channels (Instagram bio, website, QR codes)
-8. Views analytics in app
-9. Updates content regularly
+4. Creates Home Slyde first (mandatory — 2-4 frames, orientation + navigation)
+5. Adds Child Slydes for specific offerings
+6. Records video(s), adds titles/CTAs
+7. Publishes immediately
+8. Shares link across channels (Instagram bio, website, QR codes)
+9. Views analytics in app
+10. Updates content regularly
+
+See [HOME-SLYDE-SYSTEM.md](./HOME-SLYDE-SYSTEM.md) for the Home Slyde concept.
 
 **Growth**:
 1. Gets views & bookings
