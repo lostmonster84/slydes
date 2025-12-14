@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Eye, Heart, TrendingUp } from 'lucide-react'
 import { HQSidebar } from '@/components/hq/HQSidebar'
 import Link from 'next/link'
 import { useDemoBusiness } from '@/lib/demoBusiness'
@@ -218,8 +219,8 @@ export default function HQMockupPage() {
                       </button>
                     </div>
 
-                    {/* Meta (keep Slydes screen about management, not analytics) */}
-                    <div className="flex items-center gap-4 mb-4">
+                    {/* Meta */}
+                    <div className="flex items-center gap-4 mb-3">
                       <div className="flex items-center gap-1.5">
                         <svg className="w-4 h-4 text-gray-400 dark:text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -231,6 +232,24 @@ export default function HQMockupPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v8m4-4H8" />
                         </svg>
                         <span className="text-sm text-gray-600 dark:text-white/60">Last edited 2h</span>
+                      </div>
+                    </div>
+
+                    {/* Quick stats */}
+                    <div className="flex items-center gap-4 py-3 px-3 -mx-3 mb-3 bg-gray-50 rounded-xl dark:bg-white/5">
+                      <div className="flex items-center gap-1.5">
+                        <Eye className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" />
+                        <span className="text-xs font-mono font-semibold text-gray-700 dark:text-white/70">1.2k</span>
+                        <span className="text-xs text-gray-400 dark:text-white/40">views</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Heart className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" />
+                        <span className="text-xs font-mono font-semibold text-gray-700 dark:text-white/70">342</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <TrendingUp className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
+                        <span className="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400">68%</span>
+                        <span className="text-xs text-gray-400 dark:text-white/40">complete</span>
                       </div>
                     </div>
 
@@ -324,8 +343,8 @@ export default function HQMockupPage() {
                       </button>
                     </div>
 
-                    {/* Meta (keep Slydes screen about management, not analytics) */}
-                    <div className="flex items-center gap-4 mb-4">
+                    {/* Meta */}
+                    <div className="flex items-center gap-4 mb-3">
                       <div className="flex items-center gap-1.5">
                         <svg className="w-4 h-4 text-gray-400 dark:text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -337,6 +356,24 @@ export default function HQMockupPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v8m4-4H8" />
                         </svg>
                         <span className="text-sm text-gray-600 dark:text-white/60">Last edited 1d</span>
+                      </div>
+                    </div>
+
+                    {/* Quick stats */}
+                    <div className="flex items-center gap-4 py-3 px-3 -mx-3 mb-3 bg-gray-50 rounded-xl dark:bg-white/5">
+                      <div className="flex items-center gap-1.5">
+                        <Eye className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" />
+                        <span className="text-xs font-mono font-semibold text-gray-700 dark:text-white/70">856</span>
+                        <span className="text-xs text-gray-400 dark:text-white/40">views</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Heart className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" />
+                        <span className="text-xs font-mono font-semibold text-gray-700 dark:text-white/70">189</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <TrendingUp className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
+                        <span className="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400">48%</span>
+                        <span className="text-xs text-gray-400 dark:text-white/40">complete</span>
                       </div>
                     </div>
 
