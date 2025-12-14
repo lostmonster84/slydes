@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { DevicePreview } from '@/components/slyde-demo'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
 import type { FrameData, FAQItem, BusinessInfo, CTAIconType, FrameInfoContent } from '@/components/slyde-demo/frameData'
-import { demoBrandGradient, readDemoBrandProfile } from '@/lib/demoBrand'
+import { demoBrandGradient, useDemoBrand } from '@/lib/demoBrand'
 import type { LucideIcon } from 'lucide-react'
 import { Settings2, HelpCircle, UploadCloud, GripVertical, CalendarDays, Phone, Eye, ArrowRight, Menu, Video, Image as ImageIcon } from 'lucide-react'
 
@@ -338,12 +338,9 @@ const CTA_ICONS: { value: CTAIconType; label: string; Icon: LucideIcon }[] = [
 ]
 
 export default function EditorMockupClient({ slyde, name }: EditorMockupClientProps) {
-  const brandAccent = useMemo(() => {
-    const profile = readDemoBrandProfile()
-    return demoBrandGradient(profile)
-  }, [])
-
-  const brandProfile = useMemo(() => readDemoBrandProfile(), [])
+  // Live brand sync — reacts to changes from Brand settings page
+  const brandProfile = useDemoBrand()
+  const brandAccent = useMemo(() => demoBrandGradient(brandProfile), [brandProfile])
   const businessInitial = useMemo(() => {
     const n = (brandProfile.businessName || 'S').trim()
     return (n[0] || 'S').toUpperCase()
@@ -378,6 +375,19 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
   // Refs for custom drag image
   const frameCardRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const dragGhostRef = useRef<HTMLDivElement | null>(null)
+
+  // Live brand sync — update frames and business when brand changes
+  useEffect(() => {
+    setFrames((prev) =>
+      prev.map((f) => ({ ...f, accentColor: brandAccent }))
+    )
+    setBusiness((prev) => ({
+      ...prev,
+      name: brandProfile.businessName,
+      tagline: brandProfile.tagline,
+      accentColor: brandAccent,
+    }))
+  }, [brandAccent, brandProfile.businessName, brandProfile.tagline])
 
   // When the user switches Slydes from the Profile (editor-home), reset the editor to that Slyde's seed.
   // This is a demo — we prefer correctness over preserving unsaved edits across Slydes.

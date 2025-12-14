@@ -1,12 +1,12 @@
 # Slydes – Home Slyde System Overview
 
-> **The Single-Slide Entry Point**
+> **The Immersive Entry Point**
 >
 > This document defines the Home Slyde as a core structural concept in Slydes.
 > It explains why it exists, how it works, and how it changes the product.
 >
 > **Created**: December 14, 2025
-> **Updated**: December 14, 2025 (Single-slide model)
+> **Updated**: December 15, 2025 (Video-first immersive model)
 > **Status**: Canonical
 
 ---
@@ -30,24 +30,41 @@ The Home Slyde solves:
 ## Core Definition
 
 The Home Slyde is:
-> A single-slide, mobile-first decision surface that routes attention into deeper Slydes.
+> An immersive, video-first entry point that captures attention and routes it into deeper experiences.
+
+It is:
+- the brand's first impression
+- an experience with decision baked in
+- a "wow" moment that makes users want to explore
+- the front door that sets the tone
 
 It is not:
-- a homepage
-- a story
-- a scroll experience
-- a mini website
-- an immersive Slyde
-
-It exists solely to orient and direct.
+- a static menu
+- a homepage in the traditional sense
+- a list of links
+- boring
 
 ---
 
 ## Core Product Belief
 
-**Phones are for decisions, not scrolling.**
+**Every screen in Slydes should be immersive.**
 
-The Home Slyde embodies this belief.
+The Home Slyde is no exception. It's the FIRST thing users see – it must be the best thing they see.
+
+If a business can't create compelling video content, Slydes isn't for them. That's the filter. That's the positioning.
+
+**Slydes is for visual businesses.**
+
+---
+
+## The Philosophy Shift
+
+**Old thinking**: "The Home Slyde is a decision, not an experience."
+
+**New thinking**: "The Home Slyde is an experience WITH decision baked in."
+
+Immersion first. Decision follows naturally.
 
 ---
 
@@ -55,9 +72,9 @@ The Home Slyde embodies this belief.
 
 Every brand has:
 - exactly **one Home Slyde**
-- consisting of **exactly one slide**
+- consisting of **one immersive video** + **category drawer**
 
-No exceptions in v1.
+No exceptions.
 
 ---
 
@@ -65,24 +82,51 @@ No exceptions in v1.
 
 Think of Slydes as a system, not a collection of pages.
 
-- Home Slyde = front door (one slide, one decision)
+- Home Slyde = front door (immersive video + navigation drawer)
 - Child Slydes = rooms (immersive experiences)
 - Links decide where you enter the flow
 
 You can:
-- enter through the front door
-- or deep-link directly into a room
+- enter through the front door (Home Slyde)
+- or deep-link directly into a room (Child Slyde)
 
-Once inside, everything feels like the same experience.
+Once inside, everything feels like the same premium experience.
+
+---
+
+## The User Journey
+
+```
+1. LAND
+   User arrives at slydes.io/americancrew
+
+2. WOW
+   Full-screen brand video plays
+   "Holy shit, this looks premium"
+   "What do these guys do?"
+
+3. EXPLORE
+   User swipes up (or taps)
+   Category drawer slides up
+   Video continues playing (dimmed)
+
+4. DECIDE
+   User sees categories
+   Taps one to dive deeper
+
+5. IMMERSE
+   Category Slyde → Grid → Item Slyde
+   The full journey begins
+```
 
 ---
 
 ## How Links Work
 
 ### Brand-level link
-`slydes.io/wildtrax`
+`slydes.io/americancrew`
 
-Opens the **Home Slyde** (decision point)
+Opens the **Home Slyde** (immersive video + drawer)
 
 Used for:
 - bio links
@@ -94,8 +138,8 @@ Used for:
 ---
 
 ### Deep links
-`slydes.io/wildtrax/camping`
-`slydes.io/wildtrax/just-drive`
+`slydes.io/americancrew/styling`
+`slydes.io/americancrew/shampoo`
 
 Opens directly into the relevant Child Slyde
 
@@ -118,36 +162,54 @@ This constraint:
 - prevents fragmentation
 - gives the system a root
 - makes analytics meaningful
+- ensures every brand has a "wow" moment
 
 Optional Home Slydes create confusion.
 One root creates flow.
 
 ---
 
+## Why Video Is Mandatory
+
+If a business can't create a compelling 10-15 second video, they can't create compelling Slydes.
+
+The Home Slyde video is the **quality gate**:
+- It filters out businesses that aren't visual-first
+- It sets the standard for the entire platform
+- It ensures every Slydes experience starts with impact
+
+**No video = no Slydes presence.**
+
+This is intentional. Slydes is not for everyone. It's for businesses that understand visual storytelling.
+
+---
+
 ## How This Changes the Product
 
-With a Home Slyde:
-- Slydes become a connected flow
-- Links feel intentional
-- The dashboard manages flows, not fragments
-- Analytics can show entry paths and exits
+With the video-first Home Slyde:
+- First impressions are always premium
+- The platform feels cohesive and intentional
+- Every brand entry point has impact
+- Users immediately understand "this is different"
 
 Without it:
-- Slydes feel isolated
-- Links feel arbitrary
-- The product feels unfinished
+- Some brands look cheap
+- Platform quality is inconsistent
+- The TikTok-style promise feels broken
+- Users question the value
 
 ---
 
 ## One-Line Rule
 
-**The Home Slyde is a decision, not an experience.**
+**The Home Slyde is an experience with decision baked in.**
 
-Once a decision is made, immersion happens elsewhere.
+Capture attention first. Route it second.
 
 ---
 
 ## Related Documents
 
-- [HOME-SLYDE-BUILD-SPEC.md](./HOME-SLYDE-BUILD-SPEC.md) - How to build a Home Slyde (single-slide architecture)
+- [HOME-SLYDE-BUILD-SPEC.md](./HOME-SLYDE-BUILD-SPEC.md) - How to build a Home Slyde (video + drawer architecture)
 - [STRUCTURE.md](./STRUCTURE.md) - The canonical platform hierarchy
+- [CATEGORY-INVENTORY-FLOW.md](./CATEGORY-INVENTORY-FLOW.md) - How categories and inventory work

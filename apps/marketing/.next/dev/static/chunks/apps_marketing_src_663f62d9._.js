@@ -811,15 +811,31 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 __turbopack_context__.s([
     "DEFAULT_DEMO_BRAND",
     ()=>DEFAULT_DEMO_BRAND,
+    "DEMO_BRAND_CHANGE_EVENT",
+    ()=>DEMO_BRAND_CHANGE_EVENT,
     "DEMO_BRAND_STORAGE_KEY",
     ()=>DEMO_BRAND_STORAGE_KEY,
     "demoBrandGradient",
     ()=>demoBrandGradient,
     "readDemoBrandProfile",
     ()=>readDemoBrandProfile,
+    "useDemoBrand",
+    ()=>useDemoBrand,
     "writeDemoBrandProfile",
     ()=>writeDemoBrandProfile
 ]);
+/**
+ * React hook for live brand sync across tabs.
+ * Listens for both:
+ * - `storage` events (cross-tab updates)
+ * - Custom `slydes_demo_brand_change` events (same-tab updates)
+ * 
+ * Usage:
+ * ```tsx
+ * const brand = useDemoBrand()
+ * ```
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.10_@babel+core@7.28.5_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var _s = __turbopack_context__.k.signature();
 const DEMO_BRAND_STORAGE_KEY = 'slydes_demo_brand';
 const DEFAULT_DEMO_BRAND = {
     businessName: 'WildTrax',
@@ -847,11 +863,16 @@ function readDemoBrandProfile() {
         return DEFAULT_DEMO_BRAND;
     }
 }
+const DEMO_BRAND_CHANGE_EVENT = 'slydes_demo_brand_change';
 function writeDemoBrandProfile(profile) {
     if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
     ;
     try {
         window.localStorage.setItem(DEMO_BRAND_STORAGE_KEY, JSON.stringify(profile));
+        // Dispatch custom event for same-tab listeners
+        window.dispatchEvent(new CustomEvent(DEMO_BRAND_CHANGE_EVENT, {
+            detail: profile
+        }));
     } catch  {
     // ignore
     }
@@ -859,6 +880,51 @@ function writeDemoBrandProfile(profile) {
 function demoBrandGradient(profile) {
     return `linear-gradient(135deg, ${profile.primaryColor} 0%, ${profile.secondaryColor} 100%)`;
 }
+;
+function useDemoBrand() {
+    _s();
+    const [brand, setBrand] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(DEFAULT_DEMO_BRAND);
+    // Initialize from localStorage
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "useDemoBrand.useEffect": ()=>{
+            setBrand(readDemoBrandProfile());
+        }
+    }["useDemoBrand.useEffect"], []);
+    // Listen for changes
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "useDemoBrand.useEffect": ()=>{
+            // Handler for cross-tab storage events
+            const handleStorageChange = {
+                "useDemoBrand.useEffect.handleStorageChange": (e)=>{
+                    if (e.key === DEMO_BRAND_STORAGE_KEY) {
+                        setBrand(readDemoBrandProfile());
+                    }
+                }
+            }["useDemoBrand.useEffect.handleStorageChange"];
+            // Handler for same-tab custom events
+            const handleBrandChange = {
+                "useDemoBrand.useEffect.handleBrandChange": (e)=>{
+                    const customEvent = e;
+                    if (customEvent.detail) {
+                        setBrand(customEvent.detail);
+                    } else {
+                        setBrand(readDemoBrandProfile());
+                    }
+                }
+            }["useDemoBrand.useEffect.handleBrandChange"];
+            window.addEventListener('storage', handleStorageChange);
+            window.addEventListener(DEMO_BRAND_CHANGE_EVENT, handleBrandChange);
+            return ({
+                "useDemoBrand.useEffect": ()=>{
+                    window.removeEventListener('storage', handleStorageChange);
+                    window.removeEventListener(DEMO_BRAND_CHANGE_EVENT, handleBrandChange);
+                }
+            })["useDemoBrand.useEffect"];
+        }
+    }["useDemoBrand.useEffect"], []);
+    return brand;
+}
+_s(useDemoBrand, "0eVDiAL5Fwo95MPZC/bf7NXIeWE=");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }

@@ -794,15 +794,30 @@ function HQSidebar({ activePage, plan, onPlanChange, slydeCount = 2, inboxCount 
 __turbopack_context__.s([
     "DEFAULT_DEMO_BRAND",
     ()=>DEFAULT_DEMO_BRAND,
+    "DEMO_BRAND_CHANGE_EVENT",
+    ()=>DEMO_BRAND_CHANGE_EVENT,
     "DEMO_BRAND_STORAGE_KEY",
     ()=>DEMO_BRAND_STORAGE_KEY,
     "demoBrandGradient",
     ()=>demoBrandGradient,
     "readDemoBrandProfile",
     ()=>readDemoBrandProfile,
+    "useDemoBrand",
+    ()=>useDemoBrand,
     "writeDemoBrandProfile",
     ()=>writeDemoBrandProfile
 ]);
+/**
+ * React hook for live brand sync across tabs.
+ * Listens for both:
+ * - `storage` events (cross-tab updates)
+ * - Custom `slydes_demo_brand_change` events (same-tab updates)
+ * 
+ * Usage:
+ * ```tsx
+ * const brand = useDemoBrand()
+ * ```
+ */ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.10_@babel+core@7.28.5_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 const DEMO_BRAND_STORAGE_KEY = 'slydes_demo_brand';
 const DEFAULT_DEMO_BRAND = {
     businessName: 'WildTrax',
@@ -818,6 +833,7 @@ function readDemoBrandProfile() {
     //TURBOPACK unreachable
     ;
 }
+const DEMO_BRAND_CHANGE_EVENT = 'slydes_demo_brand_change';
 function writeDemoBrandProfile(profile) {
     if ("TURBOPACK compile-time truthy", 1) return;
     //TURBOPACK unreachable
@@ -825,6 +841,39 @@ function writeDemoBrandProfile(profile) {
 }
 function demoBrandGradient(profile) {
     return `linear-gradient(135deg, ${profile.primaryColor} 0%, ${profile.secondaryColor} 100%)`;
+}
+;
+function useDemoBrand() {
+    const [brand, setBrand] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(DEFAULT_DEMO_BRAND);
+    // Initialize from localStorage
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        setBrand(readDemoBrandProfile());
+    }, []);
+    // Listen for changes
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        // Handler for cross-tab storage events
+        const handleStorageChange = (e)=>{
+            if (e.key === DEMO_BRAND_STORAGE_KEY) {
+                setBrand(readDemoBrandProfile());
+            }
+        };
+        // Handler for same-tab custom events
+        const handleBrandChange = (e)=>{
+            const customEvent = e;
+            if (customEvent.detail) {
+                setBrand(customEvent.detail);
+            } else {
+                setBrand(readDemoBrandProfile());
+            }
+        };
+        window.addEventListener('storage', handleStorageChange);
+        window.addEventListener(DEMO_BRAND_CHANGE_EVENT, handleBrandChange);
+        return ()=>{
+            window.removeEventListener('storage', handleStorageChange);
+            window.removeEventListener(DEMO_BRAND_CHANGE_EVENT, handleBrandChange);
+        };
+    }, []);
+    return brand;
 }
 }),
 "[project]/apps/marketing/src/app/demo/hq-brand/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {

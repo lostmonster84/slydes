@@ -1,4 +1,4 @@
-# Slydes – Home Slyde Build Spec (Single-Slide Architecture)
+# Slydes – Home Slyde Build Spec (Video + Drawer Architecture)
 
 > **Implementation-Facing Specification**
 >
@@ -6,22 +6,24 @@
 > how it behaves, and how it differs from Child Slydes.
 >
 > **Created**: December 14, 2025
-> **Updated**: December 14, 2025 (Single-slide model)
+> **Updated**: December 15, 2025 (Video-first immersive model)
 > **Status**: Canonical
 >
 > **Override Notice**: This document supersedes any prior Home Slyde concepts
-> involving multiple frames. The Home Slyde is now explicitly **one slide only**.
+> involving static layouts or "decision-not-experience" philosophy.
+> The Home Slyde is now explicitly **video-first with swipe-up drawer**.
 
 ---
 
 ## Role of the Home Slyde
 
 The Home Slyde's job is to:
-- orient the user
-- present clear paths
-- get out of the way
+- capture attention immediately (video)
+- create a "wow" moment (immersion)
+- enable exploration (drawer)
+- route users to deeper experiences (categories)
 
-It should be faster, clearer, and more assertive than Child Slydes.
+It should feel premium, cinematic, and intentional.
 
 ---
 
@@ -29,228 +31,323 @@ It should be faster, clearer, and more assertive than Child Slydes.
 
 Every brand has:
 - exactly **one Home Slyde**
-- consisting of **exactly one slide**
+- consisting of **one full-screen video** + **swipe-up category drawer**
 
-No exceptions in v1.
-
----
-
-## Purpose
-
-The Home Slyde answers one question:
-
-**"Where should I go next?"**
-
-Once that decision is made, the Home Slyde has done its job.
+No exceptions.
 
 ---
 
-## Canonical Layout (Single Slide)
+## Two-State Architecture
 
-The Home Slyde is vertically structured into **three zones** on a single screen.
+The Home Slyde has two states:
+
+### State 1: Video (Default)
 
 ```
-┌─────────────────────────┐
-│                         │
-│   ZONE 1: Orientation   │  ← Brand name + one-line descriptor
-│         (Top)           │
-│                         │
-├─────────────────────────┤
-│                         │
-│   ZONE 2: Primary Paths │  ← 3-5 large tappable choices
-│        (Middle)         │     Each links to a Child Slyde
-│                         │
-│    [Camping]            │
-│    [Just Drive]         │
-│    [Vehicles]           │
-│    [Locations]          │
-│                         │
-├─────────────────────────┤
-│                         │
-│   ZONE 3: Primary CTA   │  ← Optional single action
-│        (Bottom)         │     "Book Now" or similar
-│                         │
-└─────────────────────────┘
+┌─────────────────────────────────────────┐
+│                                         │
+│         [FULL-SCREEN VIDEO]             │
+│                                         │
+│    Brand video playing (10-30 seconds)  │
+│    Looping, muted by default            │
+│    Cinematic, aspirational content      │
+│                                         │
+│         "American Crew"                 │
+│         "Be the man you want to be"     │
+│                                         │
+│            ▲ Swipe up to explore        │
+│                                         │
+└─────────────────────────────────────────┘
 ```
 
+**Contents**:
+- Full-screen video (9:16 vertical)
+- Brand name overlay
+- Tagline overlay
+- Swipe-up affordance hint
+- Heart + Share actions (right side)
+
 ---
 
-### Zone 1: Orientation (Top)
+### State 2: Drawer Open
 
-**Purpose**: Immediate context.
+```
+┌─────────────────────────────────────────┐
+│                                         │
+│    [VIDEO CONTINUES - dimmed 40%]       │
+│                                         │
+│  ┌─────────────────────────────────┐    │
+│  │                                 │    │
+│  │      CATEGORY DRAWER            │    │
+│  │      (slides up from bottom)    │    │
+│  │                                 │    │
+│  │   [🧴 Styling]   [🧴 Shampoo]   │    │
+│  │   [✂️ Grooming]  [🎁 Gift Sets] │    │
+│  │                                 │    │
+│  │   [Find a Barber]               │    │
+│  │                                 │    │
+│  │      ▼ Swipe down to close      │    │
+│  └─────────────────────────────────┘    │
+│                                         │
+└─────────────────────────────────────────┘
+```
 
 **Contents**:
-- Brand or experience name
-- One-line descriptor
-
-**Example**:
-> **WildTrax**
-> Self-drive adventures across the Highlands.
-
-**Rules**:
-- No motion-heavy media
-- No long copy
-- High legibility
-- Instant comprehension
+- Video continues playing (dimmed)
+- Semi-transparent drawer background
+- 3-6 category cards
+- Optional primary CTA
+- Swipe-down to dismiss
 
 ---
 
-### Zone 2: Primary Paths (Middle — Core)
+## Video Requirements
 
-**Purpose**: Convert attention into direction.
+### Duration
+- **Minimum**: 10 seconds
+- **Recommended**: 15-20 seconds
+- **Maximum**: 30 seconds
 
-**Contents**:
-- 3–5 large, tappable paths
-- Each path deep-links to a Child Slyde
+Shorter is better. The video should intrigue, not inform.
 
-**Examples**:
-- Camping
-- Just Drive
-- Vehicles
-- Locations
-- Availability
+### Technical Specs
+- **Aspect ratio**: 9:16 (vertical)
+- **Resolution**: 1080x1920 minimum
+- **Format**: H.264 (MP4) with HLS fallback
+- **File size**: Target under 15MB
+- **Audio**: Optional (muted by default)
 
-**Rules**:
-- No scrolling
-- No nested choices
-- No ambiguity
-- Each option is visually equal
-- This is the dominant visual element
+### Content Guidelines
+- Cinematic, aspirational content
+- Show the brand essence, not product details
+- Movement and energy preferred
+- No text-heavy frames
+- Should work without sound
 
-**This is the heart of the Home Slyde.**
+### Fallback
+- Static poster image (high-quality)
+- Categories visible immediately
+- Graceful degradation, not broken experience
 
 ---
 
-### Zone 3: Optional Primary CTA (Bottom)
+## Drawer Specifications
 
-**Purpose**: Provide a single escape hatch for high-intent users.
+### Trigger
+- **Swipe up** from bottom 20% of screen
+- **Tap** on "Explore" hint text
+- **Auto-reveal** after video plays once (optional setting)
 
-**Examples**:
-- Book now
-- Check availability
-- Start planning
+### Dismiss
+- **Swipe down** on drawer
+- **Tap** outside drawer area
+- **Tap** category (navigates away)
 
-**Rules**:
-- Optional
-- Only include if one action clearly dominates
-- Omit entirely if choices are the primary goal
+### Visual Style
+- Semi-transparent background (black 70% opacity)
+- Backdrop blur (8-12px)
+- Rounded top corners (24px radius)
+- Smooth spring animation (300ms)
+
+### Category Cards
+- 3-6 categories maximum
+- 2-column grid layout
+- Icon + label + optional description
+- Equal visual weight
+- Tappable → navigates to Category Child Slyde
+
+### Primary CTA (Optional)
+- Single full-width button at bottom
+- Only if one action dominates (e.g., "Book Now")
+- Accent color background
 
 ---
 
 ## Interaction Elements
 
-### Heart (Like)
+### Video State (Drawer Closed)
 
-**Included.**
+**Heart (Like)** - Included
+- Brand-level affinity
+- "I like this business"
 
-Meaning:
-- On Home Slyde: brand-level affinity
-- "I like this experience"
+**Share** - Included
+- Share the Home Slyde link
+- Default share destination
 
-Used for:
-- brand engagement signals
-- future retargeting
-- saved destinations
+**Sound Toggle** - Included (if video has audio)
+- Muted by default
+- Tap to unmute
 
----
+**Swipe-Up Hint** - Included
+- Text: "Swipe up to explore" or "↑ Explore"
+- Animated pulse after 2-3 seconds
+- Disappears when drawer opens
 
-### Share
+### Drawer State
 
-**Included.**
+**Category Cards** - Required
+- Each links to a Category Child Slyde
+- Icon + label minimum
+- Optional: brief description
 
-Meaning:
-- "Start here"
-- The default unit for recommendations, QR codes, bio links, and sharing
+**Primary CTA** - Optional
+- "Book Now", "Shop Now", etc.
+- Only if clearly dominant action
 
----
-
-### Explicitly Excluded Interactions
-
-The Home Slyde must not include:
-- comments
-- reactions
-- swipe affordances
-- secondary CTAs
-- analytics overlays
-- immersive transitions
-
-Absence of swipe cues is intentional.
-It reinforces decisiveness.
+**Close Affordance** - Required
+- Drag handle at top of drawer
+- "Swipe down" hint on first visit
 
 ---
 
-## Behavioural Characteristics
+## Behaviour Rules
 
-The Home Slyde should feel:
-- fast
-- confident
-- decisive
-- minimal
+### On Load
+1. Video starts playing immediately (muted)
+2. Brand name + tagline overlay visible
+3. Swipe-up hint appears after 2 seconds
+4. Heart + Share buttons visible
 
-Compared to Child Slydes, it is:
-- less immersive
-- less emotional
-- more directive
+### On Swipe Up
+1. Drawer slides up (spring animation)
+2. Video dims to 40% brightness
+3. Video continues playing
+4. Categories become interactive
 
-Immersion begins only after a path is chosen.
+### On Swipe Down
+1. Drawer slides down
+2. Video returns to full brightness
+3. User returns to video state
 
----
+### On Category Tap
+1. Navigate to Category Child Slyde
+2. Standard slide-from-right transition
+3. Back button returns to Home Slyde
 
-## Visual Tone
-
-The Home Slyde should feel:
-- bold
-- decisive
-- clear
-- fast
-
-Think: **signpost, not cinema**
-
-If the Home Slyde feels immersive, it is wrong.
-
----
-
-## Relationship to Child Slydes
-
-- Child Slydes are immersive
-- Child Slydes tell stories
-- Child Slydes optimise attention
-
-The Home Slyde routes attention.
-It does not attempt to hold it.
+### On Video Loop
+1. Video loops seamlessly
+2. Optional: Auto-reveal drawer after first complete loop
+3. Optional: Dim video slightly on subsequent loops
 
 ---
 
-## Analytics Specific to Home Slyde
+## Analytics
 
 **Metrics that matter**:
 - Home Slyde views
-- Path selection distribution
-- Exit rate before selection
-- Most chosen path
+- Video completion rate (full loop)
+- Drawer open rate
+- Time to drawer open
+- Category selection distribution
+- Exit rate before category selection
 
-**Metrics that do not matter**:
-- swipe depth (there is no swipe)
-- completion rate
-- time spent
-
-The Home Slyde is about choices, not depth.
+**Key insight**: Drawer open rate indicates engagement quality. Low drawer open = video isn't driving curiosity.
 
 ---
 
-## Editorial Rules
+## Accessibility
 
-- The Home Slyde never explains everything
-- It never competes with Child Slydes
-- It never feels like a website
+### Reduced Motion
+- If `prefers-reduced-motion`: Show poster image + categories visible
+- No autoplay video
+- Static, functional experience
 
-If the Home Slyde feels immersive, it is doing too much.
+### Screen Readers
+- Video has descriptive alt text
+- Categories are properly labeled buttons
+- Drawer state announced
+
+### Autoplay Restrictions
+- Video must be muted for autoplay
+- Sound-on requires user interaction
+- Fallback to poster if autoplay blocked
+
+---
+
+## Example: American Crew
+
+### Video Content
+- 15-second cinematic loop
+- Man styling hair in mirror
+- Slow-motion product shots
+- Urban lifestyle B-roll
+- No text overlays in video
+
+### Overlay
+- "American Crew"
+- "Be the man you want to be"
+
+### Categories (Drawer)
+- [🧴 Styling Products]
+- [🧴 Hair Care]
+- [✂️ Grooming]
+- [🎁 Gift Sets]
+
+### Primary CTA
+- [Find a Barber]
+
+---
+
+## Example: Highland Motors
+
+### Video Content
+- 20-second showreel
+- Cars on Highland roads
+- Workshop footage
+- Happy customers
+- Team shots
+
+### Overlay
+- "Highland Motors"
+- "Premium Service, Highland Style"
+
+### Categories (Drawer)
+- [🔧 Services]
+- [🚗 Vehicles]
+- [💰 Offers]
+- [📍 About Us]
+
+### Primary CTA
+- [Book Service]
+
+---
+
+## Technical Implementation Notes
+
+### Video Loading
+1. Show blurred poster immediately
+2. Stream low-quality version first
+3. Progressive enhancement to full quality
+4. Cache aggressively for return visits
+
+### Drawer Animation
+```css
+/* Drawer transition */
+transform: translateY(100%); /* closed */
+transform: translateY(0);    /* open */
+transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
+```
+
+### Video Dimming
+```css
+/* When drawer is open */
+filter: brightness(0.4);
+transition: filter 300ms ease;
+```
+
+### Gesture Detection
+- Swipe up: `deltaY < -50px` from bottom 20%
+- Swipe down: `deltaY > 50px` on drawer
+- Use touch events on mobile, mouse on desktop
 
 ---
 
 ## One-Line Rule
 
-**The Home Slyde is a decision, not an experience.**
+**The Home Slyde is an immersive video that invites exploration.**
+
+Capture attention. Reveal navigation. Route to experiences.
 
 ---
 
@@ -258,3 +355,4 @@ If the Home Slyde feels immersive, it is doing too much.
 
 - [HOME-SLYDE-SYSTEM.md](./HOME-SLYDE-SYSTEM.md) - Why the Home Slyde exists
 - [STRUCTURE.md](./STRUCTURE.md) - The canonical platform hierarchy
+- [CATEGORY-INVENTORY-FLOW.md](./CATEGORY-INVENTORY-FLOW.md) - How categories and inventory work

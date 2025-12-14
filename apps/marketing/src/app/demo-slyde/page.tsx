@@ -12,7 +12,7 @@ import {
   wildtraxBusiness
 } from '@/components/slyde-demo/frameData'
 import type { BusinessInfo, FrameData } from '@/components/slyde-demo/frameData'
-import { demoBrandGradient, readDemoBrandProfile } from '@/lib/demoBrand'
+import { demoBrandGradient, useDemoBrand } from '@/lib/demoBrand'
 
 /**
  * Demo Slyde Page
@@ -53,29 +53,30 @@ function DemoSlydeContent() {
     return { frames: campingFrames, faqs: campingFAQs, title: 'Camping' }
   }, [slydeId])
 
-  const [business, setBusiness] = useState<BusinessInfo>(() => {
-    const profile = readDemoBrandProfile()
-    const accent = demoBrandGradient(profile)
-    return { ...wildtraxBusiness, name: profile.businessName, tagline: profile.tagline, accentColor: accent }
-  })
-  const [brandedFrames, setBrandedFrames] = useState<FrameData[]>(() => {
-    const profile = readDemoBrandProfile()
-    const accent = demoBrandGradient(profile)
-    return frames.map((f) => ({ ...f, accentColor: accent }))
-  })
+  // Live brand sync — reacts to changes from Brand settings page (cross-tab + same-tab)
+  const brandProfile = useDemoBrand()
+  const brandAccent = useMemo(() => demoBrandGradient(brandProfile), [brandProfile])
 
-  // Demo brand → apply to viewer (so Brand page affects the live demo too)
+  const [business, setBusiness] = useState<BusinessInfo>(() => ({
+    ...wildtraxBusiness,
+    name: brandProfile.businessName,
+    tagline: brandProfile.tagline,
+    accentColor: brandAccent,
+  }))
+  const [brandedFrames, setBrandedFrames] = useState<FrameData[]>(() =>
+    frames.map((f) => ({ ...f, accentColor: brandAccent }))
+  )
+
+  // Live brand sync — update business and frames when brand changes
   useEffect(() => {
-    const profile = readDemoBrandProfile()
-    const accent = demoBrandGradient(profile)
     setBusiness((prev) => ({
       ...prev,
-      name: profile.businessName,
-      tagline: profile.tagline,
-      accentColor: accent,
+      name: brandProfile.businessName,
+      tagline: brandProfile.tagline,
+      accentColor: brandAccent,
     }))
-    setBrandedFrames(frames.map((f) => ({ ...f, accentColor: accent })))
-  }, [frames])
+    setBrandedFrames(frames.map((f) => ({ ...f, accentColor: brandAccent })))
+  }, [brandProfile, brandAccent, frames])
 
   return (
     <main className="min-h-screen bg-black flex flex-col items-center justify-center p-8">

@@ -35,10 +35,14 @@ export function readDemoBrandProfile(): DemoBrandProfile {
   }
 }
 
+export const DEMO_BRAND_CHANGE_EVENT = 'slydes_demo_brand_change'
+
 export function writeDemoBrandProfile(profile: DemoBrandProfile) {
   if (typeof window === 'undefined') return
   try {
     window.localStorage.setItem(DEMO_BRAND_STORAGE_KEY, JSON.stringify(profile))
+    // Dispatch custom event for same-tab listeners
+    window.dispatchEvent(new CustomEvent(DEMO_BRAND_CHANGE_EVENT, { detail: profile }))
   } catch {
     // ignore
   }
@@ -48,4 +52,54 @@ export function demoBrandGradient(profile: DemoBrandProfile) {
   return `linear-gradient(135deg, ${profile.primaryColor} 0%, ${profile.secondaryColor} 100%)`
 }
 
+/**
+ * React hook for live brand sync across tabs.
+ * Listens for both:
+ * - `storage` events (cross-tab updates)
+ * - Custom `slydes_demo_brand_change` events (same-tab updates)
+ * 
+ * Usage:
+ * ```tsx
+ * const brand = useDemoBrand()
+ * ```
+ */
+import { useState, useEffect, useCallback } from 'react'
 
+export function useDemoBrand(): DemoBrandProfile {
+  const [brand, setBrand] = useState<DemoBrandProfile>(DEFAULT_DEMO_BRAND)
+
+  // Initialize from localStorage
+  useEffect(() => {
+    setBrand(readDemoBrandProfile())
+  }, [])
+
+  // Listen for changes
+  useEffect(() => {
+    // Handler for cross-tab storage events
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === DEMO_BRAND_STORAGE_KEY) {
+        setBrand(readDemoBrandProfile())
+      }
+    }
+
+    // Handler for same-tab custom events
+    const handleBrandChange = (e: Event) => {
+      const customEvent = e as CustomEvent<DemoBrandProfile>
+      if (customEvent.detail) {
+        setBrand(customEvent.detail)
+      } else {
+        setBrand(readDemoBrandProfile())
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener(DEMO_BRAND_CHANGE_EVENT, handleBrandChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener(DEMO_BRAND_CHANGE_EVENT, handleBrandChange)
+    }
+  }, [])
+
+  return brand
+}
