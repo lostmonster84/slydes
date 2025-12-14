@@ -1,33 +1,19 @@
 {
-  "name": "slydes-website",
+  "name": "slydes",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.87.1",
-    "framer-motion": "^11.5.4",
-    "next": "^16.0.8",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-hook-form": "^7.52.1",
-    "resend": "^4.0.0",
-    "stripe": "^20.0.0"
+    "dev": "turbo dev",
+    "dev:marketing": "turbo dev --filter=@slydes/marketing",
+    "dev:studio": "turbo dev --filter=@slydes/studio",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "clean": "turbo clean && rm -rf node_modules"
   },
   "devDependencies": {
-    "@types/node": "^22.10.1",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^9.15.0",
-    "eslint-config-next": "^16.0.8",
-    "postcss": "^8.4.49",
-    "sharp": "^0.34.5",
-    "tailwindcss": "^3.4.15",
+    "turbo": "^2.3.3",
     "typescript": "^5.7.2"
-  }
+  },
+  "packageManager": "pnpm@9.15.0"
 }

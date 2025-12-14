@@ -1,0 +1,27 @@
+{
+  "name": "@slydes/database",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./client": {
+      "types": "./src/client.ts",
+      "default": "./src/client.ts"
+    }
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@slydes/types": "workspace:*",
+    "@supabase/supabase-js": "^2.87.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
