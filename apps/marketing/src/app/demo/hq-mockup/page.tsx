@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Eye, Heart, TrendingUp, X } from 'lucide-react'
+import { Eye, Heart, TrendingUp, X, Check, Copy, ExternalLink } from 'lucide-react'
 import { HQSidebar } from '@/components/hq/HQSidebar'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -20,7 +20,29 @@ export default function HQMockupPage() {
   const router = useRouter()
   const [plan, setPlan] = useState<'free' | 'creator'>('creator')
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [shareModal, setShareModal] = useState<{ open: boolean; slyde: string; name: string }>({ open: false, slyde: '', name: '' })
+  const [copied, setCopied] = useState(false)
   const demoBusiness = useDemoBusiness()
+
+  // Handle share link copy
+  const handleCopyLink = async () => {
+    const shareUrl = `${window.location.origin}/demo-slyde?slyde=${shareModal.slyde}`
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Fallback for older browsers
+      const input = document.createElement('input')
+      input.value = shareUrl
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand('copy')
+      document.body.removeChild(input)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
 
   // Handle Create Slyde click — gate for Free users with existing Slydes
   const handleCreateSlyde = () => {
@@ -291,12 +313,12 @@ export default function HQMockupPage() {
                       >
                         Preview
                       </Link>
-                      <Link
-                        href="/demo-slyde?slyde=camping"
+                      <button
+                        onClick={() => setShareModal({ open: true, slyde: 'camping', name: 'Camping' })}
                         className="py-2.5 px-4 bg-gray-100 text-gray-800 font-medium text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15 text-center"
                       >
                         Share
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -415,12 +437,12 @@ export default function HQMockupPage() {
                       >
                         Preview
                       </Link>
-                      <Link
-                        href="/demo-slyde?slyde=just-drive"
+                      <button
+                        onClick={() => setShareModal({ open: true, slyde: 'just-drive', name: 'Just Drive' })}
                         className="py-2.5 px-4 bg-gray-100 text-gray-800 font-medium text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15 text-center"
                       >
                         Share
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -523,6 +545,87 @@ export default function HQMockupPage() {
                   className="w-full py-3 px-5 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
                 >
                   Maybe later
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Share Modal */}
+      {shareModal.open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShareModal({ open: false, slyde: '', name: '' })}
+          />
+          
+          {/* Modal */}
+          <div className="relative w-full max-w-md rounded-3xl bg-white shadow-2xl dark:bg-[#2c2c2e] overflow-hidden">
+            {/* Gradient accent */}
+            <div className="h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
+            
+            {/* Close button */}
+            <button
+              onClick={() => setShareModal({ open: false, slyde: '', name: '' })}
+              className="absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100 transition-colors dark:hover:bg-white/10"
+            >
+              <X className="w-5 h-5 text-gray-400 dark:text-white/40" />
+            </button>
+
+            <div className="p-8">
+              {/* Icon */}
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 flex items-center justify-center mb-5 dark:from-blue-500/15 dark:to-cyan-500/15 dark:border-blue-500/20">
+                <ExternalLink className="w-7 h-7 text-blue-600 dark:text-cyan-400" />
+              </div>
+
+              <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white mb-2">
+                Share "{shareModal.name}"
+              </h2>
+              <p className="text-gray-600 dark:text-white/70 mb-6">
+                Copy this link to share your Slyde anywhere.
+              </p>
+
+              {/* Share URL */}
+              <div className="p-4 rounded-xl bg-gray-50 border border-gray-200 mb-6 dark:bg-white/5 dark:border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 font-mono text-sm text-gray-700 dark:text-white/80 truncate">
+                    {typeof window !== 'undefined' ? `${window.location.origin}/demo-slyde?slyde=${shareModal.slyde}` : '...'}
+                  </div>
+                  <button
+                    onClick={handleCopyLink}
+                    className={`shrink-0 p-2 rounded-lg transition-all ${
+                      copied 
+                        ? 'bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400' 
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-white/10 dark:text-white/70 dark:hover:bg-white/15'
+                    }`}
+                  >
+                    {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                  </button>
+                </div>
+                {copied && (
+                  <div className="mt-2 text-xs text-green-600 dark:text-green-400 font-medium">
+                    Link copied to clipboard!
+                  </div>
+                )}
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-3">
+                <Link
+                  href={`/demo-slyde?slyde=${shareModal.slyde}`}
+                  target="_blank"
+                  className="flex-1 py-3 px-5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15 text-center flex items-center justify-center gap-2"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Open Slyde
+                </Link>
+                <button
+                  onClick={() => setShareModal({ open: false, slyde: '', name: '' })}
+                  className="py-3 px-5 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+                >
+                  Done
                 </button>
               </div>
             </div>

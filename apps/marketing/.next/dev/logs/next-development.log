@@ -2300,3 +2300,71 @@ https://react.dev/link/hydration-mismatch
                                       ...
                   ...
 
+[02:08:52.563] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:08:52.708] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/demo/hq-m..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/apps/mark...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
++                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         className="space_grotesk_e2ba2b0c-module__T2VGVa__variable inter_8a594245-module__h1XLeG__va..."
+-                         style={{color-scheme:"dark"}}
+                        >
+                          ...
+                            <DemoLayout>
+                              <script>
+                              <DemoLayout>
+                                <DemoThemeProvider>
+                                  <OuterLayoutRouter>
+                                  <div className="fixed bott...">
+                                    <button
+                                      type="button"
++                                     aria-label="Switch to light mode"
+-                                     aria-label="Switch to dark mode"
+                                      onClick={function onClick}
+                                      className="group flex items-center gap-2 rounded-full border border-gray-200 bg-..."
+                                    >
+                                      <span className="inline-fle...">
+                                        <SunIcon className="w-4 h-4">
+                                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4">
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
++                                             d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.4..."
+-                                             d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"
+                                            >
++                                           <path
++                                             strokeLinecap="round"
++                                             strokeLinejoin="round"
++                                             strokeWidth={2}
++                                             d="M12 8a4 4 0 100 8 4 4 0 000-8z"
++                                           >
+                                      ...
+                  ...
+
