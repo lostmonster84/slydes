@@ -935,6 +935,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 function HQAnalyticsContent() {
     _s();
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const searchParams = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"])();
     const [plan, setPlan] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('creator');
     const [view, setView] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('overview');
@@ -954,12 +955,12 @@ function HQAnalyticsContent() {
                 "aria-hidden": "true"
             }, void 0, false, {
                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                lineNumber: 76,
+                lineNumber: 77,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-            lineNumber: 70,
+            lineNumber: 71,
             columnNumber: 7
         }, this);
     };
@@ -1353,7 +1354,7 @@ function HQAnalyticsContent() {
                         inboxCount: demoBusiness.enquiriesCount
                     }, void 0, false, {
                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                        lineNumber: 300,
+                        lineNumber: 301,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -1369,7 +1370,7 @@ function HQAnalyticsContent() {
                                                 children: "Analytics"
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                lineNumber: 313,
+                                                lineNumber: 314,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1377,13 +1378,13 @@ function HQAnalyticsContent() {
                                                 children: view === 'overview' ? 'Company-wide stats • the full picture' : 'Single-Slyde deep dive • drop-off • actions'
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                lineNumber: 314,
+                                                lineNumber: 315,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                        lineNumber: 312,
+                                        lineNumber: 313,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1406,7 +1407,7 @@ function HQAnalyticsContent() {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                    lineNumber: 321,
+                                                    lineNumber: 322,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1415,7 +1416,7 @@ function HQAnalyticsContent() {
                                                     children: "Overview"
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                    lineNumber: 331,
+                                                    lineNumber: 332,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1424,24 +1425,24 @@ function HQAnalyticsContent() {
                                                     children: "Single Slyde"
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                    lineNumber: 341,
+                                                    lineNumber: 342,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                            lineNumber: 320,
+                                            lineNumber: 321,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                        lineNumber: 318,
+                                        lineNumber: 319,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                lineNumber: 311,
+                                lineNumber: 312,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1454,66 +1455,145 @@ function HQAnalyticsContent() {
                                             !isCreator && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "absolute inset-0 z-20 flex items-start justify-center pt-16",
                                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "w-full max-w-xl rounded-3xl border border-gray-200 bg-white/95 backdrop-blur-xl shadow-xl p-6 dark:border-white/10 dark:bg-[#2c2c2e]/90",
+                                                    className: "w-full max-w-xl rounded-3xl border border-gray-200 bg-white/95 backdrop-blur-xl shadow-xl overflow-hidden dark:border-white/10 dark:bg-[#2c2c2e]/95",
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "text-xs font-semibold text-gray-500 dark:text-white/60",
-                                                            children: "Creator feature"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                            lineNumber: 362,
-                                                            columnNumber: 23
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "mt-1 text-2xl font-bold",
-                                                            children: "Unlock analytics"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                            lineNumber: 363,
-                                                            columnNumber: 23
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "mt-2 text-sm text-gray-600 dark:text-white/70",
-                                                            children: "See swipe depth, completion, and drop-off points — so you know what to fix and what to share more."
+                                                            className: "h-1 bg-gradient-to-r from-blue-600 to-cyan-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
                                                             lineNumber: 364,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "mt-5 flex items-center gap-2",
+                                                            className: "p-8",
                                                             children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                    className: "px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15",
-                                                                    children: "Upgrade to Creator (£25/mo)"
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 flex items-center justify-center mb-5 dark:from-blue-500/15 dark:to-cyan-500/15 dark:border-blue-500/20",
+                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                                        className: "w-7 h-7 text-blue-600 dark:text-cyan-400",
+                                                                        fill: "none",
+                                                                        stroke: "currentColor",
+                                                                        viewBox: "0 0 24 24",
+                                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                                            strokeLinecap: "round",
+                                                                            strokeLinejoin: "round",
+                                                                            strokeWidth: 1.5,
+                                                                            d: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                            lineNumber: 370,
+                                                                            columnNumber: 29
+                                                                        }, this)
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                        lineNumber: 369,
+                                                                        columnNumber: 27
+                                                                    }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
                                                                     lineNumber: 368,
                                                                     columnNumber: 25
                                                                 }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                    className: "px-4 py-2 bg-gray-100 text-gray-800 font-semibold text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15",
-                                                                    children: "Not now"
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "text-2xl font-display font-bold text-gray-900 dark:text-white mb-2",
+                                                                    children: "Analytics are available on Creator"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                    lineNumber: 371,
+                                                                    lineNumber: 374,
+                                                                    columnNumber: 25
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "text-gray-600 dark:text-white/70 mb-6",
+                                                                    children: "See how people swipe, where they drop off, and what works."
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                    lineNumber: 377,
+                                                                    columnNumber: 25
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "p-4 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 mb-6 dark:from-blue-500/10 dark:to-cyan-500/10 dark:border-blue-500/20",
+                                                                    children: [
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                            className: "flex items-baseline gap-2",
+                                                                            children: [
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                    className: "text-2xl font-display font-bold text-gray-900 dark:text-white",
+                                                                                    children: "£25"
+                                                                                }, void 0, false, {
+                                                                                    fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                                    lineNumber: 384,
+                                                                                    columnNumber: 29
+                                                                                }, this),
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                    className: "text-gray-500 dark:text-white/50",
+                                                                                    children: "/month"
+                                                                                }, void 0, false, {
+                                                                                    fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                                    lineNumber: 385,
+                                                                                    columnNumber: 29
+                                                                                }, this)
+                                                                            ]
+                                                                        }, void 0, true, {
+                                                                            fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                            lineNumber: 383,
+                                                                            columnNumber: 27
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                            className: "mt-1 text-sm text-gray-600 dark:text-white/60",
+                                                                            children: "Views • Swipe depth • Completion rate"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                            lineNumber: 387,
+                                                                            columnNumber: 27
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                    lineNumber: 382,
+                                                                    columnNumber: 25
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "flex flex-col gap-3",
+                                                                    children: [
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                                            href: "/demo/hq-settings",
+                                                                            className: "w-full py-3 px-5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15 text-center",
+                                                                            children: "Unlock analytics"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                            lineNumber: 393,
+                                                                            columnNumber: 27
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                            onClick: ()=>router.push('/demo/hq-dashboard'),
+                                                                            className: "w-full py-3 px-5 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15",
+                                                                            children: "Continue without analytics"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                            lineNumber: 399,
+                                                                            columnNumber: 27
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
+                                                                    lineNumber: 392,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                            lineNumber: 367,
+                                                            lineNumber: 366,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                    lineNumber: 361,
+                                                    lineNumber: 362,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                lineNumber: 360,
+                                                lineNumber: 361,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1528,7 +1608,7 @@ function HQAnalyticsContent() {
                                                                     className: "absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                    lineNumber: 385,
+                                                                    lineNumber: 417,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1543,13 +1623,13 @@ function HQAnalyticsContent() {
                                                                                     children: demoBusiness.name
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 388,
+                                                                                    lineNumber: 420,
                                                                                     columnNumber: 43
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                            lineNumber: 387,
+                                                                            lineNumber: 419,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1557,7 +1637,7 @@ function HQAnalyticsContent() {
                                                                             children: "No Slydes yet — nothing to measure."
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                            lineNumber: 390,
+                                                                            lineNumber: 422,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1565,7 +1645,7 @@ function HQAnalyticsContent() {
                                                                             children: "Create a Slyde, publish it, then come back here for drop-off and CTA performance."
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                            lineNumber: 393,
+                                                                            lineNumber: 425,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1588,18 +1668,18 @@ function HQAnalyticsContent() {
                                                                                                 d: "M13 7l5 5m0 0l-5 5m5-5H6"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 403,
+                                                                                                lineNumber: 435,
                                                                                                 columnNumber: 33
                                                                                             }, this)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 402,
+                                                                                            lineNumber: 434,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 397,
+                                                                                    lineNumber: 429,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1608,30 +1688,30 @@ function HQAnalyticsContent() {
                                                                                     children: "See examples"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 406,
+                                                                                    lineNumber: 438,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                            lineNumber: 396,
+                                                                            lineNumber: 428,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                    lineNumber: 386,
+                                                                    lineNumber: 418,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                            lineNumber: 384,
+                                                            lineNumber: 416,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                        lineNumber: 383,
+                                                        lineNumber: 415,
                                                         columnNumber: 21
                                                     }, this),
                                                     isCreator && demoBusiness.hasSlydes && !demoBusiness.hasAnalyticsData && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1643,7 +1723,7 @@ function HQAnalyticsContent() {
                                                                     className: "absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                    lineNumber: 422,
+                                                                    lineNumber: 454,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1658,13 +1738,13 @@ function HQAnalyticsContent() {
                                                                                     children: demoBusiness.name
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 425,
+                                                                                    lineNumber: 457,
                                                                                     columnNumber: 43
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                            lineNumber: 424,
+                                                                            lineNumber: 456,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1672,7 +1752,7 @@ function HQAnalyticsContent() {
                                                                             children: "No data yet."
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                            lineNumber: 427,
+                                                                            lineNumber: 459,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1680,7 +1760,7 @@ function HQAnalyticsContent() {
                                                                             children: "Share your Slyde link and drive a little traffic. This page will populate once people start swiping."
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                            lineNumber: 430,
+                                                                            lineNumber: 462,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1703,18 +1783,18 @@ function HQAnalyticsContent() {
                                                                                                 d: "M13 7l5 5m0 0l-5 5m5-5H6"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 440,
+                                                                                                lineNumber: 472,
                                                                                                 columnNumber: 33
                                                                                             }, this)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 439,
+                                                                                            lineNumber: 471,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 434,
+                                                                                    lineNumber: 466,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1723,30 +1803,30 @@ function HQAnalyticsContent() {
                                                                                     children: "View example"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 443,
+                                                                                    lineNumber: 475,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                            lineNumber: 433,
+                                                                            lineNumber: 465,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                    lineNumber: 423,
+                                                                    lineNumber: 455,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                            lineNumber: 421,
+                                                            lineNumber: 453,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                        lineNumber: 420,
+                                                        lineNumber: 452,
                                                         columnNumber: 21
                                                     }, this),
                                                     demoBusiness.hasSlydes && demoBusiness.hasAnalyticsData && view === 'overview' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1762,7 +1842,7 @@ function HQAnalyticsContent() {
                                                                                 className: "w-2 h-2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 460,
+                                                                                lineNumber: 492,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1776,13 +1856,13 @@ function HQAnalyticsContent() {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 461,
+                                                                                lineNumber: 493,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 459,
+                                                                        lineNumber: 491,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1803,7 +1883,7 @@ function HQAnalyticsContent() {
                                                                                 }
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 467,
+                                                                                lineNumber: 499,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             [
@@ -1816,19 +1896,19 @@ function HQAnalyticsContent() {
                                                                                     children: r
                                                                                 }, r, false, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 478,
+                                                                                    lineNumber: 510,
                                                                                     columnNumber: 29
                                                                                 }, this))
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 466,
+                                                                        lineNumber: 498,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                lineNumber: 458,
+                                                                lineNumber: 490,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1869,7 +1949,7 @@ function HQAnalyticsContent() {
                                                                                         children: m.label
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 526,
+                                                                                        lineNumber: 558,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(InfoButton, {
@@ -1877,13 +1957,13 @@ function HQAnalyticsContent() {
                                                                                         description: m.info
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 527,
+                                                                                        lineNumber: 559,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 525,
+                                                                                lineNumber: 557,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1891,7 +1971,7 @@ function HQAnalyticsContent() {
                                                                                 children: m.value
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 529,
+                                                                                lineNumber: 561,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1899,18 +1979,18 @@ function HQAnalyticsContent() {
                                                                                 children: m.sub
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 530,
+                                                                                lineNumber: 562,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, m.label, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 521,
+                                                                        lineNumber: 553,
                                                                         columnNumber: 27
                                                                     }, this))
                                                             }, void 0, false, {
                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                lineNumber: 494,
+                                                                lineNumber: 526,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1936,17 +2016,17 @@ function HQAnalyticsContent() {
                                                                                                 d: "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 542,
+                                                                                                lineNumber: 574,
                                                                                                 columnNumber: 33
                                                                                             }, this)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 541,
+                                                                                            lineNumber: 573,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 540,
+                                                                                        lineNumber: 572,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1956,7 +2036,7 @@ function HQAnalyticsContent() {
                                                                                                 children: "Traffic sources"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 546,
+                                                                                                lineNumber: 578,
                                                                                                 columnNumber: 31
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1968,19 +2048,19 @@ function HQAnalyticsContent() {
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 547,
+                                                                                                lineNumber: 579,
                                                                                                 columnNumber: 31
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 545,
+                                                                                        lineNumber: 577,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 539,
+                                                                                lineNumber: 571,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1999,7 +2079,7 @@ function HQAnalyticsContent() {
                                                                                                                 children: s.key
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 555,
+                                                                                                                lineNumber: 587,
                                                                                                                 columnNumber: 37
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2007,13 +2087,13 @@ function HQAnalyticsContent() {
                                                                                                                 children: s.value.toLocaleString()
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 556,
+                                                                                                                lineNumber: 588,
                                                                                                                 columnNumber: 37
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 554,
+                                                                                                        lineNumber: 586,
                                                                                                         columnNumber: 35
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2025,18 +2105,18 @@ function HQAnalyticsContent() {
                                                                                                             }
                                                                                                         }, void 0, false, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 559,
+                                                                                                            lineNumber: 591,
                                                                                                             columnNumber: 37
                                                                                                         }, this)
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 558,
+                                                                                                        lineNumber: 590,
                                                                                                         columnNumber: 35
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 553,
+                                                                                                lineNumber: 585,
                                                                                                 columnNumber: 33
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2047,18 +2127,18 @@ function HQAnalyticsContent() {
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 565,
+                                                                                                lineNumber: 597,
                                                                                                 columnNumber: 33
                                                                                             }, this)
                                                                                         ]
                                                                                     }, s.key, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 552,
+                                                                                        lineNumber: 584,
                                                                                         columnNumber: 31
                                                                                     }, this))
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 550,
+                                                                                lineNumber: 582,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2068,18 +2148,18 @@ function HQAnalyticsContent() {
                                                                                     description: "Starts by source (global). Percentages are share of total starts across all Slydes."
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 570,
+                                                                                    lineNumber: 602,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 569,
+                                                                                lineNumber: 601,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 538,
+                                                                        lineNumber: 570,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2102,17 +2182,17 @@ function HQAnalyticsContent() {
                                                                                                 d: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 582,
+                                                                                                lineNumber: 614,
                                                                                                 columnNumber: 33
                                                                                             }, this)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 581,
+                                                                                            lineNumber: 613,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 580,
+                                                                                        lineNumber: 612,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2122,7 +2202,7 @@ function HQAnalyticsContent() {
                                                                                                 children: "Drop-off shape"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 586,
+                                                                                                lineNumber: 618,
                                                                                                 columnNumber: 31
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2130,19 +2210,19 @@ function HQAnalyticsContent() {
                                                                                                 children: "When people leave (all Slydes combined)"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 587,
+                                                                                                lineNumber: 619,
                                                                                                 columnNumber: 31
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 585,
+                                                                                        lineNumber: 617,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 579,
+                                                                                lineNumber: 611,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2165,7 +2245,7 @@ function HQAnalyticsContent() {
                                                                                                                             children: d.stage
                                                                                                                         }, void 0, false, {
                                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                            lineNumber: 597,
+                                                                                                                            lineNumber: 629,
                                                                                                                             columnNumber: 41
                                                                                                                         }, this),
                                                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2177,13 +2257,13 @@ function HQAnalyticsContent() {
                                                                                                                             ]
                                                                                                                         }, void 0, true, {
                                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                            lineNumber: 598,
+                                                                                                                            lineNumber: 630,
                                                                                                                             columnNumber: 41
                                                                                                                         }, this)
                                                                                                                     ]
                                                                                                                 }, void 0, true, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 596,
+                                                                                                                    lineNumber: 628,
                                                                                                                     columnNumber: 39
                                                                                                                 }, this),
                                                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2194,13 +2274,13 @@ function HQAnalyticsContent() {
                                                                                                                     ]
                                                                                                                 }, void 0, true, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 600,
+                                                                                                                    lineNumber: 632,
                                                                                                                     columnNumber: 39
                                                                                                                 }, this)
                                                                                                             ]
                                                                                                         }, void 0, true, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 595,
+                                                                                                            lineNumber: 627,
                                                                                                             columnNumber: 37
                                                                                                         }, this),
                                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2212,23 +2292,23 @@ function HQAnalyticsContent() {
                                                                                                                 }
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 613,
+                                                                                                                lineNumber: 645,
                                                                                                                 columnNumber: 39
                                                                                                             }, this)
                                                                                                         }, void 0, false, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 612,
+                                                                                                            lineNumber: 644,
                                                                                                             columnNumber: 37
                                                                                                         }, this)
                                                                                                     ]
                                                                                                 }, void 0, true, {
                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                    lineNumber: 594,
+                                                                                                    lineNumber: 626,
                                                                                                     columnNumber: 35
                                                                                                 }, this)
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 593,
+                                                                                                lineNumber: 625,
                                                                                                 columnNumber: 33
                                                                                             }, this),
                                                                                             d.topContributors && d.topContributors.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2239,7 +2319,7 @@ function HQAnalyticsContent() {
                                                                                                         children: "Top contributors:"
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 624,
+                                                                                                        lineNumber: 656,
                                                                                                         columnNumber: 37
                                                                                                     }, this),
                                                                                                     d.topContributors.map((c)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2249,7 +2329,7 @@ function HQAnalyticsContent() {
                                                                                                                     children: c.slydeName
                                                                                                                 }, void 0, false, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 630,
+                                                                                                                    lineNumber: 662,
                                                                                                                     columnNumber: 41
                                                                                                                 }, this),
                                                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2260,30 +2340,30 @@ function HQAnalyticsContent() {
                                                                                                                     ]
                                                                                                                 }, void 0, true, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 631,
+                                                                                                                    lineNumber: 663,
                                                                                                                     columnNumber: 41
                                                                                                                 }, this)
                                                                                                             ]
                                                                                                         }, `${d.stage}-${c.slydeName}`, true, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 626,
+                                                                                                            lineNumber: 658,
                                                                                                             columnNumber: 39
                                                                                                         }, this))
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 623,
+                                                                                                lineNumber: 655,
                                                                                                 columnNumber: 35
                                                                                             }, this)
                                                                                         ]
                                                                                     }, d.stage, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 592,
+                                                                                        lineNumber: 624,
                                                                                         columnNumber: 31
                                                                                     }, this))
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 590,
+                                                                                lineNumber: 622,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2291,7 +2371,7 @@ function HQAnalyticsContent() {
                                                                                 children: "% of all drop-offs that occur at each stage"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 639,
+                                                                                lineNumber: 671,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2301,18 +2381,18 @@ function HQAnalyticsContent() {
                                                                                     description: `Stage bars are global. "Top contributors" are ${globalStats.dropoffContributorDefinition}.`
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 643,
+                                                                                    lineNumber: 675,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 642,
+                                                                                lineNumber: 674,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 578,
+                                                                        lineNumber: 610,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2335,17 +2415,17 @@ function HQAnalyticsContent() {
                                                                                                 d: "M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 655,
+                                                                                                lineNumber: 687,
                                                                                                 columnNumber: 33
                                                                                             }, this)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 654,
+                                                                                            lineNumber: 686,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 653,
+                                                                                        lineNumber: 685,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2355,7 +2435,7 @@ function HQAnalyticsContent() {
                                                                                                 children: "CTA performance"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 664,
+                                                                                                lineNumber: 696,
                                                                                                 columnNumber: 31
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2363,19 +2443,19 @@ function HQAnalyticsContent() {
                                                                                                 children: "Clicks by Slyde"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 665,
+                                                                                                lineNumber: 697,
                                                                                                 columnNumber: 31
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 663,
+                                                                                        lineNumber: 695,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 652,
+                                                                                lineNumber: 684,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2388,7 +2468,7 @@ function HQAnalyticsContent() {
                                                                                                 children: s.name
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 673,
+                                                                                                lineNumber: 705,
                                                                                                 columnNumber: 33
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2402,7 +2482,7 @@ function HQAnalyticsContent() {
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 675,
+                                                                                                        lineNumber: 707,
                                                                                                         columnNumber: 35
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2413,24 +2493,24 @@ function HQAnalyticsContent() {
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 676,
+                                                                                                        lineNumber: 708,
                                                                                                         columnNumber: 35
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 674,
+                                                                                                lineNumber: 706,
                                                                                                 columnNumber: 33
                                                                                             }, this)
                                                                                         ]
                                                                                     }, s.id, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 672,
+                                                                                        lineNumber: 704,
                                                                                         columnNumber: 31
                                                                                     }, this))
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 670,
+                                                                                lineNumber: 702,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2441,7 +2521,7 @@ function HQAnalyticsContent() {
                                                                                         children: "Best performing CTA"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 686,
+                                                                                        lineNumber: 718,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2459,7 +2539,7 @@ function HQAnalyticsContent() {
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 689,
+                                                                                                        lineNumber: 721,
                                                                                                         columnNumber: 33
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2472,7 +2552,7 @@ function HQAnalyticsContent() {
                                                                                                                 children: "•"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 693,
+                                                                                                                lineNumber: 725,
                                                                                                                 columnNumber: 67
                                                                                                             }, this),
                                                                                                             " ",
@@ -2480,13 +2560,13 @@ function HQAnalyticsContent() {
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 692,
+                                                                                                        lineNumber: 724,
                                                                                                         columnNumber: 33
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 688,
+                                                                                                lineNumber: 720,
                                                                                                 columnNumber: 31
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2499,19 +2579,19 @@ function HQAnalyticsContent() {
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 696,
+                                                                                                lineNumber: 728,
                                                                                                 columnNumber: 31
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 687,
+                                                                                        lineNumber: 719,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 685,
+                                                                                lineNumber: 717,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2522,7 +2602,7 @@ function HQAnalyticsContent() {
                                                                                         children: "Click rate by traffic source"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 704,
+                                                                                        lineNumber: 736,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2535,7 +2615,7 @@ function HQAnalyticsContent() {
                                                                                                         children: c.source
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 708,
+                                                                                                        lineNumber: 740,
                                                                                                         columnNumber: 35
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2546,24 +2626,24 @@ function HQAnalyticsContent() {
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 709,
+                                                                                                        lineNumber: 741,
                                                                                                         columnNumber: 35
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, c.source, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 707,
+                                                                                                lineNumber: 739,
                                                                                                 columnNumber: 33
                                                                                             }, this))
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 705,
+                                                                                        lineNumber: 737,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 703,
+                                                                                lineNumber: 735,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2573,18 +2653,18 @@ function HQAnalyticsContent() {
                                                                                     description: "Clicks are total CTA taps. Best CTA includes the Slyde + frame where that CTA lives."
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 716,
+                                                                                    lineNumber: 748,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 715,
+                                                                                lineNumber: 747,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 651,
+                                                                        lineNumber: 683,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2607,17 +2687,17 @@ function HQAnalyticsContent() {
                                                                                                 d: "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 728,
+                                                                                                lineNumber: 760,
                                                                                                 columnNumber: 33
                                                                                             }, this)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 727,
+                                                                                            lineNumber: 759,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 726,
+                                                                                        lineNumber: 758,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2627,7 +2707,7 @@ function HQAnalyticsContent() {
                                                                                                 children: "User flow"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 732,
+                                                                                                lineNumber: 764,
                                                                                                 columnNumber: 31
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2635,19 +2715,19 @@ function HQAnalyticsContent() {
                                                                                                 children: "Navigation patterns across all sessions"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 733,
+                                                                                                lineNumber: 765,
                                                                                                 columnNumber: 31
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 731,
+                                                                                        lineNumber: 763,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 725,
+                                                                                lineNumber: 757,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2661,7 +2741,7 @@ function HQAnalyticsContent() {
                                                                                                 children: "Top entry Slyde"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 738,
+                                                                                                lineNumber: 770,
                                                                                                 columnNumber: 31
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2669,13 +2749,13 @@ function HQAnalyticsContent() {
                                                                                                 children: globalStats.flowPatterns.topEntrySlyde
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 739,
+                                                                                                lineNumber: 771,
                                                                                                 columnNumber: 31
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 737,
+                                                                                        lineNumber: 769,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2686,7 +2766,7 @@ function HQAnalyticsContent() {
                                                                                                 children: "Top exit Slyde"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 742,
+                                                                                                lineNumber: 774,
                                                                                                 columnNumber: 31
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2694,13 +2774,13 @@ function HQAnalyticsContent() {
                                                                                                 children: globalStats.flowPatterns.topExitSlyde
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 743,
+                                                                                                lineNumber: 775,
                                                                                                 columnNumber: 31
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 741,
+                                                                                        lineNumber: 773,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2711,7 +2791,7 @@ function HQAnalyticsContent() {
                                                                                                 children: "Most skipped position"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 746,
+                                                                                                lineNumber: 778,
                                                                                                 columnNumber: 31
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2719,13 +2799,13 @@ function HQAnalyticsContent() {
                                                                                                 children: globalStats.flowPatterns.mostSkippedPosition
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 747,
+                                                                                                lineNumber: 779,
                                                                                                 columnNumber: 31
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 745,
+                                                                                        lineNumber: 777,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2736,7 +2816,7 @@ function HQAnalyticsContent() {
                                                                                                 children: "Most revisited position"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 750,
+                                                                                                lineNumber: 782,
                                                                                                 columnNumber: 31
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2744,19 +2824,19 @@ function HQAnalyticsContent() {
                                                                                                 children: globalStats.flowPatterns.mostRevisitedPosition
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 751,
+                                                                                                lineNumber: 783,
                                                                                                 columnNumber: 31
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 749,
+                                                                                        lineNumber: 781,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 736,
+                                                                                lineNumber: 768,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2767,7 +2847,7 @@ function HQAnalyticsContent() {
                                                                                         children: "Avg frames per session"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 755,
+                                                                                        lineNumber: 787,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2775,13 +2855,13 @@ function HQAnalyticsContent() {
                                                                                         children: globalStats.flowPatterns.avgFramesViewed
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 756,
+                                                                                        lineNumber: 788,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 754,
+                                                                                lineNumber: 786,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2792,7 +2872,7 @@ function HQAnalyticsContent() {
                                                                                         children: "Typical journey"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 759,
+                                                                                        lineNumber: 791,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2805,7 +2885,7 @@ function HQAnalyticsContent() {
                                                                                                         children: step
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 763,
+                                                                                                        lineNumber: 795,
                                                                                                         columnNumber: 35
                                                                                                     }, this),
                                                                                                     i < arr.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2813,24 +2893,24 @@ function HQAnalyticsContent() {
                                                                                                         children: "→"
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 764,
+                                                                                                        lineNumber: 796,
                                                                                                         columnNumber: 58
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, step, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 762,
+                                                                                                lineNumber: 794,
                                                                                                 columnNumber: 33
                                                                                             }, this))
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 760,
+                                                                                        lineNumber: 792,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 758,
+                                                                                lineNumber: 790,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2840,24 +2920,24 @@ function HQAnalyticsContent() {
                                                                                     description: "High-level navigation patterns (aggregate). No individual journeys."
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 771,
+                                                                                    lineNumber: 803,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 770,
+                                                                                lineNumber: 802,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 724,
+                                                                        lineNumber: 756,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                lineNumber: 536,
+                                                                lineNumber: 568,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2865,13 +2945,13 @@ function HQAnalyticsContent() {
                                                                 children: "Tip: Switch to Single Slyde for deep-dive forensics on drop-off and CTA performance."
                                                             }, void 0, false, {
                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                lineNumber: 780,
+                                                                lineNumber: 812,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                        lineNumber: 456,
+                                                        lineNumber: 488,
                                                         columnNumber: 21
                                                     }, this),
                                                     demoBusiness.hasSlydes && demoBusiness.hasAnalyticsData && view === 'slyde' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -2887,7 +2967,7 @@ function HQAnalyticsContent() {
                                                                                 children: "Viewing"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 791,
+                                                                                lineNumber: 823,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2903,20 +2983,20 @@ function HQAnalyticsContent() {
                                                                                                 children: currentSlyde.name
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 798,
+                                                                                                lineNumber: 830,
                                                                                                 columnNumber: 27
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$561$2e$0_react$40$18$2e$3$2e$1$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {
                                                                                                 className: `w-4 h-4 text-gray-400 dark:text-white/50 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 799,
+                                                                                                lineNumber: 831,
                                                                                                 columnNumber: 27
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 793,
+                                                                                        lineNumber: 825,
                                                                                         columnNumber: 25
                                                                                     }, this),
                                                                                     dropdownOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -2926,7 +3006,7 @@ function HQAnalyticsContent() {
                                                                                                 onClick: ()=>setDropdownOpen(false)
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 805,
+                                                                                                lineNumber: 837,
                                                                                                 columnNumber: 29
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2947,7 +3027,7 @@ function HQAnalyticsContent() {
                                                                                                                             children: s.name
                                                                                                                         }, void 0, false, {
                                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                            lineNumber: 822,
+                                                                                                                            lineNumber: 854,
                                                                                                                             columnNumber: 39
                                                                                                                         }, this),
                                                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2958,13 +3038,13 @@ function HQAnalyticsContent() {
                                                                                                                             ]
                                                                                                                         }, void 0, true, {
                                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                            lineNumber: 829,
+                                                                                                                            lineNumber: 861,
                                                                                                                             columnNumber: 39
                                                                                                                         }, this)
                                                                                                                     ]
                                                                                                                 }, void 0, true, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 821,
+                                                                                                                    lineNumber: 853,
                                                                                                                     columnNumber: 37
                                                                                                                 }, this),
                                                                                                                 selectedSlyde === s.id && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -2977,28 +3057,28 @@ function HQAnalyticsContent() {
                                                                                                                         clipRule: "evenodd"
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 835,
+                                                                                                                        lineNumber: 867,
                                                                                                                         columnNumber: 41
                                                                                                                     }, this)
                                                                                                                 }, void 0, false, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 834,
+                                                                                                                    lineNumber: 866,
                                                                                                                     columnNumber: 39
                                                                                                                 }, this)
                                                                                                             ]
                                                                                                         }, void 0, true, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 820,
+                                                                                                            lineNumber: 852,
                                                                                                             columnNumber: 35
                                                                                                         }, this)
                                                                                                     }, s.id, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 808,
+                                                                                                        lineNumber: 840,
                                                                                                         columnNumber: 33
                                                                                                     }, this))
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 806,
+                                                                                                lineNumber: 838,
                                                                                                 columnNumber: 29
                                                                                             }, this)
                                                                                         ]
@@ -3006,13 +3086,13 @@ function HQAnalyticsContent() {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 792,
+                                                                                lineNumber: 824,
                                                                                 columnNumber: 23
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 790,
+                                                                        lineNumber: 822,
                                                                         columnNumber: 21
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3026,7 +3106,7 @@ function HQAnalyticsContent() {
                                                                                 children: "Compare"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 853,
+                                                                                lineNumber: 885,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3047,7 +3127,7 @@ function HQAnalyticsContent() {
                                                                                         }
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 867,
+                                                                                        lineNumber: 899,
                                                                                         columnNumber: 25
                                                                                     }, this),
                                                                                     [
@@ -3060,25 +3140,25 @@ function HQAnalyticsContent() {
                                                                                             children: r.toUpperCase()
                                                                                         }, r, false, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 878,
+                                                                                            lineNumber: 910,
                                                                                             columnNumber: 27
                                                                                         }, this))
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 865,
+                                                                                lineNumber: 897,
                                                                                 columnNumber: 23
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 852,
+                                                                        lineNumber: 884,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                lineNumber: 789,
+                                                                lineNumber: 821,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3131,7 +3211,7 @@ function HQAnalyticsContent() {
                                                                                         children: m.label
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 909,
+                                                                                        lineNumber: 941,
                                                                                         columnNumber: 27
                                                                                     }, this),
                                                                                     compare && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3141,13 +3221,13 @@ function HQAnalyticsContent() {
                                                                                                 className: "w-3 h-3"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 916,
+                                                                                                lineNumber: 948,
                                                                                                 columnNumber: 46
                                                                                             }, this) : m.delta < 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$561$2e$0_react$40$18$2e$3$2e$1$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingDown$3e$__["TrendingDown"], {
                                                                                                 className: "w-3 h-3"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 916,
+                                                                                                lineNumber: 948,
                                                                                                 columnNumber: 97
                                                                                             }, this) : null,
                                                                                             m.delta > 0 ? '+' : '',
@@ -3155,13 +3235,13 @@ function HQAnalyticsContent() {
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 911,
+                                                                                        lineNumber: 943,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 908,
+                                                                                lineNumber: 940,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3169,7 +3249,7 @@ function HQAnalyticsContent() {
                                                                                 children: m.value
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 922,
+                                                                                lineNumber: 954,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3177,18 +3257,18 @@ function HQAnalyticsContent() {
                                                                                 children: m.sub
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 923,
+                                                                                lineNumber: 955,
                                                                                 columnNumber: 25
                                                                             }, this)
                                                                         ]
                                                                     }, m.label, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 904,
+                                                                        lineNumber: 936,
                                                                         columnNumber: 23
                                                                     }, this))
                                                             }, void 0, false, {
                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                lineNumber: 895,
+                                                                lineNumber: 927,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3216,17 +3296,17 @@ function HQAnalyticsContent() {
                                                                                                     d: "M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
                                                                                                 }, void 0, false, {
                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                    lineNumber: 936,
+                                                                                                    lineNumber: 968,
                                                                                                     columnNumber: 31
                                                                                                 }, this)
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 935,
+                                                                                                lineNumber: 967,
                                                                                                 columnNumber: 29
                                                                                             }, this)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 934,
+                                                                                            lineNumber: 966,
                                                                                             columnNumber: 27
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3236,7 +3316,7 @@ function HQAnalyticsContent() {
                                                                                                     children: "Where people leave"
                                                                                                 }, void 0, false, {
                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                    lineNumber: 940,
+                                                                                                    lineNumber: 972,
                                                                                                     columnNumber: 29
                                                                                                 }, this),
                                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3244,24 +3324,24 @@ function HQAnalyticsContent() {
                                                                                                     children: "Reach % by frame"
                                                                                                 }, void 0, false, {
                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                    lineNumber: 941,
+                                                                                                    lineNumber: 973,
                                                                                                     columnNumber: 29
                                                                                                 }, this)
                                                                                             ]
                                                                                         }, void 0, true, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 939,
+                                                                                            lineNumber: 971,
                                                                                             columnNumber: 27
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                    lineNumber: 933,
+                                                                                    lineNumber: 965,
                                                                                     columnNumber: 25
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 932,
+                                                                                lineNumber: 964,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3282,7 +3362,7 @@ function HQAnalyticsContent() {
                                                                                                                     children: f.label
                                                                                                                 }, void 0, false, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 952,
+                                                                                                                    lineNumber: 984,
                                                                                                                     columnNumber: 35
                                                                                                                 }, this),
                                                                                                                 isBiggestDrop && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3290,13 +3370,13 @@ function HQAnalyticsContent() {
                                                                                                                     children: "Biggest drop"
                                                                                                                 }, void 0, false, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 954,
+                                                                                                                    lineNumber: 986,
                                                                                                                     columnNumber: 38
                                                                                                                 }, this)
                                                                                                             ]
                                                                                                         }, void 0, true, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 951,
+                                                                                                            lineNumber: 983,
                                                                                                             columnNumber: 33
                                                                                                         }, this),
                                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3311,7 +3391,7 @@ function HQAnalyticsContent() {
                                                                                                                     ]
                                                                                                                 }, void 0, true, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 961,
+                                                                                                                    lineNumber: 993,
                                                                                                                     columnNumber: 37
                                                                                                                 }, this),
                                                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3322,19 +3402,19 @@ function HQAnalyticsContent() {
                                                                                                                     ]
                                                                                                                 }, void 0, true, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 973,
+                                                                                                                    lineNumber: 1005,
                                                                                                                     columnNumber: 35
                                                                                                                 }, this)
                                                                                                             ]
                                                                                                         }, void 0, true, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 959,
+                                                                                                            lineNumber: 991,
                                                                                                             columnNumber: 33
                                                                                                         }, this)
                                                                                                     ]
                                                                                                 }, void 0, true, {
                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                    lineNumber: 950,
+                                                                                                    lineNumber: 982,
                                                                                                     columnNumber: 31
                                                                                                 }, this),
                                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3346,18 +3426,18 @@ function HQAnalyticsContent() {
                                                                                                         }
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 977,
+                                                                                                        lineNumber: 1009,
                                                                                                         columnNumber: 33
                                                                                                     }, this)
                                                                                                 }, void 0, false, {
                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                    lineNumber: 976,
+                                                                                                    lineNumber: 1008,
                                                                                                     columnNumber: 31
                                                                                                 }, this)
                                                                                             ]
                                                                                         }, f.label, true, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 949,
+                                                                                            lineNumber: 981,
                                                                                             columnNumber: 29
                                                                                         }, this);
                                                                                     }),
@@ -3380,19 +3460,19 @@ function HQAnalyticsContent() {
                                                                                                                             className: "w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400"
                                                                                                                         }, void 0, false, {
                                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                            lineNumber: 993,
+                                                                                                                            lineNumber: 1025,
                                                                                                                             columnNumber: 38
                                                                                                                         }, this),
                                                                                                                         "Focus"
                                                                                                                     ]
                                                                                                                 }, void 0, true, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 992,
+                                                                                                                    lineNumber: 1024,
                                                                                                                     columnNumber: 36
                                                                                                                 }, this)
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 991,
+                                                                                                                lineNumber: 1023,
                                                                                                                 columnNumber: 33
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3403,7 +3483,7 @@ function HQAnalyticsContent() {
                                                                                                                         children: currentSlyde.biggestDrop.frame
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 998,
+                                                                                                                        lineNumber: 1030,
                                                                                                                         columnNumber: 35
                                                                                                                     }, this),
                                                                                                                     " is losing",
@@ -3416,7 +3496,7 @@ function HQAnalyticsContent() {
                                                                                                                         ]
                                                                                                                     }, void 0, true, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 999,
+                                                                                                                        lineNumber: 1031,
                                                                                                                         columnNumber: 36
                                                                                                                     }, this),
                                                                                                                     ' ',
@@ -3424,13 +3504,13 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 997,
+                                                                                                                lineNumber: 1029,
                                                                                                                 columnNumber: 33
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 990,
+                                                                                                        lineNumber: 1022,
                                                                                                         columnNumber: 31
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -3450,46 +3530,46 @@ function HQAnalyticsContent() {
                                                                                                                     d: "M13 7l5 5m0 0l-5 5m5-5H6"
                                                                                                                 }, void 0, false, {
                                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                    lineNumber: 1009,
+                                                                                                                    lineNumber: 1041,
                                                                                                                     columnNumber: 35
                                                                                                                 }, this)
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1008,
+                                                                                                                lineNumber: 1040,
                                                                                                                 columnNumber: 33
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1003,
+                                                                                                        lineNumber: 1035,
                                                                                                         columnNumber: 31
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 989,
+                                                                                                lineNumber: 1021,
                                                                                                 columnNumber: 29
                                                                                             }, this)
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 988,
+                                                                                            lineNumber: 1020,
                                                                                             columnNumber: 27
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 987,
+                                                                                        lineNumber: 1019,
                                                                                         columnNumber: 26
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 945,
+                                                                                lineNumber: 977,
                                                                                 columnNumber: 23
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 931,
+                                                                        lineNumber: 963,
                                                                         columnNumber: 22
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3517,17 +3597,17 @@ function HQAnalyticsContent() {
                                                                                                             d: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                                                                                                         }, void 0, false, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 1026,
+                                                                                                            lineNumber: 1058,
                                                                                                             columnNumber: 33
                                                                                                         }, this)
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1025,
+                                                                                                        lineNumber: 1057,
                                                                                                         columnNumber: 31
                                                                                                     }, this)
                                                                                                 }, void 0, false, {
                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                    lineNumber: 1024,
+                                                                                                    lineNumber: 1056,
                                                                                                     columnNumber: 29
                                                                                                 }, this),
                                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3537,7 +3617,7 @@ function HQAnalyticsContent() {
                                                                                                             children: "This week vs last"
                                                                                                         }, void 0, false, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 1030,
+                                                                                                            lineNumber: 1062,
                                                                                                             columnNumber: 31
                                                                                                         }, this),
                                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3545,24 +3625,24 @@ function HQAnalyticsContent() {
                                                                                                             children: "Is it getting better?"
                                                                                                         }, void 0, false, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 1031,
+                                                                                                            lineNumber: 1063,
                                                                                                             columnNumber: 31
                                                                                                         }, this)
                                                                                                     ]
                                                                                                 }, void 0, true, {
                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                    lineNumber: 1029,
+                                                                                                    lineNumber: 1061,
                                                                                                     columnNumber: 29
                                                                                                 }, this)
                                                                                             ]
                                                                                         }, void 0, true, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 1023,
+                                                                                            lineNumber: 1055,
                                                                                             columnNumber: 27
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 1022,
+                                                                                        lineNumber: 1054,
                                                                                         columnNumber: 25
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3576,7 +3656,7 @@ function HQAnalyticsContent() {
                                                                                                         children: "Completion"
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1038,
+                                                                                                        lineNumber: 1070,
                                                                                                         columnNumber: 29
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3590,7 +3670,7 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1040,
+                                                                                                                lineNumber: 1072,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3598,7 +3678,7 @@ function HQAnalyticsContent() {
                                                                                                                 children: "→"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1043,
+                                                                                                                lineNumber: 1075,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3609,7 +3689,7 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1044,
+                                                                                                                lineNumber: 1076,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             currentSlyde.historical.completion.current > currentSlyde.historical.completion.previous ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3621,7 +3701,7 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1048,
+                                                                                                                lineNumber: 1080,
                                                                                                                 columnNumber: 33
                                                                                                             }, this) : currentSlyde.historical.completion.current < currentSlyde.historical.completion.previous ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                                                 className: "text-xs font-semibold text-rose-600 dark:text-rose-400",
@@ -3631,26 +3711,26 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1052,
+                                                                                                                lineNumber: 1084,
                                                                                                                 columnNumber: 33
                                                                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                                                 className: "text-xs text-gray-400",
                                                                                                                 children: "—"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1056,
+                                                                                                                lineNumber: 1088,
                                                                                                                 columnNumber: 33
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1039,
+                                                                                                        lineNumber: 1071,
                                                                                                         columnNumber: 29
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 1037,
+                                                                                                lineNumber: 1069,
                                                                                                 columnNumber: 27
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3661,7 +3741,7 @@ function HQAnalyticsContent() {
                                                                                                         children: "Biggest leak"
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1062,
+                                                                                                        lineNumber: 1094,
                                                                                                         columnNumber: 29
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3672,7 +3752,7 @@ function HQAnalyticsContent() {
                                                                                                                 children: currentSlyde.historical.dropFrame.previous
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1064,
+                                                                                                                lineNumber: 1096,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3680,7 +3760,7 @@ function HQAnalyticsContent() {
                                                                                                                 children: "→"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1065,
+                                                                                                                lineNumber: 1097,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3688,7 +3768,7 @@ function HQAnalyticsContent() {
                                                                                                                 children: currentSlyde.historical.dropFrame.current
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1066,
+                                                                                                                lineNumber: 1098,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             currentSlyde.historical.dropFrame.current === currentSlyde.historical.dropFrame.previous && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3696,19 +3776,19 @@ function HQAnalyticsContent() {
                                                                                                                 children: "(same)"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1068,
+                                                                                                                lineNumber: 1100,
                                                                                                                 columnNumber: 34
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1063,
+                                                                                                        lineNumber: 1095,
                                                                                                         columnNumber: 29
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 1061,
+                                                                                                lineNumber: 1093,
                                                                                                 columnNumber: 27
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3719,7 +3799,7 @@ function HQAnalyticsContent() {
                                                                                                         children: "CTA clicks"
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1074,
+                                                                                                        lineNumber: 1106,
                                                                                                         columnNumber: 29
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3733,7 +3813,7 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1076,
+                                                                                                                lineNumber: 1108,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3741,7 +3821,7 @@ function HQAnalyticsContent() {
                                                                                                                 children: "→"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1077,
+                                                                                                                lineNumber: 1109,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3752,7 +3832,7 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1078,
+                                                                                                                lineNumber: 1110,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             currentSlyde.historical.ctaRate.current > currentSlyde.historical.ctaRate.previous ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3764,7 +3844,7 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1082,
+                                                                                                                lineNumber: 1114,
                                                                                                                 columnNumber: 33
                                                                                                             }, this) : currentSlyde.historical.ctaRate.current < currentSlyde.historical.ctaRate.previous ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                                                 className: "text-xs font-semibold text-rose-600 dark:text-rose-400",
@@ -3774,38 +3854,38 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1086,
+                                                                                                                lineNumber: 1118,
                                                                                                                 columnNumber: 33
                                                                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                                                 className: "text-xs text-gray-400",
                                                                                                                 children: "—"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1090,
+                                                                                                                lineNumber: 1122,
                                                                                                                 columnNumber: 33
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1075,
+                                                                                                        lineNumber: 1107,
                                                                                                         columnNumber: 29
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 1073,
+                                                                                                lineNumber: 1105,
                                                                                                 columnNumber: 27
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 1035,
+                                                                                        lineNumber: 1067,
                                                                                         columnNumber: 25
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 1021,
+                                                                                lineNumber: 1053,
                                                                                 columnNumber: 23
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3831,7 +3911,7 @@ function HQAnalyticsContent() {
                                                                                                                 d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1103,
+                                                                                                                lineNumber: 1135,
                                                                                                                 columnNumber: 33
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -3841,18 +3921,18 @@ function HQAnalyticsContent() {
                                                                                                                 d: "M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1104,
+                                                                                                                lineNumber: 1136,
                                                                                                                 columnNumber: 33
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1102,
+                                                                                                        lineNumber: 1134,
                                                                                                         columnNumber: 31
                                                                                                     }, this)
                                                                                                 }, void 0, false, {
                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                    lineNumber: 1101,
+                                                                                                    lineNumber: 1133,
                                                                                                     columnNumber: 29
                                                                                                 }, this),
                                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3862,7 +3942,7 @@ function HQAnalyticsContent() {
                                                                                                             children: "Engagement breakdown"
                                                                                                         }, void 0, false, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 1108,
+                                                                                                            lineNumber: 1140,
                                                                                                             columnNumber: 31
                                                                                                         }, this),
                                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3870,24 +3950,24 @@ function HQAnalyticsContent() {
                                                                                                             children: "Deep metrics"
                                                                                                         }, void 0, false, {
                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                            lineNumber: 1109,
+                                                                                                            lineNumber: 1141,
                                                                                                             columnNumber: 31
                                                                                                         }, this)
                                                                                                     ]
                                                                                                 }, void 0, true, {
                                                                                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                    lineNumber: 1107,
+                                                                                                    lineNumber: 1139,
                                                                                                     columnNumber: 29
                                                                                                 }, this)
                                                                                             ]
                                                                                         }, void 0, true, {
                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                            lineNumber: 1100,
+                                                                                            lineNumber: 1132,
                                                                                             columnNumber: 27
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 1099,
+                                                                                        lineNumber: 1131,
                                                                                         columnNumber: 25
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3906,7 +3986,7 @@ function HQAnalyticsContent() {
                                                                                                                         className: "w-3.5 h-3.5 text-gray-400 dark:text-white/40"
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 1117,
+                                                                                                                        lineNumber: 1149,
                                                                                                                         columnNumber: 33
                                                                                                                     }, this),
                                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3914,13 +3994,13 @@ function HQAnalyticsContent() {
                                                                                                                         children: "Avg time/frame"
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 1118,
+                                                                                                                        lineNumber: 1150,
                                                                                                                         columnNumber: 33
                                                                                                                     }, this)
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1116,
+                                                                                                                lineNumber: 1148,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3931,13 +4011,13 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1120,
+                                                                                                                lineNumber: 1152,
                                                                                                                 columnNumber: 31
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1115,
+                                                                                                        lineNumber: 1147,
                                                                                                         columnNumber: 29
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3950,7 +4030,7 @@ function HQAnalyticsContent() {
                                                                                                                         className: "w-3.5 h-3.5 text-gray-400 dark:text-white/40"
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 1124,
+                                                                                                                        lineNumber: 1156,
                                                                                                                         columnNumber: 33
                                                                                                                     }, this),
                                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3958,13 +4038,13 @@ function HQAnalyticsContent() {
                                                                                                                         children: "Most revisited"
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 1125,
+                                                                                                                        lineNumber: 1157,
                                                                                                                         columnNumber: 33
                                                                                                                     }, this)
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1123,
+                                                                                                                lineNumber: 1155,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3972,19 +4052,19 @@ function HQAnalyticsContent() {
                                                                                                                 children: currentSlyde.mostRevisitedFrame
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1127,
+                                                                                                                lineNumber: 1159,
                                                                                                                 columnNumber: 31
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1122,
+                                                                                                        lineNumber: 1154,
                                                                                                         columnNumber: 29
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 1114,
+                                                                                                lineNumber: 1146,
                                                                                                 columnNumber: 27
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3997,7 +4077,7 @@ function HQAnalyticsContent() {
                                                                                                                 className: "w-3.5 h-3.5 text-blue-600 dark:text-cyan-400"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1134,
+                                                                                                                lineNumber: 1166,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4005,13 +4085,13 @@ function HQAnalyticsContent() {
                                                                                                                 children: "Best CTA"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1135,
+                                                                                                                lineNumber: 1167,
                                                                                                                 columnNumber: 31
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1133,
+                                                                                                        lineNumber: 1165,
                                                                                                         columnNumber: 29
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4028,7 +4108,7 @@ function HQAnalyticsContent() {
                                                                                                                         ]
                                                                                                                     }, void 0, true, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 1139,
+                                                                                                                        lineNumber: 1171,
                                                                                                                         columnNumber: 33
                                                                                                                     }, this),
                                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4036,13 +4116,13 @@ function HQAnalyticsContent() {
                                                                                                                         children: currentSlyde.bestCta.frame
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 1140,
+                                                                                                                        lineNumber: 1172,
                                                                                                                         columnNumber: 33
                                                                                                                     }, this)
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1138,
+                                                                                                                lineNumber: 1170,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4053,19 +4133,19 @@ function HQAnalyticsContent() {
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1142,
+                                                                                                                lineNumber: 1174,
                                                                                                                 columnNumber: 31
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1137,
+                                                                                                        lineNumber: 1169,
                                                                                                         columnNumber: 29
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 1132,
+                                                                                                lineNumber: 1164,
                                                                                                 columnNumber: 27
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4077,7 +4157,7 @@ function HQAnalyticsContent() {
                                                                                                                 className: "w-3.5 h-3.5 text-gray-400 dark:text-white/40"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1149,
+                                                                                                                lineNumber: 1181,
                                                                                                                 columnNumber: 31
                                                                                                             }, this),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4085,13 +4165,13 @@ function HQAnalyticsContent() {
                                                                                                                 children: "Traffic sources"
                                                                                                             }, void 0, false, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1150,
+                                                                                                                lineNumber: 1182,
                                                                                                                 columnNumber: 31
                                                                                                             }, this)
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1148,
+                                                                                                        lineNumber: 1180,
                                                                                                         columnNumber: 29
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4108,12 +4188,12 @@ function HQAnalyticsContent() {
                                                                                                                             }
                                                                                                                         }, void 0, false, {
                                                                                                                             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                            lineNumber: 1156,
+                                                                                                                            lineNumber: 1188,
                                                                                                                             columnNumber: 37
                                                                                                                         }, this)
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 1155,
+                                                                                                                        lineNumber: 1187,
                                                                                                                         columnNumber: 35
                                                                                                                     }, this),
                                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4121,7 +4201,7 @@ function HQAnalyticsContent() {
                                                                                                                         children: t.source
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 1161,
+                                                                                                                        lineNumber: 1193,
                                                                                                                         columnNumber: 35
                                                                                                                     }, this),
                                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4132,48 +4212,48 @@ function HQAnalyticsContent() {
                                                                                                                         ]
                                                                                                                     }, void 0, true, {
                                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                        lineNumber: 1162,
+                                                                                                                        lineNumber: 1194,
                                                                                                                         columnNumber: 35
                                                                                                                     }, this)
                                                                                                                 ]
                                                                                                             }, t.source, true, {
                                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                                lineNumber: 1154,
+                                                                                                                lineNumber: 1186,
                                                                                                                 columnNumber: 33
                                                                                                             }, this))
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                        lineNumber: 1152,
+                                                                                                        lineNumber: 1184,
                                                                                                         columnNumber: 29
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                                lineNumber: 1147,
+                                                                                                lineNumber: 1179,
                                                                                                 columnNumber: 27
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                        lineNumber: 1113,
+                                                                                        lineNumber: 1145,
                                                                                         columnNumber: 25
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                                lineNumber: 1098,
+                                                                                lineNumber: 1130,
                                                                                 columnNumber: 23
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                        lineNumber: 1019,
+                                                                        lineNumber: 1051,
                                                                         columnNumber: 21
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                lineNumber: 929,
+                                                                lineNumber: 961,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4181,7 +4261,7 @@ function HQAnalyticsContent() {
                                                                 children: "Tip: Switch to Overview for company-wide stats, or stay here for single-Slyde forensics."
                                                             }, void 0, false, {
                                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                                lineNumber: 1173,
+                                                                lineNumber: 1205,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
@@ -4189,60 +4269,61 @@ function HQAnalyticsContent() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                                lineNumber: 380,
+                                                lineNumber: 412,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                        lineNumber: 357,
+                                        lineNumber: 358,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                    lineNumber: 356,
+                                    lineNumber: 357,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                                lineNumber: 355,
+                                lineNumber: 356,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                        lineNumber: 309,
+                        lineNumber: 310,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                lineNumber: 298,
+                lineNumber: 299,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "fixed top-0 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[180px] pointer-events-none dark:bg-blue-500/12"
             }, void 0, false, {
                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                lineNumber: 1186,
+                lineNumber: 1218,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "fixed bottom-0 right-1/4 w-[520px] h-[520px] bg-cyan-500/10 rounded-full blur-[180px] pointer-events-none dark:bg-cyan-500/12"
             }, void 0, false, {
                 fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-                lineNumber: 1187,
+                lineNumber: 1219,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-        lineNumber: 297,
+        lineNumber: 298,
         columnNumber: 5
     }, this);
 }
-_s(HQAnalyticsContent, "35SNvUx426UfXExYKi7ChWb/9L8=", false, function() {
+_s(HQAnalyticsContent, "w1oZ64DMU5UwWItZp2EKDY5j1lQ=", false, function() {
     return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"],
         __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$marketing$2f$src$2f$lib$2f$demoBusiness$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useDemoBusiness"]
     ];
@@ -4254,17 +4335,17 @@ function HQAnalyticsPage() {
             className: "min-h-screen bg-gray-50 dark:bg-[#1c1c1e]"
         }, void 0, false, {
             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-            lineNumber: 1194,
+            lineNumber: 1226,
             columnNumber: 25
         }, void 0),
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_$40$babel$2b$core$40$7$2e$28$2e$5_react$2d$dom$40$18$2e$3$2e$1_react$40$18$2e$3$2e$1_$5f$react$40$18$2e$3$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(HQAnalyticsContent, {}, void 0, false, {
             fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-            lineNumber: 1195,
+            lineNumber: 1227,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/apps/marketing/src/app/demo/hq-analytics/page.tsx",
-        lineNumber: 1194,
+        lineNumber: 1226,
         columnNumber: 5
     }, this);
 }

@@ -1312,6 +1312,14 @@ p {
   margin-left: -.25rem;
 }
 
+.ml-10 {
+  margin-left: 2.5rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
 .line-clamp-1 {
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -1364,6 +1372,10 @@ p {
 
 .aspect-square {
   aspect-ratio: 1;
+}
+
+.aspect-\[4\/3\] {
+  aspect-ratio: 4 / 3;
 }
 
 .h-0\.5 {
@@ -4577,6 +4589,10 @@ p {
   padding-bottom: 1.25rem;
 }
 
+.pt-10 {
+  padding-top: 2.5rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -6377,6 +6393,10 @@ html {
 .dark\:bg-\[\#48484a\]:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(72 72 74 / var(--tw-bg-opacity, 1));
+}
+
+.dark\:bg-\[\#2c2c2e\]\/95:is(.dark *) {
+  background-color: #2c2c2ef2;
 }
 
 .dark\:from-\[\#2c2c2e\]:is(.dark *) {

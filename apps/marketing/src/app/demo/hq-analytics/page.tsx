@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { ChevronDown, TrendingUp, TrendingDown, Clock, MousePointer, Share2, MapPin, Info } from 'lucide-react'
 import { HQSidebar } from '@/components/hq/HQSidebar'
@@ -56,6 +56,7 @@ interface SlydeData {
 }
 
 function HQAnalyticsContent() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const [plan, setPlan] = useState<'free' | 'creator'>('creator')
   const [view, setView] = useState<'overview' | 'slyde'>('overview')
@@ -355,22 +356,53 @@ function HQAnalyticsContent() {
           <div className="flex-1 overflow-y-auto p-8">
             <div className="max-w-5xl">
               <div className="relative">
-                {/* Locked overlay (Free) */}
+                {/* Locked overlay (Free) — matches MVP-MONETISATION.md Prompt 2 */}
                 {!isCreator && (
                   <div className="absolute inset-0 z-20 flex items-start justify-center pt-16">
-                    <div className="w-full max-w-xl rounded-3xl border border-gray-200 bg-white/95 backdrop-blur-xl shadow-xl p-6 dark:border-white/10 dark:bg-[#2c2c2e]/90">
-                      <div className="text-xs font-semibold text-gray-500 dark:text-white/60">Creator feature</div>
-                      <div className="mt-1 text-2xl font-bold">Unlock analytics</div>
-                      <div className="mt-2 text-sm text-gray-600 dark:text-white/70">
-                        See swipe depth, completion, and drop-off points — so you know what to fix and what to share more.
-                      </div>
-                      <div className="mt-5 flex items-center gap-2">
-                        <button className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15">
-                          Upgrade to Creator (£25/mo)
-                        </button>
-                        <button className="px-4 py-2 bg-gray-100 text-gray-800 font-semibold text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15">
-                          Not now
-                        </button>
+                    <div className="w-full max-w-xl rounded-3xl border border-gray-200 bg-white/95 backdrop-blur-xl shadow-xl overflow-hidden dark:border-white/10 dark:bg-[#2c2c2e]/95">
+                      {/* Gradient accent */}
+                      <div className="h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
+                      
+                      <div className="p-8">
+                        {/* Icon */}
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 flex items-center justify-center mb-5 dark:from-blue-500/15 dark:to-cyan-500/15 dark:border-blue-500/20">
+                          <svg className="w-7 h-7 text-blue-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                          </svg>
+                        </div>
+
+                        <div className="text-2xl font-display font-bold text-gray-900 dark:text-white mb-2">
+                          Analytics are available on Creator
+                        </div>
+                        <div className="text-gray-600 dark:text-white/70 mb-6">
+                          See how people swipe, where they drop off, and what works.
+                        </div>
+
+                        {/* Pricing highlight */}
+                        <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 mb-6 dark:from-blue-500/10 dark:to-cyan-500/10 dark:border-blue-500/20">
+                          <div className="flex items-baseline gap-2">
+                            <span className="text-2xl font-display font-bold text-gray-900 dark:text-white">£25</span>
+                            <span className="text-gray-500 dark:text-white/50">/month</span>
+                          </div>
+                          <div className="mt-1 text-sm text-gray-600 dark:text-white/60">
+                            Views • Swipe depth • Completion rate
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                          <Link
+                            href="/demo/hq-settings"
+                            className="w-full py-3 px-5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15 text-center"
+                          >
+                            Unlock analytics
+                          </Link>
+                          <button 
+                            onClick={() => router.push('/demo/hq-dashboard')}
+                            className="w-full py-3 px-5 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+                          >
+                            Continue without analytics
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

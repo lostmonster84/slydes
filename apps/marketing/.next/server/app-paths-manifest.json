@@ -24,6 +24,7 @@
   "/demo/editor-mockup/page": "app/demo/editor-mockup/page.js",
   "/demo/editor-states/page": "app/demo/editor-states/page.js",
   "/demo/extreme-trailers/page": "app/demo/extreme-trailers/page.js",
+  "/demo/home-slyde/page": "app/demo/home-slyde/page.js",
   "/demo/hq-analytics/page": "app/demo/hq-analytics/page.js",
   "/demo/hq-brand/page": "app/demo/hq-brand/page.js",
   "/demo/hq-dashboard/page": "app/demo/hq-dashboard/page.js",

@@ -1,15 +1,17 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { X } from 'lucide-react'
 import { HQSidebar } from '@/components/hq/HQSidebar'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useDemoBusiness } from '@/lib/demoBusiness'
 
 /**
  * Slydes HQ — Dashboard (Picture)
  *
  * Purpose: Dashboard v1.3 (Momentum-first)
- * “Is this getting better, and what should I do next?”
+ * "Is this getting better, and what should I do next?"
  * Must stay aligned with MVP docs:
  * - Free vs Creator only (PAY-TIERS.md)
  * - Analytics locked on Free (MVP-MONETISATION.md prompt 2)
@@ -18,8 +20,19 @@ import { useDemoBusiness } from '@/lib/demoBusiness'
  */
 
 export default function HQDashboardPage() {
+  const router = useRouter()
   const [plan, setPlan] = useState<'free' | 'creator'>('creator')
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const demoBusiness = useDemoBusiness()
+
+  // Handle Create Slyde click — gate for Free users with existing Slydes
+  const handleCreateSlyde = () => {
+    if (plan === 'free' && demoBusiness.hasSlydes) {
+      setShowUpgradeModal(true)
+    } else {
+      router.push('/demo/editor-mockup?slyde=new')
+    }
+  }
 
   useEffect(() => {
     try {
@@ -122,12 +135,12 @@ export default function HQDashboardPage() {
               <button className="px-4 py-2 bg-gray-100 text-gray-800 font-semibold text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15">
                 Preview Profile
               </button>
-              <Link
-                href="/demo/editor-mockup?slyde=new"
+              <button
+                onClick={handleCreateSlyde}
                 className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15"
               >
                 Create Slyde
-              </Link>
+              </button>
             </div>
           </header>
 
@@ -386,6 +399,76 @@ export default function HQDashboardPage() {
       {/* Ambient glow */}
       <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[180px] pointer-events-none dark:bg-blue-500/12" />
       <div className="fixed bottom-0 right-1/4 w-[520px] h-[520px] bg-cyan-500/10 rounded-full blur-[180px] pointer-events-none dark:bg-cyan-500/12" />
+
+      {/* Upgrade Modal — Free user trying to create second Slyde */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowUpgradeModal(false)}
+          />
+          
+          {/* Modal */}
+          <div className="relative w-full max-w-md rounded-3xl bg-white shadow-2xl dark:bg-[#2c2c2e] overflow-hidden">
+            {/* Gradient accent */}
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
+            
+            {/* Close button */}
+            <button
+              onClick={() => setShowUpgradeModal(false)}
+              className="absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100 transition-colors dark:hover:bg-white/10"
+            >
+              <X className="w-5 h-5 text-gray-400 dark:text-white/40" />
+            </button>
+
+            <div className="p-8">
+              {/* Icon */}
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 flex items-center justify-center mb-6 dark:from-blue-500/15 dark:to-cyan-500/15 dark:border-blue-500/20">
+                <svg className="w-8 h-8 text-blue-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+
+              {/* Content */}
+              <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white mb-2">
+                Ready for more?
+              </h2>
+              <p className="text-gray-600 dark:text-white/70 mb-6">
+                You can publish one Slyde for free.<br />
+                Upgrade to Creator to publish up to 10.
+              </p>
+
+              {/* Pricing highlight */}
+              <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 mb-6 dark:from-blue-500/10 dark:to-cyan-500/10 dark:border-blue-500/20">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-display font-bold text-gray-900 dark:text-white">£25</span>
+                  <span className="text-gray-500 dark:text-white/50">/month</span>
+                </div>
+                <div className="mt-2 text-sm text-gray-600 dark:text-white/60">
+                  Up to 10 Slydes • Analytics • No watermark
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex flex-col gap-3">
+                <Link
+                  href="/demo/hq-settings"
+                  className="w-full py-3 px-5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15 text-center"
+                >
+                  Upgrade to Creator
+                </Link>
+                <button
+                  onClick={() => setShowUpgradeModal(false)}
+                  className="w-full py-3 px-5 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
+                >
+                  Maybe later
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -178,6 +178,12 @@
       "namedRegex": "^/demo/extreme\\-trailers(?:/)?$"
     },
     {
+      "page": "/demo/home-slyde",
+      "regex": "^/demo/home\\-slyde(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demo/home\\-slyde(?:/)?$"
+    },
+    {
       "page": "/demo/hq-analytics",
       "regex": "^/demo/hq\\-analytics(?:/)?$",
       "routeKeys": {},
