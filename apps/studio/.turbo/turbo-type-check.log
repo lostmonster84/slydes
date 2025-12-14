@@ -1,0 +1,4 @@
+
+> @slydes/studio@0.1.0 type-check /Users/james/Projects/slydes/apps/studio
+> tsc --noEmit
+
