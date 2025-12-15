@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronUp, Volume2, VolumeX } from 'lucide-react'
 import { RatingDisplay } from '@/components/slyde-demo/RatingDisplay'
@@ -10,8 +10,8 @@ import { CategoryDrawer } from './CategoryDrawer'
 import { ShareSheet } from '@/components/slyde-demo/ShareSheet'
 import type { HomeSlydeData } from '../data/highlandMotorsData'
 
-// Placeholder video - car dealership showroom (Pixabay - free, no auth required)
-const PLACEHOLDER_VIDEO = 'https://cdn.pixabay.com/video/2020/05/25/40130-424930081_large.mp4'
+// Demo video (local public asset so it never 404s)
+const HOME_SLYDE_VIDEO = '/videos/car.mp4'
 
 interface HomeSlydeScreenProps {
   data: HomeSlydeData
@@ -94,6 +94,10 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
     []
   )
 
+  useEffect(() => {
+    void emit('sessionStart', {})
+  }, [emit])
+
   const drawerCategories = data.categories.map((cat) => ({
     id: cat.id,
     icon: cat.icon,
@@ -103,18 +107,6 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
 
   return (
     <div className="relative w-full h-full overflow-hidden">
-      {/* Session start (Home Slyde) */}
-      {/* Note: render-time safe because it's userland demo; in production, debounce and batch */}
-      {firstSeenAtRef.current === null && (
-        <span className="hidden">
-          {(() => {
-            // initialize once
-            void emit('sessionStart', {})
-            return ''
-          })()}
-        </span>
-      )}
-
       {/* Video Background */}
       <motion.div
         className="absolute inset-0"
@@ -123,7 +115,7 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
       >
         <video
           ref={videoRef}
-          src={PLACEHOLDER_VIDEO}
+          src={HOME_SLYDE_VIDEO}
           autoPlay
           loop
           muted
@@ -152,17 +144,16 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
         )}
       </motion.button>
 
-      {/* === RIGHT SIDE ACTIONS === (no FAQ for Home Slyde) */}
+      {/* === RIGHT SIDE ACTIONS === (Heart + Share only) */}
       <SocialActionStack
         heartCount={heartCount}
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
         onInfoTap={() => {}}
-        slideIndicator="1/1"
         hideFAQ
         hideInfo
-        className="absolute right-3 top-1/2 -translate-y-1/2 z-40 pt-[72px]"
+        className="absolute right-3 bottom-44 z-40"
       />
 
       {/* === BOTTOM CONTENT === (exact same as SlydeScreen) */}
@@ -199,7 +190,7 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
           onClick={() => setDrawerOpen(true)}
         >
           <ChevronUp className="w-5 h-5 text-white/60" />
-        <span className="text-white/50 text-[10px] mt-0.5">Swipe up to explore</span>
+          <span className="text-white/50 text-[10px] mt-0.5">Swipe up to explore</span>
         </motion.div>
       </div>
 
