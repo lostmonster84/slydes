@@ -7,7 +7,6 @@ import { RatingDisplay } from '@/components/slyde-demo/RatingDisplay'
 import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
 import { ProfilePill } from '@/components/slyde-demo/ProfilePill'
 import { CategoryDrawer } from './CategoryDrawer'
-import { InfoSheet } from './InfoSheet'
 import { ShareSheet } from '@/components/slyde-demo/ShareSheet'
 import type { HomeSlydeData } from '../data/highlandMotorsData'
 
@@ -25,12 +24,14 @@ interface HomeSlydeScreenProps {
  */
 export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [infoOpen, setInfoOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [isHearted, setIsHearted] = useState(false)
   const [heartCount, setHeartCount] = useState(2400)
   const [isMuted, setIsMuted] = useState(true)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const sessionIdRef = useRef<string | null>(null)
+  const firstSeenAtRef = useRef<number | null>(null)
+  const drawerOpenedOnceRef = useRef(false)
 
   const handleHeartTap = useCallback(() => {
     setIsHearted((prev) => {
@@ -56,14 +57,64 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
     [onCategoryTap]
   )
 
+  // --- Analytics (best-effort; uses existing ingest endpoint) ---
+  const emit = useCallback(
+    async (eventType: 'sessionStart' | 'drawerOpen' | 'categorySelect' | 'videoLoop', meta?: Record<string, unknown>) => {
+      // Demo: Highland Motors doesn't map to a real org yet; use a stable slug for now.
+      // When productized: org slug comes from organization profile and Home Slyde is the root Slyde.
+      const organizationSlug = 'wildtrax'
+      const slydePublicId = 'home'
+
+      try {
+        if (!sessionIdRef.current) sessionIdRef.current = crypto.randomUUID()
+        if (!firstSeenAtRef.current) firstSeenAtRef.current = Date.now()
+
+        await fetch('/api/analytics/ingest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            organizationSlug,
+            events: [
+              {
+                eventType,
+                sessionId: sessionIdRef.current,
+                slydePublicId,
+                source: 'direct',
+                referrer: typeof document !== 'undefined' ? document.referrer : undefined,
+                meta: meta ?? {},
+              },
+            ],
+          }),
+          keepalive: true,
+        })
+      } catch {
+        // ignore
+      }
+    },
+    []
+  )
+
   const drawerCategories = data.categories.map((cat) => ({
     id: cat.id,
+    icon: cat.icon,
     label: cat.label,
     description: cat.description,
   }))
 
   return (
     <div className="relative w-full h-full overflow-hidden">
+      {/* Session start (Home Slyde) */}
+      {/* Note: render-time safe because it's userland demo; in production, debounce and batch */}
+      {firstSeenAtRef.current === null && (
+        <span className="hidden">
+          {(() => {
+            // initialize once
+            void emit('sessionStart', {})
+            return ''
+          })()}
+        </span>
+      )}
+
       {/* Video Background */}
       <motion.div
         className="absolute inset-0"
@@ -78,6 +129,9 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
+          onEnded={() => {
+            void emit('videoLoop', {})
+          }}
         />
       </motion.div>
 
@@ -104,9 +158,10 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
-        onInfoTap={() => setInfoOpen(true)}
+        onInfoTap={() => {}}
         slideIndicator="1/1"
         hideFAQ
+        hideInfo
         className="absolute right-3 top-1/2 -translate-y-1/2 z-40 pt-[72px]"
       />
 
@@ -144,30 +199,49 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
           onClick={() => setDrawerOpen(true)}
         >
           <ChevronUp className="w-5 h-5 text-white/60" />
-          <span className="text-white/50 text-[10px] mt-0.5">Tap to explore</span>
+        <span className="text-white/50 text-[10px] mt-0.5">Swipe up to explore</span>
         </motion.div>
       </div>
+
+      {/* Swipe-up gesture zone (bottom 20%) */}
+      {!drawerOpen && (
+        <motion.div
+          className="absolute left-0 right-0 bottom-0 h-[20%] z-40"
+          drag="y"
+          dragConstraints={{ top: 0, bottom: 0 }}
+          dragElastic={{ top: 0.2, bottom: 0 }}
+          onDragEnd={(_, info) => {
+            if (info.offset.y < -50) {
+              setDrawerOpen(true)
+              if (!drawerOpenedOnceRef.current) {
+                drawerOpenedOnceRef.current = true
+                const ms = firstSeenAtRef.current ? Date.now() - firstSeenAtRef.current : null
+                void emit('drawerOpen', { timeToOpenMs: ms })
+              }
+            }
+          }}
+          onClick={() => {
+            setDrawerOpen(true)
+            if (!drawerOpenedOnceRef.current) {
+              drawerOpenedOnceRef.current = true
+              const ms = firstSeenAtRef.current ? Date.now() - firstSeenAtRef.current : null
+              void emit('drawerOpen', { timeToOpenMs: ms })
+            }
+          }}
+        />
+      )}
 
       {/* Category Drawer (replaces AboutSheet) */}
       <CategoryDrawer
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         categories={drawerCategories}
-        onCategoryTap={handleCategoryTap}
+        onCategoryTap={(categoryId) => {
+          void emit('categorySelect', { categoryId })
+          handleCategoryTap(categoryId)
+        }}
         businessName={data.businessName}
         accentColor={data.accentColor}
-      />
-
-      {/* Info Sheet (business info from Info button) */}
-      <InfoSheet
-        isOpen={infoOpen}
-        onClose={() => setInfoOpen(false)}
-        businessName={data.businessName}
-        accentColor={data.accentColor}
-        about={data.about || ''}
-        address={data.address || ''}
-        hours={data.hours}
-        website={data.website}
       />
 
       {/* Share Sheet */}

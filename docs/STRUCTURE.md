@@ -14,18 +14,20 @@
 ## The Hierarchy
 
 ```
-Home Slyde (single-slide entry point)
+Home Slyde (video-first entry point + drawer)
    └── Child Slyde (shareable experience)
           └── Frame (vertical screen)
 ```
 
 | Level | Term | Definition | Shareable? |
 |-------|------|------------|------------|
-| **0** | **Home Slyde** | Single-slide decision surface — orients visitors and routes them to Child Slydes | Yes |
+| **0** | **Home Slyde** | **Video-first entry point** (one immersive video) with a **swipe-up category drawer** that routes visitors to Child Slydes | Yes |
 | **1** | **Child Slyde** | A single offering, property, product, or experience (multiple Frames) | Yes |
 | **2** | **Frame** | One vertical screen inside a Child Slyde (the atomic unit users swipe through) | No (part of sequence) |
 
-**Key distinction**: Home Slyde = 1 slide (no Frames). Child Slydes = multiple Frames.
+**Key distinction**:
+- Home Slyde is **one immersive video + drawer** (no Frames)
+- Child Slydes are **multi-frame** immersive experiences
 
 ---
 
@@ -33,17 +35,17 @@ Home Slyde (single-slide entry point)
 
 ### Home Slyde
 
-The brand's mandatory entry point. Every brand has exactly one Home Slyde consisting of exactly one slide.
+The brand's mandatory entry point. Every brand has exactly one Home Slyde consisting of:
+- **one full-screen video** (9:16)
+- **a swipe-up category drawer** (3–6 categories max)
 
 - **URL**: `slydes.io/{business-slug}`
 - **Example**: `slydes.io/wildtrax`, `slydes.io/jamesestates`
-- **Purpose**: Orient the user, present clear paths to Child Slydes
-- **Structure**: Single slide with 3 vertical zones (Orientation → Primary Paths → Optional CTA)
-- **Contains**: No Frames — the Home Slyde IS the single slide
+- **Purpose**: Capture attention immediately (video), then route into deeper experiences (drawer)
+- **Structure**: Two-state model (Video state → Drawer open state)
+- **Contains**: No Frames — the Home Slyde is its own level (video + drawer)
 
-**Key principle**: The Home Slyde is a decision, not an experience.
-
-**Core belief**: Phones are for decisions, not scrolling.
+**Key principle**: The Home Slyde is an **experience with decision baked in** (immersion first, decision follows).
 
 See: [HOME-SLYDE-SYSTEM.md](./HOME-SLYDE-SYSTEM.md) and [HOME-SLYDE-BUILD-SPEC.md](./HOME-SLYDE-BUILD-SPEC.md)
 

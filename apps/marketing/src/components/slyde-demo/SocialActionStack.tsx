@@ -13,6 +13,7 @@ interface SocialActionStackProps {
   onInfoTap: () => void
   slideIndicator?: string // e.g., "3/9"
   hideFAQ?: boolean // Hide FAQ button (e.g., for Home Slyde)
+  hideInfo?: boolean // Hide Info button (e.g., for Home Slyde)
   className?: string
 }
 
@@ -52,6 +53,7 @@ export function SocialActionStack({
   onInfoTap,
   slideIndicator,
   hideFAQ = false,
+  hideInfo = false,
   className = ''
 }: SocialActionStackProps) {
   return (
@@ -120,22 +122,24 @@ export function SocialActionStack({
       </motion.button>
 
       {/* Info Button with Slide Indicator */}
-      <motion.button
-        className="flex flex-col items-center gap-1"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={(e) => {
-          e.stopPropagation()
-          onInfoTap()
-        }}
-      >
-        <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-          <Info className="w-5 h-5 text-white" />
-        </div>
-        {slideIndicator && (
-          <span className="text-white/50 text-[9px] font-medium">{slideIndicator}</span>
-        )}
-      </motion.button>
+      {!hideInfo && (
+        <motion.button 
+          className="flex flex-col items-center gap-1"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={(e) => {
+            e.stopPropagation()
+            onInfoTap()
+          }}
+        >
+          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <Info className="w-5 h-5 text-white" />
+          </div>
+          {slideIndicator && (
+            <span className="text-white/50 text-[9px] font-medium">{slideIndicator}</span>
+          )}
+        </motion.button>
+      )}
     </div>
   )
 }

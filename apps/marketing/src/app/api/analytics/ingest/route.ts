@@ -2,7 +2,16 @@ import { NextResponse } from 'next/server'
 import { createSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 type AnalyticsEventInput = {
-  eventType: 'sessionStart' | 'frameView' | 'ctaClick' | 'shareClick' | 'heartTap' | 'faqOpen'
+  eventType:
+    | 'sessionStart'
+    | 'frameView'
+    | 'ctaClick'
+    | 'shareClick'
+    | 'heartTap'
+    | 'faqOpen'
+    | 'drawerOpen'
+    | 'categorySelect'
+    | 'videoLoop'
   sessionId: string
   occurredAt?: string
   source?: string

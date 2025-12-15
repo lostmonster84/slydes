@@ -5,6 +5,7 @@ import { X, Phone, Mail, MessageCircle, ChevronRight } from 'lucide-react'
 
 interface CategoryItem {
   id: string
+  icon: string
   label: string
   description: string
 }
@@ -96,7 +97,7 @@ export function CategoryDrawer({
               </button>
             </motion.div>
 
-            {/* Categories List - straight in, no toggle (AIDA: minimize friction) */}
+            {/* Categories Grid (2-column, 3–6 max) */}
             <div
               className="flex-1 overflow-y-auto scrollbar-hide"
               style={{
@@ -107,28 +108,29 @@ export function CategoryDrawer({
                 touchAction: 'pan-y',
               }}
             >
-              {categories.map((category, index) => (
-                <button
-                  key={category.id}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onCategoryTap(category.id)
-                  }}
-                  className={`w-full flex items-center gap-2 px-4 py-2.5 text-left active:bg-white/10 transition-colors ${
-                    index < categories.length - 1 ? 'border-b border-white/10' : ''
-                  }`}
-                >
-                  <div className="flex-1 min-w-0">
-                    <div className="text-white text-[14px] font-medium">
-                      {category.label}
-                    </div>
-                    <div className="text-white/40 text-[11px] truncate">
-                      {category.description}
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-white/25 flex-shrink-0" />
-                </button>
-              ))}
+              <div className="p-4">
+                <div className="grid grid-cols-2 gap-3">
+                  {categories.slice(0, 6).map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onCategoryTap(category.id)
+                      }}
+                      className="group relative rounded-2xl bg-white/8 hover:bg-white/12 active:bg-white/15 border border-white/10 hover:border-white/15 transition-colors p-4 text-left"
+                    >
+                      <div className="text-2xl mb-2">{category.icon}</div>
+                      <div className="text-white text-sm font-semibold leading-tight">
+                        {category.label}
+                      </div>
+                      <div className="mt-1 text-white/50 text-[11px] leading-snug line-clamp-2">
+                        {category.description}
+                      </div>
+                      <ChevronRight className="absolute top-3 right-3 w-4 h-4 text-white/25 group-hover:text-white/40 transition-colors" />
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Contact Buttons - exact same as AboutSheet */}
