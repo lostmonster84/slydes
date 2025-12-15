@@ -5,6 +5,9 @@ import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { Upload, Lock, Check } from 'lucide-react'
 import { readDemoBrandProfile, writeDemoBrandProfile } from '@/lib/demoBrand'
 
+// Force dynamic rendering to avoid build-time Supabase calls
+export const dynamic = 'force-dynamic'
+
 /**
  * Slydes HQ — Brand Settings
  * 
