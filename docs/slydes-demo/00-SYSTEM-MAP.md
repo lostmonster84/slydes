@@ -12,7 +12,7 @@ The Slydes Demo (`/demo-slyde`) is a TikTok-style mobile experience built as a p
 
 **Goal**: Turn the static demo into a live, CMS-driven, persistence-backed system.
 
-**Terminology**: See `STRUCTURE.md` for canonical hierarchy (Profile → Slyde → Frame).
+**Terminology**: See `STRUCTURE.md` for canonical hierarchy (Home Slyde → Child Slyde → Frame; HQ label = Profile).
 
 ---
 

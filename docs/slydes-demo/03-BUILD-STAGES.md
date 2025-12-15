@@ -12,7 +12,7 @@ This document breaks down the productization into discrete stages. Each stage is
 
 **Total estimated stages**: 7 (plus optional Stage 8 for admin UI)
 
-**Terminology**: See `STRUCTURE.md` for canonical hierarchy (Profile → Slyde → Frame).
+**Terminology**: See `STRUCTURE.md` for canonical hierarchy (Home Slyde → Child Slyde → Frame; HQ label = Profile).
 
 ---
 

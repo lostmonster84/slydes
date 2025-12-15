@@ -64,7 +64,7 @@ This record points the subdomain directly to Slydes.
   → Desktop website (unchanged)
 
 - `m.yourdomain.com`
-  → Slydes Home Slyde (single-slide decision surface)
+  → Slydes Home Slyde (video-first entry point + swipe-up drawer)
 
 Users enter directly into the Slydes mobile experience.
 

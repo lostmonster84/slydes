@@ -133,7 +133,7 @@ This panel provides proof of value without overclaiming outcomes.
 - Most skipped position (e.g., "Frame 4" — across all Slydes)
 - Most revisited position (e.g., "Frame 5" — across all Slydes)
 - Avg frames per session (e.g., "4.3")
-- Typical journey path (e.g., Profile → Camping → Availability)
+- Typical journey path (e.g., Home Slyde → Camping → Availability) *(HQ label: Profile)*
 
 ### Explicitly Excluded
 - Individual user journeys

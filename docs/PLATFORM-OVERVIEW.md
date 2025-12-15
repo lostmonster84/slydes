@@ -276,7 +276,7 @@ Creates more content    ←  →  Discovers more businesses
 1. Downloads Partner App
 2. Quick signup (email/social)
 3. Chooses industry category
-4. Creates Home Slyde first (mandatory — 2-4 frames, orientation + navigation)
+4. Creates Home Slyde first (mandatory — one video + swipe-up category drawer)
 5. Adds Child Slydes for specific offerings
 6. Records video(s), adds titles/CTAs
 7. Publishes immediately

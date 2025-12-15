@@ -12,7 +12,7 @@ The `SlydesAPI` interface abstracts data access so the UI components don't care 
 
 **Key principle**: UI components consume the interface; implementations are swappable.
 
-**Terminology**: See `STRUCTURE.md` for canonical hierarchy (Profile → Slyde → Frame).
+**Terminology**: See `STRUCTURE.md` for canonical hierarchy (Home Slyde → Child Slyde → Frame; HQ label = Profile).
 
 ---
 

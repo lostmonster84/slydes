@@ -893,38 +893,32 @@ The mobile editor should be **even simpler** than desktop. Business owners creat
 
 Every brand must create their Home Slyde first. This is mandatory before creating Child Slydes.
 
-**The Home Slyde is exactly ONE slide** — no frames, no scrolling.
+**The Home Slyde is exactly ONE immersive video + swipe-up drawer** — no frames.
 
 See [HOME-SLYDE-BUILD-SPEC.md](./HOME-SLYDE-BUILD-SPEC.md) for full specification.
 
 ```
 1. User lands on empty editor
    → Show "Create your Home Slyde" prompt
-   → Explain: "This is your brand's decision point — one slide, three zones"
+   → Explain: "This is your brand’s entry experience — one video + a category drawer"
 
 2. User clicks "Create Home Slyde"
-   → Single-slide template created with 3 vertical zones:
-     ┌─────────────────────────────┐
-     │  ZONE 1: Brand + Tagline    │  ← Orientation
-     ├─────────────────────────────┤
-     │  ZONE 2: Path Buttons       │  ← Navigation (3-5 choices)
-     ├─────────────────────────────┤
-     │  ZONE 3: Primary CTA        │  ← Optional action
-     └─────────────────────────────┘
+   → Home Slyde template created:
+     - Upload/select a 9:16 hero video (10–30s, muted by default)
+     - Brand name + tagline overlay
+     - Category drawer (3–6 categories max)
+     - Optional single primary CTA (only if dominant)
 
-3. User customizes Zone 1 (Orientation)
-   → Add brand name
-   → Add one-line descriptor
-   → Optional background image/video
+3. User uploads/sets the video
+   → Autoplay muted (sound toggle available if audio exists)
+   → Poster fallback if autoplay blocked
 
-4. User customizes Zone 2 (Primary Paths)
-   → Add 3-5 large tappable buttons
-   → Each button = one Child Slyde (linked later)
-   → This is the heart of the Home Slyde
+4. User configures categories (drawer)
+   → Add 3–6 categories (icon + label; optional description)
+   → Each category routes to a Child Slyde
 
-5. User customizes Zone 3 (Optional CTA)
-   → Add single dominant action OR leave empty
-   → "Book Now", "Check Availability", etc.
+5. User optionally adds a primary CTA
+   → "Book Now", "Check Availability", etc. (only if truly dominant)
 
 6. User clicks "Publish"
    → Confirmation: "Your Home Slyde is live!"
@@ -933,11 +927,11 @@ See [HOME-SLYDE-BUILD-SPEC.md](./HOME-SLYDE-BUILD-SPEC.md) for full specificatio
 ```
 
 **Home Slyde constraints enforced in editor:**
-- Exactly 1 slide (no frames, no "+ Add Frame" button)
-- Zone 2 must include navigation buttons
+- Exactly 1 Home Slyde (no frames)
+- Must include at least one category (drawer)
 - Cannot be deleted (only edited)
 - Always appears first in dashboard with "Home" badge
-- No swipe affordances shown in preview
+- Drawer open/close must remain smooth (no layout shift)
 
 ### Flow 2: Create Child Slyde
 
@@ -966,7 +960,7 @@ After creating the Home Slyde, users create Child Slydes for specific offerings.
 ```
 
 **Child Slyde vs Home Slyde:**
-- Home Slyde = 1 slide, 3 zones, no frames, decision-focused
+- Home Slyde = video-first entry + drawer (no frames)
 - Child Slydes = multiple frames, immersive, narrative pacing
 - See [HOME-SLYDE-SYSTEM.md](./HOME-SLYDE-SYSTEM.md) for the distinction
 

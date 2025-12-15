@@ -10,7 +10,7 @@
 > - `WHAT-WE-WILL-BUILD.md` (behaviour-based measurement, “sharing = belief”, allowed signals)
 > - `what-we-will-never-build.md` (no CRM, no vanity dashboards, no social mechanics)
 > - `SLYDESBUILD.md` (canonical interaction + analytics event vocabulary)
-> - `STRUCTURE.md` (Profile → Slyde → Frame naming)
+> - `STRUCTURE.md` (Home Slyde → Child Slyde → Frame; HQ label = Profile)
 
 ---
 

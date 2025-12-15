@@ -6,7 +6,7 @@
 > All documentation, code, and UI must follow this naming convention.
 >
 > **Created**: December 14, 2025
-> **Updated**: December 14, 2025 (Single-slide Home Slyde model)
+> **Updated**: December 15, 2025 (Video-first Home Slyde + drawer; HQ label = Profile)
 > **Status**: Canonical — This is the source of truth
 
 ---
@@ -49,6 +49,17 @@ The brand's mandatory entry point. Every brand has exactly one Home Slyde consis
 
 See: [HOME-SLYDE-SYSTEM.md](./HOME-SLYDE-SYSTEM.md) and [HOME-SLYDE-BUILD-SPEC.md](./HOME-SLYDE-BUILD-SPEC.md)
 
+---
+
+## Naming (HQ vs Public)
+
+We intentionally use **different labels** depending on context:
+
+- **Public/customer experience**: The root link `slydes.io/{business-slug}` is the **Home Slyde** (video + drawer).
+- **HQ/owner experience**: We keep the business context label as **Profile** (brand settings, billing, business identity).
+
+**Rule**: Don’t call the public entry screen “Profile”. “Profile” is a HQ label only.
+
 ### Child Slyde
 
 A shareable, self-contained experience for one offering. This is the unit customers receive deep links to.
@@ -76,15 +87,11 @@ One vertical screen inside a Slyde. Users swipe vertically through Frames.
 ### Adventure Hire (WildTrax)
 
 ```
-Home Slyde: slydes.io/wildtrax (SINGLE SLIDE)
+Home Slyde: slydes.io/wildtrax (VIDEO + DRAWER)
 ┌─────────────────────────────────────────┐
-│  ZONE 1: "WildTrax"                     │
-│          Self-drive adventures          │
-├─────────────────────────────────────────┤
-│  ZONE 2: [Camping] [Just Drive]         │
-│          [Vehicles] [Locations]         │
-├─────────────────────────────────────────┤
-│  ZONE 3: [Check Availability]           │
+│  [FULL-SCREEN VIDEO]                    │
+│  Brand overlay (name + tagline)         │
+│  Swipe up → category drawer             │
 └─────────────────────────────────────────┘
 
 Child Slyde: slydes.io/wildtrax/camping (MULTIPLE FRAMES)
@@ -99,7 +106,7 @@ Child Slyde: slydes.io/wildtrax/just-drive
 └── ... 6 Frames
 ```
 
-**User shares**: "Check out this rental company" → `slydes.io/wildtrax` (Home Slyde — single slide)
+**User shares**: "Check out this rental company" → `slydes.io/wildtrax` (Home Slyde — video + drawer)
 **User shares**: "Look at this camping package" → `slydes.io/wildtrax/camping` (Deep link — multi-frame)
 
 ---
@@ -107,15 +114,10 @@ Child Slyde: slydes.io/wildtrax/just-drive
 ### Real Estate Agent
 
 ```
-Home Slyde: slydes.io/jamesestates (SINGLE SLIDE)
+Home Slyde: slydes.io/jamesestates (VIDEO + DRAWER)
 ┌─────────────────────────────────────────┐
-│  ZONE 1: "James Estates"                │
-│          Premium Highland Properties    │
-├─────────────────────────────────────────┤
-│  ZONE 2: [Current Listings] [Sold]      │
-│          [About James]                  │
-├─────────────────────────────────────────┤
-│  ZONE 3: [Book a Valuation]             │
+│  [FULL-SCREEN VIDEO]                    │
+│  Swipe up → categories                  │
 └─────────────────────────────────────────┘
 
 Child Slyde: slydes.io/jamesestates/beach-house (MULTIPLE FRAMES)
@@ -130,7 +132,7 @@ Child Slyde: slydes.io/jamesestates/city-apartment
 └── ... 6 Frames
 ```
 
-**Agent shares generic link**: `slydes.io/jamesestates` (Home Slyde — single slide)
+**Agent shares generic link**: `slydes.io/jamesestates` (Home Slyde — video + drawer)
 **Agent shares specific property**: `slydes.io/jamesestates/beach-house` (Deep link — multi-frame)
 
 ---
@@ -138,15 +140,10 @@ Child Slyde: slydes.io/jamesestates/city-apartment
 ### Restaurant
 
 ```
-Home Slyde: slydes.io/bistro-paris (SINGLE SLIDE)
+Home Slyde: slydes.io/bistro-paris (VIDEO + DRAWER)
 ┌─────────────────────────────────────────┐
-│  ZONE 1: "Bistro Paris"                 │
-│          Modern French dining           │
-├─────────────────────────────────────────┤
-│  ZONE 2: [Brunch] [Dinner]              │
-│          [Drinks] [Private Dining]      │
-├─────────────────────────────────────────┤
-│  ZONE 3: [Reserve a Table]              │
+│  [FULL-SCREEN VIDEO]                    │
+│  Swipe up → categories                  │
 └─────────────────────────────────────────┘
 
 Child Slyde: slydes.io/bistro-paris/brunch-menu (MULTIPLE FRAMES)
@@ -175,6 +172,7 @@ slydes.io/{business-slug}/{slyde-slug}?f=3   → Deep-link to Frame 3 (optional)
 
 | UI Element | Label | What it does |
 |------------|-------|--------------|
+| HQ business header | "Profile" | Business context (brand, billing, identity) |
 | Dashboard list | "Your Slydes" | Lists Home Slyde + all Child Slydes |
 | Home indicator | "Home Slyde" badge | Marks the mandatory entry point |
 | Left panel header | "Frames (4)" | Shows Frames in current Slyde |
@@ -197,7 +195,7 @@ slydes.io/{business-slug}/{slyde-slug}?f=3   → Deep-link to Frame 3 (optional)
 
 | Old Term | New Term |
 |----------|----------|
-| `Profile` | `Home Slyde` |
+| `Profile` (HQ label) | `Home Slyde` (public root experience) |
 | `BusinessProfile` | `HomeSlydeData` |
 | `SlideData` | `FrameData` |
 | `slides` | `frames` |
@@ -211,11 +209,11 @@ slydes.io/{business-slug}/{slyde-slug}?f=3   → Deep-link to Frame 3 (optional)
 ## Key Rules
 
 1. **Every brand has exactly one Home Slyde** — it's mandatory, not optional
-2. **Home Slyde = exactly one slide** — no Frames, no scrolling, just a decision surface
+2. **Home Slyde = one immersive video + swipe-up drawer** — no Frames
 3. **Home Slyde is the entry point** — `slydes.io/{business-slug}` always opens Home Slyde
 4. **Child Slydes are deep-linkable** — specific experiences for specific intent
 5. **Frames only exist in Child Slydes** — the Home Slyde has no Frames
-6. **Home Slyde = decision** — routes attention, doesn't hold it
+6. **Home Slyde = immersion + decision baked in** — video leads, drawer routes
 7. **Child Slydes = immersion** — longer, narrative, emotional
 8. **One Child Slyde = One Offering** — property, product, menu, package, experience
 9. **Child Slyde Frames follow AIDA** — Hook → How → What → Trust → Proof → Action
@@ -228,7 +226,7 @@ Do **NOT** use these terms in docs, code, or UI:
 
 | Don't use | Use instead |
 |-----------|-------------|
-| Profile | Home Slyde |
+| Profile (for the public entry screen) | Home Slyde |
 | Slide | Frame |
 | World | Child Slyde |
 | Deck | Slyde |
@@ -236,14 +234,14 @@ Do **NOT** use these terms in docs, code, or UI:
 | Page | Frame |
 | Section (for vertical screens) | Frame |
 
-**Exception**: "Profile" may appear in legacy code during migration, but must be replaced.
+**Exception**: "Profile" is an approved **HQ label** (business context). It must not be used to describe the public/customer entry experience.
 
 ---
 
 ## Legacy Documentation Note
 
 Some older strategy documents may still use deprecated terms:
-- "Profile" → **Home Slyde**
+- "Profile" (public entry) → **Home Slyde**
 - "slide" → **Frame**
 - "world" → **Child Slyde**
 
