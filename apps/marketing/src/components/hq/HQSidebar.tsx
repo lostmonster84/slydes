@@ -94,9 +94,18 @@ export function HQSidebar({ activePage, plan, onPlanChange, slydeCount = 2, inbo
       {/* Logo */}
       <div className="p-4 border-b border-gray-200 dark:border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-sm shrink-0">
-            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/>
+          <div className="w-9 h-9 shrink-0">
+            <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
+              <defs>
+                <linearGradient id="slydes-gradient-sidebar" x1="50%" y1="100%" x2="50%" y2="0%">
+                  <stop offset="0%" stopColor="#06B6D4" />
+                  <stop offset="100%" stopColor="#2563EB" />
+                </linearGradient>
+              </defs>
+              <rect x="14" y="36" width="36" height="24" rx="4" fill="#2563EB" opacity="0.2" />
+              <rect x="12" y="22" width="40" height="28" rx="5" fill="#2563EB" opacity="0.5" />
+              <rect x="10" y="6" width="44" height="32" rx="6" fill="url(#slydes-gradient-sidebar)" />
+              <rect x="24" y="6" width="16" height="4" rx="2" fill="white" opacity="0.3" />
             </svg>
           </div>
           {(isMobile || !collapsed) && (
@@ -261,9 +270,18 @@ export function HQSidebar({ activePage, plan, onPlanChange, slydeCount = 2, inbo
         {/* Logo */}
         <div className="p-4 border-b border-gray-200 dark:border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-sm shrink-0">
-              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/>
+            <div className="w-9 h-9 shrink-0">
+              <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
+                <defs>
+                  <linearGradient id="slydes-gradient-desktop" x1="50%" y1="100%" x2="50%" y2="0%">
+                    <stop offset="0%" stopColor="#06B6D4" />
+                    <stop offset="100%" stopColor="#2563EB" />
+                  </linearGradient>
+                </defs>
+                <rect x="14" y="36" width="36" height="24" rx="4" fill="#2563EB" opacity="0.2" />
+                <rect x="12" y="22" width="40" height="28" rx="5" fill="#2563EB" opacity="0.5" />
+                <rect x="10" y="6" width="44" height="32" rx="6" fill="url(#slydes-gradient-desktop)" />
+                <rect x="24" y="6" width="16" height="4" rx="2" fill="white" opacity="0.3" />
               </svg>
             </div>
             {!collapsed && (

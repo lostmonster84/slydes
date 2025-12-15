@@ -1,0 +1,5 @@
+{
+  "buildCommand": "bash apps/studio/vercel-build.sh",
+  "installCommand": "echo 'Install handled in build script'"
+}
+

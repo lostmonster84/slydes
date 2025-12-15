@@ -1,0 +1,5 @@
+{
+  "buildCommand": "pnpm turbo build --filter=@slydes/marketing",
+  "installCommand": "pnpm install --frozen-lockfile"
+}
+
