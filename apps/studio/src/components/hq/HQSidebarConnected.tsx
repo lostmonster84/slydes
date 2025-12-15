@@ -252,41 +252,6 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
           })}
         </div>
 
-        {/* Mobile plan toggle */}
-        <div className="p-3 border-t border-gray-200 dark:border-white/10">
-          <div className="p-1 bg-gray-100 rounded-xl flex dark:bg-white/10">
-            <button
-              onClick={() => setPlan('free')}
-              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
-                plan === 'free'
-                  ? 'bg-white text-gray-900 shadow-sm dark:bg-[#3a3a3c] dark:text-white'
-                  : 'text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-white/70'
-              }`}
-            >
-              Free
-            </button>
-            <button
-              onClick={() => setPlan('creator')}
-              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
-                plan === 'creator'
-                  ? 'bg-white text-gray-900 shadow-sm dark:bg-[#3a3a3c] dark:text-white'
-                  : 'text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-white/70'
-              }`}
-            >
-              Creator
-            </button>
-          </div>
-          {!isCreator && (
-            <Link
-              href="/settings"
-              onClick={() => setMobileOpen(false)}
-              className="mt-2 block w-full py-2 text-center text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-cyan-400 dark:hover:text-cyan-300"
-            >
-              Upgrade to Creator
-            </Link>
-          )}
-        </div>
-
         {/* Suggest a feature - Mobile */}
         <div className="px-3 pb-2">
           <button
@@ -409,7 +374,7 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
           })}
         </nav>
 
-        {/* Plan Card */}
+        {/* Plan Badge (simplified) */}
         {!collapsed && (
           <div className="p-3">
             <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-4 shadow-sm dark:border-white/10 dark:bg-[#2c2c2e] dark:from-[#2c2c2e] dark:via-[#2a2a2c] dark:to-[#2c2c2e] dark:shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
@@ -419,42 +384,10 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
                 <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-600 to-cyan-500" />
                 Plan
               </div>
-              <div className="mt-2 text-base font-display font-bold text-gray-900 dark:text-white">{isCreator ? 'Creator' : 'Free'}</div>
+              <div className="mt-2 text-base font-display font-bold text-gray-900 dark:text-white">Free</div>
               <div className="mt-1 text-xs text-gray-600 dark:text-white/70">
-                {isCreator ? '10 Slydes • Analytics • No watermark' : '1 Slyde • Watermark'}
+                Unlimited Slydes
               </div>
-
-              <div className="mt-3 flex items-center gap-1 rounded-xl bg-gray-100 p-1 dark:bg-black/20 dark:border dark:border-white/10">
-                <button
-                  onClick={() => setPlan('free')}
-                  className={`flex-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors ${
-                    !isCreator
-                      ? 'bg-white text-gray-900 shadow-sm dark:bg-[#3a3a3c] dark:text-white dark:shadow-[0_6px_18px_rgba(0,0,0,0.35)] dark:border dark:border-white/10'
-                      : 'text-gray-600 hover:text-gray-900 dark:text-white/60 dark:hover:text-white'
-                  }`}
-                >
-                  Free
-                </button>
-                <button
-                  onClick={() => setPlan('creator')}
-                  className={`flex-1 px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors ${
-                    isCreator
-                      ? 'bg-white text-gray-900 shadow-sm dark:bg-[#3a3a3c] dark:text-white dark:shadow-[0_6px_18px_rgba(0,0,0,0.35)] dark:border dark:border-white/10'
-                      : 'text-gray-600 hover:text-gray-900 dark:text-white/60 dark:hover:text-white'
-                  }`}
-                >
-                  Creator
-                </button>
-              </div>
-
-              {!isCreator && (
-                <Link
-                  href="/settings"
-                  className="mt-3 block w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm rounded-xl text-center hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15"
-                >
-                  Upgrade to Creator
-                </Link>
-              )}
             </div>
           </div>
         )}
