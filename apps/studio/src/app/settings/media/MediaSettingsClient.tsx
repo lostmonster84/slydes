@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Loader2, Video } from 'lucide-react'
+import { ArrowLeft, Loader2, Video, Image as ImageIcon } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import FrameAttachDemoClient from './FrameAttachDemoClient'
 
@@ -14,28 +14,89 @@ type Props = {
 
 export default function MediaSettingsClient({ organizationId, organizationName, existingVideoUid }: Props) {
   const supabase = useMemo(() => createClient(), [])
-  const [file, setFile] = useState<File | null>(null)
-  const [status, setStatus] = useState<
+  const [videoFile, setVideoFile] = useState<File | null>(null)
+  const [videoStatus, setVideoStatus] = useState<
     | { kind: 'idle' }
     | { kind: 'requesting-upload' }
     | { kind: 'uploading'; uid: string }
-    | { kind: 'saving'; uid: string }
     | { kind: 'done'; uid: string }
     | { kind: 'error'; message: string }
   >({ kind: 'idle' })
-  const [currentUid, setCurrentUid] = useState<string | null>(existingVideoUid)
+  const [homeVideoUid, setHomeVideoUid] = useState<string | null>(existingVideoUid)
+  const [lastUploadedVideoUid, setLastUploadedVideoUid] = useState<string | null>(null)
 
-  async function handleUpload() {
-    if (!file) return
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imageStatus, setImageStatus] = useState<
+    | { kind: 'idle' }
+    | { kind: 'requesting-upload' }
+    | { kind: 'uploading'; id: string }
+    | { kind: 'done'; id: string }
+    | { kind: 'error'; message: string }
+  >({ kind: 'idle' })
+  const [lastUploadedImageId, setLastUploadedImageId] = useState<string | null>(null)
+
+  async function uploadVideoToCloudflare(file: File): Promise<string> {
+    // 1) Ask our Studio server for a safe, short-lived Cloudflare upload URL
+    const res = await fetch('/api/media/create-video-upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ maxDurationSeconds: 30 }),
+    })
+    const contentType = res.headers.get('content-type') || ''
+    const isJson = contentType.includes('application/json')
+    const json = isJson ? await res.json().catch(() => null) : null
+    if (!res.ok) {
+      const text = !isJson ? await res.text().catch(() => '') : ''
+      throw new Error((json as any)?.error || text || `Failed to create upload (HTTP ${res.status})`)
+    }
+
+    const uid = String((json as any)?.uid || '')
+    const uploadURL = String((json as any)?.uploadURL || '')
+    if (!uid || !uploadURL) throw new Error('Upload URL missing')
+
+    // 2) Upload the file directly to Cloudflare (your server never receives the video)
+    const fd = new FormData()
+    fd.set('file', file)
+    const uploadRes = await fetch(uploadURL, { method: 'POST', body: fd })
+    if (!uploadRes.ok) throw new Error('Upload failed')
+
+    return uid
+  }
+
+  async function setHomeVideo(uid: string | null) {
     try {
-      setStatus({ kind: 'requesting-upload' })
+      const { error } = await supabase
+        .from('organizations')
+        .update({ home_video_stream_uid: uid })
+        .eq('id', organizationId)
+      if (error) throw error
 
-      // 1) Ask our Studio server for a safe, short-lived Cloudflare upload URL
-      const res = await fetch('/api/media/create-video-upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ maxDurationSeconds: 30 }),
-      })
+      setHomeVideoUid(uid)
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Something went wrong'
+      setVideoStatus({ kind: 'error', message: msg })
+    }
+  }
+
+  async function handleVideoUpload() {
+    if (!videoFile) return
+    try {
+      setVideoStatus({ kind: 'requesting-upload' })
+      const uid = await uploadVideoToCloudflare(videoFile)
+      setVideoStatus({ kind: 'done', uid })
+      setLastUploadedVideoUid(uid)
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Something went wrong'
+      setVideoStatus({ kind: 'error', message: msg })
+    }
+  }
+
+  async function handleImageUpload() {
+    if (!imageFile) return
+    try {
+      setImageStatus({ kind: 'requesting-upload' })
+
+      const res = await fetch('/api/media/create-image-upload', { method: 'POST' })
       const contentType = res.headers.get('content-type') || ''
       const isJson = contentType.includes('application/json')
       const json = isJson ? await res.json().catch(() => null) : null
@@ -44,34 +105,26 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
         throw new Error((json as any)?.error || text || `Failed to create upload (HTTP ${res.status})`)
       }
 
-      const uid = String(json.uid || '')
-      const uploadURL = String(json.uploadURL || '')
-      if (!uid || !uploadURL) throw new Error('Upload URL missing')
+      const id = String((json as any)?.id || '')
+      const uploadURL = String((json as any)?.uploadURL || '')
+      if (!id || !uploadURL) throw new Error('Image upload URL missing')
 
-      // 2) Upload the file directly to Cloudflare (your server never receives the video)
-      setStatus({ kind: 'uploading', uid })
+      setImageStatus({ kind: 'uploading', id })
       const fd = new FormData()
-      fd.set('file', file)
+      fd.set('file', imageFile)
       const uploadRes = await fetch(uploadURL, { method: 'POST', body: fd })
-      if (!uploadRes.ok) throw new Error('Upload failed')
+      if (!uploadRes.ok) throw new Error('Image upload failed')
 
-      // 3) Save the Cloudflare video id (uid) onto your organization record
-      setStatus({ kind: 'saving', uid })
-      const { error } = await supabase
-        .from('organizations')
-        .update({ home_video_stream_uid: uid })
-        .eq('id', organizationId)
-      if (error) throw error
-
-      setCurrentUid(uid)
-      setStatus({ kind: 'done', uid })
+      setImageStatus({ kind: 'done', id })
+      setLastUploadedImageId(id)
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Something went wrong'
-      setStatus({ kind: 'error', message: msg })
+      setImageStatus({ kind: 'error', message: msg })
     }
   }
 
-  const busy = status.kind !== 'idle' && status.kind !== 'done' && status.kind !== 'error'
+  const videoBusy = videoStatus.kind !== 'idle' && videoStatus.kind !== 'done' && videoStatus.kind !== 'error'
+  const imageBusy = imageStatus.kind !== 'idle' && imageStatus.kind !== 'done' && imageStatus.kind !== 'error'
 
   return (
     <div className="min-h-screen bg-future-black">
@@ -85,7 +138,7 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
               <ArrowLeft className="w-5 h-5" />
               <span className="sr-only">Back to Settings</span>
             </Link>
-            <h1 className="text-xl font-display font-semibold">Media</h1>
+            <h1 className="text-xl font-display font-semibold">Media library</h1>
           </div>
         </div>
       </header>
@@ -97,18 +150,28 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
               <Video className="w-5 h-5 text-white/60" />
             </div>
             <div className="flex-1">
-              <h2 className="text-lg font-semibold">Home video</h2>
+              <h2 className="text-lg font-semibold">Videos</h2>
               <p className="text-white/60 text-sm">
-                This uploads your video to Cloudflare and saves the “video id” to your organization ({organizationName}).
+                Uploads go to Cloudflare Stream. After upload, you can set one as your Home video for {organizationName}, or attach it to a frame below.
               </p>
             </div>
           </div>
 
           <div className="mt-5 grid gap-4">
             <div className="bg-black/30 border border-white/10 rounded-xl p-4">
-              <div className="text-xs text-white/50">Current video id</div>
+              <div className="text-xs text-white/50">Home video id (organization)</div>
               <div className="mt-1 font-mono text-sm text-white break-all">
-                {currentUid ?? '—'}
+                {homeVideoUid ?? '—'}
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setHomeVideo(null)}
+                  disabled={!homeVideoUid || videoBusy}
+                  className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-white/10 text-white/80 text-xs font-medium hover:bg-white/15 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Clear Home video
+                </button>
               </div>
             </div>
 
@@ -117,8 +180,8 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
               <input
                 type="file"
                 accept="video/mp4,video/quicktime,video/*"
-                disabled={busy}
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                disabled={videoBusy}
+                onChange={(e) => setVideoFile(e.target.files?.[0] ?? null)}
                 className="block w-full text-sm text-white/70 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-white/10 file:text-white/80 hover:file:bg-white/15"
               />
               <p className="text-xs text-white/45">
@@ -129,34 +192,113 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={handleUpload}
-                disabled={!file || busy}
+                onClick={handleVideoUpload}
+                disabled={!videoFile || videoBusy}
                 className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-leader-blue text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                Upload video
+                {videoBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                Upload to library
               </button>
 
-              {status.kind === 'requesting-upload' && (
+              {videoStatus.kind === 'requesting-upload' && (
                 <div className="text-sm text-white/60">Getting upload link…</div>
               )}
-              {status.kind === 'uploading' && (
+              {videoStatus.kind === 'uploading' && (
                 <div className="text-sm text-white/60">Uploading to Cloudflare…</div>
               )}
-              {status.kind === 'saving' && (
-                <div className="text-sm text-white/60">Saving video id…</div>
+              {videoStatus.kind === 'done' && (
+                <div className="text-sm text-emerald-300">Uploaded.</div>
               )}
-              {status.kind === 'done' && (
-                <div className="text-sm text-emerald-300">Uploaded. Video id saved.</div>
+              {videoStatus.kind === 'error' && (
+                <div className="text-sm text-red-300">Error: {videoStatus.message}</div>
               )}
-              {status.kind === 'error' && (
-                <div className="text-sm text-red-300">Error: {status.message}</div>
-              )}
+            </div>
+
+            <div className="bg-black/20 border border-white/10 rounded-xl p-4">
+              <div className="text-xs text-white/50">Last uploaded video id</div>
+              <div className="mt-1 font-mono text-sm text-white break-all">
+                {lastUploadedVideoUid ?? '—'}
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => (lastUploadedVideoUid ? setHomeVideo(lastUploadedVideoUid) : null)}
+                  disabled={!lastUploadedVideoUid || videoBusy}
+                  className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-white/10 text-white/80 text-xs font-medium hover:bg-white/15 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Set as Home video
+                </button>
+                <div className="text-xs text-white/45">
+                  This writes `home_video_stream_uid` onto your organization.
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <FrameAttachDemoClient />
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center">
+              <ImageIcon className="w-5 h-5 text-white/60" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold">Images</h2>
+              <p className="text-white/60 text-sm">
+                Uploads go to Cloudflare Images (auto-resizing/optimization). After upload, attach the image to a frame below.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-4">
+            <div className="grid gap-2">
+              <label className="text-sm text-white/70">Choose an image file</label>
+              <input
+                type="file"
+                accept="image/*"
+                disabled={imageBusy}
+                onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+                className="block w-full text-sm text-white/70 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-white/10 file:text-white/80 hover:file:bg-white/15"
+              />
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleImageUpload}
+                disabled={!imageFile || imageBusy}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-leader-blue text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {imageBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                Upload to library
+              </button>
+
+              {imageStatus.kind === 'requesting-upload' && (
+                <div className="text-sm text-white/60">Getting upload link…</div>
+              )}
+              {imageStatus.kind === 'uploading' && (
+                <div className="text-sm text-white/60">Uploading to Cloudflare…</div>
+              )}
+              {imageStatus.kind === 'done' && (
+                <div className="text-sm text-emerald-300">Uploaded.</div>
+              )}
+              {imageStatus.kind === 'error' && (
+                <div className="text-sm text-red-300">Error: {imageStatus.message}</div>
+              )}
+            </div>
+
+            <div className="bg-black/20 border border-white/10 rounded-xl p-4">
+              <div className="text-xs text-white/50">Last uploaded image id</div>
+              <div className="mt-1 font-mono text-sm text-white break-all">
+                {lastUploadedImageId ?? '—'}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <div className="text-sm text-white/70 font-medium">Attach media to a frame</div>
+          <FrameAttachDemoClient />
+        </div>
       </main>
     </div>
   )

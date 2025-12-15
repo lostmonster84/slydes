@@ -82,7 +82,7 @@ export function Footer() {
         {/* Bottom Row */}
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-gray-500">
-            © 2025 Slydes. All rights reserved.
+            © 2025 <a href="https://studio.slydes.io" className="hover:text-gray-400 transition-colors">Slydes</a>. All rights reserved.
           </p>
           
           {/* Social Links */}
