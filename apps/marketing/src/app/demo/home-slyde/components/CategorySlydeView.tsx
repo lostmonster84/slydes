@@ -30,9 +30,18 @@ export function CategorySlydeView({
   onBack,
   accentColor,
 }: CategorySlydeViewProps) {
-  const frames = category.frames
+  const frames = category.frames || []
   const currentFrame = frames[frameIndex] || frames[0]
   const totalFrames = frames.length
+
+  // Guard against missing frames
+  if (!currentFrame) {
+    return (
+      <div className="relative w-full h-full bg-slate-900 flex items-center justify-center">
+        <p className="text-white/60">No frames available</p>
+      </div>
+    )
+  }
 
   const nextFrame = useCallback(() => {
     if (frameIndex < totalFrames - 1) {
@@ -51,18 +60,11 @@ export function CategorySlydeView({
   }, [nextFrame])
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div className="relative w-full h-full overflow-hidden bg-slate-900">
       {/* Background */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentFrame.id}
-          className={`absolute inset-0 bg-gradient-to-b ${currentFrame.background.gradient || 'from-slate-800 to-slate-900'}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-        />
-      </AnimatePresence>
+      <div
+        className={`absolute inset-0 bg-gradient-to-b ${currentFrame.background.gradient || 'from-slate-800 to-slate-900'}`}
+      />
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />

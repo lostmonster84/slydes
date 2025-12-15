@@ -177,23 +177,30 @@ export function HomeSlydeDemo() {
         )
 
       case 'category':
+        if (!category) {
+          return (
+            <div key="no-category" className="absolute inset-0 bg-red-900 flex items-center justify-center">
+              <p className="text-white">No category found: {state.categoryId}</p>
+            </div>
+          )
+        }
         return (
           <motion.div
             key={`category-${state.categoryId}`}
             className="absolute inset-0"
-            {...slideFromRight}
-            transition={transition}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
-            {category && (
-              <CategorySlydeView
-                category={category}
-                frameIndex={state.frameIndex}
-                onFrameChange={handleFrameChange}
-                onViewAll={handleViewAll}
-                onBack={handleBack}
-                accentColor={highlandMotorsData.accentColor}
-              />
-            )}
+            <CategorySlydeView
+              category={category}
+              frameIndex={state.frameIndex}
+              onFrameChange={handleFrameChange}
+              onViewAll={handleViewAll}
+              onBack={handleBack}
+              accentColor={highlandMotorsData.accentColor}
+            />
           </motion.div>
         )
 
