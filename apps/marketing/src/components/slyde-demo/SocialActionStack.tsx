@@ -6,12 +6,13 @@ import { Heart, HelpCircle, Share2, Info } from 'lucide-react'
 interface SocialActionStackProps {
   heartCount: number
   isHearted: boolean
-  faqCount: number
+  faqCount?: number
   onHeartTap: () => void
-  onFAQTap: () => void
+  onFAQTap?: () => void
   onShareTap: () => void
   onInfoTap: () => void
   slideIndicator?: string // e.g., "3/9"
+  hideFAQ?: boolean // Hide FAQ button (e.g., for Home Slyde)
   className?: string
 }
 
@@ -50,15 +51,16 @@ export function SocialActionStack({
   onShareTap,
   onInfoTap,
   slideIndicator,
+  hideFAQ = false,
   className = ''
 }: SocialActionStackProps) {
   return (
-    <div 
+    <div
       className={`flex flex-col items-center gap-5 pointer-events-auto ${className}`}
       onClick={(e) => e.stopPropagation()}
     >
       {/* Heart Button */}
-      <motion.button 
+      <motion.button
         className="flex flex-col items-center gap-1"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
@@ -67,40 +69,42 @@ export function SocialActionStack({
           onHeartTap()
         }}
       >
-        <motion.div 
+        <motion.div
           className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center"
           animate={{
             scale: isHearted ? [1, 1.3, 1] : 1,
           }}
           transition={{ duration: 0.3 }}
         >
-          <Heart 
+          <Heart
             className={`w-5 h-5 transition-colors ${
               isHearted ? 'fill-red-500 text-red-500' : 'text-white'
-            }`} 
+            }`}
           />
         </motion.div>
         <span className="text-white text-[10px] font-medium">{formatCount(heartCount)}</span>
       </motion.button>
-      
-      {/* FAQ Button */}
-      <motion.button 
-        className="flex flex-col items-center gap-1"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={(e) => {
-          e.stopPropagation()
-          onFAQTap()
-        }}
-      >
-        <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-          <HelpCircle className="w-5 h-5 text-white" />
-        </div>
-        <span className="text-white text-[10px] font-medium">{faqCount} FAQs</span>
-      </motion.button>
-      
+
+      {/* FAQ Button (only shown when not hidden) */}
+      {!hideFAQ && onFAQTap && (
+        <motion.button
+          className="flex flex-col items-center gap-1"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={(e) => {
+            e.stopPropagation()
+            onFAQTap()
+          }}
+        >
+          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <HelpCircle className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-white text-[10px] font-medium">{faqCount} FAQs</span>
+        </motion.button>
+      )}
+
       {/* Share Button */}
-      <motion.button 
+      <motion.button
         className="flex flex-col items-center gap-1"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
@@ -116,7 +120,7 @@ export function SocialActionStack({
       </motion.button>
 
       {/* Info Button with Slide Indicator */}
-      <motion.button 
+      <motion.button
         className="flex flex-col items-center gap-1"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

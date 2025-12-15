@@ -50,6 +50,12 @@ export interface HomeSlydeData {
   tagline: string
   accentColor: string
   backgroundGradient: string
+  rating?: number
+  reviewCount?: number
+  about?: string
+  address?: string
+  hours?: string
+  website?: string
   categories: CategoryData[]
   primaryCta?: {
     text: string
@@ -66,6 +72,14 @@ export const highlandMotorsData: HomeSlydeData = {
   tagline: 'Premium Service, Highland Style',
   accentColor: '#22D3EE', // Electric Cyan
   backgroundGradient: 'from-slate-900 via-slate-800 to-slate-900',
+  rating: 4.9,
+  reviewCount: 847,
+
+  // Business Info (for Info button)
+  about: 'Family-owned since 1987, Highland Motors has been serving the Scottish Highlands with premium automotive services. From routine maintenance to complete restorations, we treat every vehicle like our own.',
+  address: '127 Loch Road, Inverness, IV2 4EN',
+  hours: 'Mon-Fri 8am-6pm, Sat 9am-4pm',
+  website: 'highlandmotors.co.uk',
 
   primaryCta: {
     text: 'Book Service',

@@ -3,7 +3,7 @@
 import { useReducer, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DevicePreview } from '@/components/slyde-demo/DevicePreview'
-import { HomeSlydeView } from './HomeSlydeView'
+import { HomeSlydeScreen } from './HomeSlydeScreen'
 import { CategorySlydeView } from './CategorySlydeView'
 import { InventoryGridView } from './InventoryGridView'
 import { ItemSlydeView } from './ItemSlydeView'
@@ -169,7 +169,7 @@ export function HomeSlydeDemo() {
             exit={slideFromRight.exit}
             transition={transition}
           >
-            <HomeSlydeView
+            <HomeSlydeScreen
               data={highlandMotorsData}
               onCategoryTap={handleCategoryTap}
             />
