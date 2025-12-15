@@ -225,7 +225,7 @@ export function HomeSlydeEditorClient() {
 
             <div className="flex items-center gap-2">
               <Link
-                href="/demo/home-slyde"
+                href={`/${encodeURIComponent(demoBusiness.id)}`}
                 className="px-4 py-2 bg-gray-100 text-gray-800 font-semibold text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
               >
                 Preview

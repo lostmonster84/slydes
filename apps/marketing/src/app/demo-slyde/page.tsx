@@ -125,7 +125,8 @@ function DemoSlydeContent() {
             }}
             onCategoryTap={(categoryId) => {
               const cat = home.categories.find((c) => c.id === categoryId)
-              const child = cat?.childSlydeId === 'just-drive' ? 'just-drive' : 'camping'
+              const child = cat?.childSlydeId
+              if (!child) return
               router.push(`/demo-slyde?slyde=${encodeURIComponent(child)}`)
             }}
           />
