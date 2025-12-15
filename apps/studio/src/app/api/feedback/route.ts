@@ -2,7 +2,13 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY is not configured')
+  }
+  return new Resend(apiKey)
+}
 
 export async function POST(req: Request) {
   // Auth check - get user info for context
@@ -122,6 +128,7 @@ Submitted: ${new Date().toISOString()}
   `.trim()
 
   try {
+    const resend = getResend()
     const { error } = await resend.emails.send({
       from: 'Slydes Studio <feedback@mail.slydes.io>',
       to: ['james@slydes.io'],
