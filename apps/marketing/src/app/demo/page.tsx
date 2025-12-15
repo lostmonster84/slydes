@@ -109,6 +109,14 @@ const demos = [
     category: 'Customer Experience',
     items: [
       {
+        href: '/demo/home-slyde',
+        title: 'Home Slyde Flow (MASTER)',
+        description: 'Complete Home → Category → Inventory → Item flow with shared SocialActionStack',
+        status: 'complete',
+        icon: '🏠',
+        featured: true,
+      },
+      {
         href: '/demo-slyde',
         title: 'Slyde Experience (Reference)',
         description: 'The canonical device-preview Slyde — Heart, FAQ, Share, Info, ProfilePill, AboutSheet',
