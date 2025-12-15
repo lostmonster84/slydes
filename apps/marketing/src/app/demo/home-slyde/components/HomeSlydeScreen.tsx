@@ -1,17 +1,15 @@
 'use client'
 
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronUp, Volume2, VolumeX } from 'lucide-react'
+import { ChevronUp } from 'lucide-react'
 import { RatingDisplay } from '@/components/slyde-demo/RatingDisplay'
 import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
 import { ProfilePill } from '@/components/slyde-demo/ProfilePill'
 import { CategoryDrawer } from './CategoryDrawer'
+import { InfoSheet } from './InfoSheet'
 import { ShareSheet } from '@/components/slyde-demo/ShareSheet'
 import type { HomeSlydeData } from '../data/highlandMotorsData'
-
-// Demo video (local public asset so it never 404s)
-const HOME_SLYDE_VIDEO = '/videos/car.mp4'
 
 interface HomeSlydeScreenProps {
   data: HomeSlydeData
@@ -24,14 +22,10 @@ interface HomeSlydeScreenProps {
  */
 export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [infoOpen, setInfoOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [isHearted, setIsHearted] = useState(false)
   const [heartCount, setHeartCount] = useState(2400)
-  const [isMuted, setIsMuted] = useState(true)
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const sessionIdRef = useRef<string | null>(null)
-  const firstSeenAtRef = useRef<number | null>(null)
-  const drawerOpenedOnceRef = useRef(false)
 
   const handleHeartTap = useCallback(() => {
     setIsHearted((prev) => {
@@ -39,13 +33,6 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
       return !prev
     })
   }, [])
-
-  const toggleMute = useCallback(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted
-      setIsMuted(!isMuted)
-    }
-  }, [isMuted])
 
   const handleCategoryTap = useCallback(
     (categoryId: string) => {
@@ -57,103 +44,48 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
     [onCategoryTap]
   )
 
-  // --- Analytics (best-effort; uses existing ingest endpoint) ---
-  const emit = useCallback(
-    async (eventType: 'sessionStart' | 'drawerOpen' | 'categorySelect' | 'videoLoop', meta?: Record<string, unknown>) => {
-      // Demo: Highland Motors doesn't map to a real org yet; use a stable slug for now.
-      // When productized: org slug comes from organization profile and Home Slyde is the root Slyde.
-      const organizationSlug = 'wildtrax'
-      const slydePublicId = 'home'
-
-      try {
-        if (!sessionIdRef.current) sessionIdRef.current = crypto.randomUUID()
-        if (!firstSeenAtRef.current) firstSeenAtRef.current = Date.now()
-
-        await fetch('/api/analytics/ingest', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            organizationSlug,
-            events: [
-              {
-                eventType,
-                sessionId: sessionIdRef.current,
-                slydePublicId,
-                source: 'direct',
-                referrer: typeof document !== 'undefined' ? document.referrer : undefined,
-                meta: meta ?? {},
-              },
-            ],
-          }),
-          keepalive: true,
-        })
-      } catch {
-        // ignore
-      }
-    },
-    []
-  )
-
-  useEffect(() => {
-    void emit('sessionStart', {})
-  }, [emit])
-
   const drawerCategories = data.categories.map((cat) => ({
     id: cat.id,
-    icon: cat.icon,
     label: cat.label,
     description: cat.description,
   }))
 
   return (
     <div className="relative w-full h-full overflow-hidden">
-      {/* Video Background */}
+      {/* Background Media */}
       <motion.div
-        className="absolute inset-0"
+        className={`absolute inset-0 bg-gradient-to-b ${data.backgroundGradient}`}
         animate={{ filter: drawerOpen ? 'brightness(0.4)' : 'brightness(1)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        <video
-          ref={videoRef}
-          src={HOME_SLYDE_VIDEO}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          onEnded={() => {
-            void emit('videoLoop', {})
+        {/* Animated gradient overlay to simulate video movement */}
+        <motion.div
+          className="absolute inset-0"
+          animate={{
+            background: [
+              'radial-gradient(circle at 30% 30%, rgba(34, 211, 238, 0.1) 0%, transparent 50%)',
+              'radial-gradient(circle at 70% 70%, rgba(34, 211, 238, 0.1) 0%, transparent 50%)',
+              'radial-gradient(circle at 30% 70%, rgba(34, 211, 238, 0.1) 0%, transparent 50%)',
+              'radial-gradient(circle at 30% 30%, rgba(34, 211, 238, 0.1) 0%, transparent 50%)',
+            ],
           }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
         />
       </motion.div>
 
       {/* Gradient overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
 
-      {/* Sound Toggle - Top Left */}
-      <motion.button
-        className="absolute top-4 left-4 z-50 w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={toggleMute}
-      >
-        {isMuted ? (
-          <VolumeX className="w-4 h-4 text-white" />
-        ) : (
-          <Volume2 className="w-4 h-4 text-white" />
-        )}
-      </motion.button>
-
-      {/* === RIGHT SIDE ACTIONS === (Heart + Share only) */}
+      {/* === RIGHT SIDE ACTIONS === (no FAQ for Home Slyde) */}
       <SocialActionStack
         heartCount={heartCount}
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
-        onInfoTap={() => {}}
+        onInfoTap={() => setInfoOpen(true)}
+        slideIndicator="1/1"
         hideFAQ
-        hideInfo
-        className="absolute right-3 bottom-44 z-40"
+        className="absolute right-3 top-1/2 -translate-y-1/2 z-40 pt-[72px]"
       />
 
       {/* === BOTTOM CONTENT === (exact same as SlydeScreen) */}
@@ -190,49 +122,30 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
           onClick={() => setDrawerOpen(true)}
         >
           <ChevronUp className="w-5 h-5 text-white/60" />
-          <span className="text-white/50 text-[10px] mt-0.5">Swipe up to explore</span>
+          <span className="text-white/50 text-[10px] mt-0.5">Tap to explore</span>
         </motion.div>
       </div>
-
-      {/* Swipe-up gesture zone (bottom 20%) */}
-      {!drawerOpen && (
-        <motion.div
-          className="absolute left-0 right-0 bottom-0 h-[20%] z-40"
-          drag="y"
-          dragConstraints={{ top: 0, bottom: 0 }}
-          dragElastic={{ top: 0.2, bottom: 0 }}
-          onDragEnd={(_, info) => {
-            if (info.offset.y < -50) {
-              setDrawerOpen(true)
-              if (!drawerOpenedOnceRef.current) {
-                drawerOpenedOnceRef.current = true
-                const ms = firstSeenAtRef.current ? Date.now() - firstSeenAtRef.current : null
-                void emit('drawerOpen', { timeToOpenMs: ms })
-              }
-            }
-          }}
-          onClick={() => {
-            setDrawerOpen(true)
-            if (!drawerOpenedOnceRef.current) {
-              drawerOpenedOnceRef.current = true
-              const ms = firstSeenAtRef.current ? Date.now() - firstSeenAtRef.current : null
-              void emit('drawerOpen', { timeToOpenMs: ms })
-            }
-          }}
-        />
-      )}
 
       {/* Category Drawer (replaces AboutSheet) */}
       <CategoryDrawer
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         categories={drawerCategories}
-        onCategoryTap={(categoryId) => {
-          void emit('categorySelect', { categoryId })
-          handleCategoryTap(categoryId)
-        }}
+        onCategoryTap={handleCategoryTap}
         businessName={data.businessName}
         accentColor={data.accentColor}
+      />
+
+      {/* Info Sheet (business info from Info button) */}
+      <InfoSheet
+        isOpen={infoOpen}
+        onClose={() => setInfoOpen(false)}
+        businessName={data.businessName}
+        accentColor={data.accentColor}
+        about={data.about || ''}
+        address={data.address || ''}
+        hours={data.hours}
+        website={data.website}
       />
 
       {/* Share Sheet */}
