@@ -1,8 +1,9 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, HelpCircle, Share2, Info, ChevronUp, ChevronLeft } from 'lucide-react'
+import { ChevronUp, ChevronLeft } from 'lucide-react'
+import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
 import type { CategoryData } from '../data/highlandMotorsData'
 
 interface CategorySlydeViewProps {
@@ -34,6 +35,10 @@ export function CategorySlydeView({
   const currentFrame = frames[frameIndex] || frames[0]
   const totalFrames = frames.length
 
+  // Heart state (local for demo)
+  const [isHearted, setIsHearted] = useState(false)
+  const [heartCount, setHeartCount] = useState(1200)
+
   // Guard against missing frames
   if (!currentFrame) {
     return (
@@ -42,6 +47,13 @@ export function CategorySlydeView({
       </div>
     )
   }
+
+  const handleHeartTap = useCallback(() => {
+    setIsHearted((prev) => {
+      setHeartCount((count) => (prev ? count - 1 : count + 1))
+      return !prev
+    })
+  }, [])
 
   const nextFrame = useCallback(() => {
     if (frameIndex < totalFrames - 1) {
@@ -100,41 +112,18 @@ export function CategorySlydeView({
         </AnimatePresence>
       </div>
 
-      {/* === RIGHT SIDE ACTIONS === */}
-      <div className="absolute right-3 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-3">
-        {/* Frame indicator */}
-        <div className="text-[10px] text-white/60 font-medium mb-2">
-          {frameIndex + 1}/{totalFrames}
-        </div>
-
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Heart className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-[10px] text-white/60">1.2k</span>
-        </button>
-
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <HelpCircle className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-[10px] text-white/60">FAQ</span>
-        </button>
-
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Share2 className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-[10px] text-white/60">Share</span>
-        </button>
-
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Info className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-[10px] text-white/60">Info</span>
-        </button>
-      </div>
+      {/* === RIGHT SIDE ACTIONS === (using shared SocialActionStack) */}
+      <SocialActionStack
+        heartCount={heartCount}
+        isHearted={isHearted}
+        faqCount={12}
+        onHeartTap={handleHeartTap}
+        onFAQTap={() => {}}
+        onShareTap={() => {}}
+        onInfoTap={() => {}}
+        slideIndicator={`${frameIndex + 1}/${totalFrames}`}
+        className="absolute right-3 top-1/2 -translate-y-1/2 z-40"
+      />
 
       {/* === BOTTOM CONTENT === */}
       <div className="absolute bottom-0 left-0 right-0 p-4 pb-6 z-10">
@@ -194,19 +183,6 @@ export function CategorySlydeView({
             {frameIndex === 0 ? 'Swipe up' : 'Back to top'}
           </span>
         </motion.div>
-      </div>
-
-      {/* Frame dots indicator */}
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
-        {frames.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => onFrameChange(i)}
-            className={`w-1.5 h-1.5 rounded-full transition-all ${
-              i === frameIndex ? 'bg-white w-4' : 'bg-white/40'
-            }`}
-          />
-        ))}
       </div>
     </div>
   )
