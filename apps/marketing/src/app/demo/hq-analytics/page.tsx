@@ -55,6 +55,19 @@ interface SlydeData {
   }
 }
 
+function InfoButton({ label, description }: { label: string; description: string }) {
+  return (
+    <button
+      type="button"
+      title={`${label}: ${description}`}
+      aria-label={`${label}: ${description}`}
+      className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-transparent text-gray-400 hover:text-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-white/35 dark:hover:text-white/70 dark:focus-visible:ring-cyan-400/30 dark:focus-visible:ring-offset-[#1c1c1e]"
+    >
+      <Info className="w-4 h-4" aria-hidden="true" />
+    </button>
+  )
+}
+
 function HQAnalyticsContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -70,19 +83,6 @@ function HQAnalyticsContent() {
   const [realGlobal, setRealGlobal] = useState<null | Partial<any>>(null)
   const [realSlyde, setRealSlyde] = useState<null | Partial<SlydeData>>(null)
   const [analyticsConfigured, setAnalyticsConfigured] = useState(true)
-
-  const InfoButton = ({ label, description }: { label: string; description: string }) => {
-    return (
-      <button
-        type="button"
-        title={`${label}: ${description}`}
-        aria-label={`${label}: ${description}`}
-        className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-transparent text-gray-400 hover:text-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-white/35 dark:hover:text-white/70 dark:focus-visible:ring-cyan-400/30 dark:focus-visible:ring-offset-[#1c1c1e]"
-      >
-        <Info className="w-4 h-4" aria-hidden="true" />
-      </button>
-    )
-  }
 
   // Deep-link support: ?slyde=camping
   useEffect(() => {

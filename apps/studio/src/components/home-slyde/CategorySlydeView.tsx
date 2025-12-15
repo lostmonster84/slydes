@@ -39,15 +39,6 @@ export function CategorySlydeView({
   const [isHearted, setIsHearted] = useState(false)
   const [heartCount, setHeartCount] = useState(1200)
 
-  // Guard against missing frames
-  if (!currentFrame) {
-    return (
-      <div className="relative w-full h-full bg-slate-900 flex items-center justify-center">
-        <p className="text-white/60">No frames available</p>
-      </div>
-    )
-  }
-
   const handleHeartTap = useCallback(() => {
     setIsHearted((prev) => {
       setHeartCount((count) => (prev ? count - 1 : count + 1))
@@ -70,6 +61,15 @@ export function CategorySlydeView({
   const handleTap = useCallback(() => {
     nextFrame()
   }, [nextFrame])
+
+  // Guard against missing frames
+  if (!currentFrame) {
+    return (
+      <div className="relative w-full h-full bg-slate-900 flex items-center justify-center">
+        <p className="text-white/60">No frames available</p>
+      </div>
+    )
+  }
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-slate-900">
