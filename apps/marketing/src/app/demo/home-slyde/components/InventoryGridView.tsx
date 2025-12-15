@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { InventoryItem } from '../data/highlandMotorsData'
 
 interface InventoryGridViewProps {
@@ -13,13 +13,13 @@ interface InventoryGridViewProps {
 }
 
 /**
- * InventoryGridView - Level 2: Card-based grid (earned, not default)
+ * InventoryGridView - Level 2: List format with square thumbnails
  *
  * Key rules from CATEGORY-INVENTORY-FLOW.md:
  * - Grids are NEVER an entry point
  * - Grids are only accessible from a Category Slyde
  * - Grids are shallow and utilitarian
- * - Card-based layout, minimal metadata
+ * - List layout with square thumbnails, minimal metadata
  */
 export function InventoryGridView({
   categoryName,
@@ -44,58 +44,58 @@ export function InventoryGridView({
         <span className="text-white/50 text-sm">{items.length} items</span>
       </div>
 
-      {/* Grid */}
-      <div className="flex-1 overflow-y-auto p-3">
-        <div className="grid grid-cols-2 gap-3">
+      {/* Vehicle List */}
+      <div
+        className="flex-1 overflow-y-auto p-3"
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+        }}
+      >
+        <style jsx>{`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
+        <div className="flex flex-col gap-2">
           {items.map((item, index) => (
             <motion.button
               key={item.id}
               onClick={() => onItemTap(item.id)}
-              className="group relative bg-white/5 rounded-xl overflow-hidden text-left border border-white/10 hover:border-white/20 transition-all"
+              className="group flex items-center gap-3 bg-white/5 rounded-xl p-2.5 text-left border border-white/10 active:bg-white/10 transition-colors"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.03 }}
               whileTap={{ scale: 0.98 }}
             >
-              {/* Image placeholder */}
-              <div className="aspect-[4/3] bg-gradient-to-br from-slate-700 to-slate-800 relative">
-                {/* Badge */}
-                {item.badge && (
-                  <div
-                    className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-semibold text-white"
-                    style={{ backgroundColor: accentColor }}
-                  >
-                    {item.badge}
-                  </div>
-                )}
+              {/* Square Thumbnail */}
+              <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 flex-shrink-0 flex items-center justify-center">
+                <span className="text-xl opacity-40">🚗</span>
+              </div>
 
-                {/* Car icon placeholder */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-3xl opacity-30">🚗</span>
+              {/* Vehicle Info */}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-white font-semibold text-sm truncate">
+                  {item.title}
+                </h3>
+                <p className="text-white/50 text-[11px] truncate">
+                  {item.subtitle}
+                </p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <p
+                    className="text-sm font-bold"
+                    style={{ color: accentColor }}
+                  >
+                    {item.price}
+                  </p>
+                  {item.badge && (
+                    <span className="text-[9px] text-white/40">{item.badge}</span>
+                  )}
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="p-2.5">
-                <h3 className="text-white text-xs font-semibold truncate">
-                  {item.title}
-                </h3>
-                <p className="text-white/50 text-[10px] truncate mt-0.5">
-                  {item.subtitle}
-                </p>
-                <p
-                  className="text-sm font-bold mt-1.5"
-                  style={{ color: accentColor }}
-                >
-                  {item.price}
-                </p>
-              </div>
-
-              {/* Hover indicator */}
-              <div
-                className="absolute bottom-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ backgroundColor: accentColor }}
-              />
+              {/* Chevron */}
+              <ChevronRight className="w-4 h-4 text-white/30 flex-shrink-0" />
             </motion.button>
           ))}
         </div>
