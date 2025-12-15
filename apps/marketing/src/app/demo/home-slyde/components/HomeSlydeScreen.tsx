@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronUp } from 'lucide-react'
+import { ChevronUp, Volume2, VolumeX } from 'lucide-react'
 import { RatingDisplay } from '@/components/slyde-demo/RatingDisplay'
 import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
 import { ProfilePill } from '@/components/slyde-demo/ProfilePill'
@@ -10,6 +10,9 @@ import { CategoryDrawer } from './CategoryDrawer'
 import { InfoSheet } from './InfoSheet'
 import { ShareSheet } from '@/components/slyde-demo/ShareSheet'
 import type { HomeSlydeData } from '../data/highlandMotorsData'
+
+// Placeholder video - car dealership showroom (Pixabay - free, no auth required)
+const PLACEHOLDER_VIDEO = 'https://cdn.pixabay.com/video/2020/05/25/40130-424930081_large.mp4'
 
 interface HomeSlydeScreenProps {
   data: HomeSlydeData
@@ -26,6 +29,8 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
   const [shareOpen, setShareOpen] = useState(false)
   const [isHearted, setIsHearted] = useState(false)
   const [heartCount, setHeartCount] = useState(2400)
+  const [isMuted, setIsMuted] = useState(true)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   const handleHeartTap = useCallback(() => {
     setIsHearted((prev) => {
@@ -33,6 +38,13 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
       return !prev
     })
   }, [])
+
+  const toggleMute = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted
+      setIsMuted(!isMuted)
+    }
+  }, [isMuted])
 
   const handleCategoryTap = useCallback(
     (categoryId: string) => {
@@ -52,29 +64,39 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
 
   return (
     <div className="relative w-full h-full overflow-hidden">
-      {/* Background Media */}
+      {/* Video Background */}
       <motion.div
-        className={`absolute inset-0 bg-gradient-to-b ${data.backgroundGradient}`}
+        className="absolute inset-0"
         animate={{ filter: drawerOpen ? 'brightness(0.4)' : 'brightness(1)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        {/* Animated gradient overlay to simulate video movement */}
-        <motion.div
-          className="absolute inset-0"
-          animate={{
-            background: [
-              'radial-gradient(circle at 30% 30%, rgba(34, 211, 238, 0.1) 0%, transparent 50%)',
-              'radial-gradient(circle at 70% 70%, rgba(34, 211, 238, 0.1) 0%, transparent 50%)',
-              'radial-gradient(circle at 30% 70%, rgba(34, 211, 238, 0.1) 0%, transparent 50%)',
-              'radial-gradient(circle at 30% 30%, rgba(34, 211, 238, 0.1) 0%, transparent 50%)',
-            ],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+        <video
+          ref={videoRef}
+          src={PLACEHOLDER_VIDEO}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
         />
       </motion.div>
 
       {/* Gradient overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+
+      {/* Sound Toggle - Top Left */}
+      <motion.button
+        className="absolute top-4 left-4 z-50 w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={toggleMute}
+      >
+        {isMuted ? (
+          <VolumeX className="w-4 h-4 text-white" />
+        ) : (
+          <Volume2 className="w-4 h-4 text-white" />
+        )}
+      </motion.button>
 
       {/* === RIGHT SIDE ACTIONS === (no FAQ for Home Slyde) */}
       <SocialActionStack
