@@ -66,6 +66,11 @@ function HQAnalyticsContent() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const demoBusiness = useDemoBusiness()
 
+  // Real analytics (fetched) — merges into mocked shape so UI stays stable.
+  const [realGlobal, setRealGlobal] = useState<null | Partial<any>>(null)
+  const [realSlyde, setRealSlyde] = useState<null | Partial<SlydeData>>(null)
+  const [analyticsConfigured, setAnalyticsConfigured] = useState(true)
+
   const InfoButton = ({ label, description }: { label: string; description: string }) => {
     return (
       <button
@@ -106,7 +111,7 @@ function HQAnalyticsContent() {
 
   const isCreator = plan === 'creator'
 
-  const slydesData: Record<SlydeId, SlydeData> = useMemo(
+  const slydesDataMock: Record<SlydeId, SlydeData> = useMemo(
     () => ({
       camping: {
         id: 'camping',
@@ -189,6 +194,76 @@ function HQAnalyticsContent() {
     []
   )
 
+  // Fetch real analytics when Creator (demo uses business id as org slug)
+  useEffect(() => {
+    if (!isCreator) return
+    if (!demoBusiness?.id) return
+    const org = demoBusiness.id
+    const run = async () => {
+      try {
+        const res = await fetch(`/api/analytics/overview?org=${encodeURIComponent(org)}&range=${encodeURIComponent(range)}`)
+        if (res.status === 503) {
+          setAnalyticsConfigured(false)
+          return
+        }
+        if (!res.ok) return
+        const json = await res.json()
+        setAnalyticsConfigured(true)
+        setRealGlobal(json?.global ?? null)
+      } catch {
+        // ignore
+      }
+    }
+    run()
+  }, [isCreator, demoBusiness.id, range])
+
+  useEffect(() => {
+    if (!isCreator) return
+    if (!demoBusiness?.id) return
+    const org = demoBusiness.id
+    const run = async () => {
+      try {
+        const res = await fetch(
+          `/api/analytics/slyde?org=${encodeURIComponent(org)}&slyde=${encodeURIComponent(selectedSlyde)}&range=${encodeURIComponent(range)}`
+        )
+        if (res.status === 503) {
+          setAnalyticsConfigured(false)
+          return
+        }
+        if (!res.ok) return
+        const json = await res.json()
+        setAnalyticsConfigured(true)
+        setRealSlyde(json?.slyde ?? null)
+      } catch {
+        // ignore
+      }
+    }
+    run()
+  }, [isCreator, demoBusiness.id, selectedSlyde, range])
+
+  const slydesData: Record<SlydeId, SlydeData> = useMemo(() => {
+    const merged: Record<SlydeId, SlydeData> = { ...slydesDataMock }
+    if (realSlyde && (realSlyde.id === 'camping' || realSlyde.id === 'just-drive')) {
+      const id = realSlyde.id as SlydeId
+      merged[id] = {
+        ...merged[id],
+        // map “views” to starts for now
+        views: typeof (realSlyde as any).views === 'number' ? (realSlyde as any).views : merged[id].views,
+        completion: typeof realSlyde.completion === 'number' ? realSlyde.completion : merged[id].completion,
+        swipeDepth: typeof realSlyde.swipeDepth === 'number' ? realSlyde.swipeDepth : merged[id].swipeDepth,
+        ctaClicks: typeof realSlyde.ctaClicks === 'number' ? realSlyde.ctaClicks : merged[id].ctaClicks,
+        ctaRate: typeof realSlyde.ctaRate === 'number' ? realSlyde.ctaRate : merged[id].ctaRate,
+        shares: typeof realSlyde.shares === 'number' ? realSlyde.shares : merged[id].shares,
+        hearts: typeof realSlyde.hearts === 'number' ? realSlyde.hearts : merged[id].hearts,
+        trafficSources: Array.isArray((realSlyde as any).trafficSources) ? ((realSlyde as any).trafficSources as any) : merged[id].trafficSources,
+        frames: Array.isArray((realSlyde as any).frames) ? ((realSlyde as any).frames as any) : merged[id].frames,
+        biggestDrop: (realSlyde as any).biggestDrop ? ((realSlyde as any).biggestDrop as any) : merged[id].biggestDrop,
+        bestCta: (realSlyde as any).bestCta ? ((realSlyde as any).bestCta as any) : merged[id].bestCta,
+      }
+    }
+    return merged
+  }, [slydesDataMock, realSlyde])
+
   const currentSlyde = slydesData[selectedSlyde]
   const slydesList = Object.values(slydesData)
 
@@ -196,7 +271,7 @@ function HQAnalyticsContent() {
   // GLOBAL STATS — Aggregate across ALL Slydes (company-wide view)
   // This is the "geek mode" for Creators who want the full picture.
   // ═══════════════════════════════════════════════════════════════════
-  const globalStats = useMemo(() => {
+  const globalStatsMock = useMemo(() => {
     const totalStarts = 1240
     const totalSlydes = slydesList.length
 
@@ -293,6 +368,15 @@ function HQAnalyticsContent() {
       flowPatterns,
     }
   }, [slydesList])
+
+  const globalStats = useMemo(() => {
+    // Merge real values into the existing mocked shape.
+    // This keeps all UI panels intact even if we only have partial data yet.
+    return {
+      ...globalStatsMock,
+      ...(realGlobal ?? {}),
+    }
+  }, [globalStatsMock, realGlobal])
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white overflow-hidden">
@@ -410,6 +494,23 @@ function HQAnalyticsContent() {
 
                 {/* Content (blurred on Free) */}
                 <div className={`space-y-6 ${!isCreator ? 'blur-[8px] opacity-60 pointer-events-none select-none' : ''}`}>
+                  {/* Analytics not configured (dev) */}
+                  {isCreator && !analyticsConfigured && (
+                    <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-sm dark:bg-[#2c2c2e] dark:border-white/10">
+                      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
+                      <div className="p-6">
+                        <div className="text-xs font-semibold text-gray-500 dark:text-white/60">Setup required</div>
+                        <div className="mt-1 text-2xl font-display font-bold tracking-tight text-gray-900 dark:text-white">
+                          Analytics backend isn’t configured yet.
+                        </div>
+                        <div className="mt-2 text-sm text-gray-600 dark:text-white/60">
+                          Add <span className="font-mono">NEXT_PUBLIC_SUPABASE_URL</span> and <span className="font-mono">SUPABASE_SERVICE_ROLE_KEY</span>,
+                          and run the new migration <span className="font-mono">003_create_slydes_analytics.sql</span>.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Empty state (Creator): no Slydes yet */}
                   {isCreator && !demoBusiness.hasSlydes && (
                     <div className="max-w-3xl">
