@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Loader2, Check, X, ChevronLeft } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { applyStarterTemplate } from '@/lib/starterTemplates'
-import { writeDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 
 const BUSINESS_TYPES = [
   { id: 'rentals', label: 'Rentals & Equipment', icon: '🚗' },
@@ -234,13 +232,6 @@ export default function OnboardingPage() {
         setSubmitError(profileError?.message || 'Could not update your profile. Please try again.')
         setIsLoading(false)
         return
-      }
-
-      // Apply starter template based on business type
-      const starterHomeSlyde = applyStarterTemplate(formData.business_type)
-      if (starterHomeSlyde) {
-        writeDemoHomeSlyde(starterHomeSlyde)
-        console.log('Applied starter template for:', formData.business_type)
       }
 
       // Success! Redirect to dashboard
