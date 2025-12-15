@@ -39,7 +39,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Too many events (max 200)' }, { status: 413 })
   }
 
-  const supabase = createSupabaseAdmin()
+  let supabase: ReturnType<typeof createSupabaseAdmin>
+  try {
+    supabase = createSupabaseAdmin()
+  } catch (e) {
+    return NextResponse.json(
+      { error: 'Analytics not configured', detail: (e as Error).message },
+      { status: 503 }
+    )
+  }
 
   // Resolve organization by slug
   const { data: org, error: orgErr } = await supabase
