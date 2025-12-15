@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight, LayoutDashboard, Smartphone, BarChart3, Inbox, Palette, Settings, Check, Plus, LogOut, Menu, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, LayoutDashboard, Smartphone, BarChart3, Inbox, Palette, Settings, Check, Plus, LogOut, Menu, X, Home } from 'lucide-react'
 
 interface HQSidebarProps {
-  activePage: 'dashboard' | 'slydes' | 'analytics' | 'inbox' | 'brand' | 'settings'
+  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'analytics' | 'inbox' | 'brand' | 'settings'
   plan: 'free' | 'creator'
   onPlanChange: (plan: 'free' | 'creator') => void
   slydeCount?: number
@@ -76,6 +76,7 @@ export function HQSidebar({ activePage, plan, onPlanChange, slydeCount = 2, inbo
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', href: '/demo/hq-dashboard', icon: LayoutDashboard },
+    { id: 'home-slyde', label: 'Home Slyde', href: '/demo/editor-home-slyde', icon: Home },
     { id: 'slydes', label: 'Slydes', href: '/demo/hq-mockup', icon: Smartphone, badge: slydeCount },
     { id: 'analytics', label: 'Analytics', href: '/demo/hq-analytics', icon: BarChart3, locked: !isCreator },
     { id: 'inbox', label: 'Inbox', href: '/demo/hq-inbox', icon: Inbox, badge: inboxCount },

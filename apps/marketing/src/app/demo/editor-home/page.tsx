@@ -155,7 +155,7 @@ export default function EditorHomePage() {
             <span className="text-xs text-gray-500 dark:text-white/50">Required</span>
           </div>
           <Link
-            href="/demo/editor-mockup?slyde=home"
+            href="/demo/editor-home-slyde"
             className="block w-full p-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 hover:border-gray-300 dark:hover:border-white/20 transition-colors"
           >
             <div className="flex items-start gap-4">

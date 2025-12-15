@@ -3,13 +3,22 @@ import { useEffect, useState } from 'react'
 export type DemoHomeSlydeCategory = {
   id: string
   icon: string
-  label: string
+  name: string
   description: string
   /**
    * Links a Home Slyde category to a Child Slyde (shareable experience).
    * This powers Option A: Home Slyde → Category Slyde (child) → (optional) Inventory → Item.
    */
   childSlydeId: string
+  /**
+   * PAID FEATURE: When true, this category has an inventory grid.
+   * The Category Slyde shows "View All" CTA → Inventory Grid → Item Slydes.
+   */
+  hasInventory?: boolean
+  /**
+   * CTA text for inventory link, e.g. "View All 12 Vehicles"
+   */
+  inventoryCtaText?: string
 }
 
 export type DemoHomeSlyde = {
@@ -29,8 +38,8 @@ export const DEFAULT_DEMO_HOME_SLYDE: DemoHomeSlyde = {
   videoSrc: '/videos/adventure.mp4',
   posterSrc: undefined,
   categories: [
-    { id: 'camping', icon: '🏕️', label: 'Camping', description: 'Land Rover + rooftop tent', childSlydeId: 'camping' },
-    { id: 'just-drive', icon: '🚗', label: 'Just Drive', description: 'Day hire, freedom to roam', childSlydeId: 'just-drive' },
+    { id: 'camping', icon: '🏕️', name: 'Camping', description: 'Land Rover + rooftop tent', childSlydeId: 'camping', hasInventory: false },
+    { id: 'just-drive', icon: '🚗', name: 'Just Drive', description: 'Day hire, freedom to roam', childSlydeId: 'just-drive', hasInventory: false },
   ],
   primaryCta: { text: 'Check availability', action: 'https://wildtrax.co.uk/book' },
 }
@@ -60,9 +69,12 @@ export function readDemoHomeSlyde(): DemoHomeSlyde {
       .map((c: any, idx: number) => ({
         id: typeof c?.id === 'string' && c.id.trim() ? c.id : `cat-${idx + 1}`,
         icon: typeof c?.icon === 'string' && c.icon.trim() ? c.icon : '✨',
-        label: typeof c?.label === 'string' && c.label.trim() ? c.label : 'Category',
+        // Support both old `label` and new `name` field
+        name: typeof c?.name === 'string' && c.name.trim() ? c.name : (typeof c?.label === 'string' && c.label.trim() ? c.label : 'Category'),
         description: typeof c?.description === 'string' ? c.description : '',
         childSlydeId: typeof c?.childSlydeId === 'string' && c.childSlydeId.trim() ? c.childSlydeId : 'camping',
+        hasInventory: typeof c?.hasInventory === 'boolean' ? c.hasInventory : false,
+        inventoryCtaText: typeof c?.inventoryCtaText === 'string' ? c.inventoryCtaText : undefined,
       })),
     primaryCta: parsed.primaryCta && typeof parsed.primaryCta === 'object'
       ? {

@@ -61,6 +61,8 @@ export interface HomeSlydeData {
   about?: string
   address?: string
   hours?: string
+  phone?: string
+  email?: string
   website?: string
   categories: CategoryData[]
   primaryCta?: {

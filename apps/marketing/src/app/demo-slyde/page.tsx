@@ -116,7 +116,7 @@ function DemoSlydeContent() {
               posterSrc: home.posterSrc,
               categories: home.categories.map((c) => ({
                 id: c.id,
-                label: c.label,
+                label: c.name,
                 icon: c.icon,
                 description: c.description,
                 frames: [],

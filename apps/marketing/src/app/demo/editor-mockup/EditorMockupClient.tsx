@@ -386,7 +386,7 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
       ...homeSlyde,
       categories: [
         ...homeSlyde.categories,
-        { id, icon: '✨', label: 'New category', description: '', childSlydeId: 'camping' },
+        { id, icon: '✨', name: 'New category', description: '', childSlydeId: 'camping', hasInventory: false },
       ],
     }
     writeDemoHomeSlyde(next)
@@ -637,8 +637,8 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
                       </div>
                       <div className="flex-1 min-w-0">
                         <input
-                          value={cat.label}
-                          onChange={(e) => updateHomeCategory(cat.id, { label: e.target.value })}
+                          value={cat.name}
+                          onChange={(e) => updateHomeCategory(cat.id, { name: e.target.value })}
                           className="w-full bg-transparent text-sm font-display font-bold text-gray-900 dark:text-white outline-none"
                         />
                         <input
@@ -856,7 +856,7 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
                         reviewCount: business.reviewCount,
                         categories: homeSlyde.categories.map((c) => ({
                           id: c.id,
-                          label: c.label,
+                          label: c.name,
                           icon: c.icon,
                           description: c.description,
                           frames: [],
