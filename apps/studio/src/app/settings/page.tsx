@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { ArrowLeft, User, Bell, Shield, CreditCard } from 'lucide-react'
+import { ArrowLeft, User, Bell, Shield, CreditCard, Video } from 'lucide-react'
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -28,6 +28,12 @@ export default async function SettingsPage() {
       description: 'Manage your account details',
       icon: User,
       href: '/settings/profile',
+    },
+    {
+      title: 'Media',
+      description: 'Upload your Home video',
+      icon: Video,
+      href: '/settings/media',
     },
     {
       title: 'Notifications',

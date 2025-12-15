@@ -43,7 +43,7 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
-  const [slugStatus, setSlugStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle')
+  const [slugStatus, setSlugStatus] = useState<'idle' | 'checking' | 'available' | 'owned' | 'taken'>('idle')
   const [formData, setFormData] = useState({
     full_name: '',
     organization_name: '',
@@ -73,16 +73,50 @@ export default function OnboardingPage() {
 
     const timer = setTimeout(async () => {
       setSlugStatus('checking')
-      const { data, error } = await supabase
-        .rpc('is_slug_available', { check_slug: formData.slug })
+      const checkSlug = formData.slug.toLowerCase()
 
-      if (error) {
-        console.error('Error checking slug:', error)
+      // Prefer RPC if present (distinguishes available/owned/taken without relying on RLS visibility).
+      const { data, error } = await supabase.rpc('slug_status', { check_slug: checkSlug })
+
+      if (!error) {
+        if (data === 'available' || data === 'owned' || data === 'taken') {
+          setSlugStatus(data)
+        } else {
+          setSlugStatus('idle')
+        }
+        return
+      }
+
+      // Fallback path: handle missing RPC or transient errors.
+      // 1) If the org is visible to this user (RLS), treat it as "owned" (or at least accessible).
+      // 2) Otherwise fall back to the older boolean RPC which checks global uniqueness.
+      console.warn('slug_status RPC unavailable; falling back to RLS + is_slug_available', error)
+
+      const { data: visibleOrg, error: visibleOrgError } = await supabase
+        .from('organizations')
+        .select('id')
+        .eq('slug', checkSlug)
+        .maybeSingle()
+
+      if (!visibleOrgError && visibleOrg?.id) {
+        setSlugStatus('owned')
+        return
+      }
+
+      const { data: available, error: availableError } = await supabase.rpc('is_slug_available', { check_slug: checkSlug })
+
+      if (availableError) {
+        console.error('Error checking slug (fallback):', availableError)
         setSlugStatus('idle')
         return
       }
 
-      setSlugStatus(data ? 'available' : 'taken')
+      if (typeof available === 'boolean') {
+        setSlugStatus(available ? 'available' : 'taken')
+        return
+      }
+
+      setSlugStatus('idle')
     }, 500)
 
     return () => clearTimeout(timer)
@@ -111,26 +145,47 @@ export default function OnboardingPage() {
         return
       }
 
-      // Create organization
-      const { data: org, error: orgError } = await supabase
-        .from('organizations')
-        .insert({
-          owner_id: user.id,
-          name: formData.organization_name,
-          slug: formData.slug.toLowerCase(),
-          website: formData.website || null,
-          business_type: formData.business_type,
-        })
-        .select()
-        .single()
+      let orgId: string | null = null
 
-      if (orgError) {
-        console.error('Error creating organization:', JSON.stringify(orgError, null, 2))
-        console.error('Error code:', orgError.code)
-        console.error('Error message:', orgError.message)
-        console.error('Error details:', orgError.details)
-        setIsLoading(false)
-        return
+      if (slugStatus === 'owned') {
+        // Slug exists and is owned by this user: reuse it instead of inserting (avoids unique constraint failure).
+        const { data: existingOrg, error: existingOrgError } = await supabase
+          .from('organizations')
+          .select('id')
+          .eq('slug', formData.slug.toLowerCase())
+          .single()
+
+        if (existingOrgError || !existingOrg) {
+          console.error('Error loading existing organization:', JSON.stringify(existingOrgError, null, 2))
+          setIsLoading(false)
+          return
+        }
+
+        orgId = existingOrg.id
+      } else {
+        // Create organization
+        const { data: org, error: orgError } = await supabase
+          .from('organizations')
+          .insert({
+            owner_id: user.id,
+            name: formData.organization_name,
+            slug: formData.slug.toLowerCase(),
+            website: formData.website || null,
+            business_type: formData.business_type,
+          })
+          .select('id')
+          .single()
+
+        if (orgError || !org) {
+          console.error('Error creating organization:', JSON.stringify(orgError, null, 2))
+          console.error('Error code:', orgError?.code)
+          console.error('Error message:', orgError?.message)
+          console.error('Error details:', orgError?.details)
+          setIsLoading(false)
+          return
+        }
+
+        orgId = org.id
       }
 
       // Update profile
@@ -141,7 +196,7 @@ export default function OnboardingPage() {
           company_name: formData.organization_name,
           company_website: formData.website,
           onboarding_completed: true,
-          current_organization_id: org.id,
+          current_organization_id: orgId,
         })
         .eq('id', user.id)
 
@@ -165,7 +220,12 @@ export default function OnboardingPage() {
     if (step === 1 && formData.full_name) {
       setDirection(1)
       setStep(2)
-    } else if (step === 2 && formData.organization_name && formData.slug && slugStatus === 'available') {
+    } else if (
+      step === 2 &&
+      formData.organization_name &&
+      formData.slug &&
+      (slugStatus === 'available' || slugStatus === 'owned')
+    ) {
       setDirection(1)
       setStep(3)
     }
@@ -178,7 +238,10 @@ export default function OnboardingPage() {
     }
   }
 
-  const canProceedStep2 = formData.organization_name && formData.slug.length >= 3 && slugStatus === 'available'
+  const canProceedStep2 =
+    formData.organization_name &&
+    formData.slug.length >= 3 &&
+    (slugStatus === 'available' || slugStatus === 'owned')
   const canProceedStep3 = formData.business_type
 
   return (
@@ -337,6 +400,11 @@ export default function OnboardingPage() {
                                     <Check className="w-4 h-4 text-green-400" />
                                   </div>
                                 )}
+                                {slugStatus === 'owned' && (
+                                  <div className="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center">
+                                    <Check className="w-4 h-4 text-green-400" />
+                                  </div>
+                                )}
                                 {slugStatus === 'taken' && (
                                   <div className="w-6 h-6 bg-red-500/20 rounded-full flex items-center justify-center">
                                     <X className="w-4 h-4 text-red-400" />
@@ -357,6 +425,16 @@ export default function OnboardingPage() {
                             className="text-red-400 text-[13px] mt-2"
                           >
                             This URL is already taken
+                          </motion.p>
+                        )}
+                        {slugStatus === 'owned' && (
+                          <motion.p
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="text-green-400 text-[13px] mt-2"
+                          >
+                            This URL is already yours
                           </motion.p>
                         )}
                         {slugStatus === 'available' && (

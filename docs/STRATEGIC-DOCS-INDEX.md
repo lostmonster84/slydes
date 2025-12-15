@@ -135,6 +135,12 @@ This directory contains the complete strategic documentation for Slydes, from vi
 | Stream | Starts | 2026 Target |
 |--------|--------|-------------|
 | **Subscriptions** | Q1 2025 | $6M/year |
+
+---
+
+### Deployment & Keys (Operational)
+
+- `DEPLOYMENT-CHECKLIST.md` — **Single source of truth** for all keys, env vars, and setup steps.
 | **Transaction Fees** | Q1 2026 | $2.4M/year |
 | **Featured Listings** | Q1 2026 | $1.6M/year |
 | **Enterprise** | Q2 2025 | $480K/year |

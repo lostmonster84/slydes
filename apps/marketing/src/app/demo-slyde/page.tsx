@@ -63,7 +63,7 @@ function DemoSlydeContent() {
   // Live brand sync — reacts to changes from Brand settings page (cross-tab + same-tab)
   const brandProfile = useDemoBrand()
   const brandAccent = useMemo(() => demoBrandGradient(brandProfile), [brandProfile])
-  const home = useDemoHomeSlyde()
+  const { data: home } = useDemoHomeSlyde()
 
   const [business, setBusiness] = useState<BusinessInfo>(() => ({
     ...wildtraxBusiness,

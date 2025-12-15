@@ -40,6 +40,18 @@ INVESTOR_PAGE_PASSWORD=your_secure_password
 # Required for Stripe payments (Founding Member checkout)
 STRIPE_SECRET_KEY=sk_test_your_key_here
 STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+
+# Media (Cloudflare)
+# - Stream: video upload + processing + playback
+# - Images: image upload + resizing/format
+CLOUDFLARE_ACCOUNT_ID=your_account_id
+CLOUDFLARE_STREAM_TOKEN=your_stream_api_token
+# Tokenized playback signing secret (generate yourself; do not paste into chat)
+# Example: `openssl rand -base64 32`
+CLOUDFLARE_STREAM_SIGNING_KEY=your_generated_signing_secret
+CLOUDFLARE_IMAGES_TOKEN=your_images_api_token
+CLOUDFLARE_IMAGES_ACCOUNT_HASH=your_imagedelivery_hash
+CLOUDFLARE_IMAGES_DEFAULT_VARIANT=hero
 ```
 
 ### Email Configuration
@@ -196,6 +208,8 @@ npm run lint     # Run ESLint
 - **Forms**: React Hook Form
 - **Email**: Resend
 - **Hosting**: Vercel
+- **Videos**: Cloudflare Stream (uploads + automatic quality/downsize)
+- **Images**: Cloudflare Images (uploads + automatic resizing/format)
 
 ---
 

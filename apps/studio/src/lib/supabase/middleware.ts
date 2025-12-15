@@ -40,8 +40,9 @@ export async function updateSession(request: NextRequest) {
   // Protected routes - redirect to login if not authenticated
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login') ||
                       request.nextUrl.pathname.startsWith('/auth')
+  const isApiRoute = request.nextUrl.pathname.startsWith('/api/')
 
-  if (!user && !isAuthRoute) {
+  if (!user && !isAuthRoute && !isApiRoute) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
@@ -55,23 +56,24 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Check if user needs onboarding (skip for auth routes and onboarding itself)
-  const isOnboardingRoute = request.nextUrl.pathname.startsWith('/onboarding')
+  // TEMPORARILY BYPASSED FOR DEVELOPMENT
+  // const isOnboardingRoute = request.nextUrl.pathname.startsWith('/onboarding')
 
-  if (user && !isAuthRoute && !isOnboardingRoute) {
-    // Check if profile exists and onboarding is completed
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('onboarding_completed')
-      .eq('id', user.id)
-      .single()
+  // if (user && !isAuthRoute && !isOnboardingRoute) {
+  //   // Check if profile exists and onboarding is completed
+  //   const { data: profile } = await supabase
+  //     .from('profiles')
+  //     .select('onboarding_completed')
+  //     .eq('id', user.id)
+  //     .single()
 
-    // If no profile or onboarding not completed, redirect to onboarding
-    if (!profile || !profile.onboarding_completed) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/onboarding'
-      return NextResponse.redirect(url)
-    }
-  }
+  //   // If no profile or onboarding not completed, redirect to onboarding
+  //   if (!profile || !profile.onboarding_completed) {
+  //     const url = request.nextUrl.clone()
+  //     url.pathname = '/onboarding'
+  //     return NextResponse.redirect(url)
+  //   }
+  // }
 
   return supabaseResponse
 }

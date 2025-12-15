@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronUp } from 'lucide-react'
+import { ChevronUp, ChevronLeft } from 'lucide-react'
 import { Badge } from './Badge'
 import { RatingDisplay } from './RatingDisplay'
 import { SocialActionStack } from './SocialActionStack'
@@ -51,6 +51,10 @@ interface SlydeScreenProps {
   analyticsSlydePublicId?: string
   /** Optional traffic source (qr/bio/ad/direct/referral) */
   analyticsSource?: string
+  /** Context mode - when 'category', shows back button and adjusts badge position */
+  context?: 'standalone' | 'category'
+  /** Callback when back button is pressed (only used in category context) */
+  onBack?: () => void
 }
 
 /**
@@ -84,7 +88,9 @@ export function SlydeScreen({
   shareUrl,
   analyticsOrgSlug,
   analyticsSlydePublicId,
-  analyticsSource
+  analyticsSource,
+  context = 'standalone',
+  onBack
 }: SlydeScreenProps) {
   const [currentFrame, setCurrentFrame] = useState(initialFrameIndex)
   const syncingFromPropRef = useRef(false)
@@ -432,26 +438,46 @@ export function SlydeScreen({
               className="absolute inset-0"
             >
               {currentFrameData.background.type === 'video' ? (
-                <video
-                  src={currentFrameData.background.src}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="absolute inset-0 w-full h-full object-cover"
-                  ref={(el) => {
-                    // Set video start time if specified
-                    if (el && currentFrameData.background.startTime !== undefined) {
-                      el.currentTime = currentFrameData.background.startTime
-                    }
-                  }}
-                />
+                currentFrameData.background.src.startsWith('stream-processing:') ? (
+                  <div className="absolute inset-0 w-full h-full bg-black flex items-center justify-center">
+                    <div className="text-white/60 text-sm">Processing video…</div>
+                  </div>
+                ) : currentFrameData.background.src.startsWith('stream:') ? (
+                  <div className="absolute inset-0 w-full h-full bg-black flex items-center justify-center">
+                    <div className="text-white/60 text-sm">Loading video…</div>
+                  </div>
+                ) : currentFrameData.background.src.includes('iframe.videodelivery.net') ? (
+                  <iframe
+                    src={currentFrameData.background.src}
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    title="Video"
+                  />
+                ) : (
+                  <video
+                    src={currentFrameData.background.src}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                    ref={(el) => {
+                      // Set video start time if specified
+                      if (el && currentFrameData.background.startTime !== undefined) {
+                        el.currentTime = currentFrameData.background.startTime
+                      }
+                    }}
+                  />
+                )
               ) : (
-                <div 
-                  className="absolute inset-0 w-full h-full bg-cover bg-center"
-                  style={{ 
-                    backgroundImage: `url(${currentFrameData.background.src})`,
-                    backgroundPosition: currentFrameData.background.position || 'center'
+                <img
+                  src={currentFrameData.background.src}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{
+                    objectPosition: currentFrameData.background.position || 'center',
                   }}
                 />
               )}
@@ -483,9 +509,29 @@ export function SlydeScreen({
       {/* === TOP SECTION === (hidden on Slydes promo) */}
       {!isSlydesPromo && (
         <div className="absolute top-10 left-0 right-0 px-4 z-30">
+          {/* Back button - only in category context */}
+          {context === 'category' && onBack && (
+            <button
+              onClick={onBack}
+              className="absolute left-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center"
+            >
+              <ChevronLeft className="w-5 h-5 text-white" />
+            </button>
+          )}
+
           <AnimatePresence mode="wait">
             {currentFrameData.badge && (
-              <Badge key={`badge-${currentFrame}`} text={currentFrameData.badge} />
+              <motion.div
+                key={`badge-${currentFrame}`}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className={`inline-flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 ${
+                  context === 'category' ? 'ml-10' : ''
+                }`}
+              >
+                <span className="text-xs font-medium text-white">{currentFrameData.badge}</span>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
@@ -561,8 +607,8 @@ export function SlydeScreen({
                 </p>
               )}
 
-              {/* Frame 1 only: Profile Pill */}
-              {currentFrame === 0 && (
+              {/* Frame 1 only: Profile Pill (standalone context only - not in category context) */}
+              {currentFrame === 0 && context !== 'category' && (
                 <ProfilePill
                   name={business.name}
                   accentColor={business.accentColor}

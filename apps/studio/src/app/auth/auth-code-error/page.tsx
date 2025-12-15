@@ -1,7 +1,14 @@
 import Link from 'next/link'
 import { AlertCircle } from 'lucide-react'
 
-export default function AuthCodeError() {
+export default async function AuthCodeError({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
+  const sp = await searchParams
+  const reason = typeof sp.reason === 'string' ? sp.reason : undefined
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-future-black">
       <div className="w-full max-w-md text-center">
@@ -17,6 +24,11 @@ export default function AuthCodeError() {
         <p className="text-white/60 mb-8">
           Something went wrong during authentication. This link may have expired or already been used.
         </p>
+        {reason && (
+          <p className="text-white/40 text-sm mb-8">
+            {reason}
+          </p>
+        )}
 
         <Link
           href="/login"

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@slydes/database": "workspace:*",
+    "@slydes/media": "workspace:*",
     "@slydes/types": "workspace:*",
     "@slydes/ui": "workspace:*",
     "@supabase/ssr": "^0.5.2",

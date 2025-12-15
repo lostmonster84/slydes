@@ -9,7 +9,7 @@ import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 export function PublicHomeClient({ businessSlug }: { businessSlug: string }) {
   const router = useRouter()
   const brand = useDemoBrand()
-  const home = useDemoHomeSlyde()
+  const { data: home } = useDemoHomeSlyde()
   const accent = useMemo(() => demoBrandGradient(brand), [brand])
 
   return (

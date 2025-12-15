@@ -175,6 +175,11 @@ Shorter is better. The video should intrigue, not inform.
 - Share the Home Slyde link
 - Default share destination
 
+**Info (ⓘ)** - Included
+- Opens **AboutSheet** (organization info)
+- Shows: business name, location, about text, contact options (phone, email, message)
+- Does NOT open the drawer
+
 **Sound Toggle** - Included (if video has audio)
 - Muted by default
 - Tap to unmute
@@ -183,6 +188,11 @@ Shorter is better. The video should intrigue, not inform.
 - Text: "Swipe up to explore" or "↑ Explore"
 - Animated pulse after 2-3 seconds
 - Disappears when drawer opens
+
+**ProfilePill** - Included (bottom of screen)
+- Shows business name
+- Tap → Opens category drawer (NOT AboutSheet)
+- This is the "explore" affordance
 
 ### Drawer State
 

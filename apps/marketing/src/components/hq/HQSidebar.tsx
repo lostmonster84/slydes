@@ -77,6 +77,7 @@ export function HQSidebar({ activePage, plan, onPlanChange, slydeCount = 2, inbo
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', href: '/demo/hq-dashboard', icon: LayoutDashboard },
     { id: 'home-slyde', label: 'Home Slyde', href: '/demo/editor-home-slyde', icon: Home },
+    // Slydes = Child Slydes list (Category Slydes + Item Slydes)
     { id: 'slydes', label: 'Slydes', href: '/demo/hq-mockup', icon: Smartphone, badge: slydeCount },
     { id: 'analytics', label: 'Analytics', href: '/demo/hq-analytics', icon: BarChart3, locked: !isCreator },
     { id: 'inbox', label: 'Inbox', href: '/demo/hq-inbox', icon: Inbox, badge: inboxCount },

@@ -8,6 +8,7 @@ import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
 import { ProfilePill } from '@/components/slyde-demo/ProfilePill'
 import { CategoryDrawer } from './CategoryDrawer'
 import { ShareSheet } from '@/components/slyde-demo/ShareSheet'
+import { AboutSheet } from '@/components/slyde-demo/AboutSheet'
 import type { HomeSlydeData } from '../data/highlandMotorsData'
 import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 
@@ -19,12 +20,17 @@ interface HomeSlydeScreenProps {
 /**
  * HomeSlydeScreen (Canonical)
  * - Video-first entry point with swipe-up category drawer
- * - Heart + Share actions only
- * - No FAQ, no Info
+ * - Heart + Share + Info (AboutSheet) actions
+ * - No FAQ (FAQ is frame-specific, only on Child Slydes)
+ * - ProfilePill → opens drawer (NOT AboutSheet)
+ * - Info button → opens AboutSheet (organization info)
+ *
+ * @see docs/UI-PATTERNS.md for full specification
  */
 export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
+  const [aboutOpen, setAboutOpen] = useState(false)
   const [isHearted, setIsHearted] = useState(false)
   const [heartCount, setHeartCount] = useState(2400)
   const [isMuted, setIsMuted] = useState(true)
@@ -32,7 +38,7 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
   const sessionIdRef = useRef<string | null>(null)
   const firstSeenAtRef = useRef<number | null>(null)
   const drawerOpenedOnceRef = useRef(false)
-  const demoHome = useDemoHomeSlyde()
+  const { data: demoHome } = useDemoHomeSlyde()
 
   const handleHeartTap = useCallback(() => {
     setIsHearted((prev) => {
@@ -128,40 +134,45 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
       {/* Gradient overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
 
-      {/* Sound Toggle - Top Left */}
-      <motion.button
-        className="absolute top-4 left-4 z-50 w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={toggleMute}
-      >
-        {isMuted ? (
-          <VolumeX className="w-4 h-4 text-white" />
-        ) : (
-          <Volume2 className="w-4 h-4 text-white" />
-        )}
-      </motion.button>
+      {/* Sound Toggle - Top Left (conditionally shown) */}
+      {(data.showSound ?? true) && (
+        <motion.button
+          className="absolute top-4 left-4 z-50 w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={toggleMute}
+        >
+          {isMuted ? (
+            <VolumeX className="w-4 h-4 text-white" />
+          ) : (
+            <Volume2 className="w-4 h-4 text-white" />
+          )}
+        </motion.button>
+      )}
 
-      {/* === RIGHT SIDE ACTIONS === (Heart + Share only) */}
+      {/* === RIGHT SIDE ACTIONS === (Heart + Share + Info) */}
       <SocialActionStack
         heartCount={heartCount}
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
-        onInfoTap={() => {}}
+        onInfoTap={() => setAboutOpen(true)}
         hideFAQ
-        hideInfo
+        hideHeart={!(data.showHearts ?? true)}
+        hideShare={!(data.showShare ?? true)}
         className="absolute right-3 bottom-36 z-40"
       />
 
       {/* === BOTTOM CONTENT === (exact same as SlydeScreen) */}
       <div className="absolute bottom-0 left-0 right-0 p-4 pb-6 z-30">
-        {/* Rating & Reviews */}
-        <RatingDisplay
-          rating={data.rating || 4.9}
-          reviewCount={data.reviewCount || 847}
-          className="mb-2"
-        />
+        {/* Rating & Reviews (conditionally shown) */}
+        {(data.showReviews ?? true) && (
+          <RatingDisplay
+            rating={data.rating || 4.9}
+            reviewCount={data.reviewCount || 847}
+            className="mb-2"
+          />
+        )}
 
         {/* Title */}
         <h3 className="text-white text-xl font-bold mb-1 drop-shadow-lg pr-14">
@@ -231,6 +242,7 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
         }}
         businessName={data.businessName}
         accentColor={data.accentColor}
+        showIcons={data.showCategoryIcons ?? false}
       />
 
       {/* Share Sheet */}
@@ -240,6 +252,28 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
         business={{
           name: data.businessName,
           tagline: data.tagline,
+        }}
+      />
+
+      {/* About Sheet (Info button) */}
+      <AboutSheet
+        isOpen={aboutOpen}
+        onClose={() => setAboutOpen(false)}
+        business={{
+          id: 'home-slyde',
+          name: data.businessName,
+          tagline: data.tagline,
+          location: data.address || 'Scottish Highlands',
+          rating: data.rating || 4.9,
+          reviewCount: data.reviewCount || 847,
+          credentials: [],
+          about: data.about || `${data.businessName} - ${data.tagline}`,
+          contact: {
+            phone: data.phone || '+44 1234 567890',
+            email: data.email || 'hello@example.com',
+            website: data.website,
+          },
+          accentColor: data.accentColor,
         }}
       />
     </div>

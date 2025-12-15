@@ -6,6 +6,7 @@
     "dev": "turbo dev",
     "dev:marketing": "turbo dev --filter=@slydes/marketing",
     "dev:studio": "turbo dev --filter=@slydes/studio",
+    "vercel:env:push": "node scripts/vercel-env-push-all.mjs",
     "build": "turbo build",
     "lint": "turbo lint",
     "type-check": "turbo type-check",

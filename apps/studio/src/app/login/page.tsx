@@ -13,6 +13,14 @@ export default function LoginPage() {
 
   const supabase = createClient()
 
+  const formatAuthError = (rawMessage: string) => {
+    const msg = (rawMessage || '').toLowerCase()
+    if (msg.includes('signups') && (msg.includes('not allowed') || msg.includes('disabled'))) {
+      return 'Signups are currently disabled. In Supabase → Authentication → Providers (Email), enable signups, then try again.'
+    }
+    return rawMessage
+  }
+
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true)
     setMessage(null)
@@ -61,16 +69,17 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        // Use the token_hash-based confirm route to avoid PKCE issues (e.g. opening the email on another device/browser).
+        emailRedirectTo: `${window.location.origin}/auth/confirm`,
       },
     })
 
     setIsLoading(false)
 
     if (error) {
-      setMessage({ type: 'error', text: error.message })
+      setMessage({ type: 'error', text: formatAuthError(error.message) })
     } else {
-      setMessage({ type: 'success', text: 'Check your email for the magic link!' })
+      setMessage({ type: 'success', text: 'Check your email for the magic link. If you’re new, this creates your account too.' })
       setEmail('')
     }
   }
@@ -89,10 +98,10 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
           <h2 className="text-2xl font-display font-semibold text-center mb-2">
-            Welcome back
+            Welcome
           </h2>
           <p className="text-white/60 text-center mb-8">
-            Sign in to continue to your studio
+            Sign in (or create your account) to continue to your studio
           </p>
 
           {/* OAuth Buttons */}
@@ -174,6 +183,9 @@ export default function LoginPage() {
                   className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent transition-all"
                 />
               </div>
+              <p className="mt-2 text-xs text-white/40">
+                No account yet? Enter your email and we’ll create one when you use the magic link.
+              </p>
             </div>
 
             <button

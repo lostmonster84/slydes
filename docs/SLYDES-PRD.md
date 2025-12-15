@@ -122,7 +122,8 @@
 **Technical Specs**:
 - **Framework**: Next.js 15 (App Router)
 - **Database**: Supabase PostgreSQL
-- **Storage**: Vercel Blob (images/videos)
+- **Media**: Cloudflare Stream (uploads, transcoding, HLS/DASH playback)
+- **Storage**: Cloudflare R2 (originals, posters, exports)
 - **Forms**: React Hook Form + Zod validation
 
 **Acceptance Criteria**:
@@ -391,7 +392,7 @@
 
 **Week 3-4: Slyde Builder**
 - [ ] Template selector UI
-- [ ] Image/video upload (Vercel Blob)
+- [ ] Image/video upload (Cloudflare Stream + R2)
 - [ ] Text editor
 - [ ] Color picker
 - [ ] Live preview
@@ -510,8 +511,9 @@
 │  └─ subscriptions                                       │
 │                                                          │
 │  Storage                                                │
-│  ├─ Vercel Blob (images, videos)                        │
-│  └─ Vercel KV (cache)                                   │
+│  ├─ Cloudflare Stream (playback + transcoding)           │
+│  ├─ Cloudflare R2 (originals, posters, exports)           │
+│  └─ KV/Cache (TBD)                                       │
 │                                                          │
 │  Auth (Supabase Auth)                                   │
 │  ├─ Email/password                                      │
@@ -536,7 +538,8 @@
 - **API**: Next.js API Routes
 - **Database**: Supabase PostgreSQL
 - **Auth**: Supabase Auth
-- **Storage**: Vercel Blob
+- **Media**: Cloudflare Stream
+- **Storage**: Cloudflare R2
 - **Billing**: Stripe
 
 **Mobile**:
@@ -546,7 +549,7 @@
 
 **Infrastructure**:
 - **Hosting**: Vercel
-- **CDN**: Vercel Edge Network
+- **CDN/Edge**: Cloudflare (WAF, bot protection, rate limiting)
 - **Email**: Resend
 
 ---
@@ -780,7 +783,14 @@ Built a complete 9-slide TikTok-style experience using the AIDA framework:
 - **Encryption**: TLS 1.3 in transit, PostgreSQL encryption at rest
 - **Authentication**: JWT-based (Supabase Auth)
 - **Authorization**: Row-level security (RLS)
-- **Rate Limiting**: 100 req/min per IP
+- **Rate Limiting**: Cloudflare rate limits at the edge (public endpoints), plus origin limits as backup
+- **Bot Protection**: Cloudflare WAF + bot mitigation for public pages and media scraping
+- **Public Video Protection**: Tokenized playback for Cloudflare Stream (prevents hotlinking / URL reuse)
+- **Upload Hardening**:
+  - Signed direct uploads (short TTL) to prevent credential leakage
+  - Strict server-side validation (content-type, max size, duration limits)
+  - Per-organization quotas + abuse monitoring
+  - Images handled by Cloudflare Images (resized variants served automatically)
 
 ### Compliance
 

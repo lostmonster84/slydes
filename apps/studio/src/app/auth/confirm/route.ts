@@ -24,9 +24,16 @@ export async function GET(request: NextRequest) {
       redirectTo.searchParams.delete('next')
       return NextResponse.redirect(redirectTo)
     }
+
+    // Surface the error to the UI
+    const errorUrl = request.nextUrl.clone()
+    errorUrl.pathname = '/auth/auth-code-error'
+    errorUrl.searchParams.set('reason', error.message)
+    return NextResponse.redirect(errorUrl)
   }
 
   // Return the user to an error page with some instructions
   redirectTo.pathname = '/auth/auth-code-error'
+  redirectTo.searchParams.set('reason', 'Missing token_hash/type in confirm URL')
   return NextResponse.redirect(redirectTo)
 }

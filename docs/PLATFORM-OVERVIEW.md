@@ -238,8 +238,10 @@ Creates more content    ←  →  Discovers more businesses
 **Backend**:
 - **API**: Node.js / Next.js API routes
 - **Database**: PostgreSQL (user data, business profiles, slides)
-- **Video Storage**: AWS S3 or Cloudflare R2
-- **CDN**: Cloudflare (fast global video delivery)
+- **Media**: Cloudflare Stream (uploads, transcoding, HLS/DASH playback)
+- **Images**: Cloudflare Images (uploads + automatic resizing/format)
+- **Storage**: Cloudflare R2 (originals, posters, exports)
+- **CDN/Edge**: Cloudflare (fast global delivery + security)
 
 **Infrastructure**:
 - **Hosting**: Vercel (web), AWS or Railway (backend)
@@ -248,7 +250,7 @@ Creates more content    ←  →  Discovers more businesses
 - **Analytics**: Mixpanel or Amplitude
 
 **Video Pipeline**:
-- Upload → Transcode (multiple resolutions) → Store → CDN
+- Upload → Transcode (multiple resolutions) → Stream playback (HLS/DASH) → Edge delivery
 - Optimization for mobile (vertical aspect ratio priority)
 - Lazy loading & progressive streaming
 

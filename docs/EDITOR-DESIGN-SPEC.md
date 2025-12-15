@@ -1119,7 +1119,9 @@ Based on existing codebase:
 - **Animations**: Framer Motion
 - **State**: React state (useState, useContext)
 - **Database**: Supabase PostgreSQL
-- **Storage**: Vercel Blob (videos/images)
+- **Media**: Cloudflare Stream (uploads, transcoding, HLS/DASH playback)
+- **Images**: Cloudflare Images (uploads + automatic resizing/format)
+- **Storage**: Cloudflare R2 (originals, posters, exports)
 
 ### Component Structure
 

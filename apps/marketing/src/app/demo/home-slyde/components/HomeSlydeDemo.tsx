@@ -1,6 +1,6 @@
 'use client'
 
-import { useReducer, useCallback, useRef, useState } from 'react'
+import { useReducer, useCallback, useRef, useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DevicePreview } from '@/components/slyde-demo/DevicePreview'
 import { HomeSlydeOverlay } from './HomeSlydeOverlay'
@@ -8,8 +8,10 @@ import { CategorySlydeView } from './CategorySlydeView'
 import { InventoryGridView } from './InventoryGridView'
 import { ItemSlydeView } from './ItemSlydeView'
 import { FlowBreadcrumb } from './FlowBreadcrumb'
-import { highlandMotorsData, getCategory, getInventoryItem } from '../data/highlandMotorsData'
+import { highlandMotorsData, getCategory as getHardcodedCategory, getInventoryItem } from '../data/highlandMotorsData'
+import type { HomeSlydeData, CategoryData, FrameData as ViewerFrameData } from '../data/highlandMotorsData'
 import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
+import type { FrameData as EditorFrameData } from '@/components/slyde-demo/frameData'
 
 // ============================================
 // STATE MACHINE
@@ -127,10 +129,85 @@ export function HomeSlydeDemo() {
   const [state, dispatch] = useReducer(navReducer, initialState)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const demoHome = useDemoHomeSlyde()
+  const { data: demoHome } = useDemoHomeSlyde()
 
-  // Video source from data or fallback
-  const videoSrc = highlandMotorsData.videoSrc || demoHome.videoSrc || '/videos/adventure.mp4'
+  // Merge localStorage data with hardcoded fallback
+  // Priority: localStorage > hardcoded
+  const viewerData: HomeSlydeData = useMemo(() => {
+    // If we have localStorage categories with custom frames, use those
+    // Otherwise fall back to hardcoded highlandMotorsData
+    const hasCustomCategories = demoHome.categories && demoHome.categories.length > 0
+
+    if (!hasCustomCategories) {
+      return highlandMotorsData
+    }
+
+    // Map localStorage categories to viewer format
+    const categories: CategoryData[] = demoHome.categories.map((cat) => {
+      // Get custom frames from childFrames, or fall back to hardcoded category frames
+      const customFrames = demoHome.childFrames?.[cat.id] as EditorFrameData[] | undefined
+      const hardcodedCategory = getHardcodedCategory(cat.id)
+
+      // Convert editor FrameData format to viewer FrameData format
+      const frames: ViewerFrameData[] = customFrames && customFrames.length > 0
+        ? customFrames.map((f) => ({
+            id: f.id,
+            title: f.title || 'Untitled',
+            subtitle: f.subtitle || '',
+            badge: f.badge || undefined,
+            background: {
+              type: 'gradient' as const,
+              // Editor uses background.src for video/image, we convert to gradient for viewer
+              gradient: 'from-slate-800 to-slate-900',
+            },
+            cta: f.cta?.text ? { text: f.cta.text, action: f.cta.action || '' } : undefined,
+            // Editor frames don't have showViewAll - that's viewer-specific
+          }))
+        : hardcodedCategory?.frames || [{
+            id: `${cat.id}-placeholder`,
+            title: cat.name,
+            subtitle: cat.description,
+            background: { type: 'gradient' as const, gradient: 'from-slate-800 to-slate-900' },
+          }]
+
+      return {
+        id: cat.id,
+        label: cat.name,
+        icon: cat.icon,
+        description: cat.description,
+        frames,
+        // Use hardcoded inventory if available for this category
+        inventory: hardcodedCategory?.inventory,
+      }
+    })
+
+    return {
+      businessName: highlandMotorsData.businessName,
+      tagline: highlandMotorsData.tagline,
+      accentColor: highlandMotorsData.accentColor,
+      backgroundGradient: highlandMotorsData.backgroundGradient,
+      videoSrc: demoHome.videoSrc || highlandMotorsData.videoSrc,
+      posterSrc: demoHome.posterSrc || highlandMotorsData.posterSrc,
+      rating: highlandMotorsData.rating,
+      reviewCount: highlandMotorsData.reviewCount,
+      about: highlandMotorsData.about,
+      address: highlandMotorsData.address,
+      hours: highlandMotorsData.hours,
+      phone: highlandMotorsData.phone,
+      email: highlandMotorsData.email,
+      website: highlandMotorsData.website,
+      categories,
+      primaryCta: demoHome.primaryCta || highlandMotorsData.primaryCta,
+      showCategoryIcons: demoHome.showCategoryIcons,
+      showHearts: demoHome.showHearts,
+      showShare: demoHome.showShare,
+      showSound: demoHome.showSound,
+      showReviews: demoHome.showReviews,
+    }
+  }, [demoHome])
+
+  // Video source from merged data
+  const videoSrc = viewerData.videoSrc || '/videos/adventure.mp4'
 
   // Handlers
   const handleCategoryTap = useCallback((categoryId: string) => {
@@ -161,7 +238,11 @@ export function HomeSlydeDemo() {
     dispatch({ type: 'SET_FRAME', index })
   }, [])
 
-  // Get current data
+  // Get current data from merged viewerData
+  const getCategory = useCallback((categoryId: string) => {
+    return viewerData.categories.find(c => c.id === categoryId)
+  }, [viewerData.categories])
+
   const category = state.categoryId ? getCategory(state.categoryId) : null
   const item = state.categoryId && state.itemId
     ? getInventoryItem(state.categoryId, state.itemId)
@@ -199,7 +280,7 @@ export function HomeSlydeDemo() {
               onFrameChange={handleFrameChange}
               onViewAll={handleViewAll}
               onBack={handleBack}
-              accentColor={highlandMotorsData.accentColor}
+              accentColor={viewerData.accentColor}
             />
           </motion.div>
         )
@@ -231,7 +312,7 @@ export function HomeSlydeDemo() {
               items={category.inventory}
               onItemTap={handleItemTap}
               onBack={handleBack}
-              accentColor={highlandMotorsData.accentColor}
+              accentColor={viewerData.accentColor}
             />
           </motion.div>
         )
@@ -262,7 +343,7 @@ export function HomeSlydeDemo() {
               frameIndex={state.frameIndex}
               onFrameChange={handleFrameChange}
               onBack={handleBack}
-              accentColor={highlandMotorsData.accentColor}
+              accentColor={viewerData.accentColor}
             />
           </motion.div>
         )
@@ -323,7 +404,7 @@ export function HomeSlydeDemo() {
                 transition={{ duration: 0.2 }}
               >
                 <HomeSlydeOverlay
-                  data={highlandMotorsData}
+                  data={viewerData}
                   drawerOpen={drawerOpen}
                   onDrawerOpen={() => setDrawerOpen(true)}
                   onDrawerClose={() => setDrawerOpen(false)}

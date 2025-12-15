@@ -3,60 +3,48 @@
 > next build
 
    ▲ Next.js 15.5.9
+   - Environments: .env.local
 
    Creating an optimized production build ...
 <w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (129kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
- ⚠ Compiled with warnings in 684ms
-
-../../node_modules/.pnpm/@supabase+realtime-js@2.87.1/node_modules/@supabase/realtime-js/dist/module/lib/websocket-factory.js
-A Node.js API is used (process.versions at line: 39) which is not supported in the Edge Runtime.
-Learn more: https://nextjs.org/docs/api-reference/edge-runtime
-
-Import trace for requested module:
-../../node_modules/.pnpm/@supabase+realtime-js@2.87.1/node_modules/@supabase/realtime-js/dist/module/lib/websocket-factory.js
-../../node_modules/.pnpm/@supabase+realtime-js@2.87.1/node_modules/@supabase/realtime-js/dist/module/index.js
-../../node_modules/.pnpm/@supabase+supabase-js@2.87.1/node_modules/@supabase/supabase-js/dist/main/index.js
-../../node_modules/.pnpm/@supabase+supabase-js@2.87.1/node_modules/@supabase/supabase-js/dist/esm/wrapper.mjs
-../../node_modules/.pnpm/@supabase+ssr@0.5.2_@supabase+supabase-js@2.87.1/node_modules/@supabase/ssr/dist/module/createBrowserClient.js
-../../node_modules/.pnpm/@supabase+ssr@0.5.2_@supabase+supabase-js@2.87.1/node_modules/@supabase/ssr/dist/module/index.js
-./src/lib/supabase/middleware.ts
-
-../../node_modules/.pnpm/@supabase+supabase-js@2.87.1/node_modules/@supabase/supabase-js/dist/main/index.js
-A Node.js API is used (process.version at line: 60) which is not supported in the Edge Runtime.
-Learn more: https://nextjs.org/docs/api-reference/edge-runtime
-
-Import trace for requested module:
-../../node_modules/.pnpm/@supabase+supabase-js@2.87.1/node_modules/@supabase/supabase-js/dist/main/index.js
-../../node_modules/.pnpm/@supabase+supabase-js@2.87.1/node_modules/@supabase/supabase-js/dist/esm/wrapper.mjs
-../../node_modules/.pnpm/@supabase+ssr@0.5.2_@supabase+supabase-js@2.87.1/node_modules/@supabase/ssr/dist/module/createBrowserClient.js
-../../node_modules/.pnpm/@supabase+ssr@0.5.2_@supabase+supabase-js@2.87.1/node_modules/@supabase/ssr/dist/module/index.js
-./src/lib/supabase/middleware.ts
-
- ✓ Compiled successfully in 3.5s
+ ✓ Compiled successfully in 4.8s
    Linting and checking validity of types ...
  ⨯ ESLint: Converting circular structure to JSON     --> starting at object with constructor 'Object'     |     property 'configs' -> object with constructor 'Object'     |     property 'flat' -> object with constructor 'Object'     |     ...     |     property 'plugins' -> object with constructor 'Object'     --- property 'react' closes the circle Referenced from: /Users/james/Projects/slydes/.eslintrc.json
    Collecting page data ...
-   Generating static pages (0/10) ...
-   Generating static pages (2/10) 
-   Generating static pages (4/10) 
-   Generating static pages (7/10) 
- ✓ Generating static pages (10/10)
+   Generating static pages (0/23) ...
+   Generating static pages (5/23) 
+   Generating static pages (11/23) 
+   Generating static pages (17/23) 
+ ✓ Generating static pages (23/23)
    Finalizing page optimization ...
    Collecting build traces ...
 
 Route (app)                                 Size  First Load JS
-┌ ƒ /                                      132 B         102 kB
+┌ ƒ /                                    36.2 kB         244 kB
 ├ ○ /_not-found                            987 B         103 kB
-├ ○ /auth/auth-code-error                  163 B         105 kB
-├ ƒ /auth/callback                         132 B         102 kB
-├ ƒ /auth/confirm                          132 B         102 kB
-├ ƒ /auth/signout                          132 B         102 kB
-├ ○ /login                               61.2 kB         163 kB
-└ ƒ /settings                              163 B         105 kB
+├ ○ /analytics                           10.8 kB         219 kB
+├ ƒ /api/feedback                          141 B         102 kB
+├ ƒ /api/media/attach-to-frame             141 B         102 kB
+├ ƒ /api/media/create-image-upload         141 B         102 kB
+├ ƒ /api/media/create-video-upload         141 B         102 kB
+├ ƒ /api/media/video-status                141 B         102 kB
+├ ƒ /auth/auth-code-error                  163 B         105 kB
+├ ƒ /auth/callback                         141 B         102 kB
+├ ƒ /auth/confirm                          141 B         102 kB
+├ ƒ /auth/signout                          141 B         102 kB
+├ ○ /brand                               5.49 kB         176 kB
+├ ○ /dashboard                           5.55 kB         176 kB
+├ ○ /inbox                               4.42 kB         175 kB
+├ ○ /login                                  3 kB         163 kB
+├ ○ /onboarding                          5.02 kB         203 kB
+├ ƒ /settings                              163 B         105 kB
+├ ƒ /settings/media                      3.58 kB         167 kB
+├ ○ /settings/profile                    2.49 kB         166 kB
+└ ○ /slydes                              7.85 kB         178 kB
 + First Load JS shared by all             102 kB
   ├ chunks/960-d2a9785a0faedc69.js       45.5 kB
   ├ chunks/b653352e-d291cf2a8b94e4ca.js  54.2 kB
-  └ other shared chunks (total)           1.9 kB
+  └ other shared chunks (total)          1.93 kB
 
 
 ƒ Middleware                             85.7 kB

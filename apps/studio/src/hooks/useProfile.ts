@@ -11,6 +11,7 @@ export interface Profile {
   company_website: string | null
   avatar_url: string | null
   onboarding_completed: boolean
+  current_organization_id: string | null
   plan: 'free' | 'pro' | 'enterprise'
   created_at: string
   updated_at: string

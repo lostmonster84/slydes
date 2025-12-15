@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
@@ -15,25 +15,61 @@ import {
 } from '@/components/slyde-demo/frameData'
 import { useDemoBrand, demoBrandGradient } from '@/lib/demoBrand'
 
-type DemoSlydeSlug = 'camping' | 'just-drive'
-
-function coerceSlydeSlug(raw: string): DemoSlydeSlug | null {
-  if (raw === 'camping' || raw === 'just-drive') return raw
-  return null
+export type FrameMedia = {
+  frameIndex: number
+  mediaType: 'video' | 'image' | null
+  videoUid: string | null
+  imageUrl: string | null
+  imageId: string | null
+  imageVariant: string | null
+  videoStatus: string | null
 }
 
-export function PublicSlydeClient({ businessSlug, slydeSlug }: { businessSlug: string; slydeSlug: string }) {
+function isStreamPlaceholder(src: string) {
+  return src.startsWith('stream:')
+}
+
+function isStreamProcessingPlaceholder(src: string) {
+  return src.startsWith('stream-processing:')
+}
+
+function extractStreamUid(src: string) {
+  if (src.startsWith('stream:')) return src.slice('stream:'.length)
+  if (src.startsWith('stream-processing:')) return src.slice('stream-processing:'.length)
+  const match = /iframe\.videodelivery\.net\/([^?]+)/.exec(src)
+  return match?.[1] ? decodeURIComponent(match[1]) : null
+}
+
+function buildStreamIframeUrl(uid: string, token?: string) {
+  const sp = new URLSearchParams()
+  sp.set('autoplay', 'true')
+  sp.set('muted', 'true')
+  sp.set('loop', 'true')
+  sp.set('controls', 'false')
+  sp.set('preload', 'true')
+  if (token) sp.set('token', token)
+  return `https://iframe.videodelivery.net/${encodeURIComponent(uid)}?${sp.toString()}`
+}
+
+export function PublicSlydeClient({
+  businessSlug,
+  slydeSlug,
+  frameMedia,
+  businessName,
+}: {
+  businessSlug: string
+  slydeSlug: string
+  frameMedia: FrameMedia[]
+  businessName: string
+}) {
   const sp = useSearchParams()
   const brand = useDemoBrand()
   const accent = useMemo(() => demoBrandGradient(brand), [brand])
 
-  const id = coerceSlydeSlug(slydeSlug)
-  if (!id) return null
-
   const { frames, faqs } = useMemo(() => {
-    if (id === 'just-drive') return { frames: justDriveFrames, faqs: justDriveFAQs }
+    if (slydeSlug === 'just-drive') return { frames: justDriveFrames, faqs: justDriveFAQs }
     return { frames: campingFrames, faqs: campingFAQs }
-  }, [id])
+  }, [slydeSlug])
 
   const initialFrameIndex = useMemo(() => {
     const raw = sp.get('f')
@@ -46,25 +82,178 @@ export function PublicSlydeClient({ businessSlug, slydeSlug }: { businessSlug: s
   const [business, setBusiness] = useState<BusinessInfo>(() => ({
     ...wildtraxBusiness,
     id: businessSlug,
-    name: brand.businessName,
+    name: businessName || brand.businessName,
     tagline: brand.tagline,
     accentColor: accent,
   }))
 
-  const [brandedFrames, setBrandedFrames] = useState<FrameData[]>(() =>
-    frames.map((f) => ({ ...f, accentColor: accent }))
+  const baseFrames = useMemo<FrameData[]>(
+    () => frames.map((f) => ({ ...f, accentColor: accent })),
+    [frames, accent]
   )
+
+  const [renderFrames, setRenderFrames] = useState<FrameData[]>(() => baseFrames)
+  const tokenCacheRef = useRef<Map<string, string>>(new Map())
+
+  // Apply DB-provided media onto the demo frame scaffolding.
+  useEffect(() => {
+    const byIndex = new Map<number, FrameMedia>()
+    for (const m of frameMedia ?? []) {
+      if (typeof m?.frameIndex === 'number') byIndex.set(m.frameIndex, m)
+    }
+
+    const next: FrameData[] = baseFrames.map((f) => {
+      const m = byIndex.get(f.order)
+      if (!m || !m.mediaType) return f
+      if (m.mediaType === 'image' && m.imageUrl) {
+        return {
+          ...f,
+          background: { ...f.background, type: 'image' as const, src: m.imageUrl },
+        }
+      }
+      if (m.mediaType === 'video' && m.videoUid) {
+        const isReady = m.videoStatus === 'ready' || m.videoStatus === null
+        return {
+          ...f,
+          // Don't load the iframe until we have a token (tokenized playback).
+          background: {
+            ...f.background,
+            type: 'video' as const,
+            src: isReady ? `stream:${m.videoUid}` : `stream-processing:${m.videoUid}`,
+          },
+        }
+      }
+      return f
+    })
+
+    setRenderFrames(next)
+  }, [baseFrames, frameMedia])
 
   useEffect(() => {
     setBusiness((prev) => ({
       ...prev,
       id: businessSlug,
-      name: brand.businessName,
+      name: businessName || brand.businessName,
       tagline: brand.tagline,
       accentColor: accent,
     }))
-    setBrandedFrames(frames.map((f) => ({ ...f, accentColor: accent })))
-  }, [brand.businessName, brand.tagline, accent, frames, businessSlug])
+  }, [brand.businessName, brand.tagline, accent, businessSlug, businessName])
+
+  const ensureVideoToken = useCallback(
+    async (videoUid: string) => {
+      if (tokenCacheRef.current.has(videoUid)) return tokenCacheRef.current.get(videoUid)!
+      const res = await fetch(`/api/media/playback-token?uid=${encodeURIComponent(videoUid)}`)
+      const json = await res.json()
+      if (!res.ok) throw new Error(json?.error || 'Failed to mint token')
+      const token = String(json.token || '')
+      if (!token) throw new Error('Missing token')
+      tokenCacheRef.current.set(videoUid, token)
+      return token
+    },
+    []
+  )
+
+  const hydrateFrameVideo = useCallback(
+    async (frameIndex: number) => {
+      const f = renderFrames[frameIndex]
+      if (!f || f.background.type !== 'video') return
+
+      const uid = extractStreamUid(f.background.src)
+      if (!uid) return
+
+      // Already hydrated
+      if (!isStreamPlaceholder(f.background.src) && f.background.src.includes('token=')) return
+      // If we're still processing, don't attempt playback yet.
+      if (isStreamProcessingPlaceholder(f.background.src)) return
+
+      const token = await ensureVideoToken(uid)
+      setRenderFrames((prev) =>
+        prev.map((x, idx) =>
+          idx === frameIndex
+            ? { ...x, background: { ...x.background, type: 'video', src: buildStreamIframeUrl(uid, token) } }
+            : x
+        )
+      )
+    },
+    [renderFrames, ensureVideoToken]
+  )
+
+  const checkIfVideoReady = useCallback(async (videoUid: string) => {
+    const res = await fetch(`/api/media/stream-status?uid=${encodeURIComponent(videoUid)}`)
+    const json = await res.json()
+    if (!res.ok) throw new Error(json?.error || 'Failed to check status')
+    return Boolean(json?.readyToStream) || json?.state === 'ready'
+  }, [])
+
+  // Hydrate the initial frame (and prefetch the next one) so the first view doesn't flash a broken iframe.
+  useEffect(() => {
+    const run = async () => {
+      const idx = Math.max(0, Math.min(initialFrameIndex, renderFrames.length - 1))
+      try {
+        // If initial frame is "processing", poll until ready (best effort).
+        const first = renderFrames[idx]
+        if (first?.background?.type === 'video' && isStreamProcessingPlaceholder(first.background.src)) {
+          const uid = extractStreamUid(first.background.src)
+          if (uid) {
+            for (let i = 0; i < 30; i++) {
+              const ready = await checkIfVideoReady(uid)
+              if (ready) {
+                setRenderFrames((prev) =>
+                  prev.map((x, j) =>
+                    j === idx ? { ...x, background: { ...x.background, type: 'video', src: `stream:${uid}` } } : x
+                  )
+                )
+                break
+              }
+              await new Promise((r) => setTimeout(r, 2000))
+            }
+          }
+        }
+
+        await hydrateFrameVideo(idx)
+        // Prefetch next frame token (best effort)
+        if (idx + 1 < renderFrames.length) await hydrateFrameVideo(idx + 1)
+      } catch (e) {
+        console.error('[PublicSlydeClient] initial video hydrate failed', e)
+      }
+    }
+    run()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [renderFrames.length])
+
+  const handleFrameChange = useCallback(
+    async (index: number) => {
+      try {
+        // If this frame is still processing, poll until it's ready (best effort).
+        const f = renderFrames[index]
+        if (f?.background?.type === 'video' && isStreamProcessingPlaceholder(f.background.src)) {
+          const uid = extractStreamUid(f.background.src)
+          if (uid) {
+            for (let i = 0; i < 30; i++) {
+              const ready = await checkIfVideoReady(uid)
+              if (ready) {
+                setRenderFrames((prev) =>
+                  prev.map((x, j) =>
+                    j === index ? { ...x, background: { ...x.background, type: 'video', src: `stream:${uid}` } } : x
+                  )
+                )
+                break
+              }
+              await new Promise((r) => setTimeout(r, 2000))
+            }
+          }
+        }
+
+        await hydrateFrameVideo(index)
+        // Prefetch next frame token for smoother swipes (best effort)
+        if (index + 1 < renderFrames.length) await hydrateFrameVideo(index + 1)
+      } catch (e) {
+        // Best-effort: keep existing src; viewer may still play if signed URLs are off.
+        console.error('[PublicSlydeClient] token fetch failed', e)
+      }
+    },
+    [renderFrames, checkIfVideoReady, hydrateFrameVideo]
+  )
 
   return (
     <main className="min-h-screen bg-black">
@@ -75,20 +264,21 @@ export function PublicSlydeClient({ businessSlug, slydeSlug }: { businessSlug: s
             ← Home
           </Link>
           <div className="text-white/60 text-xs">
-            {businessSlug}/{id}
+            {businessSlug}/{slydeSlug}
           </div>
         </div>
       </div>
 
       <div className="h-screen w-full pt-14">
         <SlydeScreen
-          frames={brandedFrames}
+          frames={renderFrames}
           faqs={faqs}
           business={business}
           autoAdvance={false}
           initialFrameIndex={initialFrameIndex}
+          onFrameChange={handleFrameChange}
           analyticsOrgSlug={businessSlug}
-          analyticsSlydePublicId={id}
+          analyticsSlydePublicId={slydeSlug}
           analyticsSource="direct"
         />
       </div>
