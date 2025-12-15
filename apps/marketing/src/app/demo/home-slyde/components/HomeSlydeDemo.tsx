@@ -1,14 +1,15 @@
 'use client'
 
-import { useReducer, useCallback } from 'react'
+import { useReducer, useCallback, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DevicePreview } from '@/components/slyde-demo/DevicePreview'
-import { HomeSlydeScreen } from './HomeSlydeScreen'
+import { HomeSlydeOverlay } from './HomeSlydeOverlay'
 import { CategorySlydeView } from './CategorySlydeView'
 import { InventoryGridView } from './InventoryGridView'
 import { ItemSlydeView } from './ItemSlydeView'
 import { FlowBreadcrumb } from './FlowBreadcrumb'
 import { highlandMotorsData, getCategory, getInventoryItem } from '../data/highlandMotorsData'
+import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 
 // ============================================
 // STATE MACHINE
@@ -124,10 +125,20 @@ const transition = { type: 'spring', stiffness: 300, damping: 30 }
 
 export function HomeSlydeDemo() {
   const [state, dispatch] = useReducer(navReducer, initialState)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const demoHome = useDemoHomeSlyde()
+
+  // Video source from data or fallback
+  const videoSrc = highlandMotorsData.videoSrc || demoHome.videoSrc || '/videos/adventure.mp4'
 
   // Handlers
   const handleCategoryTap = useCallback((categoryId: string) => {
-    dispatch({ type: 'TAP_CATEGORY', categoryId })
+    setDrawerOpen(false)
+    // Small delay to let drawer close before transitioning
+    setTimeout(() => {
+      dispatch({ type: 'TAP_CATEGORY', categoryId })
+    }, 100)
   }, [])
 
   const handleViewAll = useCallback(() => {
@@ -156,32 +167,21 @@ export function HomeSlydeDemo() {
     ? getInventoryItem(state.categoryId, state.itemId)
     : null
 
-  // Determine which view to render
-  const renderView = () => {
+  // Render overlay views (category, inventory, item) - NOT home
+  const renderOverlayView = () => {
     switch (state.level) {
-      case 'home':
-        return (
-          <motion.div
-            key="home"
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={slideFromRight.exit}
-            transition={transition}
-          >
-            <HomeSlydeScreen
-              data={highlandMotorsData}
-              onCategoryTap={handleCategoryTap}
-            />
-          </motion.div>
-        )
-
       case 'category':
         if (!category) {
           return (
-            <div key="no-category" className="absolute inset-0 bg-red-900 flex items-center justify-center">
-              <p className="text-white">No category found: {state.categoryId}</p>
-            </div>
+            <motion.div
+              key="no-category"
+              className="absolute inset-0 bg-slate-900 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <p className="text-white/60">Category not found</p>
+            </motion.div>
           )
         }
         return (
@@ -205,6 +205,20 @@ export function HomeSlydeDemo() {
         )
 
       case 'inventory':
+        // Guard: If category has no inventory, go back
+        if (!category?.inventory) {
+          return (
+            <motion.div
+              key="no-inventory"
+              className="absolute inset-0 bg-slate-900 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <p className="text-white/60">No inventory available</p>
+            </motion.div>
+          )
+        }
         return (
           <motion.div
             key={`inventory-${state.categoryId}`}
@@ -212,19 +226,30 @@ export function HomeSlydeDemo() {
             {...fadeScale}
             transition={transition}
           >
-            {category?.inventory && (
-              <InventoryGridView
-                categoryName={category.label}
-                items={category.inventory}
-                onItemTap={handleItemTap}
-                onBack={handleBack}
-                accentColor={highlandMotorsData.accentColor}
-              />
-            )}
+            <InventoryGridView
+              categoryName={category.label}
+              items={category.inventory}
+              onItemTap={handleItemTap}
+              onBack={handleBack}
+              accentColor={highlandMotorsData.accentColor}
+            />
           </motion.div>
         )
 
       case 'item':
+        if (!item) {
+          return (
+            <motion.div
+              key="no-item"
+              className="absolute inset-0 bg-slate-900 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <p className="text-white/60">Item not found</p>
+            </motion.div>
+          )
+        }
         return (
           <motion.div
             key={`item-${state.itemId}`}
@@ -232,17 +257,18 @@ export function HomeSlydeDemo() {
             {...slideFromBottom}
             transition={transition}
           >
-            {item && (
-              <ItemSlydeView
-                item={item}
-                frameIndex={state.frameIndex}
-                onFrameChange={handleFrameChange}
-                onBack={handleBack}
-                accentColor={highlandMotorsData.accentColor}
-              />
-            )}
+            <ItemSlydeView
+              item={item}
+              frameIndex={state.frameIndex}
+              onFrameChange={handleFrameChange}
+              onBack={handleBack}
+              accentColor={highlandMotorsData.accentColor}
+            />
           </motion.div>
         )
+
+      default:
+        return null
     }
   }
 
@@ -263,8 +289,53 @@ export function HomeSlydeDemo() {
       {/* Phone device */}
       <DevicePreview enableTilt={false}>
         <div className="relative w-full h-full overflow-hidden">
-          <AnimatePresence mode="wait">
-            {renderView()}
+          {/* PERSISTENT VIDEO LAYER - Always visible, dims when not on home */}
+          <motion.div
+            className="absolute inset-0"
+            animate={{
+              opacity: state.level === 'home' ? 1 : 0.15,
+              filter: state.level === 'home' ? 'brightness(1)' : 'brightness(0.3)',
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            <video
+              ref={videoRef}
+              src={videoSrc}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            {/* Gradient overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+          </motion.div>
+
+          {/* HOME UI OVERLAY - Only when on home level */}
+          <AnimatePresence>
+            {state.level === 'home' && (
+              <motion.div
+                key="home-overlay"
+                className="absolute inset-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <HomeSlydeOverlay
+                  data={highlandMotorsData}
+                  drawerOpen={drawerOpen}
+                  onDrawerOpen={() => setDrawerOpen(true)}
+                  onDrawerClose={() => setDrawerOpen(false)}
+                  onCategoryTap={handleCategoryTap}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* CATEGORY/INVENTORY/ITEM OVERLAY - When not on home */}
+          <AnimatePresence>
+            {state.level !== 'home' && renderOverlayView()}
           </AnimatePresence>
         </div>
       </DevicePreview>
