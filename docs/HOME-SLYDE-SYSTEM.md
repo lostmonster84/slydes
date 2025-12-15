@@ -119,6 +119,9 @@ Once inside, everything feels like the same premium experience.
    The full journey begins
 ```
 
+**Canonical data model** (Home → Categories → Category Slyde → Inventory → Item Slyde) is defined in:
+- [CATEGORY-INVENTORY-FLOW.md](./CATEGORY-INVENTORY-FLOW.md)
+
 ---
 
 ## How Links Work

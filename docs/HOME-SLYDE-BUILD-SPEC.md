@@ -154,7 +154,7 @@ Shorter is better. The video should intrigue, not inform.
 - 2-column grid layout
 - Icon + label + optional description
 - Equal visual weight
-- Tappable → navigates to Category Child Slyde
+- Tappable → navigates to Category Slyde (a Child Slyde of type `category`)
 
 ### Primary CTA (Optional)
 - Single full-width button at bottom
@@ -355,4 +355,4 @@ Capture attention. Reveal navigation. Route to experiences.
 
 - [HOME-SLYDE-SYSTEM.md](./HOME-SLYDE-SYSTEM.md) - Why the Home Slyde exists
 - [STRUCTURE.md](./STRUCTURE.md) - The canonical platform hierarchy
-- [CATEGORY-INVENTORY-FLOW.md](./CATEGORY-INVENTORY-FLOW.md) - How categories and inventory work
+- [CATEGORY-INVENTORY-FLOW.md](./CATEGORY-INVENTORY-FLOW.md) - Categories, inventory, and data architecture (canonical CRUD model)

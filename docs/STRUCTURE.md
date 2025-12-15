@@ -19,6 +19,24 @@ Home Slyde (video-first entry point + drawer)
           └── Frame (vertical screen)
 ```
 
+### Categories + Inventory (How Child Slydes are organised)
+
+The hierarchy above is intentionally simple. In practice, the **Home Slyde drawer** is powered by:
+
+- **Categories** (shown in the drawer)
+  - each Category links to a **Category Slyde** (a Child Slyde of type `category`)
+  - optionally, a Category can have **Inventory** (a paid feature)
+    - Inventory shows a grid/list of **Inventory Items**
+    - each Inventory Item links to an **Item Slyde** (a Child Slyde of type `item`)
+
+This is the canonical “earned list” flow:
+
+```
+Home Slyde → Category Slyde → (CTA: View all) Inventory → Item Slyde
+```
+
+See: [CATEGORY-INVENTORY-FLOW.md](./CATEGORY-INVENTORY-FLOW.md) for the complete data architecture + CRUD model.
+
 | Level | Term | Definition | Shareable? |
 |-------|------|------------|------------|
 | **0** | **Home Slyde** | **Video-first entry point** (one immersive video) with a **swipe-up category drawer** that routes visitors to Child Slydes | Yes |
@@ -166,6 +184,8 @@ slydes.io/{business-slug}/{slyde-slug}       → Child Slyde (deep link)
 slydes.io/{business-slug}/{slyde-slug}?f=3   → Deep-link to Frame 3 (optional)
 ```
 
+> Inventory list URLs are implementation-defined (e.g. `/{business}/{category}/all`). The **data model and journey** are canonical; the exact path can be finalised during build-out. See [CATEGORY-INVENTORY-FLOW.md](./CATEGORY-INVENTORY-FLOW.md).
+
 ---
 
 ## Editor UI Implications
@@ -253,6 +273,7 @@ When updating those documents, follow this guide.
 
 - [HOME-SLYDE-SYSTEM.md](./HOME-SLYDE-SYSTEM.md) - Why the Home Slyde exists
 - [HOME-SLYDE-BUILD-SPEC.md](./HOME-SLYDE-BUILD-SPEC.md) - How to build a Home Slyde
+- [CATEGORY-INVENTORY-FLOW.md](./CATEGORY-INVENTORY-FLOW.md) - Categories, inventory, and data architecture
 
 ---
 

@@ -915,7 +915,8 @@ See [HOME-SLYDE-BUILD-SPEC.md](./HOME-SLYDE-BUILD-SPEC.md) for full specificatio
 
 4. User configures categories (drawer)
    → Add 3–6 categories (icon + label; optional description)
-   → Each category routes to a Child Slyde
+   → Each category routes to a **Category Slyde** (a Child Slyde of type `category`)
+   → Categories may optionally have **Inventory** (paid feature): Category Slyde can include a “View all” CTA that opens the inventory list
 
 5. User optionally adds a primary CTA
    → "Book Now", "Check Availability", etc. (only if truly dominant)
@@ -955,9 +956,30 @@ After creating the Home Slyde, users create Child Slydes for specific offerings.
    → Prompt: "Link this to your Home Slyde navigation?"
 
 5. User links Child Slyde to Home Slyde
-   → Zone 2 navigation button now points to this Child Slyde
+   → The Home Slyde drawer category now points to this Child Slyde (Category Slyde)
    → Flow connected
 ```
+
+### Flow 2b: Add Inventory + Item Slydes (Optional)
+
+Inventory is optional and category-specific.
+
+```
+1. User enables Inventory on a Category
+   → Category now has an “Inventory list” underneath it
+
+2. User adds Inventory Items (title, subtitle, price, thumbnail)
+   → Each Inventory Item automatically gets an Item Slyde (Child Slyde type='item')
+
+3. User edits the Item Slyde frames (deep dive)
+   → Same editor + same frame system
+
+4. In the Category Slyde, user adds/uses a “View all” CTA (showViewAll: true)
+   → Customer flow becomes:
+     Home Slyde → Category Slyde → (View all) Inventory → Item Slyde
+```
+
+See [CATEGORY-INVENTORY-FLOW.md](./CATEGORY-INVENTORY-FLOW.md) for the canonical entity relationships and CRUD model.
 
 **Child Slyde vs Home Slyde:**
 - Home Slyde = video-first entry + drawer (no frames)
