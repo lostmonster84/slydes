@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronUp } from 'lucide-react'
+import { ChevronUp, Volume2, VolumeX } from 'lucide-react'
 import { RatingDisplay } from '@/components/slyde-demo/RatingDisplay'
 import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
 import { ProfilePill } from '@/components/slyde-demo/ProfilePill'
@@ -26,6 +26,8 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
   const [shareOpen, setShareOpen] = useState(false)
   const [isHearted, setIsHearted] = useState(false)
   const [heartCount, setHeartCount] = useState(2400)
+  const [isMuted, setIsMuted] = useState(true)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   const handleHeartTap = useCallback(() => {
     setIsHearted((prev) => {
@@ -33,6 +35,13 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
       return !prev
     })
   }, [])
+
+  const toggleMute = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted
+      setIsMuted(!isMuted)
+    }
+  }, [isMuted])
 
   const handleCategoryTap = useCallback(
     (categoryId: string) => {
@@ -61,6 +70,20 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
 
       {/* Gradient overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+
+      {/* Sound Toggle - Top Left */}
+      <motion.button
+        className="absolute top-4 left-4 z-50 w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={toggleMute}
+      >
+        {isMuted ? (
+          <VolumeX className="w-4 h-4 text-white" />
+        ) : (
+          <Volume2 className="w-4 h-4 text-white" />
+        )}
+      </motion.button>
 
       {/* === RIGHT SIDE ACTIONS === (no FAQ for Home Slyde) */}
       <SocialActionStack
