@@ -43,6 +43,7 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [slugStatus, setSlugStatus] = useState<'idle' | 'checking' | 'available' | 'owned' | 'taken'>('idle')
   const [formData, setFormData] = useState({
     full_name: '',
@@ -136,11 +137,24 @@ export default function OnboardingPage() {
 
   const handleSubmit = async () => {
     setIsLoading(true)
+    setSubmitError(null)
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const withTimeout = async <T,>(promise: PromiseLike<T>, ms: number, label: string): Promise<T> => {
+        return await Promise.race([
+          Promise.resolve(promise),
+          new Promise<T>((_, reject) =>
+            setTimeout(() => reject(new Error(`${label} timed out after ${Math.round(ms / 1000)}s`)), ms),
+          ),
+        ])
+      }
+
+      const {
+        data: { user },
+      } = await withTimeout(supabase.auth.getUser(), 15_000, 'Auth check')
 
       if (!user) {
+        setIsLoading(false)
         router.push('/login')
         return
       }
@@ -149,14 +163,15 @@ export default function OnboardingPage() {
 
       if (slugStatus === 'owned') {
         // Slug exists and is owned by this user: reuse it instead of inserting (avoids unique constraint failure).
-        const { data: existingOrg, error: existingOrgError } = await supabase
-          .from('organizations')
-          .select('id')
-          .eq('slug', formData.slug.toLowerCase())
-          .single()
+        const { data: existingOrg, error: existingOrgError } = await withTimeout(
+          supabase.from('organizations').select('id').eq('slug', formData.slug.toLowerCase()).single(),
+          15_000,
+          'Loading existing organization',
+        )
 
         if (existingOrgError || !existingOrg) {
           console.error('Error loading existing organization:', JSON.stringify(existingOrgError, null, 2))
+          setSubmitError(existingOrgError?.message || 'Could not load your existing organization. Please try again.')
           setIsLoading(false)
           return
         }
@@ -164,23 +179,28 @@ export default function OnboardingPage() {
         orgId = existingOrg.id
       } else {
         // Create organization
-        const { data: org, error: orgError } = await supabase
-          .from('organizations')
-          .insert({
-            owner_id: user.id,
-            name: formData.organization_name,
-            slug: formData.slug.toLowerCase(),
-            website: formData.website || null,
-            business_type: formData.business_type,
-          })
-          .select('id')
-          .single()
+        const { data: org, error: orgError } = await withTimeout(
+          supabase
+            .from('organizations')
+            .insert({
+              owner_id: user.id,
+              name: formData.organization_name,
+              slug: formData.slug.toLowerCase(),
+              website: formData.website || null,
+              business_type: formData.business_type,
+            })
+            .select('id')
+            .single(),
+          20_000,
+          'Creating organization',
+        )
 
         if (orgError || !org) {
           console.error('Error creating organization:', JSON.stringify(orgError, null, 2))
           console.error('Error code:', orgError?.code)
           console.error('Error message:', orgError?.message)
           console.error('Error details:', orgError?.details)
+          setSubmitError(orgError?.message || 'Could not create your organization. Please try again.')
           setIsLoading(false)
           return
         }
@@ -189,29 +209,36 @@ export default function OnboardingPage() {
       }
 
       // Update profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({
-          full_name: formData.full_name,
-          company_name: formData.organization_name,
-          company_website: formData.website,
-          onboarding_completed: true,
-          current_organization_id: orgId,
-        })
-        .eq('id', user.id)
+      const { error: profileError } = await withTimeout(
+        supabase
+          .from('profiles')
+          .update({
+            full_name: formData.full_name,
+            company_name: formData.organization_name,
+            company_website: formData.website,
+            onboarding_completed: true,
+            current_organization_id: orgId,
+          })
+          .eq('id', user.id),
+        15_000,
+        'Updating profile',
+      )
 
       if (profileError) {
         console.error('Error updating profile:', JSON.stringify(profileError, null, 2))
+        setSubmitError(profileError?.message || 'Could not update your profile. Please try again.')
         setIsLoading(false)
         return
       }
 
       // Success! Redirect to dashboard
       console.log('Onboarding complete, redirecting...')
+      setIsLoading(false)
       router.replace('/')
       router.refresh()
     } catch (error) {
       console.error('Error:', error)
+      setSubmitError(error instanceof Error ? error.message : 'Something went wrong. Please try again.')
       setIsLoading(false)
     }
   }
@@ -363,7 +390,7 @@ export default function OnboardingPage() {
                         type="text"
                         value={formData.organization_name}
                         onChange={handleChange}
-                        placeholder="WildTrax"
+                        placeholder="Bloom Studio"
                         autoComplete="organization"
                         autoFocus
                         className="w-full bg-white/[0.06] border-0 rounded-2xl py-4 px-5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/50 focus:bg-white/[0.08] transition-all text-[17px]"
@@ -382,7 +409,7 @@ export default function OnboardingPage() {
                             type="text"
                             value={formData.slug}
                             onChange={handleChange}
-                            placeholder="wildtrax"
+                            placeholder="bloomstudio"
                             className="flex-1 bg-transparent py-4 px-5 text-white placeholder:text-white/30 focus:outline-none text-[17px]"
                           />
                           <div className="flex items-center gap-2 px-4 py-4 text-white/40 bg-white/[0.04] border-l border-white/[0.06]">
@@ -460,7 +487,7 @@ export default function OnboardingPage() {
                         type="text"
                         value={formData.website}
                         onChange={handleChange}
-                        placeholder="wildtrax.co.uk"
+                        placeholder="bloomstudio.com"
                         className="w-full bg-white/[0.06] border-0 rounded-2xl py-4 px-5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/50 focus:bg-white/[0.08] transition-all text-[17px]"
                       />
                     </div>
@@ -534,6 +561,19 @@ export default function OnboardingPage() {
                       'Get started'
                     )}
                   </motion.button>
+
+                  <AnimatePresence>
+                    {submitError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        className="mt-4 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-[13px] text-red-200"
+                      >
+                        {submitError}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               )}
             </motion.div>
