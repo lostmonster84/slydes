@@ -18,9 +18,18 @@ export const dynamic = 'force-dynamic'
 export default function EditorMockupPage({
   searchParams,
 }: {
-  searchParams?: Record<string, string | string[] | undefined>
+  searchParams?: Promise<Record<string, string | string[] | undefined>>
 }) {
-  const slyde = typeof searchParams?.slyde === 'string' ? searchParams.slyde : undefined
-  const name = typeof searchParams?.name === 'string' ? searchParams.name : undefined
+  return <EditorMockupPageContent searchParamsPromise={searchParams} />
+}
+
+async function EditorMockupPageContent({
+  searchParamsPromise,
+}: {
+  searchParamsPromise?: Promise<Record<string, string | string[] | undefined>>
+}) {
+  const resolved = await Promise.resolve(searchParamsPromise)
+  const slyde = typeof resolved?.slyde === 'string' ? resolved.slyde : undefined
+  const name = typeof resolved?.name === 'string' ? resolved.name : undefined
   return <EditorMockupClient slyde={slyde} name={name} />
 }

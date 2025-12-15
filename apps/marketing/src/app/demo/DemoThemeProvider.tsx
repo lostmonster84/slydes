@@ -88,4 +88,6 @@ export function DemoThemeProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
+export default DemoThemeProvider
+
 

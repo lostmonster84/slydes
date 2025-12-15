@@ -14,7 +14,6 @@ export default function DemoLayout({ children }: { children: React.ReactNode }) 
         }
         var root = document.documentElement;
         if (isDark) root.classList.add('dark'); else root.classList.remove('dark');
-        root.style.colorScheme = isDark ? 'dark' : 'light';
       } catch (e) {}
     })();
   `

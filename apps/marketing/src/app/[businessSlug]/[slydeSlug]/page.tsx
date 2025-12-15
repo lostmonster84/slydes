@@ -3,12 +3,20 @@ import { PublicSlydeClient } from './PublicSlydeClient'
 
 export const dynamic = 'force-dynamic'
 
-export default async function BusinessSlydePage({
+export default function BusinessSlydePage({
   params,
 }: {
   params: Promise<{ businessSlug: string; slydeSlug: string }>
 }) {
-  const { businessSlug, slydeSlug } = await params
+  return <BusinessSlydePageContent paramsPromise={params} />
+}
+
+async function BusinessSlydePageContent({
+  paramsPromise,
+}: {
+  paramsPromise: Promise<{ businessSlug: string; slydeSlug: string }>
+}) {
+  const { businessSlug, slydeSlug } = await paramsPromise
   if (businessSlug !== 'wildtrax') return notFound()
 
   if (slydeSlug !== 'camping' && slydeSlug !== 'just-drive') return notFound()

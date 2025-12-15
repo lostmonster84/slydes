@@ -15,12 +15,16 @@ const RESERVED = new Set([
   'privacy',
 ])
 
-export default async function BusinessHomePage({
+export default function BusinessHomePage({
   params,
 }: {
   params: Promise<{ businessSlug: string }>
 }) {
-  const { businessSlug } = await params
+  return <BusinessHomePageContent paramsPromise={params} />
+}
+
+async function BusinessHomePageContent({ paramsPromise }: { paramsPromise: Promise<{ businessSlug: string }> }) {
+  const { businessSlug } = await paramsPromise
   if (!businessSlug || RESERVED.has(businessSlug)) return notFound()
 
   // Demo scope: only WildTrax is wired to the Home Slyde store right now.
