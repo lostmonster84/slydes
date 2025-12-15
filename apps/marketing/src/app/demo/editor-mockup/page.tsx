@@ -1,5 +1,7 @@
 import EditorMockupClient from './EditorMockupClient'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * Editor Mockup Page
  *
@@ -13,6 +15,12 @@ import EditorMockupClient from './EditorMockupClient'
  * issues with useSearchParams().
  */
 
-export default function EditorMockupPage() {
-  return <EditorMockupClient />
+export default function EditorMockupPage({
+  searchParams,
+}: {
+  searchParams?: Record<string, string | string[] | undefined>
+}) {
+  const slyde = typeof searchParams?.slyde === 'string' ? searchParams.slyde : undefined
+  const name = typeof searchParams?.name === 'string' ? searchParams.name : undefined
+  return <EditorMockupClient slyde={slyde} name={name} />
 }

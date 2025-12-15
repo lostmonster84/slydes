@@ -3,14 +3,17 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { DevicePreview } from '@/components/slyde-demo'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
 import type { FrameData, FAQItem, BusinessInfo, CTAIconType, FrameInfoContent } from '@/components/slyde-demo/frameData'
 import { demoBrandGradient, useDemoBrand } from '@/lib/demoBrand'
+import { useDemoHomeSlyde, writeDemoHomeSlyde, type DemoHomeSlyde, type DemoHomeSlydeCategory } from '@/lib/demoHomeSlyde'
 import type { LucideIcon } from 'lucide-react'
 import { Settings2, HelpCircle, UploadCloud, GripVertical, CalendarDays, Phone, Eye, ArrowRight, Menu, Video, Image as ImageIcon } from 'lucide-react'
+import { HomeSlydeScreen } from '@/app/demo/home-slyde/components/HomeSlydeScreen'
 
-type DemoSlydeId = 'camping' | 'just-drive' | 'new'
+type DemoSlydeId = 'home' | 'camping' | 'just-drive' | 'new'
 
 export interface EditorMockupClientProps {
   slyde?: string
@@ -18,11 +21,12 @@ export interface EditorMockupClientProps {
 }
 
 function coerceDemoSlydeId(input: string | undefined): DemoSlydeId {
-  if (input === 'camping' || input === 'just-drive' || input === 'new') return input
+  if (input === 'home' || input === 'camping' || input === 'just-drive' || input === 'new') return input
   return 'camping'
 }
 
 function getDemoSlydeLabel(slydeId: DemoSlydeId, nameOverride?: string | null) {
+  if (slydeId === 'home') return 'Home Slyde'
   if (slydeId === 'new') return (nameOverride || 'New Slyde').trim() || 'New Slyde'
   if (slydeId === 'just-drive') return 'Just Drive'
   return 'Camping'
@@ -323,6 +327,7 @@ const INITIAL_FRAMES_JUST_DRIVE: FrameData[] = INITIAL_FRAMES_CAMPING.map((f) =>
 
 function getInitialFramesForSlyde(slydeId: DemoSlydeId): FrameData[] {
   if (slydeId === 'just-drive') return INITIAL_FRAMES_JUST_DRIVE
+  if (slydeId === 'home') return INITIAL_FRAMES_CAMPING
   if (slydeId === 'new') {
     return buildStarterFrames({ faqCount: INITIAL_FAQS.length, accentColor: INITIAL_BUSINESS.accentColor || 'bg-red-600' })
   }
@@ -338,6 +343,10 @@ const CTA_ICONS: { value: CTAIconType; label: string; Icon: LucideIcon }[] = [
 ]
 
 export default function EditorMockupClient({ slyde, name }: EditorMockupClientProps) {
+  const sp = useSearchParams()
+  const slydeFromUrl = sp.get('slyde') || slyde
+  const nameFromUrl = sp.get('name') || name
+
   // Live brand sync — reacts to changes from Brand settings page
   const brandProfile = useDemoBrand()
   const brandAccent = useMemo(() => demoBrandGradient(brandProfile), [brandProfile])
@@ -349,8 +358,47 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
   // HQ skin tokens (chrome only — phone preview stays canonical)
   const HQ_PRIMARY_GRADIENT = 'bg-gradient-to-r from-blue-600 to-cyan-500'
   const HQ_PRIMARY_SHADOW = 'shadow-lg shadow-blue-500/15'
-  const activeSlydeId = coerceDemoSlydeId(slyde)
-  const activeSlydeLabel = getDemoSlydeLabel(activeSlydeId, name)
+  const activeSlydeId = coerceDemoSlydeId(slydeFromUrl || undefined)
+  const activeSlydeLabel = getDemoSlydeLabel(activeSlydeId, nameFromUrl)
+  const isHomeMode = activeSlydeId === 'home'
+
+  const homeSlyde = useDemoHomeSlyde()
+  const [homePreviewLevel, setHomePreviewLevel] = useState<'home' | 'child'>('home')
+  const [homePreviewChildId, setHomePreviewChildId] = useState<'camping' | 'just-drive'>('camping')
+
+  const updateHomeSlyde = useCallback((updates: Partial<DemoHomeSlyde>) => {
+    const next: DemoHomeSlyde = { ...homeSlyde, ...updates }
+    writeDemoHomeSlyde(next)
+  }, [homeSlyde])
+
+  const updateHomeCategory = useCallback((id: string, updates: Partial<DemoHomeSlydeCategory>) => {
+    const next: DemoHomeSlyde = {
+      ...homeSlyde,
+      categories: homeSlyde.categories.map((c) => (c.id === id ? { ...c, ...updates } : c)),
+    }
+    writeDemoHomeSlyde(next)
+  }, [homeSlyde])
+
+  const addHomeCategory = useCallback(() => {
+    if (homeSlyde.categories.length >= 6) return
+    const id = `cat-${homeSlyde.categories.length + 1}`
+    const next: DemoHomeSlyde = {
+      ...homeSlyde,
+      categories: [
+        ...homeSlyde.categories,
+        { id, icon: '✨', label: 'New category', description: '', childSlydeId: 'camping' },
+      ],
+    }
+    writeDemoHomeSlyde(next)
+  }, [homeSlyde])
+
+  const deleteHomeCategory = useCallback((id: string) => {
+    const next: DemoHomeSlyde = {
+      ...homeSlyde,
+      categories: homeSlyde.categories.filter((c) => c.id !== id),
+    }
+    writeDemoHomeSlyde(next)
+  }, [homeSlyde])
 
   // State
   const [frames, setFrames] = useState<FrameData[]>(() =>
@@ -567,16 +615,61 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
 
       {/* Main Editor */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Frames Panel */}
+        {/* Left Panel */}
         <aside className="w-72 border-r border-gray-200 dark:border-white/10 bg-white/80 backdrop-blur-xl dark:bg-[#2c2c2e]/80 flex flex-col shrink-0">
           <div className="p-3 border-b border-gray-200 dark:border-white/10">
             <h2 className="text-xs font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
-              Frames ({frames.length})
+              {isHomeMode ? `Categories (${homeSlyde.categories.length})` : `Frames (${frames.length})`}
             </h2>
           </div>
           
           <div className="flex-1 overflow-y-auto p-3 space-y-2 relative">
-            {frames.map((frame, index) => {
+            {isHomeMode ? (
+              <>
+                {homeSlyde.categories.map((cat) => (
+                  <div
+                    key={cat.id}
+                    className="p-3 rounded-2xl border border-gray-200/60 bg-white/70 backdrop-blur-sm shadow-sm dark:bg-[#2c2c2e]/70 dark:border-white/10"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-white/10 flex items-center justify-center text-xl">
+                        {cat.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <input
+                          value={cat.label}
+                          onChange={(e) => updateHomeCategory(cat.id, { label: e.target.value })}
+                          className="w-full bg-transparent text-sm font-display font-bold text-gray-900 dark:text-white outline-none"
+                        />
+                        <input
+                          value={cat.description}
+                          onChange={(e) => updateHomeCategory(cat.id, { description: e.target.value })}
+                          className="w-full bg-transparent text-xs text-gray-500 dark:text-white/50 outline-none mt-1"
+                          placeholder="Description"
+                        />
+                        <div className="mt-2 flex items-center gap-2">
+                          <select
+                            value={cat.childSlydeId}
+                            onChange={(e) => updateHomeCategory(cat.id, { childSlydeId: e.target.value })}
+                            className="flex-1 h-8 rounded-lg bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/10 px-2 text-xs text-gray-700 dark:text-white/70"
+                          >
+                            <option value="camping">Camping</option>
+                            <option value="just-drive">Just Drive</option>
+                          </select>
+                          <button
+                            onClick={() => deleteHomeCategory(cat.id)}
+                            className="h-8 px-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/15 text-xs text-gray-600 dark:text-white/60"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              frames.map((frame, index) => {
               const isDropTarget = draggingFrameId && dragOverTarget?.id === frame.id
               const showIndicatorAbove = isDropTarget && dragOverTarget?.position === 'above'
               const showIndicatorBelow = isDropTarget && dragOverTarget?.position === 'below'
@@ -716,22 +809,33 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
                   />
                 </div>
               )
-            })}
+            }))}
           </div>
 
           <div className="p-3 border-t border-gray-200 dark:border-white/10">
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className={`w-full py-2.5 mb-2 text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity ${HQ_PRIMARY_SHADOW} ${HQ_PRIMARY_GRADIENT}`}
-            >
-              + Create new Slyde (starter)
-            </button>
-            <button
-              onClick={addFrame}
-              className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/[0.08] dark:hover:bg-white/[0.12] rounded-xl text-gray-700 dark:text-white/70 hover:text-gray-900 dark:hover:text-white transition-colors text-sm font-medium"
-            >
-              + Add Frame
-            </button>
+            {isHomeMode ? (
+              <button
+                onClick={addHomeCategory}
+                className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/[0.08] dark:hover:bg-white/[0.12] rounded-xl text-gray-700 dark:text-white/70 hover:text-gray-900 dark:hover:text-white transition-colors text-sm font-medium"
+              >
+                + Add Category
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={() => setShowCreateModal(true)}
+                  className={`w-full py-2.5 mb-2 text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity ${HQ_PRIMARY_SHADOW} ${HQ_PRIMARY_GRADIENT}`}
+                >
+                  + Create new Slyde (starter)
+                </button>
+                <button
+                  onClick={addFrame}
+                  className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-white/[0.08] dark:hover:bg-white/[0.12] rounded-xl text-gray-700 dark:text-white/70 hover:text-gray-900 dark:hover:text-white transition-colors text-sm font-medium"
+                >
+                  + Add Frame
+                </button>
+              </>
+            )}
           </div>
         </aside>
 
@@ -739,18 +843,66 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
         <main className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-[#1c1c1e] p-8 overflow-hidden">
           <div className="flex flex-col items-center">
             <DevicePreview enableTilt={false}>
-              <SlydeScreen
-                frames={frames}
-                faqs={faqs}
-                business={business}
-                autoAdvance={false}
-                initialFrameIndex={previewFrameIndex}
-                onFrameChange={handlePreviewFrameChange}
-              />
+              {isHomeMode ? (
+                <div className="relative w-full h-full">
+                  {homePreviewLevel === 'home' ? (
+                    <HomeSlydeScreen
+                      data={{
+                        businessName: brandProfile.businessName,
+                        tagline: brandProfile.tagline,
+                        accentColor: brandProfile.secondaryColor,
+                        backgroundGradient: 'from-slate-900 via-slate-900 to-slate-900',
+                        rating: business.rating,
+                        reviewCount: business.reviewCount,
+                        categories: homeSlyde.categories.map((c) => ({
+                          id: c.id,
+                          label: c.label,
+                          icon: c.icon,
+                          description: c.description,
+                          frames: [],
+                        })),
+                        primaryCta: homeSlyde.primaryCta ? { text: homeSlyde.primaryCta.text, action: homeSlyde.primaryCta.action } : undefined,
+                      }}
+                      onCategoryTap={(categoryId) => {
+                        const cat = homeSlyde.categories.find((c) => c.id === categoryId)
+                        const child = (cat?.childSlydeId === 'just-drive' ? 'just-drive' : 'camping') as 'camping' | 'just-drive'
+                        setHomePreviewChildId(child)
+                        setHomePreviewLevel('child')
+                      }}
+                    />
+                  ) : (
+                    <div className="relative w-full h-full">
+                      <button
+                        onClick={() => setHomePreviewLevel('home')}
+                        className="absolute top-3 left-3 z-50 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur text-white text-xs font-semibold"
+                      >
+                        ← Home
+                      </button>
+                      <SlydeScreen
+                        frames={getInitialFramesForSlyde(homePreviewChildId).map((f) => ({ ...f, accentColor: brandAccent }))}
+                        faqs={faqs}
+                        business={business}
+                        autoAdvance={false}
+                      />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <SlydeScreen
+                  frames={frames}
+                  faqs={faqs}
+                  business={business}
+                  autoAdvance={false}
+                  initialFrameIndex={previewFrameIndex}
+                  onFrameChange={handlePreviewFrameChange}
+                />
+              )}
             </DevicePreview>
-            <p className="mt-4 text-sm text-gray-500 dark:text-white/50 font-mono">
-              Editing: Frame {previewFrameIndex + 1} of {frames.length}
-            </p>
+            {!isHomeMode && (
+              <p className="mt-4 text-sm text-gray-500 dark:text-white/50 font-mono">
+                Editing: Frame {previewFrameIndex + 1} of {frames.length}
+              </p>
+            )}
           </div>
         </main>
 
@@ -786,130 +938,170 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
           {/* Tab Content */}
           <div className="flex-1 overflow-y-auto p-4 space-y-5">
             {activeTab === 'content' && (
-              <>
-                <div>
-                  <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    value={selectedFrame.title}
-                    onChange={e => updateFrame(selectedFrame.id, { title: e.target.value })}
-                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
-                    Subtitle
-                  </label>
-                  <input
-                    type="text"
-                    value={selectedFrame.subtitle || ''}
-                    onChange={e => updateFrame(selectedFrame.id, { subtitle: e.target.value })}
-                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
-                    Badge
-                  </label>
-                  <input
-                    type="text"
-                    value={selectedFrame.badge || ''}
-                    onChange={e => updateFrame(selectedFrame.id, { badge: e.target.value })}
-                    placeholder="e.g. ⭐ 5-Star Rated"
-                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
-                    Background media
-                  </label>
-                  <div className="flex gap-2 mb-2">
-                    <button
-                      onClick={() => updateFrame(selectedFrame.id, { background: { ...selectedFrame.background, type: 'video' } })}
-                      className={`flex-1 py-2 text-sm rounded-lg border transition-colors ${
-                        selectedFrame.background.type === 'video'
-                          ? 'border-blue-200 bg-blue-50 dark:border-blue-500/25 dark:bg-blue-500/10 text-blue-700 dark:text-cyan-300'
-                          : 'border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/60'
-                      }`}
-                    >
-                      <span className="inline-flex items-center justify-center gap-2">
-                        <Video className="w-4 h-4" aria-hidden="true" />
-                        <span className="font-semibold">Video</span>
-                      </span>
-                    </button>
-                    <button
-                      onClick={() => updateFrame(selectedFrame.id, { background: { ...selectedFrame.background, type: 'image' } })}
-                      className={`flex-1 py-2 text-sm rounded-lg border transition-colors ${
-                        selectedFrame.background.type === 'image'
-                          ? 'border-blue-200 bg-blue-50 dark:border-blue-500/25 dark:bg-blue-500/10 text-blue-700 dark:text-cyan-300'
-                          : 'border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/60'
-                      }`}
-                    >
-                      <span className="inline-flex items-center justify-center gap-2">
-                        <ImageIcon className="w-4 h-4" aria-hidden="true" />
-                        <span className="font-semibold">Image</span>
-                      </span>
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    value={selectedFrame.background.src}
-                    onChange={e => updateFrame(selectedFrame.id, { background: { ...selectedFrame.background, src: e.target.value } })}
-                    placeholder="URL or upload..."
-                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
-                    Heart count
-                  </label>
-                  <input
-                    type="number"
-                    value={selectedFrame.heartCount}
-                    onChange={e => updateFrame(selectedFrame.id, { heartCount: parseInt(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
-                  />
-                  <p className="mt-1.5 text-[12px] text-gray-500 dark:text-white/40">
-                    Popularity signal shown on the frame
-                  </p>
-                </div>
-
-                {(selectedFrame.rating !== undefined) && (
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
-                        Rating
-                      </label>
-                      <input
-                        type="number"
-                        step="0.1"
-                        min="0"
-                        max="5"
-                        value={selectedFrame.rating || 0}
-                        onChange={e => updateFrame(selectedFrame.id, { rating: parseFloat(e.target.value) || 0 })}
-                        className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
-                        Reviews
-                      </label>
-                      <input
-                        type="number"
-                        value={selectedFrame.reviewCount || 0}
-                        onChange={e => updateFrame(selectedFrame.id, { reviewCount: parseInt(e.target.value) || 0 })}
-                        className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
-                      />
+              isHomeMode ? (
+                <>
+                  <div className="p-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5">
+                    <div className="text-[13px] font-semibold text-gray-900 dark:text-white">Home Slyde</div>
+                    <div className="mt-1 text-[12px] text-gray-600 dark:text-white/60">
+                      Video-first entry point. Categories route into Child Slydes (Option A).
                     </div>
                   </div>
-                )}
-              </>
+
+                  <div>
+                    <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                      Video URL
+                    </label>
+                    <input
+                      type="text"
+                      value={homeSlyde.videoSrc}
+                      onChange={(e) => updateHomeSlyde({ videoSrc: e.target.value })}
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                      placeholder="/videos/adventure.mp4"
+                    />
+                    <p className="mt-1.5 text-[12px] text-gray-500 dark:text-white/40">
+                      Autoplay is muted; sound requires a user tap.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                      Poster URL (optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={homeSlyde.posterSrc || ''}
+                      onChange={(e) => updateHomeSlyde({ posterSrc: e.target.value || undefined })}
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                      placeholder="https://..."
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      value={selectedFrame.title}
+                      onChange={e => updateFrame(selectedFrame.id, { title: e.target.value })}
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                      Subtitle
+                    </label>
+                    <input
+                      type="text"
+                      value={selectedFrame.subtitle || ''}
+                      onChange={e => updateFrame(selectedFrame.id, { subtitle: e.target.value })}
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                      Badge
+                    </label>
+                    <input
+                      type="text"
+                      value={selectedFrame.badge || ''}
+                      onChange={e => updateFrame(selectedFrame.id, { badge: e.target.value })}
+                      placeholder="e.g. ⭐ 5-Star Rated"
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                      Background media
+                    </label>
+                    <div className="flex gap-2 mb-2">
+                      <button
+                        onClick={() => updateFrame(selectedFrame.id, { background: { ...selectedFrame.background, type: 'video' } })}
+                        className={`flex-1 py-2 text-sm rounded-lg border transition-colors ${
+                          selectedFrame.background.type === 'video'
+                            ? 'border-blue-200 bg-blue-50 dark:border-blue-500/25 dark:bg-blue-500/10 text-blue-700 dark:text-cyan-300'
+                            : 'border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/60'
+                        }`}
+                      >
+                        <span className="inline-flex items-center justify-center gap-2">
+                          <Video className="w-4 h-4" aria-hidden="true" />
+                          <span className="font-semibold">Video</span>
+                        </span>
+                      </button>
+                      <button
+                        onClick={() => updateFrame(selectedFrame.id, { background: { ...selectedFrame.background, type: 'image' } })}
+                        className={`flex-1 py-2 text-sm rounded-lg border transition-colors ${
+                          selectedFrame.background.type === 'image'
+                            ? 'border-blue-200 bg-blue-50 dark:border-blue-500/25 dark:bg-blue-500/10 text-blue-700 dark:text-cyan-300'
+                            : 'border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/60'
+                        }`}
+                      >
+                        <span className="inline-flex items-center justify-center gap-2">
+                          <ImageIcon className="w-4 h-4" aria-hidden="true" />
+                          <span className="font-semibold">Image</span>
+                        </span>
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      value={selectedFrame.background.src}
+                      onChange={e => updateFrame(selectedFrame.id, { background: { ...selectedFrame.background, src: e.target.value } })}
+                      placeholder="URL or upload..."
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                      Heart count
+                    </label>
+                    <input
+                      type="number"
+                      value={selectedFrame.heartCount}
+                      onChange={e => updateFrame(selectedFrame.id, { heartCount: parseInt(e.target.value) || 0 })}
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
+                    />
+                    <p className="mt-1.5 text-[12px] text-gray-500 dark:text-white/40">
+                      Popularity signal shown on the frame
+                    </p>
+                  </div>
+
+                  {(selectedFrame.rating !== undefined) && (
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                          Rating
+                        </label>
+                        <input
+                          type="number"
+                          step="0.1"
+                          min="0"
+                          max="5"
+                          value={selectedFrame.rating || 0}
+                          onChange={e => updateFrame(selectedFrame.id, { rating: parseFloat(e.target.value) || 0 })}
+                          className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                          Reviews
+                        </label>
+                        <input
+                          type="number"
+                          value={selectedFrame.reviewCount || 0}
+                          onChange={e => updateFrame(selectedFrame.id, { reviewCount: parseInt(e.target.value) || 0 })}
+                          className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
+              )
             )}
 
             {activeTab === 'cta' && (

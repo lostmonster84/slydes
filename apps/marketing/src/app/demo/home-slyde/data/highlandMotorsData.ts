@@ -50,6 +50,12 @@ export interface HomeSlydeData {
   tagline: string
   accentColor: string
   backgroundGradient: string
+  /**
+   * Optional: explicit video source (Home Slyde is video-first).
+   * If omitted, HomeSlydeScreen will use a local demo fallback.
+   */
+  videoSrc?: string
+  posterSrc?: string
   rating?: number
   reviewCount?: number
   about?: string

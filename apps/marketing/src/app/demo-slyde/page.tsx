@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { DevicePreview } from '@/components/slyde-demo'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
 import {
@@ -13,6 +13,8 @@ import {
 } from '@/components/slyde-demo/frameData'
 import type { BusinessInfo, FrameData } from '@/components/slyde-demo/frameData'
 import { demoBrandGradient, useDemoBrand } from '@/lib/demoBrand'
+import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
+import { HomeSlydeScreen } from '@/app/demo/home-slyde/components/HomeSlydeScreen'
 
 /**
  * Demo Slyde Page
@@ -40,13 +42,18 @@ import { demoBrandGradient, useDemoBrand } from '@/lib/demoBrand'
 
 function DemoSlydeContent() {
   const sp = useSearchParams()
+  const router = useRouter()
   const slydeId = useMemo(() => {
     const raw = sp.get('slyde')
+    if (raw === 'home') return 'home'
     if (raw === 'just-drive') return 'just-drive'
     return 'camping'
   }, [sp])
 
   const { frames, faqs, title } = useMemo(() => {
+    if (slydeId === 'home') {
+      return { frames: campingFrames, faqs: campingFAQs, title: 'Home Slyde' }
+    }
     if (slydeId === 'just-drive') {
       return { frames: justDriveFrames, faqs: justDriveFAQs, title: 'Just Drive' }
     }
@@ -56,6 +63,7 @@ function DemoSlydeContent() {
   // Live brand sync — reacts to changes from Brand settings page (cross-tab + same-tab)
   const brandProfile = useDemoBrand()
   const brandAccent = useMemo(() => demoBrandGradient(brandProfile), [brandProfile])
+  const home = useDemoHomeSlyde()
 
   const [business, setBusiness] = useState<BusinessInfo>(() => ({
     ...wildtraxBusiness,
@@ -95,15 +103,43 @@ function DemoSlydeContent() {
 
       {/* Device Preview */}
       <DevicePreview enableTilt={true}>
-        <SlydeScreen
-          frames={brandedFrames}
-          faqs={faqs}
-          business={business}
-          autoAdvance={false}
-          analyticsOrgSlug="wildtrax"
-          analyticsSlydePublicId={slydeId}
-          analyticsSource="direct"
-        />
+        {slydeId === 'home' ? (
+          <HomeSlydeScreen
+            data={{
+              businessName: brandProfile.businessName,
+              tagline: brandProfile.tagline,
+              accentColor: brandProfile.secondaryColor,
+              backgroundGradient: 'from-slate-900 via-slate-900 to-slate-900',
+              rating: business.rating,
+              reviewCount: business.reviewCount,
+              videoSrc: home.videoSrc,
+              posterSrc: home.posterSrc,
+              categories: home.categories.map((c) => ({
+                id: c.id,
+                label: c.label,
+                icon: c.icon,
+                description: c.description,
+                frames: [],
+              })),
+              primaryCta: home.primaryCta ? { text: home.primaryCta.text, action: home.primaryCta.action } : undefined,
+            }}
+            onCategoryTap={(categoryId) => {
+              const cat = home.categories.find((c) => c.id === categoryId)
+              const child = cat?.childSlydeId === 'just-drive' ? 'just-drive' : 'camping'
+              router.push(`/demo-slyde?slyde=${encodeURIComponent(child)}`)
+            }}
+          />
+        ) : (
+          <SlydeScreen
+            frames={brandedFrames}
+            faqs={faqs}
+            business={business}
+            autoAdvance={false}
+            analyticsOrgSlug="wildtrax"
+            analyticsSlydePublicId={slydeId}
+            analyticsSource="direct"
+          />
+        )}
       </DevicePreview>
 
       {/* Footer */}

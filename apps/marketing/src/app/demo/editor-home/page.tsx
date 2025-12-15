@@ -15,8 +15,9 @@ import {
  * Editor Home Page
  * 
  * TERMINOLOGY (per STRUCTURE.md):
- * - Profile → Slyde → Frame
- * - This page shows the Profile level: a list of all Slydes for a business
+ * - Public: Home Slyde → Child Slyde → Frame
+ * - HQ: we keep the business context label as "Profile"
+ * - This page shows the HQ Profile context and a list of Child Slydes
  * - Click on a Slyde to edit its Frames
  * 
  * This is the entry point to the editor experience.
@@ -139,12 +140,44 @@ export default function EditorHomePage() {
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Your Slydes</h2>
             <span className="text-sm text-gray-500 dark:text-white/50">
-              Profile: slydes.io/{business.id}
+              Public Home Slyde: slydes.io/{business.id}
             </span>
           </div>
           <p className="text-gray-600 dark:text-white/60">
-            Each Slyde is a shareable experience. Click on one to edit its frames.
+            Your public root link opens the Home Slyde. Each Child Slyde is a shareable experience with Frames inside.
           </p>
+        </div>
+
+        {/* Home Slyde (pinned) */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-white/70">Home Slyde (public root)</h3>
+            <span className="text-xs text-gray-500 dark:text-white/50">Required</span>
+          </div>
+          <Link
+            href="/demo/editor-mockup?slyde=home"
+            className="block w-full p-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 hover:border-gray-300 dark:hover:border-white/20 transition-colors"
+          >
+            <div className="flex items-start gap-4">
+              <div className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl bg-gradient-to-br from-blue-600/15 to-cyan-500/15 border border-blue-500/15 text-blue-700 dark:text-cyan-300">
+                🎬
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Home Slyde</h4>
+                <p className="text-sm text-gray-500 dark:text-white/60 mt-0.5">
+                  One hero video + swipe-up categories (routes into Child Slydes)
+                </p>
+                <div className="flex items-center gap-3 mt-2">
+                  <span className="text-xs text-gray-400 dark:text-white/40 px-2 py-0.5 bg-gray-100 dark:bg-white/10 rounded-full">
+                    /{business.id}
+                  </span>
+                  <span className="text-xs text-blue-600 dark:text-cyan-300 font-medium">
+                    Edit →
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
 
         {/* Slydes Grid */}
@@ -207,22 +240,22 @@ export default function EditorHomePage() {
             <div className="flex items-start gap-3">
               <span className="w-6 h-6 bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold shrink-0">1</span>
               <div>
-                <span className="font-medium text-gray-900 dark:text-white">Profile</span>
-                <span className="text-gray-500 dark:text-white/50"> — Your business home page (slydes.io/{business.id})</span>
+                <span className="font-medium text-gray-900 dark:text-white">Profile (HQ)</span>
+                <span className="text-gray-500 dark:text-white/50"> — Your business context (brand, settings, billing)</span>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="w-6 h-6 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center text-xs font-bold shrink-0">2</span>
               <div>
-                <span className="font-medium text-gray-900 dark:text-white">Slyde</span>
-                <span className="text-gray-500 dark:text-white/50"> — A shareable experience (e.g., "Camping" or "Just Drive")</span>
+                <span className="font-medium text-gray-900 dark:text-white">Home Slyde (public root)</span>
+                <span className="text-gray-500 dark:text-white/50"> — The entry experience at slydes.io/{business.id}</span>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="w-6 h-6 bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 rounded-full flex items-center justify-center text-xs font-bold shrink-0">3</span>
               <div>
-                <span className="font-medium text-gray-900 dark:text-white">Frame</span>
-                <span className="text-gray-500 dark:text-white/50"> — A vertical screen inside a Slyde (what users swipe through)</span>
+                <span className="font-medium text-gray-900 dark:text-white">Child Slyde → Frames</span>
+                <span className="text-gray-500 dark:text-white/50"> — A shareable experience with swipeable Frames inside</span>
               </div>
             </div>
           </div>

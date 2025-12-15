@@ -1,15 +1,15 @@
 'use client'
 
-import { useState, useCallback, useRef } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronUp, Volume2, VolumeX } from 'lucide-react'
 import { RatingDisplay } from '@/components/slyde-demo/RatingDisplay'
 import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
 import { ProfilePill } from '@/components/slyde-demo/ProfilePill'
 import { CategoryDrawer } from './CategoryDrawer'
-import { InfoSheet } from './InfoSheet'
 import { ShareSheet } from '@/components/slyde-demo/ShareSheet'
 import type { HomeSlydeData } from '../data/highlandMotorsData'
+import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 
 interface HomeSlydeScreenProps {
   data: HomeSlydeData
@@ -17,17 +17,22 @@ interface HomeSlydeScreenProps {
 }
 
 /**
- * HomeSlydeScreen - Carbon copy of SlydeScreen structure
- * ProfilePill opens CategoryDrawer instead of AboutSheet
+ * HomeSlydeScreen (Canonical)
+ * - Video-first entry point with swipe-up category drawer
+ * - Heart + Share actions only
+ * - No FAQ, no Info
  */
 export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [infoOpen, setInfoOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [isHearted, setIsHearted] = useState(false)
   const [heartCount, setHeartCount] = useState(2400)
   const [isMuted, setIsMuted] = useState(true)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const sessionIdRef = useRef<string | null>(null)
+  const firstSeenAtRef = useRef<number | null>(null)
+  const drawerOpenedOnceRef = useRef(false)
+  const demoHome = useDemoHomeSlyde()
 
   const handleHeartTap = useCallback(() => {
     setIsHearted((prev) => {
@@ -43,6 +48,44 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
     }
   }, [isMuted])
 
+  const emit = useCallback(
+    async (eventType: 'sessionStart' | 'drawerOpen' | 'categorySelect' | 'videoLoop', meta?: Record<string, unknown>) => {
+      const organizationSlug = 'wildtrax'
+      const slydePublicId = 'home'
+
+      try {
+        if (!sessionIdRef.current) sessionIdRef.current = crypto.randomUUID()
+        if (!firstSeenAtRef.current) firstSeenAtRef.current = Date.now()
+
+        await fetch('/api/analytics/ingest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            organizationSlug,
+            events: [
+              {
+                eventType,
+                sessionId: sessionIdRef.current,
+                slydePublicId,
+                source: 'direct',
+                referrer: typeof document !== 'undefined' ? document.referrer : undefined,
+                meta: meta ?? {},
+              },
+            ],
+          }),
+          keepalive: true,
+        })
+      } catch {
+        // ignore
+      }
+    },
+    []
+  )
+
+  useEffect(() => {
+    void emit('sessionStart', {})
+  }, [emit])
+
   const handleCategoryTap = useCallback(
     (categoryId: string) => {
       setDrawerOpen(false)
@@ -55,18 +98,32 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
 
   const drawerCategories = data.categories.map((cat) => ({
     id: cat.id,
+    icon: cat.icon,
     label: cat.label,
     description: cat.description,
   }))
 
+  const videoSrc = data.videoSrc || demoHome.videoSrc || '/videos/adventure.mp4'
+
   return (
     <div className="relative w-full h-full overflow-hidden">
-      {/* Gradient Background */}
+      {/* Video Background */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950"
+        className="absolute inset-0"
         animate={{ filter: drawerOpen ? 'brightness(0.4)' : 'brightness(1)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
-      />
+      >
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          onEnded={() => void emit('videoLoop', {})}
+        />
+      </motion.div>
 
       {/* Gradient overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
@@ -85,15 +142,15 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
         )}
       </motion.button>
 
-      {/* === RIGHT SIDE ACTIONS === (no FAQ for Home Slyde) */}
+      {/* === RIGHT SIDE ACTIONS === (Heart + Share only) */}
       <SocialActionStack
         heartCount={heartCount}
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
-        onInfoTap={() => setInfoOpen(true)}
-        slideIndicator="1/1"
+        onInfoTap={() => {}}
         hideFAQ
+        hideInfo
         className="absolute right-3 bottom-36 z-40"
       />
 
@@ -108,12 +165,12 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
 
         {/* Title */}
         <h3 className="text-white text-xl font-bold mb-1 drop-shadow-lg pr-14">
-          Premium Service
+          {data.businessName}
         </h3>
 
         {/* Subtitle */}
         <p className="text-white/80 text-sm mb-4 drop-shadow-md pr-14">
-          Highland Style
+          {data.tagline}
         </p>
 
         {/* ProfilePill → opens drawer (instead of AboutSheet) */}
@@ -131,30 +188,49 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
           onClick={() => setDrawerOpen(true)}
         >
           <ChevronUp className="w-5 h-5 text-white/60" />
-          <span className="text-white/50 text-[10px] mt-0.5">Tap to explore</span>
+          <span className="text-white/50 text-[10px] mt-0.5">Swipe up to explore</span>
         </motion.div>
       </div>
+
+      {/* Swipe-up gesture zone (bottom 20%) */}
+      {!drawerOpen && (
+        <motion.div
+          className="absolute left-0 right-0 bottom-0 h-[20%] z-40"
+          drag="y"
+          dragConstraints={{ top: 0, bottom: 0 }}
+          dragElastic={{ top: 0.2, bottom: 0 }}
+          onDragEnd={(_, info) => {
+            if (info.offset.y < -50) {
+              setDrawerOpen(true)
+              if (!drawerOpenedOnceRef.current) {
+                drawerOpenedOnceRef.current = true
+                const ms = firstSeenAtRef.current ? Date.now() - firstSeenAtRef.current : null
+                void emit('drawerOpen', { timeToOpenMs: ms })
+              }
+            }
+          }}
+          onClick={() => {
+            setDrawerOpen(true)
+            if (!drawerOpenedOnceRef.current) {
+              drawerOpenedOnceRef.current = true
+              const ms = firstSeenAtRef.current ? Date.now() - firstSeenAtRef.current : null
+              void emit('drawerOpen', { timeToOpenMs: ms })
+            }
+          }}
+        />
+      )}
 
       {/* Category Drawer (replaces AboutSheet) */}
       <CategoryDrawer
         isOpen={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         categories={drawerCategories}
-        onCategoryTap={handleCategoryTap}
+        onCategoryTap={(categoryId) => {
+          void emit('categorySelect', { categoryId })
+          handleCategoryTap(categoryId)
+        }}
         businessName={data.businessName}
         accentColor={data.accentColor}
-      />
-
-      {/* Info Sheet (business info from Info button) */}
-      <InfoSheet
-        isOpen={infoOpen}
-        onClose={() => setInfoOpen(false)}
-        businessName={data.businessName}
-        accentColor={data.accentColor}
-        about={data.about || ''}
-        address={data.address || ''}
-        hours={data.hours}
-        website={data.website}
       />
 
       {/* Share Sheet */}
