@@ -45,6 +45,12 @@ interface SlydeScreenProps {
   onQuestionSubmit?: (question: string, frameId: string) => Promise<void>
   /** Canonical share URL for current frame */
   shareUrl?: string
+  /** Optional analytics org slug (e.g. "wildtrax"). If provided, events are emitted to /api/analytics/ingest */
+  analyticsOrgSlug?: string
+  /** Optional public slyde id (e.g. "camping"). If provided, events are attributed to this Slyde */
+  analyticsSlydePublicId?: string
+  /** Optional traffic source (qr/bio/ad/direct/referral) */
+  analyticsSource?: string
 }
 
 /**
@@ -75,7 +81,10 @@ export function SlydeScreen({
   onFrameChange,
   onHeartPersist,
   onQuestionSubmit,
-  shareUrl
+  shareUrl,
+  analyticsOrgSlug,
+  analyticsSlydePublicId,
+  analyticsSource
 }: SlydeScreenProps) {
   const [currentFrame, setCurrentFrame] = useState(initialFrameIndex)
   const syncingFromPropRef = useRef(false)
@@ -94,6 +103,94 @@ export function SlydeScreen({
   const [touchCursor, setTouchCursor] = useState({ x: 0, y: 0, visible: false })
 
   const currentFrameData = frames[currentFrame]
+
+  // ============================
+  // Analytics (client-side batch)
+  // ============================
+  const sessionIdRef = useRef<string | null>(null)
+  const analyticsQueueRef = useRef<Array<{
+    eventType: 'sessionStart' | 'frameView' | 'ctaClick' | 'shareClick' | 'heartTap' | 'faqOpen'
+    sessionId: string
+    occurredAt: string
+    source?: string
+    referrer?: string
+    slydePublicId: string
+    framePublicId?: string
+    meta?: Record<string, unknown>
+  }>>([])
+
+  const canTrack = Boolean(analyticsOrgSlug && analyticsSlydePublicId)
+
+  const enqueueEvent = useCallback(
+    (event: Omit<(typeof analyticsQueueRef.current)[number], 'sessionId' | 'occurredAt'> & { meta?: Record<string, unknown> }) => {
+      if (!canTrack) return
+      if (!sessionIdRef.current) {
+        sessionIdRef.current = (crypto?.randomUUID?.() ?? null) as string | null
+      }
+      if (!sessionIdRef.current) return
+      analyticsQueueRef.current.push({
+        ...event,
+        sessionId: sessionIdRef.current,
+        occurredAt: new Date().toISOString(),
+      })
+    },
+    [canTrack]
+  )
+
+  const flushAnalytics = useCallback(async () => {
+    if (!canTrack) return
+    if (analyticsQueueRef.current.length === 0) return
+    const batch = analyticsQueueRef.current.splice(0, 50)
+    try {
+      await fetch('/api/analytics/ingest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          organizationSlug: analyticsOrgSlug,
+          events: batch,
+        }),
+        keepalive: true,
+      })
+    } catch {
+      // Put back on failure (best-effort)
+      analyticsQueueRef.current.unshift(...batch)
+    }
+  }, [canTrack, analyticsOrgSlug])
+
+  // Start session once
+  useEffect(() => {
+    if (!canTrack) return
+    if (!sessionIdRef.current) {
+      sessionIdRef.current = crypto.randomUUID()
+    }
+    enqueueEvent({
+      eventType: 'sessionStart',
+      slydePublicId: analyticsSlydePublicId as string,
+      source: analyticsSource,
+      referrer: typeof document !== 'undefined' ? document.referrer : undefined,
+      meta: {},
+    })
+    // Flush quickly after session start
+    flushAnalytics()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canTrack, analyticsSlydePublicId])
+
+  // Background flush interval + pagehide flush
+  useEffect(() => {
+    if (!canTrack) return
+    const id = window.setInterval(() => {
+      flushAnalytics()
+    }, 3000)
+    const onHide = () => {
+      // best effort final flush
+      flushAnalytics()
+    }
+    window.addEventListener('pagehide', onHide)
+    return () => {
+      window.clearInterval(id)
+      window.removeEventListener('pagehide', onHide)
+    }
+  }, [canTrack, flushAnalytics])
 
   // A stable key for the frame-set (add/remove/reorder/slyde switch).
   // Important: editor text edits should NOT force a reset to frame 0.
@@ -139,6 +236,23 @@ export function SlydeScreen({
       return
     }
     onFrameChange?.(currentFrame)
+
+    // Analytics: frame view
+    if (canTrack && currentFrameData) {
+      enqueueEvent({
+        eventType: 'frameView',
+        slydePublicId: analyticsSlydePublicId as string,
+        framePublicId: currentFrameData.id,
+        source: analyticsSource,
+        referrer: typeof document !== 'undefined' ? document.referrer : undefined,
+        meta: {
+          frameIndex: currentFrame + 1,
+          templateType: currentFrameData.templateType ?? null,
+        },
+      })
+      // keep the queue moving without spamming
+      flushAnalytics()
+    }
   }, [currentFrame, onFrameChange])
 
   // Auto-advance frames
@@ -202,11 +316,35 @@ export function SlydeScreen({
         }))
       })
     }
+
+    // Analytics: heart tap
+    if (canTrack) {
+      enqueueEvent({
+        eventType: 'heartTap',
+        slydePublicId: analyticsSlydePublicId as string,
+        framePublicId: frameId,
+        source: analyticsSource,
+        referrer: typeof document !== 'undefined' ? document.referrer : undefined,
+        meta: { hearted: newHearted },
+      })
+      flushAnalytics()
+    }
   }, [currentFrameData.id, isHearted, onHeartPersist])
 
   // Handle share - opens share sheet
   const handleShare = useCallback(() => {
     setShowShare(true)
+    if (canTrack) {
+      enqueueEvent({
+        eventType: 'shareClick',
+        slydePublicId: analyticsSlydePublicId as string,
+        framePublicId: currentFrameData.id,
+        source: analyticsSource,
+        referrer: typeof document !== 'undefined' ? document.referrer : undefined,
+        meta: { platform: 'sheet_open' },
+      })
+      flushAnalytics()
+    }
   }, [])
 
   // Handle FAQ question submission
@@ -360,7 +498,20 @@ export function SlydeScreen({
           isHearted={isHearted[currentFrameData.id] || false}
           faqCount={currentFrameData.faqCount}
           onHeartTap={handleHeartTap}
-          onFAQTap={() => setShowFAQ(true)}
+          onFAQTap={() => {
+            setShowFAQ(true)
+            if (canTrack) {
+              enqueueEvent({
+                eventType: 'faqOpen',
+                slydePublicId: analyticsSlydePublicId as string,
+                framePublicId: currentFrameData.id,
+                source: analyticsSource,
+                referrer: typeof document !== 'undefined' ? document.referrer : undefined,
+                meta: {},
+              })
+              flushAnalytics()
+            }
+          }}
           onShareTap={handleShare}
           onInfoTap={() => setShowInfo(true)}
           slideIndicator={frameIndicator}
@@ -428,6 +579,20 @@ export function SlydeScreen({
                   icon={currentFrameData.cta.icon}
                   accentColor={currentFrameData.accentColor}
                   onClick={() => {
+                    if (canTrack) {
+                      enqueueEvent({
+                        eventType: 'ctaClick',
+                        slydePublicId: analyticsSlydePublicId as string,
+                        framePublicId: currentFrameData.id,
+                        source: analyticsSource,
+                        referrer: typeof document !== 'undefined' ? document.referrer : undefined,
+                        meta: {
+                          ctaText: currentFrameData.cta?.text ?? null,
+                          action: currentFrameData.cta?.action ?? null,
+                        },
+                      })
+                      flushAnalytics()
+                    }
                     const action = currentFrameData.cta?.action
                     if (action?.startsWith('http')) {
                       window.open(action, '_blank', 'noopener,noreferrer')

@@ -100,6 +100,9 @@ function DemoSlydeContent() {
           faqs={faqs}
           business={business}
           autoAdvance={false}
+          analyticsOrgSlug="wildtrax"
+          analyticsSlydePublicId={slydeId}
+          analyticsSource="direct"
         />
       </DevicePreview>
 
