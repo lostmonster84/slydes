@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Loader2, Check, X, ChevronLeft } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { applyStarterTemplate } from '@/lib/starterTemplates'
+import { writeDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 
 const BUSINESS_TYPES = [
   { id: 'rentals', label: 'Rentals & Equipment', icon: '🚗' },
@@ -208,20 +210,23 @@ export default function OnboardingPage() {
         orgId = org.id
       }
 
-      // Update profile
+      // Upsert profile (create if missing, update if exists)
       const { error: profileError } = await withTimeout(
         supabase
           .from('profiles')
-          .update({
+          .upsert({
+            id: user.id,
+            email: user.email,
             full_name: formData.full_name,
             company_name: formData.organization_name,
             company_website: formData.website,
             onboarding_completed: true,
             current_organization_id: orgId,
-          })
-          .eq('id', user.id),
+          }, {
+            onConflict: 'id'
+          }),
         15_000,
-        'Updating profile',
+        'Creating/updating profile',
       )
 
       if (profileError) {
@@ -229,6 +234,13 @@ export default function OnboardingPage() {
         setSubmitError(profileError?.message || 'Could not update your profile. Please try again.')
         setIsLoading(false)
         return
+      }
+
+      // Apply starter template based on business type
+      const starterHomeSlyde = applyStarterTemplate(formData.business_type)
+      if (starterHomeSlyde) {
+        writeDemoHomeSlyde(starterHomeSlyde)
+        console.log('Applied starter template for:', formData.business_type)
       }
 
       // Success! Redirect to dashboard
