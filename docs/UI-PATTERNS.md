@@ -241,6 +241,75 @@ Inventory is an **optional paid feature** that lets categories contain a list of
 - Opens Inventory Grid showing all items
 - Each item links to an Item Slyde
 
+### Inventory vs Commerce (Canonical)
+
+**Inventory** is the *browsing model* (grid/list → tap → Item Slyde).
+**Commerce** is the *action model* attached to inventory items (what the CTA does).
+
+Inventory is how we show items (cars, products, properties). Commerce is what happens next (enquire, buy, cart).
+
+#### Commerce Modes (per Inventory Item)
+
+Each inventory item chooses exactly **one primary CTA mode**:
+
+- **Enquire / Book** (default for services, rentals, bookings)
+  - CTA opens an external link, phone call, enquiry form, or message action
+- **Buy now** (MVP commerce)
+  - CTA creates a Stripe Checkout Session and redirects to Stripe
+- **Add to cart** (paid tier)
+  - CTA adds item to cart; checkout uses Stripe Checkout with multiple line items
+
+#### Paid Feature Gating (Studio UI)
+
+We gate at two levels:
+
+1) **Organization entitlement** (plan feature): Inventory/Commerce enabled for the organization.
+- If disabled: hide Inventory nav + hide/lock `has_inventory` controls.
+
+2) **Category toggle**: `has_inventory`
+- `false` → category ends with CTA (no grid)
+- `true` → category can show "View All" → Inventory Grid → Item Slydes
+
+### Cart UX Pattern (Add to cart + Checkout CTA)
+
+When **Cart** is enabled (paid tier), we support *two* “add” entry points and *one* consistent checkout CTA.
+
+#### 1) Inventory Grid: Quick-add button (primary for retail)
+
+Each item card has a compact button:
+- **Default state**: `Add`
+- **Added state**: `Added` (or a checkmark) + tapping again removes (optional) or opens cart (optional)
+
+Rules:
+- The item card remains tappable to open the Item Slyde (deep dive).
+- The quick-add button should not hijack the entire card tap.
+
+#### 2) Item Slyde: Primary CTA becomes Add to cart
+
+On the final “Action” frame:
+- CTA label: `Add to cart` (or `Add this vehicle`)
+- Secondary action (optional): `View cart`
+
+#### 3) Persistent Checkout CTA (bottom bar)
+
+When cart has ≥ 1 item:
+- Show a **sticky bottom bar** (above safe-area) with:
+  - left: item count + subtotal (e.g., `3 items • £1,240`)
+  - right: primary CTA button `Checkout`
+
+Behavior:
+- `Checkout` opens Stripe Checkout for the current cart.
+- If cart is empty, the bar is hidden.
+- The bar should appear in:
+  - Inventory Grid
+  - Item Slydes (while browsing)
+
+#### Cart persistence
+
+Cart should persist per organization:
+- MVP: localStorage (client) + optional “clear on checkout success”
+- Later: server-backed cart for cross-device continuity
+
 ### Inventory Grid
 
 The Inventory Grid displays items in a scrollable list/grid format.
