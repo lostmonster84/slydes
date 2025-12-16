@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { ArrowLeft, User, Bell, Shield, CreditCard, Video } from 'lucide-react'
+import { ArrowLeft, User, Bell, Shield, CreditCard, Video, Globe } from 'lucide-react'
 import { PlanBadge } from '@/components/settings/PlanBadge'
 
 export default async function SettingsPage() {
@@ -35,6 +35,12 @@ export default async function SettingsPage() {
       description: 'Upload your Home video',
       icon: Video,
       href: '/settings/media',
+    },
+    {
+      title: 'Domain',
+      description: 'Connect your mobile subdomain',
+      icon: Globe,
+      href: '/settings/domain',
     },
     {
       title: 'Notifications',

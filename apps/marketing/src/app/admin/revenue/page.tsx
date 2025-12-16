@@ -147,23 +147,23 @@ export default function RevenuePage() {
 
       {/* Hero Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white">
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6">
           <div className="flex items-center gap-1 mb-1">
             <p className="text-green-100 text-sm font-medium">Monthly Recurring Revenue</p>
             <InfoIcon tooltip="MRR = Total monthly subscription revenue from all paying customers. Pro subscribers pay £50/mo, Creator subscribers pay £25/mo." light />
           </div>
-          <p className="text-4xl font-bold">{formatCurrency(data.mrr)}</p>
+          <p className="text-4xl font-bold text-white">{formatCurrency(data.mrr)}</p>
           <p className="text-green-200 text-sm mt-2">
             {data.subscribers.pro + data.subscribers.creator} active subscribers
           </p>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6">
           <div className="flex items-center gap-1 mb-1">
             <p className="text-blue-100 text-sm font-medium">Annual Run Rate</p>
             <InfoIcon tooltip="ARR = MRR × 12. This is your projected yearly revenue if current subscriptions continue unchanged. Useful for understanding your business trajectory." light />
           </div>
-          <p className="text-4xl font-bold">{formatCurrency(data.arr)}</p>
+          <p className="text-4xl font-bold text-white">{formatCurrency(data.arr)}</p>
           <p className="text-blue-200 text-sm mt-2">projected yearly</p>
         </div>
 

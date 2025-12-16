@@ -9,13 +9,39 @@ interface AdminLayoutProps {
   children: ReactNode
 }
 
-const NAV_ITEMS = [
-  { href: '/admin/hq', label: 'Overview', icon: 'home' },
-  { href: '/admin/integrations', label: 'Integrations', icon: 'plug' },
-  { href: '/admin/business', label: 'Business', icon: 'chart' },
-  { href: '/admin/revenue', label: 'Revenue', icon: 'currency' },
-  { href: '/admin/customers', label: 'Customers', icon: 'customers' },
-  { href: '/admin/waitlist', label: 'Waitlist', icon: 'users' },
+type NavItem = {
+  href: string
+  label: string
+  icon: string
+}
+
+type NavSection = {
+  label?: string
+  items: NavItem[]
+}
+
+const NAV_SECTIONS: NavSection[] = [
+  {
+    items: [
+      { href: '/admin/hq', label: 'Overview', icon: 'home' },
+      { href: '/admin/integrations', label: 'Integrations', icon: 'plug' },
+    ],
+  },
+  {
+    label: 'Business',
+    items: [
+      { href: '/admin/business', label: 'Metrics', icon: 'chart' },
+      { href: '/admin/revenue', label: 'Revenue', icon: 'currency' },
+    ],
+  },
+  {
+    label: 'CRM',
+    items: [
+      { href: '/admin/customers', label: 'Customers', icon: 'customers' },
+      { href: '/admin/organizations', label: 'Organizations', icon: 'building' },
+      { href: '/admin/waitlist', label: 'Waitlist', icon: 'users' },
+    ],
+  },
 ]
 
 function NavIcon({ name }: { name: string }) {
@@ -56,6 +82,12 @@ function NavIcon({ name }: { name: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
       )
+    case 'building':
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+      )
     default:
       return null
   }
@@ -65,6 +97,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
 
@@ -168,60 +201,101 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div className="min-h-screen bg-[#1c1c1e] flex">
       {/* Side Navigation - Apple HIG sidebar */}
-      <aside className="w-60 bg-[#2c2c2e] text-white flex flex-col fixed h-full border-r border-white/10">
+      <aside
+        className={`${
+          isNavCollapsed ? 'w-16' : 'w-60'
+        } bg-[#2c2c2e] text-white flex flex-col fixed h-full border-r border-white/10 transition-all duration-200`}
+      >
         {/* Logo */}
-        <div className="p-6 border-b border-white/10">
+        <div className="p-4 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10">
-              <Image src="/logo.svg" alt="Slydes" width={40} height={40} />
+            <div className="w-8 h-8 flex-shrink-0">
+              <Image src="/logo.svg" alt="Slydes" width={32} height={32} />
             </div>
-            <div>
-              <h1 className="font-bold text-lg text-white">Slydes HQ</h1>
-              <p className="text-xs text-gray-400">Admin Dashboard</p>
-            </div>
+            {!isNavCollapsed && (
+              <div className="overflow-hidden">
+                <h1 className="font-bold text-base text-white">Slydes HQ</h1>
+                <p className="text-xs text-gray-400">Admin</p>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4">
-          <ul className="space-y-1">
-            {NAV_ITEMS.map((item) => {
-              const isActive = pathname === item.href
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                      isActive
-                        ? 'bg-leader-blue text-white'
-                        : 'text-gray-300 hover:bg-white/10 hover:text-white'
-                    }`}
-                  >
-                    <NavIcon name={item.icon} />
-                    <span className="font-medium">{item.label}</span>
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
+        <nav className="flex-1 p-2 overflow-y-auto">
+          <div className="space-y-4">
+            {NAV_SECTIONS.map((section, sectionIdx) => (
+              <div key={sectionIdx}>
+                {section.label && !isNavCollapsed && (
+                  <p className="px-3 py-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    {section.label}
+                  </p>
+                )}
+                {section.label && isNavCollapsed && (
+                  <div className="mx-3 my-2 border-t border-white/10" />
+                )}
+                <ul className="space-y-1">
+                  {section.items.map((item) => {
+                    const isActive = pathname === item.href
+                    return (
+                      <li key={item.href}>
+                        <Link
+                          href={item.href}
+                          title={isNavCollapsed ? item.label : undefined}
+                          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+                            isActive
+                              ? 'bg-leader-blue text-white'
+                              : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                          } ${isNavCollapsed ? 'justify-center' : ''}`}
+                        >
+                          <NavIcon name={item.icon} />
+                          {!isNavCollapsed && <span className="font-medium text-sm">{item.label}</span>}
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
         </nav>
 
-        {/* Logout */}
-        <div className="p-4 border-t border-white/10">
+        {/* Collapse Toggle + Logout */}
+        <div className="p-2 border-t border-white/10 space-y-1">
+          <button
+            onClick={() => setIsNavCollapsed(!isNavCollapsed)}
+            title={isNavCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            className={`flex items-center gap-3 px-3 py-2.5 w-full text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all ${
+              isNavCollapsed ? 'justify-center' : ''
+            }`}
+          >
+            <svg
+              className={`w-5 h-5 transition-transform ${isNavCollapsed ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            </svg>
+            {!isNavCollapsed && <span className="font-medium text-sm">Collapse</span>}
+          </button>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 w-full text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
+            title={isNavCollapsed ? 'Logout' : undefined}
+            className={`flex items-center gap-3 px-3 py-2.5 w-full text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all ${
+              isNavCollapsed ? 'justify-center' : ''
+            }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
-            <span className="font-medium">Logout</span>
+            {!isNavCollapsed && <span className="font-medium text-sm">Logout</span>}
           </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-60">
+      <main className={`flex-1 ${isNavCollapsed ? 'ml-16' : 'ml-60'} transition-all duration-200`}>
         {children}
       </main>
     </div>

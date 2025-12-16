@@ -20,6 +20,14 @@ export type DemoHomeSlydeCategory = {
    * CTA text for inventory link, e.g. "View All 12 Vehicles"
    */
   inventoryCtaText?: string
+  /**
+   * Alias for inventoryCtaText for shorter reference
+   */
+  ctaText?: string
+  /**
+   * ID of the connected List for inventory display
+   */
+  listId?: string
 }
 
 export type DemoHomeSlyde = {

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { HomeSlydeEditorClient } from './HomeSlydeEditorClient'
+import { UnifiedStudioEditor } from './UnifiedStudioEditor'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -22,5 +22,5 @@ export default async function DashboardPage() {
   //   redirect('/onboarding')
   // }
 
-  return <HomeSlydeEditorClient />
+  return <UnifiedStudioEditor />
 }

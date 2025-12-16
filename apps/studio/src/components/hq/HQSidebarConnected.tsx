@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { ChevronLeft, ChevronRight, TrendingUp, Smartphone, BarChart3, Inbox, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List } from 'lucide-react'
+import { TrendingUp, Smartphone, BarChart3, Inbox, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { FeatureSuggestionModal } from './FeatureSuggestionModal'
 import { useOrganization } from '@/hooks/useOrganization'
@@ -445,16 +445,20 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
         <div className="p-3 border-t border-gray-200 dark:border-white/10">
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="flex items-center justify-center w-full gap-2 px-3 py-2 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors dark:text-white/60 dark:hover:text-white dark:hover:bg-white/10"
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            className={`flex items-center gap-3 px-3 py-2.5 w-full text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all dark:text-white/50 dark:hover:text-white dark:hover:bg-white/10 ${
+              collapsed ? 'justify-center' : ''
+            }`}
           >
-            {collapsed ? (
-              <ChevronRight className="w-5 h-5" />
-            ) : (
-              <>
-                <ChevronLeft className="w-5 h-5" />
-                <span className="text-sm font-medium">Collapse</span>
-              </>
-            )}
+            <svg
+              className={`w-5 h-5 transition-transform ${collapsed ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            </svg>
+            {!collapsed && <span className="text-sm font-medium">Collapse</span>}
           </button>
         </div>
 

@@ -76,17 +76,23 @@ async function checkSupabase(): Promise<IntegrationStatus> {
 
   try {
     const supabase = createSupabaseAdmin()
-    const { count, error } = await supabase
-      .from('profiles')
-      .select('*', { count: 'exact', head: true })
 
-    if (error) throw error
+    // Count users and organizations in parallel
+    const [usersResult, orgsResult] = await Promise.all([
+      supabase.from('profiles').select('*', { count: 'exact', head: true }),
+      supabase.from('organizations').select('*', { count: 'exact', head: true }),
+    ])
+
+    if (usersResult.error) throw usersResult.error
+
+    const userCount = usersResult.count ?? 0
+    const orgCount = orgsResult.error ? 0 : (orgsResult.count ?? 0)
 
     return {
       status: 'healthy',
-      message: `Connected (${count ?? 0} users)`,
+      message: `Connected (${userCount} users, ${orgCount} orgs)`,
       lastChecked: now,
-      details: { userCount: count },
+      details: { userCount, orgCount },
     }
   } catch (e) {
     return { status: 'error', message: e instanceof Error ? e.message : 'Connection error', lastChecked: now }
@@ -174,32 +180,32 @@ async function checkAnalytics(): Promise<IntegrationStatus> {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
   if (!url || !serviceKey) {
-    return { status: 'warning', message: 'Supabase not configured', lastChecked: now }
+    return { status: 'error', message: 'Supabase not configured', lastChecked: now }
   }
 
   try {
     const supabase = createSupabaseAdmin()
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
 
+    // Check if the analytics_events table exists and is queryable
     const { count, error } = await supabase
       .from('analytics_events')
       .select('*', { count: 'exact', head: true })
-      .gte('occurred_at', oneDayAgo)
 
     if (error) {
-      // Table might not exist yet
+      // Table doesn't exist
       if (error.message.includes('does not exist') || error.code === '42P01') {
-        return { status: 'warning', message: 'Table not found', lastChecked: now }
+        return { status: 'error', message: 'Table not found - run migrations', lastChecked: now }
       }
       throw error
     }
 
+    // Table exists and is queryable = integration is working
     const eventCount = count ?? 0
     return {
-      status: eventCount > 0 ? 'healthy' : 'warning',
-      message: `${eventCount} events (24h)`,
+      status: 'healthy',
+      message: `Connected (${eventCount} total events)`,
       lastChecked: now,
-      details: { recentEvents: eventCount },
+      details: { totalEvents: eventCount },
     }
   } catch (e) {
     return { status: 'error', message: e instanceof Error ? e.message : 'Query error', lastChecked: now }

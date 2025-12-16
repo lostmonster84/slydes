@@ -73,6 +73,7 @@ export async function GET(request: NextRequest) {
   try {
     const supabase = createSupabaseAdmin()
     console.log('[Revenue API] Supabase client created successfully')
+    console.log('[Revenue API] Using URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
     const now = new Date()
     const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
     const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString()
@@ -83,18 +84,23 @@ export async function GET(request: NextRequest) {
     let profiles: { id: string; email?: string; plan?: string; subscription_status?: string; created_at: string }[] | null = null
     let profilesError = null
 
-    const { data: fullProfiles, error: fullError } = await supabase
+    console.log('[Revenue API] Attempting profiles query...')
+    const { data: fullProfiles, error: fullError, count: fullCount } = await supabase
       .from('profiles')
-      .select('id, email, plan, subscription_status, created_at')
+      .select('id, email, plan, subscription_status, created_at', { count: 'exact' })
       .order('created_at', { ascending: false })
+
+    console.log('[Revenue API] Full query result - count:', fullCount, 'data length:', fullProfiles?.length, 'error:', fullError?.message)
 
     if (fullError) {
       console.log('[Revenue API] Full query failed, trying basic query:', fullError.message)
       // If columns don't exist, try a simpler query
-      const { data: basicProfiles, error: basicError } = await supabase
+      const { data: basicProfiles, error: basicError, count: basicCount } = await supabase
         .from('profiles')
-        .select('id, email, created_at')
+        .select('id, email, created_at', { count: 'exact' })
         .order('created_at', { ascending: false })
+
+      console.log('[Revenue API] Basic query result - count:', basicCount, 'data length:', basicProfiles?.length, 'error:', basicError?.message)
 
       if (basicError) {
         console.error('[Revenue API] Basic profiles query also failed:', basicError)
@@ -108,7 +114,7 @@ export async function GET(request: NextRequest) {
 
     if (profilesError) {
       console.error('[Revenue API] Profiles query error:', profilesError)
-      throw profilesError
+      throw new Error(profilesError.message || 'Failed to query profiles')
     }
     console.log('[Revenue API] Found', profiles?.length || 0, 'profiles')
 
@@ -177,14 +183,23 @@ export async function GET(request: NextRequest) {
     // Growth rate
     const growthRate = lastMonthSubs > 0 ? ((thisMonthSubs - lastMonthSubs) / lastMonthSubs) * 100 : 0
 
-    // Get orders data
-    const { data: orders, error: ordersError } = await supabase
-      .from('orders')
-      .select('id, subtotal_cents, platform_fee_cents, status, created_at')
-      .in('status', ['paid', 'fulfilled'])
+    // Get orders data (table may not exist yet)
+    let orders: { id: string; subtotal_cents: number; platform_fee_cents: number; status: string; created_at: string }[] | null = null
+    try {
+      const { data: ordersData, error: ordersError } = await supabase
+        .from('orders')
+        .select('id, subtotal_cents, platform_fee_cents, status, created_at')
+        .in('status', ['paid', 'fulfilled'])
 
-    if (ordersError && !ordersError.message.includes('does not exist')) {
-      throw ordersError
+      if (ordersError) {
+        // Table doesn't exist - that's fine, just skip orders
+        console.log('[Revenue API] Orders query failed (table may not exist):', ordersError.message)
+      } else {
+        orders = ordersData
+      }
+    } catch (e) {
+      // Silently ignore orders errors - table may not exist
+      console.log('[Revenue API] Orders query exception:', e)
     }
 
     let totalOrders = 0
@@ -234,8 +249,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response)
   } catch (error) {
     console.error('Revenue API error:', error)
+    // Handle Supabase errors (which have a .message property but aren't Error instances)
+    let errorMessage = 'Unknown error'
+    if (error instanceof Error) {
+      errorMessage = error.message
+    } else if (error && typeof error === 'object' && 'message' in error) {
+      errorMessage = String((error as { message: unknown }).message)
+    } else if (typeof error === 'string') {
+      errorMessage = error
+    }
     return NextResponse.json(
-      { error: 'Failed to fetch revenue data', message: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Failed to fetch revenue data', message: errorMessage },
       { status: 500 }
     )
   }
