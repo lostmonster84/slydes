@@ -9,15 +9,16 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { ChevronLeft, ChevronRight, TrendingUp, Smartphone, BarChart3, Inbox, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb } from 'lucide-react'
+import { ChevronLeft, ChevronRight, TrendingUp, Smartphone, BarChart3, Inbox, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { FeatureSuggestionModal } from './FeatureSuggestionModal'
 import { useOrganization } from '@/hooks/useOrganization'
 import { useSlydes } from '@/hooks/useSlydes'
 
 interface HQSidebarConnectedProps {
-  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'analytics' | 'inbox' | 'brand' | 'settings'
+  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'analytics' | 'shop' | 'inbox' | 'brand' | 'settings'
 }
 
 export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
@@ -109,7 +110,8 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
     { id: 'dashboard', label: 'Momentum', href: '/dashboard', icon: TrendingUp },
     { id: 'home-slyde', label: 'Studio', href: '/', icon: Smartphone },
     { id: 'slydes', label: 'Slydes', href: '/slydes', icon: Layers, badge: slydeCount > 0 ? slydeCount : undefined },
-    { id: 'analytics', label: 'Analytics', href: '/analytics', icon: BarChart3, locked: !isCreator },
+    { id: 'analytics', label: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { id: 'shop', label: 'Shop', href: '/shop', icon: ShoppingBag, comingSoon: true },
     { id: 'inbox', label: 'Inbox', href: '/inbox', icon: Inbox, comingSoon: true },
   ]
 
@@ -122,31 +124,27 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   const sidebarContent = (isMobile: boolean) => (
     <>
       <div className="p-4 border-b border-gray-200 dark:border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 shrink-0">
-            <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
-              <defs>
-                <linearGradient id="slydes-gradient-sidebar" x1="50%" y1="100%" x2="50%" y2="0%">
-                  <stop offset="0%" stopColor="#06B6D4" />
-                  <stop offset="100%" stopColor="#2563EB" />
-                </linearGradient>
-              </defs>
-              <rect x="14" y="36" width="36" height="24" rx="4" fill="#2563EB" opacity="0.2" />
-              <rect x="12" y="22" width="40" height="28" rx="5" fill="#2563EB" opacity="0.5" />
-              <rect x="10" y="6" width="44" height="32" rx="6" fill="url(#slydes-gradient-sidebar)" />
-              <rect x="24" y="6" width="16" height="4" rx="2" fill="white" opacity="0.3" />
-            </svg>
-          </div>
+        <div className="flex items-center gap-2.5">
+          <Image
+            src="/logo-mark.svg"
+            alt="Slydes"
+            width={32}
+            height={32}
+            className="w-8 h-8 shrink-0"
+          />
           {(isMobile || !collapsed) && (
-            <div className="min-w-0 flex-1">
-              <div className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">Slydes</div>
-              <div className="text-xs text-gray-500 dark:text-white/50 -mt-0.5">Studio</div>
+            <div className="flex flex-col">
+              <span className="font-display font-bold tracking-tight text-xl leading-tight">
+                <span className="text-gray-900 dark:text-white">Slydes</span>
+                <span className="text-gray-400 dark:text-white/40">.io</span>
+              </span>
+              <span className="text-xs text-gray-500 dark:text-white/50 -mt-0.5">Studio</span>
             </div>
           )}
           {isMobile && (
             <button
               onClick={() => setMobileOpen(false)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+              className="ml-auto p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
             >
               <X className="w-5 h-5 text-gray-500 dark:text-white/60" />
             </button>
@@ -217,9 +215,6 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
                   }`}>
                     {item.badge}
                   </span>
-                )}
-                {item.locked && (
-                  <span className="ml-auto text-[10px] font-semibold text-gray-400 dark:text-white/40">Locked</span>
                 )}
                 {item.comingSoon && (
                   <span className="ml-auto text-[10px] font-semibold text-gray-400 dark:text-white/50">Coming soon</span>
@@ -331,11 +326,6 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
                         {item.badge}
                       </span>
                     )}
-                    {item.locked && (
-                      <span className="ml-auto text-[11px] bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full dark:bg-white/20 dark:text-white/80">
-                        Locked
-                      </span>
-                    )}
                     {item.comingSoon && (
                       <span className="ml-auto text-[11px] text-gray-400 dark:text-white/50">
                         Coming soon
@@ -374,23 +364,6 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
           })}
         </nav>
 
-        {/* Plan Badge (simplified) */}
-        {!collapsed && (
-          <div className="p-3">
-            <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-4 shadow-sm dark:border-white/10 dark:bg-[#2c2c2e] dark:from-[#2c2c2e] dark:via-[#2a2a2c] dark:to-[#2c2c2e] dark:shadow-[0_12px_40px_rgba(0,0,0,0.35)]">
-              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
-
-              <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[11px] font-semibold uppercase tracking-wider border border-blue-100 dark:bg-blue-500/12 dark:text-cyan-300 dark:border-blue-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-600 to-cyan-500" />
-                Plan
-              </div>
-              <div className="mt-2 text-base font-display font-bold text-gray-900 dark:text-white">Free</div>
-              <div className="mt-1 text-xs text-gray-600 dark:text-white/70">
-                Unlimited Slydes
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Suggest a feature - Desktop */}
         <div className="px-3 pb-2">

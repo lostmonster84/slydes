@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { getEffectivePlan } from '@/lib/whitelist'
 
 export interface Profile {
   id: string
@@ -44,7 +45,11 @@ export function useProfile() {
           throw error
         }
 
-        setProfile(data)
+        // Apply whitelist override for plan
+        setProfile({
+          ...data,
+          plan: getEffectivePlan(data.email, data.plan),
+        })
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to fetch profile'))
       } finally {

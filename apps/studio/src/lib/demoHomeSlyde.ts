@@ -44,13 +44,10 @@ export const DEMO_HOME_SLYDE_STORAGE_KEY = 'slydes_demo_home_slyde'
 export const DEMO_HOME_SLYDE_CHANGE_EVENT = 'slydes_demo_home_slyde_change'
 
 export const DEFAULT_DEMO_HOME_SLYDE: DemoHomeSlyde = {
-  videoSrc: '/videos/adventure.mp4',
+  videoSrc: '',
   posterSrc: undefined,
-  categories: [
-    { id: 'camping', icon: 'tent', name: 'Camping', description: 'Land Rover + rooftop tent', childSlydeId: 'camping', hasInventory: false },
-    { id: 'just-drive', icon: 'car', name: 'Just Drive', description: 'Day hire, freedom to roam', childSlydeId: 'just-drive', hasInventory: false },
-  ],
-  primaryCta: { text: 'Check availability', action: 'https://wildtrax.co.uk/book' },
+  categories: [],
+  primaryCta: { text: 'Contact us', action: '#' },
   // UI Settings defaults
   showCategoryIcons: false,
   showHearts: true,

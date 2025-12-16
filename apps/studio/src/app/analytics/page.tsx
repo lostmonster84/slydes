@@ -7,6 +7,7 @@ import { ChevronDown, TrendingUp, TrendingDown, Clock, MousePointer, Share2, Map
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import Link from 'next/link'
 import { useDemoBusiness } from '@/lib/demoBusiness'
+import { hasUnlockCode } from '@/lib/whitelist'
 
 /**
  * Slydes HQ — Analytics (Forensics Lab)
@@ -56,15 +57,29 @@ interface SlydeData {
 }
 
 function InfoButton({ label, description }: { label: string; description: string }) {
+  const [showTooltip, setShowTooltip] = useState(false)
+
   return (
-    <button
-      type="button"
-      title={`${label}: ${description}`}
-      aria-label={`${label}: ${description}`}
-      className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-transparent text-gray-400 hover:text-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-white/35 dark:hover:text-white/70 dark:focus-visible:ring-cyan-400/30 dark:focus-visible:ring-offset-[#1c1c1e]"
-    >
-      <Info className="w-4 h-4" aria-hidden="true" />
-    </button>
+    <div className="relative">
+      <button
+        type="button"
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+        onClick={() => setShowTooltip(!showTooltip)}
+        aria-label={`${label}: ${description}`}
+        className="inline-flex items-center justify-center w-6 h-6 rounded-md bg-transparent text-gray-400 hover:text-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-white/35 dark:hover:text-white/70 dark:focus-visible:ring-cyan-400/30 dark:focus-visible:ring-offset-[#1c1c1e]"
+      >
+        <Info className="w-4 h-4" aria-hidden="true" />
+      </button>
+
+      {showTooltip && (
+        <div className="absolute z-50 bottom-full right-0 mb-2 w-64 p-3 rounded-xl bg-[#2c2c2e] border border-white/10 shadow-xl animate-in fade-in duration-150">
+          <div className="text-xs font-semibold text-white/80 mb-1">{label}</div>
+          <div className="text-xs text-white/60 leading-relaxed">{description}</div>
+          <div className="absolute -bottom-1 right-3 w-2 h-2 bg-[#2c2c2e] border-r border-b border-white/10 transform rotate-45" />
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -109,7 +124,7 @@ function HQAnalyticsContent() {
     }
   }, [plan])
 
-  const isCreator = plan === 'creator'
+  const isCreator = plan === 'creator' || hasUnlockCode()
 
   const slydesDataMock: Record<SlydeId, SlydeData> = useMemo(
     () => ({
@@ -387,52 +402,17 @@ function HQAnalyticsContent() {
         {/* Main */}
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
-          <header className="h-16 border-b border-gray-200 flex items-center justify-between px-8 shrink-0 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#1c1c1e]/80">
+          <header className="h-16 border-b border-gray-200 flex items-center px-8 shrink-0 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#1c1c1e]/80">
             <div>
               <h1 className="text-xl font-bold font-display tracking-tight text-gray-900 dark:text-white">Analytics</h1>
               <p className="text-sm text-gray-500 dark:text-white/60">
                 {view === 'overview' ? 'Company-wide stats • the full picture' : 'Single-Slyde deep dive • drop-off • actions'}
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              {/* View toggle — macOS segmented control */}
-              <div className="relative flex items-center rounded-lg bg-gray-100 p-1 dark:bg-[#2c2c2e]">
-                <motion.div
-                  layoutId="analytics-view-pill"
-                  className="absolute top-1 bottom-1 rounded-md bg-white shadow-sm dark:bg-[#48484a]"
-                  initial={false}
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  style={{
-                    width: 'calc(50% - 2px)',
-                    left: view === 'overview' ? '4px' : 'calc(50% + 2px)',
-                  }}
-                />
-                <button
-                  onClick={() => setView('overview')}
-                  className={`relative z-10 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    view === 'overview'
-                      ? 'text-gray-900 dark:text-white'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-white/70'
-                  }`}
-                >
-                  Overview
-                </button>
-                <button
-                  onClick={() => setView('slyde')}
-                  className={`relative z-10 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                    view === 'slyde'
-                      ? 'text-gray-900 dark:text-white'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-white/70'
-                  }`}
-                >
-                  Single Slyde
-                </button>
-              </div>
-            </div>
           </header>
 
-          <div className="flex-1 overflow-y-auto p-8">
-            <div className="max-w-5xl">
+          <div className="flex-1 overflow-y-auto p-6 lg:p-8">
+            <div>
               <div className="relative">
                 {/* Locked overlay (Free) — matches MVP-MONETISATION.md Prompt 2 */}
                 {!isCreator && (
@@ -488,6 +468,30 @@ function HQAnalyticsContent() {
 
                 {/* Content (blurred on Free) */}
                 <div className={`space-y-6 ${!isCreator ? 'blur-[8px] opacity-60 pointer-events-none select-none' : ''}`}>
+                  {/* View toggle - Apple-style segmented control */}
+                  <div className="inline-flex items-center p-1 rounded-lg bg-white/5 border border-white/10">
+                    <button
+                      onClick={() => setView('overview')}
+                      className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                        view === 'overview'
+                          ? 'bg-white/15 text-white shadow-sm'
+                          : 'text-white/50 hover:text-white/70'
+                      }`}
+                    >
+                      Overview
+                    </button>
+                    <button
+                      onClick={() => setView('slyde')}
+                      className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                        view === 'slyde'
+                          ? 'bg-white/15 text-white shadow-sm'
+                          : 'text-white/50 hover:text-white/70'
+                      }`}
+                    >
+                      Single Slyde
+                    </button>
+                  </div>
+
                   {/* Analytics not configured (dev) */}
                   {isCreator && !analyticsConfigured && (
                     <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-sm dark:bg-[#2c2c2e] dark:border-white/10">
@@ -589,26 +593,16 @@ function HQAnalyticsContent() {
                             Aggregate performance • Last {range} • {globalStats.totalSlydes} Slydes
                           </span>
                         </div>
-                        {/* Time range toggle */}
-                        <div className="relative flex items-center rounded-lg bg-gray-100 p-1 dark:bg-white/10">
-                          <motion.div
-                            layoutId="analytics-range-pill"
-                            className="absolute top-1 bottom-1 rounded-md bg-white shadow-sm dark:bg-[#3a3a3c]"
-                            initial={false}
-                            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                            style={{
-                              width: 'calc(33.33% - 2px)',
-                              left: range === '7d' ? '4px' : range === '30d' ? 'calc(33.33% + 2px)' : 'calc(66.66% + 2px)',
-                            }}
-                          />
+                        {/* Time range toggle - Apple HIG */}
+                        <div className="inline-flex items-center p-1 rounded-lg bg-white/5 border border-white/10">
                           {(['7d', '30d', '90d'] as const).map((r) => (
                             <button
                               key={r}
                               onClick={() => setRange(r)}
-                              className={`relative z-10 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                              className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
                                 range === r
-                                  ? 'text-gray-900 dark:text-white'
-                                  : 'text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-white/70'
+                                  ? 'bg-white/15 text-white shadow-sm'
+                                  : 'text-white/50 hover:text-white/70'
                               }`}
                             >
                               {r}
@@ -624,25 +618,25 @@ function HQAnalyticsContent() {
                             label: 'Total starts',
                             value: globalStats.totalStarts.toLocaleString(),
                             sub: 'across all Slydes',
-                            info: 'Sessions that begin on any Slyde (profile → first Slyde view).',
+                            info: 'How many people opened any of your Slydes. Each person counts once per visit.',
                           },
                           {
                             label: 'Completion rate',
                             value: `${globalStats.completionRate}%`,
                             sub: `${globalStats.avgSwipeDepth}% avg depth`,
-                            info: 'Percent of starts that reach the final frame of the Slyde they entered.',
+                            info: 'How many people swiped all the way to the end. Higher = your content is keeping them hooked.',
                           },
                           {
                             label: 'CTA clicks',
                             value: globalStats.totalClicks.toString(),
                             sub: `${globalStats.clickRate}% click rate`,
-                            info: 'Total CTA button taps across all frames and all Slydes.',
+                            info: 'How many times people tapped your buttons (like "Book now" or "Learn more"). This is what drives action.',
                           },
                           {
                             label: 'Bounce rate',
                             value: `${globalStats.bounceRate}%`,
                             sub: `${globalStats.avgTimePerFrame}s per frame`,
-                            info: 'Percent of starts that exit on Frame 1 (no meaningful progression).',
+                            info: 'People who left after seeing just the first frame. Lower is better - it means your hook is working.',
                           },
                         ].map((m) => (
                           <div
@@ -696,7 +690,7 @@ function HQAnalyticsContent() {
                           <div className="absolute bottom-4 right-4">
                             <InfoButton
                               label="Traffic sources"
-                              description="Starts by source (global). Percentages are share of total starts across all Slydes."
+                              description="Where your visitors come from. QR = scanned your code. Bio links = clicked from Instagram/TikTok. Direct = typed your URL."
                             />
                           </div>
                         </div>
@@ -769,7 +763,7 @@ function HQAnalyticsContent() {
                           <div className="absolute bottom-4 right-4">
                             <InfoButton
                               label="Drop-off shape"
-                              description={`Stage bars are global. "Top contributors" are ${globalStats.dropoffContributorDefinition}.`}
+                              description="Shows when people stop swiping. Early = left quickly. Mid = lost interest halfway. Late = almost made it! Focus on your biggest drop-off point."
                             />
                           </div>
                         </div>
@@ -842,7 +836,7 @@ function HQAnalyticsContent() {
                           <div className="absolute bottom-4 right-4">
                             <InfoButton
                               label="CTA performance"
-                              description="Clicks are total CTA taps. Best CTA includes the Slyde + frame where that CTA lives."
+                              description="Your buttons are working! This shows which Slydes get the most taps. The 'best CTA' is your most effective call-to-action."
                             />
                           </div>
                         </div>
@@ -897,7 +891,7 @@ function HQAnalyticsContent() {
                           <div className="absolute bottom-4 right-4">
                             <InfoButton
                               label="User flow"
-                              description="High-level navigation patterns (aggregate). No individual journeys."
+                              description="How people move through your Slydes. Entry = where they start. Exit = where they leave. Skipped = frames they swipe past quickly."
                             />
                           </div>
                         </div>
@@ -989,26 +983,15 @@ function HQAnalyticsContent() {
                       >
                         Compare
                       </button>
-                      <div className="relative flex items-center rounded-lg bg-gray-100 p-1 dark:bg-white/10">
-                        {/* Sliding pill indicator */}
-                        <motion.div
-                          layoutId="analytics-range-pill"
-                          className="absolute top-1 bottom-1 rounded-md bg-white shadow-sm dark:bg-[#3a3a3c]"
-                          initial={false}
-                          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                          style={{
-                            width: 'calc(33.333% - 2px)',
-                            left: range === '7d' ? '4px' : range === '30d' ? 'calc(33.333% + 2px)' : 'calc(66.666% + 0px)',
-                          }}
-                        />
+                      <div className="inline-flex items-center p-1 rounded-lg bg-white/5 border border-white/10">
                         {(['7d', '30d', '90d'] as const).map((r) => (
                           <button
                             key={r}
                             onClick={() => setRange(r)}
-                            className={`relative z-10 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                            className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
                               range === r
-                                ? 'text-gray-900 dark:text-white'
-                                : 'text-gray-500 hover:text-gray-700 dark:text-white/50 dark:hover:text-white/70'
+                                ? 'bg-white/15 text-white shadow-sm'
+                                : 'text-white/50 hover:text-white/70'
                             }`}
                           >
                             {r.toUpperCase()}

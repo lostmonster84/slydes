@@ -440,10 +440,10 @@ export default function HQDashboardPage() {
               {/* Actions */}
               <div className="flex flex-col gap-3">
                 <Link
-                  href="/settings"
+                  href="/settings/billing"
                   className="w-full py-3 px-5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15 text-center"
                 >
-                  Upgrade to Creator
+                  Upgrade to Pro
                 </Link>
                 <button
                   onClick={() => setShowUpgradeModal(false)}
@@ -452,6 +452,14 @@ export default function HQDashboardPage() {
                   Maybe later
                 </button>
               </div>
+
+              {/* Promo code link */}
+              <p className="text-center text-sm text-gray-500 dark:text-white/50 mt-4">
+                Have a promo code?{' '}
+                <Link href="/settings/billing" className="text-blue-500 hover:underline">
+                  Enter it here
+                </Link>
+              </p>
             </div>
           </div>
         </div>

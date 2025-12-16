@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { ArrowLeft, User, Bell, Shield, CreditCard, Video } from 'lucide-react'
+import { PlanBadge } from '@/components/settings/PlanBadge'
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -97,15 +98,7 @@ export default async function SettingsPage() {
               <p className="text-white/60 text-sm">{user.email}</p>
             </div>
             <div className="ml-auto">
-              <span className={`px-3 py-1 text-xs font-medium rounded-full ${
-                profile?.plan === 'pro'
-                  ? 'bg-leader-blue/20 text-leader-blue'
-                  : profile?.plan === 'enterprise'
-                  ? 'bg-purple-500/20 text-purple-400'
-                  : 'bg-white/10 text-white/60'
-              }`}>
-                {profile?.plan === 'pro' ? 'Pro' : profile?.plan === 'enterprise' ? 'Enterprise' : 'Free'}
-              </span>
+              <PlanBadge dbPlan={profile?.plan} />
             </div>
           </div>
         </div>
