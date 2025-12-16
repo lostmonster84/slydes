@@ -34,11 +34,25 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
   const [isHearted, setIsHearted] = useState(false)
   const [heartCount, setHeartCount] = useState(2400)
   const [isMuted, setIsMuted] = useState(true)
+  const [touchCursor, setTouchCursor] = useState({ x: 0, y: 0, visible: false })
   const videoRef = useRef<HTMLVideoElement>(null)
   const sessionIdRef = useRef<string | null>(null)
   const firstSeenAtRef = useRef<number | null>(null)
   const drawerOpenedOnceRef = useRef(false)
   const { data: demoHome } = useDemoHomeSlyde()
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    setTouchCursor({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      visible: true
+    })
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    setTouchCursor(prev => ({ ...prev, visible: false }))
+  }, [])
 
   const handleHeartTap = useCallback(() => {
     setIsHearted((prev) => {
@@ -56,7 +70,7 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
 
   const emit = useCallback(
     async (eventType: 'sessionStart' | 'drawerOpen' | 'categorySelect' | 'videoLoop', meta?: Record<string, unknown>) => {
-      const organizationSlug = 'wildtrax'
+      const organizationSlug = data.organizationSlug || 'unknown'
       const slydePublicId = 'home'
 
       try {
@@ -85,7 +99,7 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
         // ignore
       }
     },
-    []
+    [data.organizationSlug]
   )
 
   useEffect(() => {
@@ -112,10 +126,24 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
   const videoSrc = data.videoSrc || demoHome.videoSrc || '/videos/adventure.mp4'
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div
+      className="relative w-full h-full cursor-none overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Touch cursor indicator - always visible at parent level */}
+      <div
+        className={`pointer-events-none absolute w-7 h-7 rounded-full border-2 border-white/70 bg-white/20 z-[100] transition-opacity duration-100 ${touchCursor.visible ? 'opacity-100' : 'opacity-0'}`}
+        style={{
+          left: touchCursor.x,
+          top: touchCursor.y,
+          transform: 'translate(-50%, -50%)'
+        }}
+      />
+
       {/* Video Background */}
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         animate={{ filter: drawerOpen ? 'brightness(0.4)' : 'brightness(1)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
@@ -132,15 +160,18 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
       </motion.div>
 
       {/* Gradient overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
 
-      {/* Sound Toggle - Top Left (conditionally shown) */}
+      {/* Sound Toggle - Top Left (conditionally shown) - top-10 clears the notch */}
       {(data.showSound ?? true) && (
         <motion.button
-          className="absolute top-4 left-4 z-50 w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center"
+          className="absolute top-10 left-4 z-[70] w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center pointer-events-auto"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          onClick={toggleMute}
+          onClick={(e) => {
+            e.stopPropagation()
+            toggleMute()
+          }}
         >
           {isMuted ? (
             <VolumeX className="w-4 h-4 text-white" />
@@ -203,10 +234,10 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
         </motion.div>
       </div>
 
-      {/* Swipe-up gesture zone (bottom 20%) */}
-      {!drawerOpen && (
+      {/* Swipe-up gesture zone (bottom 20%) - disabled when ANY sheet is open */}
+      {!drawerOpen && !shareOpen && !aboutOpen && (
         <motion.div
-          className="absolute left-0 right-0 bottom-0 h-[20%] z-40"
+          className="absolute left-0 right-0 bottom-0 h-[20%] z-20"
           drag="y"
           dragConstraints={{ top: 0, bottom: 0 }}
           dragElastic={{ top: 0.2, bottom: 0 }}

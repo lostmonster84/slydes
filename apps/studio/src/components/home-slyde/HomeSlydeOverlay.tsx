@@ -51,7 +51,7 @@ export function HomeSlydeOverlay({
 
   const emit = useCallback(
     async (eventType: 'sessionStart' | 'drawerOpen' | 'categorySelect' | 'videoLoop', meta?: Record<string, unknown>) => {
-      const organizationSlug = 'wildtrax'
+      const organizationSlug = data.organizationSlug || 'unknown'
       const slydePublicId = 'home'
 
       try {
@@ -80,7 +80,7 @@ export function HomeSlydeOverlay({
         // ignore
       }
     },
-    []
+    [data.organizationSlug]
   )
 
   useEffect(() => {

@@ -21,19 +21,19 @@ interface FAQSheetProps {
 
 /**
  * FAQSheet - Bottom sheet with FAQ accordion and Ask Question form
- * 
+ *
  * Features:
  * - Search bar for filtering FAQs
  * - Expandable accordion for each FAQ
  * - "Ask [Business]" button for new questions
  * - Success state after submission
- * 
+ *
  * Specs:
  * - Sheet: fixed bottom-0, bg-gray-900, rounded-t-3xl
  * - Max height: 70vh
  * - Header: p-4, border-b border-white/10
  * - FAQ item: border-b border-white/5, py-4
- * 
+ *
  * @see SLYDESBUILD.md for full specification
  */
 export function FAQSheet({
@@ -77,17 +77,17 @@ export function FAQSheet({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60 z-40"
+            className="absolute inset-0 bg-black/60 z-[55] cursor-none pointer-events-auto"
             onClick={onClose}
           />
-          
+
           {/* Sheet - full screen within phone frame */}
           <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-            className="absolute inset-0 bg-gray-900 z-50 flex flex-col"
+            className="absolute inset-0 bg-gray-900 z-[60] flex flex-col cursor-none pointer-events-auto"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">

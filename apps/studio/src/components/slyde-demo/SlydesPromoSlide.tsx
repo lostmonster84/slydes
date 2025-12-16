@@ -13,11 +13,11 @@ export function SlydesPromoSlide() {
   return (
     <div className="absolute inset-0 flex flex-col">
       {/* Background - gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0E27] via-[#1E293B] to-[#0A0E27]" />
-      
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0E27] via-[#1E293B] to-[#0A0E27] pointer-events-none" />
+
       {/* Subtle grid pattern */}
-      <div 
-        className="absolute inset-0 opacity-10"
+      <div
+        className="absolute inset-0 opacity-10 pointer-events-none"
         style={{
           backgroundImage: `linear-gradient(rgba(37,99,235,0.3) 1px, transparent 1px),
                            linear-gradient(90deg, rgba(37,99,235,0.3) 1px, transparent 1px)`,

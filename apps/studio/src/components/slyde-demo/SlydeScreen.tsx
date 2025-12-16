@@ -301,6 +301,7 @@ export function SlydeScreen({
 
   // Handle heart tap
   const handleHeartTap = useCallback(() => {
+    if (!currentFrameData) return
     const frameId = currentFrameData.id
     const wasHearted = isHearted[frameId]
     const newHearted = !wasHearted
@@ -344,12 +345,12 @@ export function SlydeScreen({
       })
       flushAnalytics()
     }
-  }, [currentFrameData.id, isHearted, onHeartPersist])
+  }, [currentFrameData?.id, isHearted, onHeartPersist])
 
   // Handle share - opens share sheet
   const handleShare = useCallback(() => {
     setShowShare(true)
-    if (canTrack) {
+    if (canTrack && currentFrameData) {
       enqueueEvent({
         eventType: 'shareClick',
         slydePublicId: analyticsSlydePublicId as string,
@@ -364,6 +365,7 @@ export function SlydeScreen({
 
   // Handle FAQ question submission
   const handleAskQuestion = useCallback((question: string) => {
+    if (!currentFrameData) return
     const frameId = currentFrameData.id
     
     if (onQuestionSubmit) {
@@ -373,7 +375,7 @@ export function SlydeScreen({
     } else {
       console.log('Question submitted:', question, 'for frame:', frameId)
     }
-  }, [currentFrameData.id, onQuestionSubmit])
+  }, [currentFrameData?.id, onQuestionSubmit])
 
   // Frame indicator string (e.g., "3/9")
   const frameIndicator = `${currentFrame + 1}/${frames.length}`
@@ -403,17 +405,26 @@ export function SlydeScreen({
     setTouchCursor(prev => ({ ...prev, visible: false }))
   }, [])
 
+  // Guard: If no frames or invalid index, show loading state
+  if (!currentFrameData) {
+    return (
+      <div className="relative w-full h-full bg-black flex items-center justify-center">
+        <p className="text-white/50 text-sm">Loading...</p>
+      </div>
+    )
+  }
+
   return (
-    <div 
+    <div
       className={`relative w-full h-full cursor-none overflow-hidden ${className}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ touchAction: 'none' }}
+      style={{ touchAction: 'manipulation' }}
     >
       {/* Touch cursor indicator - like Chrome DevTools mobile */}
-      <div 
-        className={`pointer-events-none absolute w-7 h-7 rounded-full border-2 border-white/70 bg-white/20 z-50 transition-opacity duration-100 ${touchCursor.visible ? 'opacity-100' : 'opacity-0'}`}
-        style={{ 
+      <div
+        className={`pointer-events-none absolute w-7 h-7 rounded-full border-2 border-white/70 bg-white/20 z-[100] transition-opacity duration-100 ${touchCursor.visible ? 'opacity-100' : 'opacity-0'}`}
+        style={{
           left: touchCursor.x,
           top: touchCursor.y,
           transform: 'translate(-50%, -50%)'
@@ -444,7 +455,7 @@ export function SlydeScreen({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className="absolute inset-0"
+              className="absolute inset-0 pointer-events-none"
             >
               {currentFrameData.background.type === 'video' ? (
                 currentFrameData.background.src.startsWith('stream:') ? (
@@ -454,7 +465,7 @@ export function SlydeScreen({
                 ) : currentFrameData.background.src.includes('iframe.videodelivery.net') ? (
                   <iframe
                     src={currentFrameData.background.src}
-                    className="absolute inset-0 w-full h-full"
+                    className="absolute inset-0 w-full h-full pointer-events-none"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     referrerPolicy="strict-origin-when-cross-origin"
@@ -467,7 +478,7 @@ export function SlydeScreen({
                     loop
                     muted
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                     ref={(el) => {
                       // Set video start time if specified
                       if (el && currentFrameData.background.startTime !== undefined) {
@@ -480,7 +491,7 @@ export function SlydeScreen({
                 <img
                   src={currentFrameData.background.src}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                   style={{
                     objectPosition: currentFrameData.background.position || 'center',
                   }}
@@ -530,13 +541,16 @@ export function SlydeScreen({
           </AnimatePresence>
           
           {/* Gradient overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
         </>
       )}
 
-      {/* Swipe/Tap zone for navigation - excludes right side where SocialActionStack lives */}
-      <motion.div 
-        className="absolute left-0 right-16 top-0 bottom-40 z-20"
+      {/* Swipe/Tap zone for navigation - excludes left (back button), right (SocialActionStack), and bottom (content) */}
+      {/* NUCLEAR FIX: left-14 to avoid back button, conditional pointer-events-none when sheets open */}
+      <motion.div
+        className={`absolute left-14 right-16 top-24 bottom-40 z-20 ${
+          (showFAQ || showInfo || showShare || showAbout) ? 'pointer-events-none' : ''
+        }`}
         onClick={() => nextFrame()}
         drag="y"
         dragConstraints={{ top: 0, bottom: 0 }}
@@ -551,19 +565,22 @@ export function SlydeScreen({
         }}
       />
 
-      {/* === TOP SECTION === (hidden on Slydes promo) */}
-      {!isSlydesPromo && (
-        <div className="absolute top-10 left-0 right-0 px-4 z-30">
-          {/* Back button - only in category context */}
-          {context === 'category' && onBack && (
-            <button
-              onClick={onBack}
-              className="absolute left-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center"
-            >
-              <ChevronLeft className="w-5 h-5 text-white" />
-            </button>
-          )}
+      {/* Back button - OUTSIDE TOP SECTION for proper z-index stacking */}
+      {!isSlydesPromo && context === 'category' && onBack && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onBack()
+          }}
+          className="absolute top-10 left-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center z-[70] pointer-events-auto"
+        >
+          <ChevronLeft className="w-5 h-5 text-white" />
+        </button>
+      )}
 
+      {/* === TOP SECTION === (Badge only - back button moved out for z-index fix) */}
+      {!isSlydesPromo && (
+        <div className="absolute top-10 left-0 right-0 px-4 z-30 pointer-events-none">
           <AnimatePresence mode="wait">
             {currentFrameData.badge && (
               <motion.div

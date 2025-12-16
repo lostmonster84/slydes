@@ -8,6 +8,7 @@ import {
   SupabaseIcon,
   CloudflareIcon,
   ResendIcon,
+  AnthropicIcon,
   AnalyticsIcon,
 } from '../_components/IntegrationCard'
 import {
@@ -36,6 +37,7 @@ type HealthData = {
     cloudflareStream: IntegrationStatus
     cloudflareImages: IntegrationStatus
     resend: IntegrationStatus
+    anthropic: IntegrationStatus
     analytics: IntegrationStatus
   }
 }
@@ -357,6 +359,14 @@ export default function AdminOverviewPage() {
                 tooltip="Email delivery. Sends transactional emails, waitlist confirmations, and notifications."
               />
               <IntegrationCard
+                name="Anthropic"
+                status={health.integrations.anthropic.status}
+                message={health.integrations.anthropic.message}
+                icon={<AnthropicIcon />}
+                lastChecked={health.integrations.anthropic.lastChecked}
+                tooltip="AI assistant. Powers the Ask HQ chat for business insights."
+              />
+              <IntegrationCard
                 name="Analytics"
                 status={health.integrations.analytics.status}
                 message={health.integrations.analytics.message}
@@ -369,7 +379,7 @@ export default function AdminOverviewPage() {
 
           {!health && (
             <>
-              {[1, 2, 3, 4, 5, 6].map((i) => (
+              {[1, 2, 3, 4, 5, 6, 7].map((i) => (
                 <div
                   key={i}
                   className="bg-[#2c2c2e] rounded-xl border border-white/10 p-5 animate-pulse"

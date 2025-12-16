@@ -7,12 +7,13 @@ import { CategorySlydeView } from './CategorySlydeView'
 import { InventoryGridView } from './InventoryGridView'
 import { ItemSlydeView } from './ItemSlydeView'
 import { FloatingCartButton } from './FloatingCartButton'
-import { highlandMotorsData, getCategory as getHardcodedCategory, getInventoryItem } from './data/highlandMotorsData'
+import { highlandMotorsData } from './data/highlandMotorsData'
 import type { HomeSlydeData, CategoryData, FrameData as ViewerFrameData, InventoryItem } from './data/highlandMotorsData'
 import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
+import { useOrganization } from '@/hooks/useOrganization'
 import { useCart } from '@/lib/useCart'
 import { useDemoCheckout } from '@/lib/useCheckout'
-import type { FrameData as EditorFrameData } from '@/components/slyde-demo/frameData'
+import type { FrameData as EditorFrameData, ListData } from '@/components/slyde-demo/frameData'
 
 // ============================================
 // STATE MACHINE
@@ -137,45 +138,77 @@ interface HomeSlydeViewerProps {
 export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = false }: HomeSlydeViewerProps) {
   const [state, dispatch] = useReducer(navReducer, initialState)
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const { data: demoHome } = useDemoHomeSlyde()
+  const { data: demoHome, hydrated: demoHydrated } = useDemoHomeSlyde()
+  const { organization, isLoading: orgLoading } = useOrganization()
   const cart = useCart()
   const { checkout, isLoading: isCheckingOut } = useDemoCheckout()
 
-  // Merge localStorage data with hardcoded fallback
+  // Show loading state while data is hydrating
+  const isLoading = !useHardcodedData && (orgLoading || !demoHydrated)
+
+  // Build viewer data from organization + localStorage editor state
   const viewerData: HomeSlydeData = useMemo(() => {
-    // If useHardcodedData is true, skip localStorage entirely
+    // If useHardcodedData is true, use demo data (for marketing/showcase)
     if (useHardcodedData) {
       return highlandMotorsData
     }
 
-    const hasCustomCategories = demoHome.categories && demoHome.categories.length > 0
+    // Production mode: Use real organization data
+    const businessName = organization?.name || 'Your Business'
+    const accentColor = organization?.primary_color || '#2563EB'
 
-    if (!hasCustomCategories) {
-      return highlandMotorsData
-    }
+    // Build video URL from Cloudflare stream UID if available
+    const orgVideoSrc = organization?.home_video_stream_uid
+      ? `https://customer-${process.env.NEXT_PUBLIC_CF_ACCOUNT_HASH}.cloudflarestream.com/${organization.home_video_stream_uid}/manifest/video.m3u8`
+      : null
 
-    const categories: CategoryData[] = demoHome.categories.map((cat) => {
+    // Categories from localStorage editor state
+    const categories: CategoryData[] = (demoHome.categories || []).map((cat) => {
       const customFrames = demoHome.childFrames?.[cat.id] as EditorFrameData[] | undefined
-      const hardcodedCategory = getHardcodedCategory(cat.id)
+
+      // Get list ID from any frame CTA that links to a list
+      const listIdFromFrames = customFrames?.find(f => f.cta?.action === 'list')?.listId
+      const listForCategory = listIdFromFrames
+        ? (demoHome.lists || []).find((l: ListData) => l.id === listIdFromFrames)
+        : null
 
       const frames: ViewerFrameData[] = customFrames && customFrames.length > 0
         ? customFrames.map((f) => ({
             id: f.id,
             title: f.title || 'Untitled',
             subtitle: f.subtitle || '',
-            badge: f.badge || undefined,
-            background: {
-              type: 'gradient' as const,
-              gradient: 'from-slate-800 to-slate-900',
-            },
+            background: f.background?.src
+              ? { type: 'image' as const, src: f.background.src }
+              : { type: 'gradient' as const, gradient: 'from-slate-800 to-slate-900' },
             cta: f.cta?.text ? { text: f.cta.text, action: f.cta.action || '' } : undefined,
+            showViewAll: f.cta?.action === 'list',
           }))
-        : hardcodedCategory?.frames || [{
+        : [{
             id: `${cat.id}-placeholder`,
             title: cat.name,
             subtitle: cat.description,
             background: { type: 'gradient' as const, gradient: 'from-slate-800 to-slate-900' },
           }]
+
+      // Build inventory from connected list
+      const inventory: InventoryItem[] | undefined = listForCategory?.items?.map(item => ({
+        id: item.id,
+        title: item.title,
+        subtitle: item.subtitle || '',
+        price: item.price || '',
+        price_cents: item.price ? parseInt(item.price.replace(/[^0-9]/g, '')) : undefined,
+        image: item.image || '',
+        commerce_mode: 'add_to_cart' as const,
+        frames: (item.frames || []).map(f => ({
+          id: f.id,
+          title: f.title || 'Untitled',
+          subtitle: f.subtitle || '',
+          background: f.background?.src
+            ? { type: 'image' as const, src: f.background.src }
+            : { type: 'gradient' as const, gradient: 'from-slate-800 to-slate-900' },
+          cta: f.cta?.text ? { text: f.cta.text, action: f.cta.action || '' } : undefined,
+        })),
+      }))
 
       return {
         id: cat.id,
@@ -183,34 +216,35 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = f
         icon: cat.icon,
         description: cat.description,
         frames,
-        inventory: hardcodedCategory?.inventory,
+        inventory,
       }
     })
 
     return {
-      businessName: highlandMotorsData.businessName,
-      tagline: highlandMotorsData.tagline,
-      accentColor: highlandMotorsData.accentColor,
-      backgroundGradient: highlandMotorsData.backgroundGradient,
-      videoSrc: customVideoSrc || demoHome.videoSrc || highlandMotorsData.videoSrc,
-      posterSrc: demoHome.posterSrc || highlandMotorsData.posterSrc,
-      rating: highlandMotorsData.rating,
-      reviewCount: highlandMotorsData.reviewCount,
-      about: highlandMotorsData.about,
-      address: highlandMotorsData.address,
-      hours: highlandMotorsData.hours,
-      phone: highlandMotorsData.phone,
-      email: highlandMotorsData.email,
-      website: highlandMotorsData.website,
+      organizationSlug: organization?.slug, // For analytics
+      businessName,
+      tagline: '', // TODO: Add tagline to organization table
+      accentColor,
+      backgroundGradient: 'from-slate-900 via-slate-800 to-slate-900',
+      videoSrc: customVideoSrc || demoHome.videoSrc || orgVideoSrc || '',
+      posterSrc: demoHome.posterSrc || organization?.home_video_poster_url || undefined,
+      rating: undefined, // TODO: Add to organization or fetch from reviews
+      reviewCount: undefined,
+      about: '', // TODO: Add to organization table
+      address: '', // TODO: Add to organization table
+      hours: '',
+      phone: '',
+      email: '',
+      website: organization?.website || '',
       categories,
-      primaryCta: demoHome.primaryCta || highlandMotorsData.primaryCta,
+      primaryCta: demoHome.primaryCta,
       showCategoryIcons: demoHome.showCategoryIcons,
       showHearts: demoHome.showHearts,
       showShare: demoHome.showShare,
       showSound: demoHome.showSound,
       showReviews: demoHome.showReviews,
     }
-  }, [demoHome, customVideoSrc])
+  }, [demoHome, customVideoSrc, organization])
 
   const videoSrc = viewerData.videoSrc || '/videos/adventure.mp4'
 
@@ -260,14 +294,19 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = f
     checkout({ items: cart.items })
   }, [checkout, cart.items])
 
-  // Get current data
+  // Get current data from viewerData (NOT from hardcoded demo data)
   const getCategory = useCallback((categoryId: string) => {
     return viewerData.categories.find(c => c.id === categoryId)
   }, [viewerData.categories])
 
+  const getItem = useCallback((categoryId: string, itemId: string): InventoryItem | undefined => {
+    const cat = viewerData.categories.find(c => c.id === categoryId)
+    return cat?.inventory?.find(item => item.id === itemId)
+  }, [viewerData.categories])
+
   const category = state.categoryId ? getCategory(state.categoryId) : null
   const item = state.categoryId && state.itemId
-    ? getInventoryItem(state.categoryId, state.itemId)
+    ? getItem(state.categoryId, state.itemId)
     : null
 
   // Render overlay views
@@ -380,6 +419,18 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = f
     }
   }
 
+  // Show loading skeleton while data hydrates
+  if (isLoading) {
+    return (
+      <div className="relative w-full h-full overflow-hidden bg-slate-900 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-white/20 border-t-white/80 rounded-full animate-spin" />
+          <p className="text-white/60 text-sm">Loading preview...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="relative w-full h-full overflow-hidden">
       {/* PERSISTENT VIDEO LAYER */}
@@ -399,7 +450,7 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = f
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
       </motion.div>
 
       {/* HOME UI OVERLAY */}

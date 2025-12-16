@@ -93,7 +93,7 @@ export function ItemSlydeView({
       <AnimatePresence mode="wait">
         <motion.div
           key={currentFrame.id}
-          className={`absolute inset-0 bg-gradient-to-b ${currentFrame.background.gradient || 'from-slate-800 to-slate-900'}`}
+          className={`absolute inset-0 bg-gradient-to-b pointer-events-none ${currentFrame.background.gradient || 'from-slate-800 to-slate-900'}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -102,7 +102,7 @@ export function ItemSlydeView({
       </AnimatePresence>
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
 
       {/* iOS Back button */}
       <button

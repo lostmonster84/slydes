@@ -120,3 +120,11 @@ export function AnalyticsIcon() {
     </svg>
   )
 }
+
+export function AnthropicIcon() {
+  return (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.304 3.541h-3.672l6.696 16.918h3.672l-6.696-16.918zm-10.608 0L0 20.459h3.744l1.368-3.6h6.624l1.368 3.6h3.744L10.152 3.541H6.696zm-.672 10.177l2.304-6.048 2.304 6.048H6.024z" />
+    </svg>
+  )
+}

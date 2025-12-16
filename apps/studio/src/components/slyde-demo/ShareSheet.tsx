@@ -153,7 +153,7 @@ export function ShareSheet({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm z-40"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm z-[55] cursor-none pointer-events-auto"
             onClick={onClose}
           />
 
@@ -163,7 +163,7 @@ export function ShareSheet({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="absolute bottom-0 left-0 right-0 bg-gray-900 rounded-t-2xl z-50"
+            className="absolute bottom-0 left-0 right-0 bg-gray-900 rounded-t-2xl z-[60] cursor-none pointer-events-auto"
           >
             {/* Handle */}
             <div className="flex justify-center pt-2 pb-1">
@@ -184,10 +184,10 @@ export function ShareSheet({
               </button>
             </div>
 
-            {/* Content - fixed, no scroll */}
-            <div className="px-4 pb-6">
+            {/* Content - fixed, no scroll - all containers get pointer-events-auto */}
+            <div className="px-4 pb-6 pointer-events-auto">
               {/* Share Preview Card */}
-              <div className="mb-4 p-3 bg-white/5 rounded-xl border border-white/10">
+              <div className="mb-4 p-3 bg-white/5 rounded-xl border border-white/10 pointer-events-auto">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-sm font-bold">W</span>
@@ -200,21 +200,24 @@ export function ShareSheet({
               </div>
 
               {/* Share Options - 3 rows of 3 */}
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 pointer-events-auto">
                 {[row1Options, row2Options, row3Options].map((row, rowIndex) => (
-                  <div key={rowIndex} className="flex justify-center gap-6">
+                  <div key={rowIndex} className="flex justify-center gap-6 pointer-events-auto">
                     {row.map((option) => (
                       <motion.button
                         key={option.id}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={option.action}
-                        className="flex flex-col items-center gap-1.5 w-16"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          option.action()
+                        }}
+                        className="flex flex-col items-center gap-1.5 w-16 pointer-events-auto cursor-pointer"
                       >
-                        <div className={`w-11 h-11 ${option.color} rounded-full flex items-center justify-center`}>
+                        <div className={`w-11 h-11 ${option.color} rounded-full flex items-center justify-center pointer-events-none`}>
                           <option.icon className={`w-5 h-5 ${option.id === 'snapchat' ? 'text-black' : 'text-white'}`} />
                         </div>
-                        <span className="text-white/60 text-[10px] font-medium">{option.label}</span>
+                        <span className="text-white/60 text-[10px] font-medium pointer-events-none">{option.label}</span>
                       </motion.button>
                     ))}
                   </div>

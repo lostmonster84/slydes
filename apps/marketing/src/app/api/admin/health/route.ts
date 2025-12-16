@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdmin } from '@/lib/supabaseAdmin'
 import Stripe from 'stripe'
 import { Resend } from 'resend'
+import Anthropic from '@anthropic-ai/sdk'
 
 type IntegrationStatus = {
   status: 'healthy' | 'warning' | 'error'
@@ -19,6 +20,7 @@ type HealthResponse = {
     cloudflareStream: IntegrationStatus
     cloudflareImages: IntegrationStatus
     resend: IntegrationStatus
+    anthropic: IntegrationStatus
     analytics: IntegrationStatus
   }
 }
@@ -174,6 +176,36 @@ async function checkResend(): Promise<IntegrationStatus> {
   }
 }
 
+async function checkAnthropic(): Promise<IntegrationStatus> {
+  const now = new Date().toISOString()
+  const apiKey = process.env.ANTHROPIC_API_KEY
+
+  if (!apiKey) {
+    return { status: 'warning', message: 'Not configured', lastChecked: now }
+  }
+
+  try {
+    const client = new Anthropic({ apiKey })
+    // Make a minimal API call to verify the key works
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 10,
+      messages: [{ role: 'user', content: 'ping' }],
+    })
+
+    if (response.id) {
+      return { status: 'healthy', message: 'Connected', lastChecked: now }
+    }
+    return { status: 'error', message: 'Invalid response', lastChecked: now }
+  } catch (e) {
+    const message = e instanceof Error ? e.message : 'API error'
+    if (message.includes('401') || message.includes('invalid')) {
+      return { status: 'error', message: 'Invalid API key', lastChecked: now }
+    }
+    return { status: 'error', message, lastChecked: now }
+  }
+}
+
 async function checkAnalytics(): Promise<IntegrationStatus> {
   const now = new Date().toISOString()
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -232,12 +264,13 @@ export async function GET(request: NextRequest) {
 
   try {
     // Run all checks in parallel
-    const [stripe, supabase, cloudflareStream, cloudflareImages, resend, analytics] = await Promise.all([
+    const [stripe, supabase, cloudflareStream, cloudflareImages, resend, anthropic, analytics] = await Promise.all([
       checkStripe(),
       checkSupabase(),
       checkCloudflareStream(),
       checkCloudflareImages(),
       checkResend(),
+      checkAnthropic(),
       checkAnalytics(),
     ])
 
@@ -247,6 +280,7 @@ export async function GET(request: NextRequest) {
       cloudflareStream,
       cloudflareImages,
       resend,
+      anthropic,
       analytics,
     }
 

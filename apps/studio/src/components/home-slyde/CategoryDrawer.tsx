@@ -94,7 +94,7 @@ export function CategoryDrawer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60 z-40"
+            className="absolute inset-0 bg-black/60 z-[55] cursor-none pointer-events-auto"
             onClick={(e) => {
               e.stopPropagation()
               onClose()
@@ -107,7 +107,7 @@ export function CategoryDrawer({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="absolute bottom-0 left-0 right-0 bg-[#1c1c1e] rounded-t-[20px] z-50 flex flex-col"
+            className="absolute bottom-0 left-0 right-0 bg-[#1c1c1e] rounded-t-[20px] z-[60] flex flex-col cursor-none pointer-events-auto"
             style={{ maxHeight: '70vh' }}
           >
             {/* iOS Handle */}

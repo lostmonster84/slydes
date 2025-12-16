@@ -68,6 +68,7 @@ import {
   Trash2,
   ChevronDown,
   ChevronRight,
+  ChevronLeft,
   Settings,
   Image as ImageIcon,
   Palette,
@@ -131,7 +132,7 @@ const CTA_ICONS: { value: CTAIconType; label: string; Icon: LucideIcon }[] = [
 ]
 
 function getCategoryIcon(iconId: string): LucideIcon {
-  return CATEGORY_ICONS.find((i) => i.id === iconId)?.Icon || Sparkles
+  return CATEGORY_ICONS.find((i) => i.id === iconId)?.Icon || Smartphone
 }
 
 export function UnifiedStudioEditor() {
@@ -196,7 +197,6 @@ export function UnifiedStudioEditor() {
   // =============================================
   const [previewFrameIndex, setPreviewFrameIndex] = useState(0)
   const [itemPreviewFrameIndex, setItemPreviewFrameIndex] = useState(0)
-  const [showingInventoryForListId, setShowingInventoryForListId] = useState<string | null>(null)
 
   // =============================================
   // INLINE EDITING STATE
@@ -389,7 +389,7 @@ export function UnifiedStudioEditor() {
           order: 1,
           templateType: 'hook',
           title: 'Frame 1',
-          subtitle: '',
+          subtitle: 'Add your subtitle here',
           heartCount: 0,
           faqCount: 0,
           background: { type: 'image', src: '' },
@@ -651,13 +651,6 @@ export function UnifiedStudioEditor() {
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="px-4 py-2 bg-gray-100 text-gray-800 font-semibold text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
-                onClick={() => window.open(`/preview`, '_blank')}
-              >
-                Preview
-              </button>
-              <button
-                type="button"
                 className={`inline-flex items-center gap-2 px-5 py-2.5 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity ${HQ_PRIMARY_SHADOW} ${HQ_PRIMARY_GRADIENT}`}
               >
                 <UploadCloud className="w-4 h-4" />
@@ -735,7 +728,9 @@ export function UnifiedStudioEditor() {
                                 <ChevronRight className={`w-4 h-4 ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
                               </button>
 
-                              <IconComponent className={`w-4 h-4 ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
+                              {showCategoryIcons && (
+                                <IconComponent className={`w-4 h-4 ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
+                              )}
 
                               {isEditing ? (
                                 <input
@@ -890,7 +885,10 @@ export function UnifiedStudioEditor() {
                                               <div key={item.id}>
                                                 {/* Item Row */}
                                                 <div
-                                                  onClick={() => setSelection({ type: 'item', listId: connectedList.id, itemId: item.id })}
+                                                  onClick={() => {
+                                                    setItemPreviewFrameIndex(0) // Reset frame index for new item
+                                                    setSelection({ type: 'item', listId: connectedList.id, itemId: item.id, categoryId: cat.id })
+                                                  }}
                                                   className={`group w-full flex items-center gap-2 px-2 py-1.5 rounded-xl text-left transition-all cursor-pointer ${
                                                     isItemSelected
                                                       ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
@@ -946,7 +944,7 @@ export function UnifiedStudioEditor() {
                                                         <div
                                                           key={itemFrame.id}
                                                           onClick={() => {
-                                                            setSelection({ type: 'itemFrame', listId: connectedList.id, itemId: item.id, itemFrameId: itemFrame.id })
+                                                            setSelection({ type: 'itemFrame', listId: connectedList.id, itemId: item.id, itemFrameId: itemFrame.id, categoryId: cat.id })
                                                             setItemPreviewFrameIndex(frameIdx)
                                                           }}
                                                           className={`group w-full flex items-center gap-2 px-2 py-1 rounded-lg text-left transition-all cursor-pointer ${
@@ -1055,50 +1053,25 @@ export function UnifiedStudioEditor() {
 
             {/* PREVIEW - Phone */}
             <div className="flex-1 flex items-center justify-center bg-gray-100/50 dark:bg-[#1c1c1e]/50 relative overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.03),transparent_50%)]" />
-              <div className="relative z-10">
-                <DevicePreview>
+              <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.03),transparent_50%)]" />
+              <div className="relative z-50 isolate pointer-events-auto">
+                <DevicePreview enableTilt={false}>
                   {/* Home Preview */}
                   {selection.type === 'home' && (
                     <HomeSlydeScreen
                       data={previewData}
-                      onCategoryTap={() => {}}
+                      onCategoryTap={(categoryId) => {
+                        // Expand the category in navigator and select it
+                        setExpandedCategories(prev => new Set([...prev, categoryId]))
+                        setPreviewFrameIndex(0)
+                        setSelection({ type: 'category', categoryId })
+                      }}
                     />
                   )}
 
                   {/* Category Preview */}
                   {(selection.type === 'category' || selection.type === 'categoryFrame') && selectedCategory && (
-                    showingInventoryForListId ? (() => {
-                      // Show inventory grid when "View All" is clicked
-                      const inventoryList = lists.find(l => l.id === showingInventoryForListId)
-                      if (!inventoryList) return null
-
-                      // Map ListItem to InventoryItem (with defaults for required fields)
-                      // Using 'as any' to bridge between frameData.FrameData and highlandMotorsData.FrameData
-                      const inventoryItems: InventoryItem[] = inventoryList.items.map(item => ({
-                        id: item.id,
-                        title: item.title,
-                        subtitle: item.subtitle || '',
-                        price: item.price || '',
-                        image: item.image || '',
-                        badge: item.badge,
-                        frames: (item.frames || []) as any,
-                      }))
-
-                      return (
-                        <InventoryGridView
-                          categoryName={inventoryList.name}
-                          items={inventoryItems}
-                          onItemTap={(itemId) => {
-                            // Select the item
-                            setSelection({ type: 'item', listId: inventoryList.id, itemId })
-                            setShowingInventoryForListId(null)
-                          }}
-                          onBack={() => setShowingInventoryForListId(null)}
-                          accentColor={brandProfile.primaryColor}
-                        />
-                      )
-                    })() : selectedCategoryFrames.length > 0 ? (
+                    selectedCategoryFrames.length > 0 ? (
                       <SlydeScreen
                         frames={selectedCategoryFrames}
                         business={businessInfo}
@@ -1107,15 +1080,28 @@ export function UnifiedStudioEditor() {
                         initialFrameIndex={previewFrameIndex}
                         onFrameChange={setPreviewFrameIndex}
                         autoAdvance={false}
+                        onBack={() => setSelection({ type: 'home' })}
                         onListView={(frame) => {
-                          // When "View All" CTA is clicked, show the inventory grid
+                          // When "View All" CTA is clicked, select the list
                           if (frame.listId) {
-                            setShowingInventoryForListId(frame.listId)
+                            setExpandedLists(prev => new Set([...prev, frame.listId!]))
+                            setSelection({ type: 'list', listId: frame.listId, categoryId: selection.categoryId })
                           }
                         }}
                       />
                     ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white">
+                      <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white">
+                        {/* Back button */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setSelection({ type: 'home' })
+                          }}
+                          className="absolute top-4 left-4 z-50 flex items-center gap-1 text-white/80 hover:text-white transition-colors bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                          <span className="text-sm font-medium">Back</span>
+                        </button>
                         <Layers className="w-12 h-12 text-gray-500 mb-4" />
                         <p className="text-gray-400">No frames yet</p>
                         <p className="text-gray-500 text-sm">Click "Add frame" to create one</p>
@@ -1123,28 +1109,83 @@ export function UnifiedStudioEditor() {
                     )
                   )}
 
-                  {/* List Preview */}
+                  {/* List Preview - Shows InventoryGridView */}
                   {selection.type === 'list' && selectedList && (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white">
-                      <List className="w-12 h-12 text-blue-500 mb-4" />
-                      <p className="text-white font-medium">{selectedList.name}</p>
-                      <p className="text-gray-400 text-sm">{selectedList.items.length} items</p>
-                    </div>
+                    <InventoryGridView
+                      categoryName={selectedList.name}
+                      items={selectedList.items.map(item => ({
+                        id: item.id,
+                        title: item.title,
+                        subtitle: item.subtitle || '',
+                        price: item.price || '',
+                        image: item.image || '',
+                        frames: (item.frames || []) as any,
+                      }))}
+                      onItemTap={(itemId) => {
+                        // Expand the item in navigator and select it
+                        setExpandedItems(prev => new Set([...prev, itemId]))
+                        setSelection({ type: 'item', listId: selectedList.id, itemId, categoryId: selection.categoryId })
+                      }}
+                      onBack={() => {
+                        // Go back to category if we came from one, otherwise go home
+                        if (selection.categoryId) {
+                          setSelection({ type: 'category', categoryId: selection.categoryId })
+                        } else {
+                          setSelection({ type: 'home' })
+                        }
+                      }}
+                      accentColor={brandProfile.primaryColor}
+                    />
                   )}
 
-                  {/* Item Preview */}
+                  {/* Item Preview - Shows SlydeScreen if item has frames */}
                   {selection.type === 'item' && selectedItem && (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white p-6">
-                      {selectedItem.image ? (
-                        <img src={selectedItem.image} alt="" className="w-24 h-24 rounded-2xl object-cover mb-4" />
-                      ) : (
-                        <Package className="w-12 h-12 text-cyan-500 mb-4" />
-                      )}
-                      <p className="text-white font-medium">{selectedItem.title}</p>
-                      {selectedItem.subtitle && <p className="text-gray-400 text-sm">{selectedItem.subtitle}</p>}
-                      {selectedItem.price && <p className="text-cyan-400 font-semibold mt-2">{selectedItem.price}</p>}
-                      <p className="text-gray-500 text-xs mt-3">{selectedItem.frames?.length ?? 0} frames</p>
-                    </div>
+                    selectedItem.frames && selectedItem.frames.length > 0 ? (
+                      <SlydeScreen
+                        frames={selectedItem.frames}
+                        business={businessInfo}
+                        faqs={[]}
+                        context="category"
+                        initialFrameIndex={itemPreviewFrameIndex}
+                        onFrameChange={setItemPreviewFrameIndex}
+                        autoAdvance={false}
+                        onBack={() => {
+                          // Go back to list
+                          if (selection.listId) {
+                            setSelection({ type: 'list', listId: selection.listId, categoryId: selection.categoryId })
+                          } else {
+                            setSelection({ type: 'home' })
+                          }
+                        }}
+                      />
+                    ) : (
+                      <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white p-6">
+                        {/* Back button */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            if (selection.listId) {
+                              setSelection({ type: 'list', listId: selection.listId, categoryId: selection.categoryId })
+                            } else {
+                              setSelection({ type: 'home' })
+                            }
+                          }}
+                          className="absolute top-4 left-4 z-50 flex items-center gap-1 text-white/80 hover:text-white transition-colors bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                          <span className="text-sm font-medium">Back</span>
+                        </button>
+                        {selectedItem.image ? (
+                          <img src={selectedItem.image} alt="" className="w-24 h-24 rounded-2xl object-cover mb-4" />
+                        ) : (
+                          <Package className="w-12 h-12 text-cyan-500 mb-4" />
+                        )}
+                        <p className="text-white font-medium">{selectedItem.title}</p>
+                        {selectedItem.subtitle && <p className="text-gray-400 text-sm">{selectedItem.subtitle}</p>}
+                        {selectedItem.price && <p className="text-cyan-400 font-semibold mt-2">{selectedItem.price}</p>}
+                        <p className="text-gray-500 text-xs mt-3">No frames - add one to preview</p>
+                      </div>
+                    )
                   )}
 
                   {/* Item Frame Preview */}
@@ -1157,6 +1198,7 @@ export function UnifiedStudioEditor() {
                       initialFrameIndex={itemPreviewFrameIndex}
                       onFrameChange={setItemPreviewFrameIndex}
                       autoAdvance={false}
+                      onBack={() => setSelection({ type: 'item', listId: selection.listId!, itemId: selection.itemId! })}
                     />
                   )}
 
@@ -1393,7 +1435,7 @@ export function UnifiedStudioEditor() {
                     {inspectorSections.settings && (
                       <div className="space-y-3 pl-6">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600 dark:text-white/60">Show category icons</span>
+                          <span className="text-sm text-gray-600 dark:text-white/60">Show slyde icons</span>
                           <Toggle enabled={showCategoryIcons} onChange={setShowCategoryIcons} />
                         </div>
                         <div className="flex items-center justify-between">
@@ -1452,28 +1494,30 @@ export function UnifiedStudioEditor() {
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-2">Icon</label>
-                      <div className="grid grid-cols-4 gap-2">
-                        {CATEGORY_ICONS.map(({ id, Icon }) => (
-                          <button
-                            key={id}
-                            onClick={() => updateCategory(selectedCategory.id, { icon: id })}
-                            className={`p-3 rounded-xl border-2 transition-all ${
-                              selectedCategory.icon === id
-                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/10'
-                                : 'border-gray-200 dark:border-white/10 hover:border-gray-300'
-                            }`}
-                          >
-                            <Icon className={`w-5 h-5 mx-auto ${
-                              selectedCategory.icon === id
-                                ? 'text-blue-600 dark:text-blue-400'
-                                : 'text-gray-500'
-                            }`} />
-                          </button>
-                        ))}
+                    {showCategoryIcons && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-2">Icon</label>
+                        <div className="grid grid-cols-4 gap-2">
+                          {CATEGORY_ICONS.map(({ id, Icon }) => (
+                            <button
+                              key={id}
+                              onClick={() => updateCategory(selectedCategory.id, { icon: id })}
+                              className={`p-3 rounded-xl border-2 transition-all ${
+                                selectedCategory.icon === id
+                                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/10'
+                                  : 'border-gray-200 dark:border-white/10 hover:border-gray-300'
+                              }`}
+                            >
+                              <Icon className={`w-5 h-5 mx-auto ${
+                                selectedCategory.icon === id
+                                  ? 'text-blue-600 dark:text-blue-400'
+                                  : 'text-gray-500'
+                              }`} />
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                   </div>
                 </div>
@@ -1539,11 +1583,11 @@ export function UnifiedStudioEditor() {
                                 } : undefined
                               })
                             }}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+                            className="w-full px-3 py-2 bg-white dark:bg-[#2c2c2e] border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
                           >
-                            <option value="">Select a list...</option>
+                            <option value="" className="bg-white dark:bg-[#2c2c2e] text-gray-900 dark:text-white">Select a list...</option>
                             {lists.map((list) => (
-                              <option key={list.id} value={list.id}>
+                              <option key={list.id} value={list.id} className="bg-white dark:bg-[#2c2c2e] text-gray-900 dark:text-white">
                                 {list.name} ({list.items.length} items)
                               </option>
                             ))}
@@ -1607,16 +1651,6 @@ export function UnifiedStudioEditor() {
                             value={selectedCategoryFrame.subtitle || ''}
                             onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { subtitle: e.target.value })}
                             className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Badge</label>
-                          <input
-                            type="text"
-                            value={selectedCategoryFrame.badge || ''}
-                            onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { badge: e.target.value })}
-                            placeholder="e.g. ⭐ 5-Star Rated"
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                           />
                         </div>
                         <div>
@@ -1960,13 +1994,6 @@ export function UnifiedStudioEditor() {
                                   className="w-1/2 px-2 py-1.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded text-sm text-gray-900 dark:text-white"
                                   placeholder="£18.50"
                                 />
-                                <input
-                                  type="text"
-                                  value={item.badge || ''}
-                                  onChange={(e) => updateItem(selectedList.id, item.id, { badge: e.target.value })}
-                                  className="w-1/2 px-2 py-1.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded text-sm text-gray-900 dark:text-white"
-                                  placeholder="Badge"
-                                />
                               </div>
                               <input
                                 type="text"
@@ -2045,16 +2072,6 @@ export function UnifiedStudioEditor() {
                         onChange={(e) => updateItem(selectedList.id, selectedItem.id, { price: e.target.value })}
                         className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
                         placeholder="£45,000"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Badge</label>
-                      <input
-                        type="text"
-                        value={selectedItem.badge || ''}
-                        onChange={(e) => updateItem(selectedList.id, selectedItem.id, { badge: e.target.value })}
-                        className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
-                        placeholder="Best Seller"
                       />
                     </div>
                   </div>
@@ -2139,16 +2156,6 @@ export function UnifiedStudioEditor() {
                             value={selectedItemFrame.subtitle || ''}
                             onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { subtitle: e.target.value })}
                             className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Badge</label>
-                          <input
-                            type="text"
-                            value={selectedItemFrame.badge || ''}
-                            onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { badge: e.target.value })}
-                            placeholder="e.g. Best Seller"
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                           />
                         </div>
                         <div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
+import {
   X, Phone, Mail, MessageCircle, MapPin, ChevronDown
 } from 'lucide-react'
 import type { BusinessInfo } from './frameData'
@@ -15,19 +15,19 @@ interface AboutSheetProps {
 
 /**
  * AboutSheet - Business overview
- * 
+ *
  * Opened from ProfilePill on Frame 1. Shows business info and contact options.
- * 
+ *
  * TERMINOLOGY (per STRUCTURE.md):
  * - Profile → Slyde → Frame
  * - This sheet shows the business (Profile level info) while viewing a Slyde
  * - Navigation between Slydes happens at the Profile level, not here
- * 
+ *
  * Content (in order):
  * - Header: Business name, logo, location
  * - About section: Collapsible highlights
  * - Contact buttons: Call, Email, Message
- * 
+ *
  * @see SLYDESBUILD.md for full specification
  * @see STRUCTURE.md for hierarchy
  */
@@ -38,7 +38,7 @@ export function AboutSheet({
 }: AboutSheetProps) {
   // Get first letter for fallback logo
   const initial = business.name.charAt(0).toUpperCase()
-  
+
   // About section is expanded by default (since we removed world selector)
   const [showAbout, setShowAbout] = useState(true)
 
@@ -51,20 +51,20 @@ export function AboutSheet({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60 z-40"
+            className="absolute inset-0 bg-black/60 z-[55] cursor-none pointer-events-auto"
             onClick={(e) => {
               e.stopPropagation()
               onClose()
             }}
           />
-          
+
           {/* Sheet */}
           <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-            className="absolute bottom-0 left-0 right-0 bg-gray-900 rounded-t-2xl z-50 flex flex-col"
+            className="absolute bottom-0 left-0 right-0 bg-gray-900 rounded-t-2xl z-[60] flex flex-col cursor-none pointer-events-auto"
             style={{ maxHeight: '70vh' }}
           >
             {/* Drag Handle - only this area triggers drag-to-close */}

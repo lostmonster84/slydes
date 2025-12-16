@@ -42,15 +42,15 @@ interface InfoSheetProps {
 
 /**
  * InfoSheet - Frame-focused info sheet with collapsible business section
- * 
+ *
  * TERMINOLOGY (per STRUCTURE.md):
  * - Frame = vertical screen inside a Slyde
- * 
+ *
  * Priority order:
  * 1. Frame headline & description (what is this frame about?)
  * 2. Frame items/details (bullet points)
  * 3. Collapsible business card (tappable to expand contact options)
- * 
+ *
  * When autoExpandContact is true, the contact section starts expanded.
  */
 export function InfoSheet({
@@ -64,11 +64,11 @@ export function InfoSheet({
   autoExpandContact = false
 }: InfoSheetProps) {
   const [businessExpanded, setBusinessExpanded] = useState(autoExpandContact)
-  
+
   // Support both old and new prop names during migration
   const context = frameContext || slideContext
   const content = frameContent || slideContent
-  
+
   // Get up to 4 items to display
   const displayItems = content?.items?.slice(0, 4)
 
@@ -81,20 +81,20 @@ export function InfoSheet({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/70 z-40"
+            className="absolute inset-0 bg-black/70 z-[55] cursor-none pointer-events-auto"
             onClick={(e) => {
               e.stopPropagation()
               onClose()
             }}
           />
-          
+
           {/* Sheet */}
           <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 350 }}
-            className="absolute bottom-0 left-0 right-0 bg-[#1c1c1e] rounded-t-2xl z-50 max-h-[85%] overflow-hidden"
+            className="absolute bottom-0 left-0 right-0 bg-[#1c1c1e] rounded-t-2xl z-[60] max-h-[85%] overflow-hidden cursor-none pointer-events-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Handle */}

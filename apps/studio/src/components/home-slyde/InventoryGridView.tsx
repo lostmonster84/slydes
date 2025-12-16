@@ -17,14 +17,19 @@ interface InventoryGridViewProps {
 }
 
 /**
- * InventoryGridView - Level 2: List format with square thumbnails
+ * InventoryGridView - List view with thumbnails
  *
- * Key rules from CATEGORY-INVENTORY-FLOW.md:
- * - Grids are NEVER an entry point
- * - Grids are only accessible from a Category Slyde
- * - Grids are shallow and utilitarian
- * - List layout with square thumbnails, minimal metadata
+ * Styled to match CategoryDrawer - consistent Slydes brand:
+ * - Dark #1c1c1e background
+ * - Grouped list with #2c2c2e cards
+ * - Handle bar + centered title header
+ * - Clean typography, subtle separators
+ *
+ * E-commerce support:
+ * - Optional commerce_mode per item (add_to_cart, buy_now, enquire)
+ * - Quick action buttons when commerce enabled
  */
+
 /**
  * Commerce button component for quick actions
  * Flashes green with tick on add_to_cart success
@@ -132,21 +137,27 @@ export function InventoryGridView({
   }
   return (
     <div className="relative w-full h-full bg-[#1c1c1e] flex flex-col">
-      {/* iOS Navigation Bar */}
-      <div className="pt-12 pb-2 px-4 bg-[#1c1c1e]">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-0.5 -ml-1"
-          style={{ color: accentColor }}
-        >
-          <ChevronLeft className="w-5 h-5" />
-          <span className="text-[17px]">Back</span>
-        </button>
-        <div className="flex items-baseline gap-2 mt-1">
-          <h1 className="text-white text-[34px] font-bold tracking-tight">
+      {/* Header - Slydes brand style (matches CategoryDrawer) */}
+      <div className="pt-8 pb-3 bg-[#1c1c1e]">
+        {/* Handle bar */}
+        <div className="flex justify-center pb-3">
+          <div className="w-9 h-[5px] rounded-full bg-white/30" />
+        </div>
+
+        {/* Header row with back button centered title */}
+        <div className="flex items-center justify-between px-4">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-0.5 -ml-1"
+            style={{ color: accentColor }}
+          >
+            <ChevronLeft className="w-5 h-5" />
+            <span className="text-[15px]">Back</span>
+          </button>
+          <h2 className="text-white text-[17px] font-semibold">
             {categoryName}
-          </h1>
-          <span className="text-white/40 text-[15px]">{items.length}</span>
+          </h2>
+          <div className="w-14" /> {/* Spacer for centering */}
         </div>
       </div>
 
@@ -192,14 +203,16 @@ export function InventoryGridView({
                   <div className={`w-full h-full bg-gradient-to-br from-[#3a3a3c] to-[#2c2c2e] ${item.image ? 'hidden' : ''}`} />
                 </div>
 
-                {/* Item Info - Title + Price only */}
-                <div className="flex-1 min-w-0 py-0.5">
-                  <h3 className="text-white text-[15px] font-medium line-clamp-2 leading-tight">
+                {/* Item Info */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-white text-[15px] font-medium line-clamp-1">
                     {item.title}
                   </h3>
-                  <p style={{ color: accentColor }} className="text-[15px] font-semibold mt-0.5">
-                    {item.price}
-                  </p>
+                  {item.subtitle && (
+                    <p className="text-white/50 text-[13px] line-clamp-1 mt-0.5">
+                      {item.subtitle}
+                    </p>
+                  )}
                 </div>
 
                 {/* Commerce button or chevron */}

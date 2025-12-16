@@ -57,6 +57,7 @@ export interface CategoryData {
 }
 
 export interface HomeSlydeData {
+  organizationSlug?: string // For analytics - org slug from Supabase
   businessName: string
   tagline: string
   accentColor: string

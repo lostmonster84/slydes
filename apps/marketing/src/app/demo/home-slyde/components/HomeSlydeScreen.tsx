@@ -115,7 +115,7 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
     <div className="relative w-full h-full overflow-hidden">
       {/* Video Background */}
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         animate={{ filter: drawerOpen ? 'brightness(0.4)' : 'brightness(1)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
@@ -126,13 +126,13 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           onEnded={() => void emit('videoLoop', {})}
         />
       </motion.div>
 
       {/* Gradient overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
 
       {/* Sound Toggle - Top Left (conditionally shown) */}
       {(data.showSound ?? true) && (

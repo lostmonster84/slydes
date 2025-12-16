@@ -7,6 +7,7 @@ import {
   SupabaseIcon,
   CloudflareIcon,
   ResendIcon,
+  AnthropicIcon,
   AnalyticsIcon,
 } from '../_components/IntegrationCard'
 import { StatusBadge } from '../_components/StatusBadge'
@@ -27,6 +28,7 @@ type HealthData = {
     cloudflareStream: IntegrationStatus
     cloudflareImages: IntegrationStatus
     resend: IntegrationStatus
+    anthropic: IntegrationStatus
     analytics: IntegrationStatus
   }
 }
@@ -71,6 +73,14 @@ const INTEGRATION_INFO = {
     critical: false,
     docs: 'https://resend.com/docs',
     envVars: ['RESEND_API_KEY'],
+  },
+  anthropic: {
+    name: 'Anthropic',
+    description: 'AI assistant for Ask HQ chat',
+    icon: <AnthropicIcon />,
+    critical: false,
+    docs: 'https://docs.anthropic.com',
+    envVars: ['ANTHROPIC_API_KEY'],
   },
   analytics: {
     name: 'Analytics',
@@ -249,6 +259,33 @@ export default function IntegrationsPage() {
           </div>
 
           <div className="space-y-4">
+            {/* Current Status */}
+            {health?.integrations[selectedIntegration as keyof typeof health.integrations] && (
+              <div>
+                <h4 className="text-sm font-medium text-[#98989d] mb-2">Current Status</h4>
+                <div className={`rounded-lg p-3 ${
+                  health.integrations[selectedIntegration as keyof typeof health.integrations].status === 'error'
+                    ? 'bg-red-500/10 border border-red-500/30'
+                    : health.integrations[selectedIntegration as keyof typeof health.integrations].status === 'warning'
+                    ? 'bg-amber-500/10 border border-amber-500/30'
+                    : 'bg-green-500/10 border border-green-500/30'
+                }`}>
+                  <p className={`text-sm font-medium ${
+                    health.integrations[selectedIntegration as keyof typeof health.integrations].status === 'error'
+                      ? 'text-red-400'
+                      : health.integrations[selectedIntegration as keyof typeof health.integrations].status === 'warning'
+                      ? 'text-amber-400'
+                      : 'text-green-400'
+                  }`}>
+                    {health.integrations[selectedIntegration as keyof typeof health.integrations].message}
+                  </p>
+                  <p className="text-xs text-[#636366] mt-1">
+                    Last checked: {new Date(health.integrations[selectedIntegration as keyof typeof health.integrations].lastChecked).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Environment Variables */}
             <div>
               <h4 className="text-sm font-medium text-[#98989d] mb-2">Required Environment Variables</h4>

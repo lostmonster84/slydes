@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -26,6 +26,8 @@ export function HQSidebar({ activePage, plan, onPlanChange, slydeCount = 2, inbo
   const [activeBusinessId, setActiveBusinessId] = useState<'wildtrax'>('wildtrax')
   const [businessHydrated, setBusinessHydrated] = useState(false)
   const [featureModalOpen, setFeatureModalOpen] = useState(false)
+  const accountMenuRef = useRef<HTMLDivElement>(null)
+  const accountButtonRef = useRef<HTMLButtonElement>(null)
 
   const handleSignOut = async () => {
     const supabase = createClient()
@@ -64,6 +66,30 @@ export function HQSidebar({ activePage, plan, onPlanChange, slydeCount = 2, inbo
       // ignore
     }
   }, [collapsed, collapsedHydrated])
+
+  // Close account menu on click outside / Escape (avoid a full-screen overlay that can block the editor)
+  useEffect(() => {
+    if (!accountMenuOpen) return
+
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node | null
+      if (!target) return
+      if (accountMenuRef.current?.contains(target)) return
+      if (accountButtonRef.current?.contains(target)) return
+      setAccountMenuOpen(false)
+    }
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setAccountMenuOpen(false)
+    }
+
+    document.addEventListener('pointerdown', onPointerDown, true)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown, true)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [accountMenuOpen])
 
   // Persist active business (demo)
   useEffect(() => {
@@ -399,6 +425,7 @@ export function HQSidebar({ activePage, plan, onPlanChange, slydeCount = 2, inbo
           <button
             type="button"
             onClick={() => setAccountMenuOpen((v) => !v)}
+            ref={accountButtonRef}
             className={`w-full flex items-center gap-3 p-2 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer dark:hover:bg-white/10 ${collapsed ? 'justify-center' : ''}`}
             aria-haspopup="menu"
             aria-expanded={accountMenuOpen}
@@ -422,8 +449,8 @@ export function HQSidebar({ activePage, plan, onPlanChange, slydeCount = 2, inbo
 
           {accountMenuOpen && (
             <>
-              <div className="fixed inset-0 z-[90]" onClick={() => setAccountMenuOpen(false)} />
               <div
+                ref={accountMenuRef}
                 className={`absolute bottom-full mb-2 z-[100] w-72 max-h-[calc(100vh-120px)] rounded-2xl border border-gray-200 bg-white shadow-2xl overflow-y-auto dark:border-white/10 dark:bg-[#2c2c2e] ${
                   collapsed ? 'left-0' : 'left-0'
                 }`}

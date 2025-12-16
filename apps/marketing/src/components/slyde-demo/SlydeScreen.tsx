@@ -435,7 +435,7 @@ export function SlydeScreen({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className="absolute inset-0"
+              className="absolute inset-0 pointer-events-none"
             >
               {currentFrameData.background.type === 'video' ? (
                 currentFrameData.background.src.startsWith('stream-processing:') ? (
@@ -449,7 +449,7 @@ export function SlydeScreen({
                 ) : currentFrameData.background.src.includes('iframe.videodelivery.net') ? (
                   <iframe
                     src={currentFrameData.background.src}
-                    className="absolute inset-0 w-full h-full"
+                    className="absolute inset-0 w-full h-full pointer-events-none"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     referrerPolicy="strict-origin-when-cross-origin"
@@ -462,7 +462,7 @@ export function SlydeScreen({
                     loop
                     muted
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                     ref={(el) => {
                       // Set video start time if specified
                       if (el && currentFrameData.background.startTime !== undefined) {
@@ -475,7 +475,7 @@ export function SlydeScreen({
                 <img
                   src={currentFrameData.background.src}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                   style={{
                     objectPosition: currentFrameData.background.position || 'center',
                   }}
@@ -485,7 +485,7 @@ export function SlydeScreen({
           </AnimatePresence>
           
           {/* Gradient overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
         </>
       )}
 
