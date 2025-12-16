@@ -46,8 +46,9 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { DevicePreview } from '@/components/slyde-demo'
 import { HomeSlydeScreen } from '@/components/home-slyde/HomeSlydeScreen'
+import { InventoryGridView } from '@/components/home-slyde/InventoryGridView'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
-import type { FrameData, FAQItem, BusinessInfo, FrameInfoContent, CTAIconType } from '@/components/slyde-demo/frameData'
+import type { FrameData, FAQItem, BusinessInfo, FrameInfoContent, CTAIconType, ListItem } from '@/components/slyde-demo/frameData'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { useOrganization } from '@/hooks'
 import {
@@ -96,6 +97,7 @@ import {
   Info,
   Phone,
   Book,
+  List,
   type LucideIcon,
 } from 'lucide-react'
 import { Toggle } from '@/components/ui/Toggle'
@@ -139,6 +141,7 @@ const CTA_ICONS: { value: CTAIconType; label: string; Icon: LucideIcon }[] = [
   { value: 'view', label: 'View', Icon: ExternalLink },
   { value: 'arrow', label: 'Arrow', Icon: ChevronRight },
   { value: 'menu', label: 'Menu', Icon: Layers },
+  { value: 'list', label: 'List', Icon: List },
 ]
 
 function getCategoryIcon(iconId: string): LucideIcon {
@@ -190,9 +193,12 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
   const [selection, setSelection] = useState<Selection>({ type: 'home' })
 
   // Editing level state - tracks whether we're editing Home or a Child Slyde
-  type EditingLevel = 'home' | 'child'
+  type EditingLevel = 'home' | 'child' | 'list'
   const [editingLevel, setEditingLevel] = useState<EditingLevel>('home')
   const [editingChildId, setEditingChildId] = useState<string | null>(null)
+
+  // List View preview state
+  const [listViewFrame, setListViewFrame] = useState<FrameData | null>(null)
 
   // Get the category being edited (for breadcrumb)
   const editingCategory = editingChildId ? categories.find(c => c.id === editingChildId) : null
@@ -797,6 +803,28 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
               <DevicePreview enableTilt={false}>
                 {editingLevel === 'home' ? (
                   <HomeSlydeScreen data={previewData} onCategoryTap={() => {}} />
+                ) : editingLevel === 'list' && listViewFrame?.listItems ? (
+                  <InventoryGridView
+                    categoryName={listViewFrame.title || 'Items'}
+                    items={listViewFrame.listItems.map(item => ({
+                      id: item.id,
+                      title: item.title,
+                      subtitle: item.subtitle || '',
+                      price: item.price || '',
+                      image: item.image || '',
+                      badge: item.badge,
+                      frames: [],
+                    }))}
+                    onItemTap={(itemId) => {
+                      // TODO: Navigate to item slyde
+                      console.log('Item tapped:', itemId)
+                    }}
+                    onBack={() => {
+                      setEditingLevel('child')
+                      setListViewFrame(null)
+                    }}
+                    accentColor={brandProfile.primaryColor}
+                  />
                 ) : currentFrames.length > 0 ? (
                   <SlydeScreen
                     frames={currentFrames}
@@ -804,11 +832,18 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                     faqs={faqs}
                     initialFrameIndex={previewFrameIndex}
                     onFrameChange={setPreviewFrameIndex}
+                    autoAdvance={false}
                     context="category"
                     onBack={() => {
                       setEditingLevel('home')
                       setEditingChildId(null)
                       setSelection({ type: 'category', categoryId: editingChildId || undefined })
+                    }}
+                    onListView={(frame) => {
+                      if (frame.listItems && frame.listItems.length > 0) {
+                        setListViewFrame(frame)
+                        setEditingLevel('list')
+                      }
                     }}
                   />
                 ) : (
@@ -821,7 +856,7 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                 )}
               </DevicePreview>
               <p className="mt-4 text-sm text-gray-500 dark:text-white/50 font-mono">
-                {editingLevel === 'home' ? 'Home Slyde Preview' : `${editingCategory?.name || 'Child Slyde'} Preview`}
+                {editingLevel === 'home' ? 'Home Slyde Preview' : editingLevel === 'list' ? 'List View Preview' : `${editingCategory?.name || 'Child Slyde'} Preview`}
               </p>
             </main>
 
@@ -1385,6 +1420,7 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                                   <option value="info">Open Info Sheet</option>
                                   <option value="faq">Open FAQ Sheet</option>
                                   <option value="reviews">Go to Reviews</option>
+                                  <option value="list">Open List View</option>
                                 </select>
                                 {(selectedFrame.cta.action === '' || selectedFrame.cta.action?.startsWith('http')) && (
                                   <input
@@ -1394,6 +1430,139 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                                     placeholder="https://..."
                                     className="w-full mt-2 px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
                                   />
+                                )}
+                                {/* List Items Section - shown when action is 'list' */}
+                                {selectedFrame.cta.action === 'list' && (
+                                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10">
+                                    <div className="flex items-center justify-between mb-3">
+                                      <label className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                        <List className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                                        List Items ({selectedFrame.listItems?.length || 0})
+                                      </label>
+                                      <button
+                                        onClick={() => {
+                                          const newItem: ListItem = {
+                                            id: `item-${Date.now()}`,
+                                            title: 'New Item',
+                                            subtitle: '',
+                                            price: '',
+                                          }
+                                          updateFrame(selectedFrame.id, {
+                                            listItems: [...(selectedFrame.listItems || []), newItem]
+                                          })
+                                        }}
+                                        className="text-[12px] font-medium text-blue-600 dark:text-cyan-400 hover:text-blue-700 dark:hover:text-cyan-300 flex items-center gap-1"
+                                      >
+                                        <Plus className="w-3.5 h-3.5" />
+                                        Add Item
+                                      </button>
+                                    </div>
+                                    {(!selectedFrame.listItems || selectedFrame.listItems.length === 0) ? (
+                                      <div className="text-center py-6 text-gray-400 dark:text-white/30 text-[12px]">
+                                        No items yet. Add items to create a browseable list.
+                                      </div>
+                                    ) : (
+                                      <div className="space-y-2">
+                                        {selectedFrame.listItems.map((item, index) => (
+                                          <div
+                                            key={item.id}
+                                            className="flex items-center gap-2 p-2.5 rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5"
+                                          >
+                                            <GripVertical className="w-4 h-4 text-gray-300 dark:text-white/20 cursor-grab flex-shrink-0" />
+                                            {/* Thumbnail */}
+                                            <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-white/10 flex-shrink-0 overflow-hidden">
+                                              {item.image ? (
+                                                <img src={item.image} alt="" className="w-full h-full object-cover" />
+                                              ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-white/30">
+                                                  <ImageIcon className="w-4 h-4" />
+                                                </div>
+                                              )}
+                                            </div>
+                                            {/* Title & Price */}
+                                            <div className="flex-1 min-w-0">
+                                              <input
+                                                type="text"
+                                                value={item.title}
+                                                onChange={(e) => {
+                                                  const updatedItems = [...(selectedFrame.listItems || [])]
+                                                  updatedItems[index] = { ...item, title: e.target.value }
+                                                  updateFrame(selectedFrame.id, { listItems: updatedItems })
+                                                }}
+                                                className="w-full text-[13px] font-medium text-gray-900 dark:text-white bg-transparent border-none p-0 focus:outline-none focus:ring-0"
+                                                placeholder="Item title"
+                                              />
+                                              <input
+                                                type="text"
+                                                value={item.price || ''}
+                                                onChange={(e) => {
+                                                  const updatedItems = [...(selectedFrame.listItems || [])]
+                                                  updatedItems[index] = { ...item, price: e.target.value }
+                                                  updateFrame(selectedFrame.id, { listItems: updatedItems })
+                                                }}
+                                                className="w-full text-[11px] text-blue-600 dark:text-cyan-400 bg-transparent border-none p-0 focus:outline-none focus:ring-0"
+                                                placeholder="£0.00"
+                                              />
+                                            </div>
+                                            {/* Delete */}
+                                            <button
+                                              onClick={() => {
+                                                const updatedItems = (selectedFrame.listItems || []).filter((_, i) => i !== index)
+                                                updateFrame(selectedFrame.id, { listItems: updatedItems })
+                                              }}
+                                              className="p-1 text-gray-400 dark:text-white/30 hover:text-red-500 dark:hover:text-red-400 transition-colors flex-shrink-0"
+                                            >
+                                              <Trash2 className="w-3.5 h-3.5" />
+                                            </button>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+                                    {/* Detailed edit for first item (or make this expandable per-item later) */}
+                                    {selectedFrame.listItems && selectedFrame.listItems.length > 0 && (
+                                      <div className="mt-3 space-y-2">
+                                        <p className="text-[11px] font-medium text-gray-500 dark:text-white/50">
+                                          Edit First Item Details:
+                                        </p>
+                                        <input
+                                          type="text"
+                                          value={selectedFrame.listItems[0].subtitle || ''}
+                                          onChange={(e) => {
+                                            const updatedItems = [...selectedFrame.listItems!]
+                                            updatedItems[0] = { ...updatedItems[0], subtitle: e.target.value }
+                                            updateFrame(selectedFrame.id, { listItems: updatedItems })
+                                          }}
+                                          placeholder="Subtitle (e.g., Medium hold • High shine)"
+                                          className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 text-[12px]"
+                                        />
+                                        <input
+                                          type="url"
+                                          value={selectedFrame.listItems[0].image || ''}
+                                          onChange={(e) => {
+                                            const updatedItems = [...selectedFrame.listItems!]
+                                            updatedItems[0] = { ...updatedItems[0], image: e.target.value }
+                                            updateFrame(selectedFrame.id, { listItems: updatedItems })
+                                          }}
+                                          placeholder="Image URL (https://...)"
+                                          className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 text-[12px]"
+                                        />
+                                        <input
+                                          type="text"
+                                          value={selectedFrame.listItems[0].badge || ''}
+                                          onChange={(e) => {
+                                            const updatedItems = [...selectedFrame.listItems!]
+                                            updatedItems[0] = { ...updatedItems[0], badge: e.target.value }
+                                            updateFrame(selectedFrame.id, { listItems: updatedItems })
+                                          }}
+                                          placeholder="Badge (e.g., Best Seller, New)"
+                                          className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 text-[12px]"
+                                        />
+                                        <p className="text-[10px] text-gray-400 dark:text-white/30 italic mt-2">
+                                          Item Slydes (deep-dive frames per item) coming soon.
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
                                 )}
                               </div>
                             </>

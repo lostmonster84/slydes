@@ -16,6 +16,7 @@ import { createClient } from '@/lib/supabase/client'
 import { FeatureSuggestionModal } from './FeatureSuggestionModal'
 import { useOrganization } from '@/hooks/useOrganization'
 import { useSlydes } from '@/hooks/useSlydes'
+import { DevPanel } from '@/components/dev/DevPanel'
 
 interface HQSidebarConnectedProps {
   activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'analytics' | 'shop' | 'inbox' | 'brand' | 'settings'
@@ -31,28 +32,6 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
   const [featureModalOpen, setFeatureModalOpen] = useState(false)
-
-  // Plan state (demo - will be from Stripe later)
-  const [plan, setPlan] = useState<'free' | 'creator'>('free')
-  const isCreator = plan === 'creator'
-
-  // Persist plan preference
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem('slydes_demo_plan')
-      if (stored === 'free' || stored === 'creator') setPlan(stored)
-    } catch {
-      // ignore
-    }
-  }, [])
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem('slydes_demo_plan', plan)
-    } catch {
-      // ignore
-    }
-  }, [plan])
 
   const handleSignOut = async () => {
     const supabase = createClient()
@@ -287,7 +266,7 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className={`hidden md:flex ${collapsed ? 'w-[72px]' : 'w-72'} bg-white border-r border-gray-200 flex-col dark:bg-[#2c2c2e] dark:border-white/10 transition-all duration-300 shrink-0 ${!collapsedHydrated ? 'opacity-0' : 'opacity-100'}`}>
+      <aside className={`hidden md:flex ${collapsed ? 'w-[72px]' : 'w-72'} bg-white border-r border-gray-200 flex-col dark:bg-[#2c2c2e] dark:border-white/10 transition-all duration-300 shrink-0`}>
         {sidebarContent(false)}
 
         {/* Navigation */}
@@ -376,6 +355,9 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
             {!collapsed && <span className="font-semibold text-sm">Suggest a feature</span>}
           </button>
         </div>
+
+        {/* Dev Control Panel - localhost only */}
+        {!collapsed && <DevPanel />}
 
         {/* Collapse Toggle */}
         <div className="p-3 border-t border-gray-200 dark:border-white/10">

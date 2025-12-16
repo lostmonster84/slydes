@@ -98,12 +98,8 @@ export function UpgradeModal({ isOpen, onClose, targetTier, feature }: UpgradeMo
 
                 {/* Feature unlock badge */}
                 <div className="flex items-center gap-2 mb-4">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                    targetTier === 'pro' ? 'bg-purple-500/20' : 'bg-leader-blue/20'
-                  }`}>
-                    <FeatureIcon className={`w-5 h-5 ${
-                      targetTier === 'pro' ? 'text-purple-400' : 'text-leader-blue'
-                    }`} />
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-500/20">
+                    <FeatureIcon className="w-5 h-5 text-cyan-400" />
                   </div>
                   <div>
                     <p className="text-white/50 text-xs uppercase tracking-wider">Unlock</p>
@@ -164,12 +160,8 @@ export function UpgradeModal({ isOpen, onClose, targetTier, feature }: UpgradeMo
                 <div className="bg-white/5 rounded-xl p-4 space-y-3">
                   {features.map((feat, idx) => (
                     <div key={idx} className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                        targetTier === 'pro' ? 'bg-purple-500/20' : 'bg-leader-blue/20'
-                      }`}>
-                        <Check className={`w-3 h-3 ${
-                          targetTier === 'pro' ? 'text-purple-400' : 'text-leader-blue'
-                        }`} />
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center bg-blue-500/20">
+                        <Check className="w-3 h-3 text-cyan-400" />
                       </div>
                       <span className="text-white/80 text-sm">{feat}</span>
                     </div>
@@ -182,11 +174,7 @@ export function UpgradeModal({ isOpen, onClose, targetTier, feature }: UpgradeMo
                 <button
                   onClick={handleUpgrade}
                   disabled={isLoading}
-                  className={`w-full py-3.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all ${
-                    targetTier === 'pro'
-                      ? 'bg-purple-600 hover:bg-purple-500'
-                      : 'bg-leader-blue hover:bg-leader-blue/90'
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  className="w-full py-3.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all bg-gradient-to-r from-blue-600 to-cyan-500 hover:opacity-90 shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useMemo, useState, Suspense } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import { ChevronDown, TrendingUp, TrendingDown, Clock, MousePointer, Share2, MapPin, Info, Lock, Sparkles, BarChart3, ArrowRight } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import { ChevronDown, TrendingUp, TrendingDown, Clock, MousePointer, Share2, MapPin, Info, Lock, BarChart3, ArrowRight } from 'lucide-react'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import Link from 'next/link'
 import { useDemoBusiness } from '@/lib/demoBusiness'
@@ -80,35 +80,6 @@ function InfoButton({ label, description }: { label: string; description: string
         </div>
       )}
     </div>
-  )
-}
-
-/**
- * Dev toggle for switching between free/creator
- */
-function PlanToggle({ plan, setPlan }: { plan: 'free' | 'creator'; setPlan: (p: 'free' | 'creator') => void }) {
-  return (
-    <button
-      onClick={() => setPlan(plan === 'free' ? 'creator' : 'free')}
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full transition-colors ${
-        plan === 'creator'
-          ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-cyan-500/30 text-cyan-400'
-          : 'bg-gray-100 border border-gray-200 text-gray-600 dark:bg-white/10 dark:border-white/20 dark:text-white/60'
-      }`}
-      title="Toggle plan (dev only)"
-    >
-      {plan === 'creator' ? (
-        <>
-          <Sparkles className="w-3.5 h-3.5" />
-          Creator
-        </>
-      ) : (
-        <>
-          <Lock className="w-3.5 h-3.5" />
-          Free
-        </>
-      )}
-    </button>
   )
 }
 
@@ -285,10 +256,8 @@ function AnalyticsTeaser() {
 }
 
 function HQAnalyticsContent() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const { canAccessAnalytics, isLoading: planLoading } = useEffectivePlan()
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [view, setView] = useState<'overview' | 'slyde'>('overview')
   const [range, setRange] = useState<'7d' | '30d' | '90d'>('30d')
   const [compare, setCompare] = useState(true)
@@ -299,29 +268,6 @@ function HQAnalyticsContent() {
   // Real analytics (fetched) — merges into mocked shape so UI stays stable.
   const [realGlobal, setRealGlobal] = useState<null | Partial<any>>(null)
   const [realSlyde, setRealSlyde] = useState<null | Partial<SlydeData>>(null)
-
-  // Dev toggle for plan switching
-  const [plan, setPlan] = useState<'free' | 'creator'>('creator')
-  const [hydrated, setHydrated] = useState(false)
-
-  // Hydrate plan from localStorage
-  useEffect(() => {
-    const stored = window.localStorage.getItem('slydes_demo_plan')
-    if (stored === 'free' || stored === 'creator') {
-      setPlan(stored)
-    }
-    setHydrated(true)
-  }, [])
-
-  // Persist plan changes
-  useEffect(() => {
-    if (hydrated) {
-      window.localStorage.setItem('slydes_demo_plan', plan)
-    }
-  }, [plan, hydrated])
-
-  // Use dev toggle plan instead of hook for testing
-  const isCreator = plan === 'creator'
   const [analyticsConfigured, setAnalyticsConfigured] = useState(true)
 
   // Deep-link support: ?slyde=camping
@@ -417,7 +363,7 @@ function HQAnalyticsContent() {
 
   // Fetch real analytics when Creator (demo uses business id as org slug)
   useEffect(() => {
-    if (!isCreator) return
+    if (!canAccessAnalytics) return
     if (!demoBusiness?.id) return
     const org = demoBusiness.id
     const run = async () => {
@@ -436,10 +382,10 @@ function HQAnalyticsContent() {
       }
     }
     run()
-  }, [isCreator, demoBusiness.id, range])
+  }, [canAccessAnalytics, demoBusiness.id, range])
 
   useEffect(() => {
-    if (!isCreator) return
+    if (!canAccessAnalytics) return
     if (!demoBusiness?.id) return
     const org = demoBusiness.id
     const run = async () => {
@@ -460,7 +406,7 @@ function HQAnalyticsContent() {
       }
     }
     run()
-  }, [isCreator, demoBusiness.id, selectedSlyde, range])
+  }, [canAccessAnalytics, demoBusiness.id, selectedSlyde, range])
 
   const slydesData: Record<SlydeId, SlydeData> = useMemo(() => {
     const merged: Record<SlydeId, SlydeData> = { ...slydesDataMock }
@@ -599,8 +545,8 @@ function HQAnalyticsContent() {
     }
   }, [globalStatsMock, realGlobal])
 
-  // Show teaser for free users (after hydration) - must be after all hooks
-  if (hydrated && !isCreator) {
+  // Show teaser for users without analytics access
+  if (!planLoading && !canAccessAnalytics) {
     return <AnalyticsTeaser />
   }
 
@@ -649,7 +595,7 @@ function HQAnalyticsContent() {
                   </div>
 
                   {/* Analytics not configured (dev) */}
-                  {isCreator && !analyticsConfigured && (
+                  {canAccessAnalytics && !analyticsConfigured && (
                     <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-sm dark:bg-[#2c2c2e] dark:border-white/10">
                       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
                       <div className="p-6">
@@ -666,7 +612,7 @@ function HQAnalyticsContent() {
                   )}
 
                   {/* Empty state (Creator): no Slydes yet */}
-                  {isCreator && !demoBusiness.hasSlydes && (
+                  {canAccessAnalytics && !demoBusiness.hasSlydes && (
                     <div className="max-w-3xl">
                       <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-sm dark:bg-[#2c2c2e] dark:border-white/10">
                         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
@@ -703,7 +649,7 @@ function HQAnalyticsContent() {
                   )}
 
                   {/* Empty state (Creator): no analytics data yet */}
-                  {isCreator && demoBusiness.hasSlydes && !demoBusiness.hasAnalyticsData && (
+                  {canAccessAnalytics && demoBusiness.hasSlydes && !demoBusiness.hasAnalyticsData && (
                     <div className="max-w-3xl">
                       <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-sm dark:bg-[#2c2c2e] dark:border-white/10">
                         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />

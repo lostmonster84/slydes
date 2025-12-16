@@ -55,6 +55,8 @@ interface SlydeScreenProps {
   context?: 'standalone' | 'category'
   /** Callback when back button is pressed (only used in category context) */
   onBack?: () => void
+  /** Callback when CTA with action='list' is clicked - passes the frame with listItems */
+  onListView?: (frame: FrameData) => void
 }
 
 /**
@@ -90,7 +92,8 @@ export function SlydeScreen({
   analyticsSlydePublicId,
   analyticsSource,
   context = 'standalone',
-  onBack
+  onBack,
+  onListView
 }: SlydeScreenProps) {
   const [currentFrame, setCurrentFrame] = useState(initialFrameIndex)
   const syncingFromPropRef = useRef(false)
@@ -638,6 +641,16 @@ export function SlydeScreen({
                     const action = currentFrameData.cta?.action
                     if (action?.startsWith('http')) {
                       window.open(action, '_blank', 'noopener,noreferrer')
+                    } else if (action === 'list' && onListView) {
+                      onListView(currentFrameData)
+                    } else if (action === 'faq') {
+                      setShowFAQ(true)
+                    } else if (action === 'reviews') {
+                      // Navigate to proof frame
+                      const reviewsIndex = frames.findIndex(f => f.templateType === 'proof')
+                      if (reviewsIndex !== -1) {
+                        setCurrentFrame(reviewsIndex)
+                      }
                     } else {
                       setShowInfo(true)
                     }

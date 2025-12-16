@@ -27,6 +27,23 @@ export const stripe = {
   get paymentIntents() {
     return getStripe().paymentIntents
   },
+  // Stripe Connect
+  get accounts() {
+    return getStripe().accounts
+  },
+  get accountLinks() {
+    return getStripe().accountLinks
+  },
+  // Subscriptions & Billing Portal
+  get subscriptions() {
+    return getStripe().subscriptions
+  },
+  get billingPortal() {
+    return getStripe().billingPortal
+  },
+  get customers() {
+    return getStripe().customers
+  },
 } as unknown as Stripe
 
 /**

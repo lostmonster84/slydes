@@ -125,7 +125,7 @@ function ShopTeaser({ onUpgrade }: { onUpgrade: () => void }) {
                   {/* CTA */}
                   <button
                     onClick={onUpgrade}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-500 transition-colors shadow-lg shadow-purple-500/20"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/20"
                   >
                     <Lock className="w-4 h-4" />
                     Upgrade to Pro
@@ -231,16 +231,16 @@ function ShopDashboard() {
                   value={cart.itemCount > 0 ? cart.itemCount.toString() : '—'}
                   sublabel={cart.itemCount > 0 ? `Total: ${cart.totalFormatted}` : 'Demo cart empty'}
                   icon={ShoppingCart}
-                  iconColor="text-purple-500"
-                  iconBg="bg-purple-500/10"
+                  iconColor="text-cyan-500"
+                  iconBg="bg-cyan-500/10"
                 />
                 <StatCard
                   label="Pending"
                   value={stats.pendingFulfillment.toString()}
                   sublabel="Awaiting fulfillment"
                   icon={Clock}
-                  iconColor="text-amber-500"
-                  iconBg="bg-amber-500/10"
+                  iconColor="text-blue-500"
+                  iconBg="bg-blue-500/10"
                   href="/shop/orders"
                 />
               </div>
@@ -279,11 +279,11 @@ function ShopDashboard() {
                             >
                               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                                 order.status === 'paid'
-                                  ? 'bg-amber-100 dark:bg-amber-500/15'
+                                  ? 'bg-blue-100 dark:bg-blue-500/15'
                                   : 'bg-emerald-100 dark:bg-emerald-500/15'
                               }`}>
                                 {order.status === 'paid' ? (
-                                  <Clock className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                                  <Clock className="w-5 h-5 text-blue-600 dark:text-cyan-400" />
                                 ) : (
                                   <Receipt className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                                 )}

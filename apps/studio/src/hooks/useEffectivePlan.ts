@@ -4,30 +4,37 @@ import { useProfile } from './useProfile'
 import { hasUnlockCode } from '@/lib/whitelist'
 import { hasAnalytics, hasInventory, hasCommerce, type PlanTier } from '@/lib/plans'
 import { useEffect, useState } from 'react'
+import { getDevPlanOverride } from '@/components/dev/DevPanel'
 
 /**
  * Single source of truth for plan detection
  *
  * Priority:
- * 1. Active subscription status
+ * 1. Dev override (localhost only)
  * 2. Promo/VIP code (localStorage)
  * 3. Database plan field
+ * 4. Default to free
  *
  * Use this hook everywhere instead of scattered plan checks.
  */
 export function useEffectivePlan() {
   const { profile, loading: profileLoading } = useProfile()
   const [isVIP, setIsVIP] = useState(false)
+  const [devOverride, setDevOverride] = useState<PlanTier | null>(null)
   const [mounted, setMounted] = useState(false)
 
-  // Check VIP status after hydration
+  // Check VIP status and dev override after hydration
   useEffect(() => {
     setMounted(true)
     setIsVIP(hasUnlockCode())
+    setDevOverride(getDevPlanOverride())
   }, [])
 
   // Determine effective plan
   const effectivePlan: PlanTier = (() => {
+    // Dev override takes top priority (localhost only)
+    if (devOverride) return devOverride
+
     // VIP code gives Pro access
     if (isVIP) return 'pro'
 
