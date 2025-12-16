@@ -514,7 +514,7 @@ Commerce features require:
 2. Stripe Connect account linked
 3. `chargesEnabled: true` on Stripe account
 
-**Platform fee**: 5% on all transactions
+**Platform fee**: 0% — sellers keep 100% of their sales
 
 ### Implementation Notes
 

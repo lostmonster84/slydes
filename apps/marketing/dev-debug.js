@@ -175,18 +175,87 @@ function checkTurboProcesses() {
   }
 }
 
+// Auto-cleanup function
+function autoCleanup() {
+  try {
+    // Kill processes on port 3000
+    const portPids = execSync('lsof -ti:3000 2>/dev/null || echo ""', { encoding: 'utf-8' }).trim();
+    if (portPids) {
+      const pids = portPids.split('\n').filter(Boolean);
+      console.log(`🧹 Auto-cleaning: Killing ${pids.length} stale process(es) on port 3000...`);
+      pids.forEach(pid => {
+        try {
+          execSync(`kill -9 ${pid} 2>/dev/null`, { encoding: 'utf-8' });
+        } catch (e) {
+          // Ignore errors
+        }
+      });
+    }
+    
+    // Remove stale lock files
+    const lockPath = path.join(__dirname, '.dev-lock');
+    if (fs.existsSync(lockPath)) {
+      try {
+        const existingLock = fs.readFileSync(lockPath, 'utf8');
+        const existingPid = parseInt(existingLock.split('\n')[0]);
+        // Check if process is still running
+        try {
+          process.kill(existingPid, 0);
+          // Process exists, don't remove
+        } catch (e) {
+          // Process doesn't exist, remove stale lock
+          fs.unlinkSync(lockPath);
+          console.log('🧹 Auto-cleaning: Removed stale lock file');
+        }
+      } catch (e) {
+        // Can't read, try to remove anyway
+        try {
+          fs.unlinkSync(lockPath);
+          console.log('🧹 Auto-cleaning: Removed corrupted lock file');
+        } catch (e2) {
+          // Ignore
+        }
+      }
+    }
+    
+    // Remove Next.js lock file
+    const nextLockPath = path.join(__dirname, '.next', 'dev', 'lock');
+    if (fs.existsSync(nextLockPath)) {
+      try {
+        fs.unlinkSync(nextLockPath);
+        console.log('🧹 Auto-cleaning: Removed Next.js lock file');
+      } catch (e) {
+        // Ignore
+      }
+    }
+  } catch (error) {
+    // Silently fail cleanup
+  }
+}
+
 // Main execution
 async function main() {
   // #region agent log
   log('dev-debug.js:main', 'Starting diagnostic checks', { cwd: process.cwd(), pid: process.pid }, 'A,B,C,D,E');
   // #endregion
   
-  // Acquire process lock first to prevent race conditions
-  if (!acquireProcessLock()) {
+  // Try to acquire process lock
+  let lockAcquired = acquireProcessLock();
+  
+  // If lock acquisition failed, try auto-cleanup and retry once
+  if (!lockAcquired) {
+    console.log('⚠️  Lock detected, attempting auto-cleanup...');
+    autoCleanup();
+    // Wait a moment for cleanup
+    await new Promise(resolve => setTimeout(resolve, 500));
+    lockAcquired = acquireProcessLock();
+  }
+  
+  if (!lockAcquired) {
     console.error('⚠️  Another dev server instance is already starting or running.');
-    console.error('   Please wait a moment and try again, or kill any existing processes.');
+    console.error('   Run `pnpm fix` to clean up, or kill any existing processes manually.');
     // #region agent log
-    log('dev-debug.js:main', 'Failed to acquire process lock, exiting', { pid: process.pid }, 'C');
+    log('dev-debug.js:main', 'Failed to acquire process lock after cleanup, exiting', { pid: process.pid }, 'C');
     // #endregion
     process.exit(1);
   }
@@ -199,17 +268,27 @@ async function main() {
   log('dev-debug.js:main', 'All checks completed', { portCheck, lockCheck, turboCheck }, 'A,B,C,D,E');
   // #endregion
   
-  // If port is in use, log details but don't start
+  // If port is in use, try auto-cleanup first
   if (portCheck.inUse) {
-    console.error('⚠️  Port 3000 is already in use by:');
-    portCheck.processDetails.forEach(({ pid, details }) => {
-      console.error(`   PID ${pid}: ${details}`);
-    });
-    console.error('\n💡 Suggestion: Kill the process(es) above or use a different port.');
-    // #region agent log
-    log('dev-debug.js:main', 'Port 3000 in use, exiting', { pids: portCheck.pids }, 'A,B,D');
-    // #endregion
-    process.exit(1);
+    console.log('⚠️  Port 3000 is in use, attempting auto-cleanup...');
+    autoCleanup();
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Re-check port
+    const recheck = checkPort3000();
+    if (recheck.inUse) {
+      console.error('⚠️  Port 3000 is still in use by:');
+      recheck.processDetails.forEach(({ pid, details }) => {
+        console.error(`   PID ${pid}: ${details}`);
+      });
+      console.error('\n💡 Run `pnpm fix` to clean up, or kill the process(es) manually.');
+      // #region agent log
+      log('dev-debug.js:main', 'Port 3000 still in use after cleanup, exiting', { pids: recheck.pids }, 'A,B,D');
+      // #endregion
+      process.exit(1);
+    } else {
+      console.log('✅ Port 3000 is now free, continuing...');
+    }
   }
   
   // If lock file exists, warn but continue (Next.js will handle it)
@@ -257,4 +336,5 @@ main().catch((error) => {
   console.error('Fatal error:', error);
   process.exit(1);
 });
+
 

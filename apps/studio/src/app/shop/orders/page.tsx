@@ -108,7 +108,7 @@ export default function ShopOrdersPage() {
                 <StatCard
                   label="Revenue"
                   value={formatCurrency(stats.totalRevenue)}
-                  sublabel="After platform fee"
+                  sublabel="Total revenue"
                   icon={DollarSign}
                   iconColor="text-emerald-500"
                   iconBg="bg-emerald-500/10"
@@ -270,9 +270,6 @@ function OrderRow({ order, onClick }: { order: Order; onClick: () => void }) {
         <p className="font-semibold text-gray-900 dark:text-white">
           {formatCurrency(order.subtotal_cents, order.currency)}
         </p>
-        <p className="text-xs text-gray-400 dark:text-white/40">
-          You receive: {formatCurrency(order.seller_payout_cents, order.currency)}
-        </p>
       </div>
 
       <ChevronRight className="w-5 h-5 text-gray-400 dark:text-white/40 shrink-0" />
@@ -401,24 +398,15 @@ function OrderDetailPanel({ order, onClose }: { order: Order; onClose: () => voi
 
           {/* Totals */}
           <div className="border-t border-gray-200 dark:border-white/10 pt-4 space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-white/50">Subtotal</span>
-              <span className="text-gray-900 dark:text-white">
+            <div className="flex justify-between text-base font-semibold">
+              <span className="text-gray-900 dark:text-white">Total</span>
+              <span className="text-emerald-600 dark:text-emerald-400">
                 {formatCurrency(order.subtotal_cents, order.currency)}
               </span>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-white/50">Platform fee (5%)</span>
-              <span className="text-gray-500 dark:text-white/50">
-                -{formatCurrency(order.platform_fee_cents, order.currency)}
-              </span>
-            </div>
-            <div className="flex justify-between text-base font-semibold border-t border-gray-200 dark:border-white/10 pt-2">
-              <span className="text-gray-900 dark:text-white">You receive</span>
-              <span className="text-emerald-600 dark:text-emerald-400">
-                {formatCurrency(order.seller_payout_cents, order.currency)}
-              </span>
-            </div>
+            <p className="text-xs text-gray-400 dark:text-white/40">
+              You keep 100% — Slydes takes no commission
+            </p>
           </div>
         </div>
 

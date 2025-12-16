@@ -84,5 +84,5 @@ create trigger on_order_updated
 -- Comments
 comment on table public.orders is 'Orders from Stripe Checkout - created by webhook';
 comment on column public.orders.line_items is 'JSONB array of items: [{id, title, subtitle, price, price_cents, quantity}]';
-comment on column public.orders.platform_fee_cents is 'Slydes 5% platform fee in cents';
+comment on column public.orders.platform_fee_cents is 'Platform fee in cents (currently 0% - Slydes takes no commission)';
 comment on column public.orders.seller_payout_cents is 'Amount seller receives after platform fee';

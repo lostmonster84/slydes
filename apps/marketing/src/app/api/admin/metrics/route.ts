@@ -145,8 +145,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Calculate revenue metrics
-    // MRR = Pro users * $19 + Creator users * $9 (estimate)
-    const mrr = proUsers * 19 + creatorUsers * 9
+    // MRR = Pro users * £50 + Creator users * £25
+    const mrr = proUsers * 50 + creatorUsers * 25
 
     // Platform fees from paid orders
     let platformFees = 0

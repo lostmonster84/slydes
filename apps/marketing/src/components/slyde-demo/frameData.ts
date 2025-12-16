@@ -16,7 +16,32 @@
  * @see STRUCTURE.md for canonical hierarchy
  */
 
-export type CTAIconType = 'book' | 'call' | 'view' | 'arrow' | 'menu'
+export type CTAIconType = 'book' | 'call' | 'view' | 'arrow' | 'menu' | 'list'
+
+/**
+ * ListItem - An item in a List View
+ * Used when CTA action is 'list' to display a browseable list of items
+ */
+export interface ListItem {
+  id: string
+  title: string
+  subtitle?: string
+  image?: string           // URL to thumbnail image
+  price?: string           // Display price (e.g., "£18.50", "From £25")
+  badge?: string           // Optional badge ("Best Seller", "New")
+  frames?: FrameData[]     // Item Slyde frames for deep-dive
+}
+
+/**
+ * ListData - An independent list that can be connected to via CTA
+ * Lists are created separately and then referenced by frames via CTA action 'list'
+ * Examples: "Our Cars", "Hair Products", "Services", "Menu Items"
+ */
+export interface ListData {
+  id: string
+  name: string             // Display name (e.g., "Our Vehicles", "Hair Products")
+  items: ListItem[]        // The items in this list
+}
 
 export interface FrameInfoContent {
   headline: string

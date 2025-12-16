@@ -865,6 +865,46 @@ iOS navigation bar with large title:
 - Stepper buttons: `w-7 h-6` minimum
 - Circle buttons: `w-8 h-8` (commerce) or `w-11 h-11` (cart FAB)
 
+### Dashed Affordance Pattern
+
+We use a consistent "dashed affordance" pattern for empty state and add-new actions throughout the Studio editor. This pattern provides clear visual affordance for where users can add new items.
+
+**Key Rule**: The dashed affordance button is **ALWAYS visible** at the bottom of lists, not just when the list is empty. This provides a consistent, discoverable add action.
+
+**Visual Pattern**:
+```tsx
+<button
+  onClick={handleAdd}
+  className="w-full flex items-center justify-center gap-2 px-3 py-4 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
+>
+  <Plus className="w-4 h-4" />
+  <span className="text-[12px] font-medium">Add [thing]</span>
+</button>
+```
+
+**Where It's Used**:
+| Section | Label | Location |
+|---------|-------|----------|
+| Categories | "Add category" | Home level Navigator |
+| Frames | "Add frame" | Child level Navigator |
+| Lists | "Add list" | Lists admin page |
+| Items | "Add item" | Items panel |
+| Item Frames | "Add frame" | Item editor |
+
+**Design Specs**:
+- Border: `2px dashed` (not solid)
+- Border radius: `rounded-xl` (12px)
+- Colors: Gray in default state, accent on hover
+- Height: `py-4` for comfortable touch target
+- Icon: Plus icon (Lucide `Plus`)
+- Text: `12px` semibold
+
+**Why Always Visible?**
+- Provides consistent, predictable add location
+- Users don't have to wonder "how do I add more?"
+- Works for both empty and populated lists
+- Better UX than conditional visibility
+
 ---
 
 ## Commerce Feature Gating

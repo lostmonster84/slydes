@@ -1,4 +1,5 @@
 import { StatusBadge, StatusText } from './StatusBadge'
+import { InfoIcon } from './InfoTooltip'
 
 type Status = 'healthy' | 'warning' | 'error'
 
@@ -9,6 +10,7 @@ interface IntegrationCardProps {
   icon: React.ReactNode
   lastChecked?: string
   critical?: boolean
+  tooltip?: string
 }
 
 export function IntegrationCard({
@@ -18,17 +20,18 @@ export function IntegrationCard({
   icon,
   lastChecked,
   critical = false,
+  tooltip,
 }: IntegrationCardProps) {
   return (
     <div
-      className={`bg-white rounded-xl border p-5 ${
+      className={`bg-[#2c2c2e] rounded-xl border p-5 ${
         status === 'error' && critical
-          ? 'border-red-200 bg-red-50/50'
+          ? 'border-red-500/30 bg-red-500/10'
           : status === 'error'
-          ? 'border-red-200'
+          ? 'border-red-500/30'
           : status === 'warning'
-          ? 'border-amber-200'
-          : 'border-gray-200'
+          ? 'border-amber-500/30'
+          : 'border-white/10'
       }`}
     >
       <div className="flex items-start justify-between mb-3">
@@ -36,18 +39,21 @@ export function IntegrationCard({
           <div
             className={`w-10 h-10 rounded-lg flex items-center justify-center ${
               status === 'healthy'
-                ? 'bg-gray-100 text-gray-600'
+                ? 'bg-[#3a3a3c] text-[#98989d]'
                 : status === 'warning'
-                ? 'bg-amber-100 text-amber-600'
-                : 'bg-red-100 text-red-600'
+                ? 'bg-amber-500/20 text-amber-400'
+                : 'bg-red-500/20 text-red-400'
             }`}
           >
             {icon}
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900">{name}</h3>
+            <div className="flex items-center gap-1">
+              <h3 className="font-semibold text-white">{name}</h3>
+              {tooltip && <InfoIcon tooltip={tooltip} light />}
+            </div>
             {critical && (
-              <span className="text-xs text-gray-400 uppercase tracking-wide">Critical</span>
+              <span className="text-xs text-[#636366] uppercase tracking-wide">Critical</span>
             )}
           </div>
         </div>
@@ -55,12 +61,12 @@ export function IntegrationCard({
       </div>
 
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-600 truncate flex-1">{message}</p>
+        <p className="text-sm text-[#98989d] truncate flex-1">{message}</p>
         <StatusText status={status} />
       </div>
 
       {lastChecked && (
-        <p className="text-xs text-gray-400 mt-2">
+        <p className="text-xs text-[#636366] mt-2">
           Last checked: {new Date(lastChecked).toLocaleTimeString()}
         </p>
       )}

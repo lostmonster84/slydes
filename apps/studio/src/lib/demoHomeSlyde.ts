@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { FrameData } from '@/components/slyde-demo/frameData'
+import type { FrameData, ListData } from '@/components/slyde-demo/frameData'
 
 export type DemoHomeSlydeCategory = {
   id: string
@@ -38,6 +38,8 @@ export type DemoHomeSlyde = {
   showReviews?: boolean
   // Child Slyde frames keyed by category ID
   childFrames?: Record<string, FrameData[]>
+  // Lists - independent entities that can be connected via CTA action 'list'
+  lists?: ListData[]
 }
 
 export const DEMO_HOME_SLYDE_STORAGE_KEY = 'slydes_demo_home_slyde'
@@ -56,6 +58,8 @@ export const DEFAULT_DEMO_HOME_SLYDE: DemoHomeSlyde = {
   showReviews: true,
   // Empty child frames by default - editor populates these
   childFrames: {},
+  // Empty lists by default - user creates these
+  lists: [],
 }
 
 function safeParse(raw: string | null): Partial<DemoHomeSlyde> | null {
@@ -105,6 +109,8 @@ export function readDemoHomeSlyde(): DemoHomeSlyde {
     childFrames: parsed.childFrames && typeof parsed.childFrames === 'object'
       ? (parsed.childFrames as Record<string, FrameData[]>)
       : {},
+    // Parse lists - stored as ListData[]
+    lists: Array.isArray(parsed.lists) ? parsed.lists : [],
   }
 }
 
@@ -189,5 +195,60 @@ export function deleteChildFrames(categoryId: string) {
   writeDemoHomeSlyde({
     ...current,
     childFrames: rest,
+  })
+}
+
+// ============================================
+// Lists Helpers
+// ============================================
+
+/**
+ * Read all lists from localStorage
+ */
+export function readLists(): ListData[] {
+  const current = readDemoHomeSlyde()
+  return current.lists ?? []
+}
+
+/**
+ * Read a specific list by ID
+ */
+export function readList(listId: string): ListData | null {
+  const lists = readLists()
+  return lists.find(l => l.id === listId) ?? null
+}
+
+/**
+ * Add a new list
+ */
+export function addList(list: ListData) {
+  const current = readDemoHomeSlyde()
+  writeDemoHomeSlyde({
+    ...current,
+    lists: [...(current.lists ?? []), list],
+  })
+}
+
+/**
+ * Update an existing list
+ */
+export function updateList(listId: string, updates: Partial<ListData>) {
+  const current = readDemoHomeSlyde()
+  writeDemoHomeSlyde({
+    ...current,
+    lists: (current.lists ?? []).map(l =>
+      l.id === listId ? { ...l, ...updates } : l
+    ),
+  })
+}
+
+/**
+ * Delete a list by ID
+ */
+export function deleteList(listId: string) {
+  const current = readDemoHomeSlyde()
+  writeDemoHomeSlyde({
+    ...current,
+    lists: (current.lists ?? []).filter(l => l.id !== listId),
   })
 }

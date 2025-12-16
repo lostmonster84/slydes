@@ -117,6 +117,23 @@ What are we tackling? 🚀
 - Done > perfect
 - Iterate quickly
 
+**6. CONSISTENT UX - NEVER DEVIATE** 🚨
+- **THIS IS CRITICAL** - Every new page/component MUST match existing patterns
+- Before building ANY new UI, reference existing pages (Studio, Slydes, Analytics)
+- Use the SAME:
+  - Header styles (gradient pills, layout, spacing)
+  - Selected states (gradient `from-blue-600 to-cyan-500`, shadow)
+  - Row/card styling (rounded-xl, hover states, padding)
+  - Icons (Lucide icons, consistent sizing)
+  - Typography (font sizes, weights, colors)
+  - Dark mode patterns (`dark:bg-[#2c2c2e]`, `dark:text-white/70`)
+  - Empty states (dashed affordance pattern)
+- **NEVER** create a page that looks different from the rest of Studio
+- When in doubt, copy existing patterns exactly
+- Reference: `HomeSlydeEditorClient.tsx` for Navigator/Inspector patterns
+- Reference: `HQSidebarConnected.tsx` for sidebar nav patterns
+- **If it looks different, it's WRONG**
+
 ---
 
 ## 🎯 CURRENT PROJECTS

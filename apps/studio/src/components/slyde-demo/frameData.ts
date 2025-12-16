@@ -32,6 +32,17 @@ export interface ListItem {
   frames?: FrameData[]     // Item Slyde frames for deep-dive
 }
 
+/**
+ * ListData - An independent list that can be connected to via CTA
+ * Lists are created separately and then referenced by frames via CTA action 'list'
+ * Examples: "Our Cars", "Hair Products", "Services", "Menu Items"
+ */
+export interface ListData {
+  id: string
+  name: string             // Display name (e.g., "Our Vehicles", "Hair Products")
+  items: ListItem[]        // The items in this list
+}
+
 export interface FrameInfoContent {
   headline: string
   description?: string
@@ -62,7 +73,8 @@ export interface FrameData {
   cta?: {
     text: string
     icon: CTAIconType
-    action?: string // URL or action identifier (e.g., 'book', 'faq', 'reviews')
+    action?: string // URL or action identifier (e.g., 'book', 'faq', 'reviews', 'list')
+    listId?: string // Reference to a ListData.id when action is 'list'
   }
   background: {
     type: 'video' | 'image'

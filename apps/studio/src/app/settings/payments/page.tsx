@@ -130,7 +130,7 @@ function PaymentsSettingsContent() {
             <div className="flex-1">
               <h2 className="text-white font-semibold text-lg">Stripe Connect</h2>
               <p className="text-white/50 text-sm mt-1">
-                Payments go directly to your Stripe account. Slydes takes a 5% platform fee.
+                Payments go directly to your Stripe account. Slydes takes 0% — you keep 100%.
               </p>
 
               {/* Status indicators */}
@@ -206,7 +206,7 @@ function PaymentsSettingsContent() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-white/30">4.</span>
-              Slydes deducts a 5% platform fee automatically
+              You keep 100% — Slydes takes no commission
             </li>
           </ul>
         </div>

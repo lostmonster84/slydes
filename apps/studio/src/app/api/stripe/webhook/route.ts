@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe, PLATFORM_FEE_PERCENT } from '@/lib/stripe/server'
+import { stripe } from '@/lib/stripe/server'
 import { createClient } from '@supabase/supabase-js'
 import Stripe from 'stripe'
 
@@ -82,10 +82,10 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
     quantity: item.quantity || 1,
   }))
 
-  // Calculate totals
+  // Calculate totals (0% platform fee - seller receives 100%)
   const subtotalCents = session.amount_total || 0
-  const platformFeeCents = Math.round(subtotalCents * (PLATFORM_FEE_PERCENT / 100))
-  const sellerPayoutCents = subtotalCents - platformFeeCents
+  const platformFeeCents = 0 // Slydes takes no commission
+  const sellerPayoutCents = subtotalCents
 
   // Find organization by Stripe account ID
   // For demo checkout (no Connect), we need to handle differently

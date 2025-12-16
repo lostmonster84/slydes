@@ -1,9 +1,9 @@
 'use client'
 
 import * as React from 'react'
-import { ArrowRight, BookOpen, Calendar, Eye, Phone } from 'lucide-react'
+import { ArrowRight, BookOpen, Calendar, Eye, Phone, List } from 'lucide-react'
 
-export type CTAIconType = 'book' | 'call' | 'view' | 'arrow' | 'menu'
+export type CTAIconType = 'book' | 'call' | 'view' | 'arrow' | 'menu' | 'list'
 
 export type CTAButtonProps = {
   text: string
@@ -23,6 +23,7 @@ const ICONS: Record<CTAIconType, React.ComponentType<{ className?: string }>> = 
   view: Eye,
   arrow: ArrowRight,
   menu: BookOpen,
+  list: List,
 }
 
 export const CTAButton: React.FC<CTAButtonProps> = ({ text, icon = 'arrow', accentColor = 'bg-red-600', onClick, className }) => {

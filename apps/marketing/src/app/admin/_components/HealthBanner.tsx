@@ -11,28 +11,31 @@ interface HealthBannerProps {
 
 const STATUS_CONFIG: Record<
   OverallStatus,
-  { label: string; description: string; bg: string; border: string; text: string }
+  { label: string; description: string; bg: string; border: string; text: string; descText: string }
 > = {
   healthy: {
     label: 'All Systems Operational',
     description: 'Everything is running smoothly',
-    bg: 'bg-green-50',
-    border: 'border-green-200',
-    text: 'text-green-800',
+    bg: 'bg-green-500/10',
+    border: 'border-green-500/30',
+    text: 'text-green-400',
+    descText: 'text-green-400/70',
   },
   degraded: {
     label: 'Partial Outage',
     description: 'Some services may be affected',
-    bg: 'bg-amber-50',
-    border: 'border-amber-200',
-    text: 'text-amber-800',
+    bg: 'bg-amber-500/10',
+    border: 'border-amber-500/30',
+    text: 'text-amber-400',
+    descText: 'text-amber-400/70',
   },
   unhealthy: {
     label: 'Major Outage',
     description: 'Critical services are down',
-    bg: 'bg-red-50',
-    border: 'border-red-200',
-    text: 'text-red-800',
+    bg: 'bg-red-500/10',
+    border: 'border-red-500/30',
+    text: 'text-red-400',
+    descText: 'text-red-400/70',
   },
 }
 
@@ -47,13 +50,13 @@ export function HealthBanner({ status, lastUpdated, onRefresh, isRefreshing }: H
           <StatusBadge status={badgeStatus} size="lg" pulse={status !== 'healthy'} />
           <div>
             <h2 className={`font-semibold ${config.text}`}>{config.label}</h2>
-            <p className="text-sm text-gray-600">{config.description}</p>
+            <p className={`text-sm ${config.descText}`}>{config.description}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
           {lastUpdated && (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#636366]">
               Updated {new Date(lastUpdated).toLocaleTimeString()}
             </p>
           )}
@@ -61,7 +64,7 @@ export function HealthBanner({ status, lastUpdated, onRefresh, isRefreshing }: H
             <button
               onClick={onRefresh}
               disabled={isRefreshing}
-              className="px-4 py-2 text-sm font-medium bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors flex items-center gap-2"
+              className="px-4 py-2 text-sm font-medium bg-[#3a3a3c] text-white border border-white/10 rounded-lg hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
             >
               <svg
                 className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}

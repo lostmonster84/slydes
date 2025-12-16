@@ -67,6 +67,12 @@ async function checkStripe(): Promise<IntegrationStatus> {
 
 async function checkSupabase(): Promise<IntegrationStatus> {
   const now = new Date().toISOString()
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!url || !serviceKey) {
+    return { status: 'error', message: 'Missing Supabase config', lastChecked: now }
+  }
 
   try {
     const supabase = createSupabaseAdmin()
@@ -164,6 +170,12 @@ async function checkResend(): Promise<IntegrationStatus> {
 
 async function checkAnalytics(): Promise<IntegrationStatus> {
   const now = new Date().toISOString()
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!url || !serviceKey) {
+    return { status: 'warning', message: 'Supabase not configured', lastChecked: now }
+  }
 
   try {
     const supabase = createSupabaseAdmin()
@@ -176,7 +188,7 @@ async function checkAnalytics(): Promise<IntegrationStatus> {
 
     if (error) {
       // Table might not exist yet
-      if (error.message.includes('does not exist')) {
+      if (error.message.includes('does not exist') || error.code === '42P01') {
         return { status: 'warning', message: 'Table not found', lastChecked: now }
       }
       throw error
@@ -212,30 +224,38 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  // Run all checks in parallel
-  const [stripe, supabase, cloudflareStream, cloudflareImages, resend, analytics] = await Promise.all([
-    checkStripe(),
-    checkSupabase(),
-    checkCloudflareStream(),
-    checkCloudflareImages(),
-    checkResend(),
-    checkAnalytics(),
-  ])
+  try {
+    // Run all checks in parallel
+    const [stripe, supabase, cloudflareStream, cloudflareImages, resend, analytics] = await Promise.all([
+      checkStripe(),
+      checkSupabase(),
+      checkCloudflareStream(),
+      checkCloudflareImages(),
+      checkResend(),
+      checkAnalytics(),
+    ])
 
-  const integrations = {
-    stripe,
-    supabase,
-    cloudflareStream,
-    cloudflareImages,
-    resend,
-    analytics,
+    const integrations = {
+      stripe,
+      supabase,
+      cloudflareStream,
+      cloudflareImages,
+      resend,
+      analytics,
+    }
+
+    const response: HealthResponse = {
+      timestamp: new Date().toISOString(),
+      overall: calculateOverall(integrations),
+      integrations,
+    }
+
+    return NextResponse.json(response)
+  } catch (e) {
+    console.error('Health check error:', e)
+    return NextResponse.json(
+      { error: 'Health check failed', message: e instanceof Error ? e.message : 'Unknown error' },
+      { status: 500 }
+    )
   }
-
-  const response: HealthResponse = {
-    timestamp: new Date().toISOString(),
-    overall: calculateOverall(integrations),
-    integrations,
-  }
-
-  return NextResponse.json(response)
 }

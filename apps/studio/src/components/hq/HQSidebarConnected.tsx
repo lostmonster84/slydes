@@ -11,21 +11,23 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { ChevronLeft, ChevronRight, TrendingUp, Smartphone, BarChart3, Inbox, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag } from 'lucide-react'
+import { ChevronLeft, ChevronRight, TrendingUp, Smartphone, BarChart3, Inbox, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { FeatureSuggestionModal } from './FeatureSuggestionModal'
 import { useOrganization } from '@/hooks/useOrganization'
 import { useSlydes } from '@/hooks/useSlydes'
+import { useLists } from '@/hooks/useLists'
 import { DevPanel } from '@/components/dev/DevPanel'
 
 interface HQSidebarConnectedProps {
-  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'analytics' | 'shop' | 'inbox' | 'brand' | 'settings'
+  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'lists' | 'analytics' | 'shop' | 'inbox' | 'brand' | 'settings'
 }
 
 export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   const router = useRouter()
   const { organization, organizations, isLoading: orgLoading, switchOrganization } = useOrganization()
   const { slydes, isLoading: slydesLoading } = useSlydes()
+  const { lists } = useLists()
 
   const [collapsed, setCollapsed] = useState(false)
   const [collapsedHydrated, setCollapsedHydrated] = useState(false)
@@ -84,20 +86,27 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
       }
 
   const slydeCount = slydes.length
+  const listCount = lists.length
+  const totalItems = lists.reduce((acc, l) => acc + l.items.length, 0)
 
-  const navItems = [
-    { id: 'dashboard', label: 'Momentum', href: '/dashboard', icon: TrendingUp },
+  // Dashboard (standalone at top)
+  const dashboardItem = { id: 'dashboard', label: 'Momentum', href: '/dashboard', icon: TrendingUp }
+
+  // Editor group - these are the content creation tools
+  const editorItems = [
     { id: 'home-slyde', label: 'Studio', href: '/', icon: Smartphone },
     { id: 'slydes', label: 'Slydes', href: '/slydes', icon: Layers, badge: slydeCount > 0 ? slydeCount : undefined },
+    { id: 'lists', label: 'Lists', href: '/lists', icon: List, badge: listCount > 0 ? listCount : undefined },
+  ]
+
+  // Business tools
+  const navItems: Array<{ id: string; label: string; href: string; icon: typeof BarChart3; badge?: number; comingSoon?: boolean }> = [
     { id: 'analytics', label: 'Analytics', href: '/analytics', icon: BarChart3 },
     { id: 'shop', label: 'Shop', href: '/shop', icon: ShoppingBag },
     { id: 'inbox', label: 'Inbox', href: '/inbox', icon: Inbox, comingSoon: true },
   ]
 
-  const bottomNavItems = [
-    { id: 'brand', label: 'Brand', href: '/brand', icon: Palette },
-    { id: 'settings', label: 'Settings', href: '/settings', icon: Settings },
-  ]
+  // Brand and Settings are in the account dropdown menu only
 
   // Shared sidebar content
   const sidebarContent = (isMobile: boolean) => (
@@ -162,6 +171,61 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
 
         {/* Mobile nav */}
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+          {/* Momentum (Dashboard) */}
+          <Link
+            href={dashboardItem.href}
+            onClick={() => setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+              activePage === dashboardItem.id
+                ? 'bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 dark:from-blue-500/15 dark:to-cyan-500/15 dark:text-cyan-300'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-white/70 dark:hover:bg-white/10'
+            }`}
+          >
+            <dashboardItem.icon className="w-5 h-5 shrink-0" />
+            <span className="font-medium truncate">{dashboardItem.label}</span>
+          </Link>
+
+          <div className="my-3 border-t border-gray-200 dark:border-white/10" />
+
+          {/* Editor Group */}
+          <div className="px-3 pt-1 pb-2">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40">Editor</span>
+          </div>
+          {editorItems.map((item) => {
+            const isActive = activePage === item.id
+            const Icon = item.icon
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+                  isActive
+                    ? 'bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 dark:from-blue-500/15 dark:to-cyan-500/15 dark:text-cyan-300'
+                    : 'text-gray-600 hover:bg-gray-100 dark:text-white/70 dark:hover:bg-white/10'
+                }`}
+              >
+                <Icon className="w-5 h-5 shrink-0" />
+                <span className="font-medium truncate">{item.label}</span>
+                {item.badge && (
+                  <span className={`ml-auto px-2 py-0.5 text-xs font-semibold rounded-full ${
+                    isActive
+                      ? 'bg-blue-600 text-white dark:bg-cyan-500'
+                      : 'bg-gray-200 text-gray-600 dark:bg-white/15 dark:text-white/70'
+                  }`}>
+                    {item.badge}
+                  </span>
+                )}
+              </Link>
+            )
+          })}
+
+          <div className="my-3 border-t border-gray-200 dark:border-white/10" />
+
+          {/* Insights Group */}
+          <div className="px-3 pt-1 pb-2">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40">Insights</span>
+          </div>
           {navItems.map((item) => {
             const isActive = activePage === item.id
             const Icon = item.icon
@@ -202,29 +266,6 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
             )
           })}
         </nav>
-
-        {/* Mobile bottom nav */}
-        <div className="p-3 border-t border-gray-200 dark:border-white/10 space-y-1">
-          {bottomNavItems.map((item) => {
-            const isActive = activePage === item.id
-            const Icon = item.icon
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
-                  isActive
-                    ? 'bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 dark:from-blue-500/15 dark:to-cyan-500/15 dark:text-cyan-300'
-                    : 'text-gray-600 hover:bg-gray-100 dark:text-white/70 dark:hover:bg-white/10'
-                }`}
-              >
-                <Icon className="w-5 h-5 shrink-0" />
-                <span className="font-medium truncate">{item.label}</span>
-              </Link>
-            )
-          })}
-        </div>
 
         {/* Suggest a feature - Mobile */}
         <div className="px-3 pb-2">
@@ -270,7 +311,73 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
         {sidebarContent(false)}
 
         {/* Navigation */}
-        <nav className="flex-1 p-3 space-y-1">
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+          {/* Momentum (Dashboard) */}
+          <Link
+            href={dashboardItem.href}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors relative cursor-pointer ${
+              activePage === dashboardItem.id
+                ? 'bg-gray-100 text-gray-900 dark:bg-white/10 dark:text-white'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white/60 dark:hover:text-white dark:hover:bg-white/10'
+            }`}
+            title={collapsed ? dashboardItem.label : undefined}
+          >
+            {activePage === dashboardItem.id && (
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-blue-600 to-cyan-500 rounded-r-full" />
+            )}
+            <dashboardItem.icon className="w-5 h-5 shrink-0" />
+            {!collapsed && <span className="text-sm font-medium">{dashboardItem.label}</span>}
+          </Link>
+
+          <div className="my-3 border-t border-gray-200 dark:border-white/10" />
+
+          {/* Editor Group */}
+          {!collapsed && (
+            <div className="px-3 pt-1 pb-2">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40">Editor</span>
+            </div>
+          )}
+          {editorItems.map((item) => {
+            const isActive = activePage === item.id
+            const Icon = item.icon
+
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors relative cursor-pointer ${
+                  isActive
+                    ? 'bg-gray-100 text-gray-900 dark:bg-white/10 dark:text-white'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white/60 dark:hover:text-white dark:hover:bg-white/10'
+                }`}
+                title={collapsed ? item.label : undefined}
+              >
+                {isActive && (
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-blue-600 to-cyan-500 rounded-r-full" />
+                )}
+                <Icon className="w-5 h-5 shrink-0" />
+                {!collapsed && (
+                  <>
+                    <span className="text-sm font-medium">{item.label}</span>
+                    {item.badge && (
+                      <span className="ml-auto text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full dark:bg-white/20 dark:text-white/80">
+                        {item.badge}
+                      </span>
+                    )}
+                  </>
+                )}
+              </Link>
+            )
+          })}
+
+          <div className="my-3 border-t border-gray-200 dark:border-white/10" />
+
+          {/* Insights Group */}
+          {!collapsed && (
+            <div className="px-3 pt-1 pb-2">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40">Insights</span>
+            </div>
+          )}
           {navItems.map((item) => {
             const isActive = activePage === item.id
             const Icon = item.icon
@@ -316,31 +423,6 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
             )
           })}
 
-          <div className="my-3 border-t border-gray-200 dark:border-white/10" />
-
-          {bottomNavItems.map((item) => {
-            const isActive = activePage === item.id
-            const Icon = item.icon
-
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors cursor-pointer relative ${
-                  isActive
-                    ? 'bg-gray-100 text-gray-900 dark:bg-white/10 dark:text-white'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white/60 dark:hover:text-white dark:hover:bg-white/10'
-                }`}
-                title={collapsed ? item.label : undefined}
-              >
-                {isActive && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-blue-600 to-cyan-500 rounded-r-full" />
-                )}
-                <Icon className="w-5 h-5 shrink-0" />
-                {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
-              </Link>
-            )
-          })}
         </nav>
 
 

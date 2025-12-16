@@ -3,6 +3,7 @@
 import { useState, useEffect, ReactNode } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface AdminLayoutProps {
   children: ReactNode
@@ -12,6 +13,8 @@ const NAV_ITEMS = [
   { href: '/admin/hq', label: 'Overview', icon: 'home' },
   { href: '/admin/integrations', label: 'Integrations', icon: 'plug' },
   { href: '/admin/business', label: 'Business', icon: 'chart' },
+  { href: '/admin/revenue', label: 'Revenue', icon: 'currency' },
+  { href: '/admin/customers', label: 'Customers', icon: 'customers' },
   { href: '/admin/waitlist', label: 'Waitlist', icon: 'users' },
 ]
 
@@ -41,6 +44,18 @@ function NavIcon({ name }: { name: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       )
+    case 'currency':
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      )
+    case 'customers':
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+      )
     default:
       return null
   }
@@ -52,10 +67,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [error, setError] = useState('')
   const pathname = usePathname()
   const router = useRouter()
-
-  useEffect(() => {
-    checkAuth()
-  }, [])
 
   const checkAuth = async () => {
     try {
@@ -72,6 +83,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       setIsAuthenticated(false)
     }
   }
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -117,8 +132,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <div className="w-full max-w-sm">
           <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
             <div className="text-center mb-8">
-              <div className="w-14 h-14 bg-future-black rounded-xl flex items-center justify-center mx-auto mb-4">
-                <span className="text-white font-bold text-xl">S</span>
+              <div className="w-14 h-14 mx-auto mb-4">
+                <Image src="/logo.svg" alt="Slydes" width={56} height={56} />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Slydes HQ</h1>
               <p className="text-gray-500">Enter password to access admin</p>
@@ -149,19 +164,19 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     )
   }
 
-  // Authenticated layout with side nav
+  // Authenticated layout with side nav (Dark mode, Apple HIG)
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Side Navigation */}
-      <aside className="w-60 bg-future-black text-white flex flex-col fixed h-full">
+    <div className="min-h-screen bg-[#1c1c1e] flex">
+      {/* Side Navigation - Apple HIG sidebar */}
+      <aside className="w-60 bg-[#2c2c2e] text-white flex flex-col fixed h-full border-r border-white/10">
         {/* Logo */}
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-leader-blue rounded-lg flex items-center justify-center">
-              <span className="font-bold text-lg">S</span>
+            <div className="w-10 h-10">
+              <Image src="/logo.svg" alt="Slydes" width={40} height={40} />
             </div>
             <div>
-              <h1 className="font-bold text-lg">Slydes HQ</h1>
+              <h1 className="font-bold text-lg text-white">Slydes HQ</h1>
               <p className="text-xs text-gray-400">Admin Dashboard</p>
             </div>
           </div>

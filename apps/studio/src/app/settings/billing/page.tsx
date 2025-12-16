@@ -32,7 +32,7 @@ function BillingPageContent() {
         setUpgradeLoading(null)
         return
       }
-      window.location.href = url
+      window.location.assign(url)
     } catch (err) {
       console.error('Failed to create checkout:', err)
       setUpgradeLoading(null)
@@ -49,7 +49,7 @@ function BillingPageContent() {
         setPortalLoading(false)
         return
       }
-      window.location.href = url
+      window.location.assign(url)
     } catch (err) {
       console.error('Failed to open portal:', err)
       setPortalLoading(false)

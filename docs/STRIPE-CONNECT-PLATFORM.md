@@ -6,6 +6,19 @@
 
 ---
 
+## IMPORTANT: We Are The Platform
+
+**Slydes is the PLATFORM, not a connected account.**
+
+We don't "connect" to anything. We enable our CUSTOMERS to connect their Stripe accounts to us. This is a critical distinction:
+
+- ❌ We do NOT have a Stripe Connect account
+- ✅ We ARE the platform that hosts Connect accounts
+- ✅ Our customers create Express accounts linked to our platform
+- ✅ We have platform API keys (secret key, publishable key, webhook secret)
+
+---
+
 ## Overview
 
 Slydes uses **Stripe Connect** as a platform to enable our customers (sellers) to accept payments from their customers (buyers). We are not selling products ourselves - we facilitate commerce between businesses and their audiences.
@@ -14,9 +27,11 @@ Slydes uses **Stripe Connect** as a platform to enable our customers (sellers) t
 
 | Role | Who | What They Do |
 |------|-----|--------------|
-| **Platform** | Slydes | Provides the infrastructure, takes 5% platform fee |
+| **Platform** | Slydes | Provides the infrastructure, takes **0% commission** |
 | **Connected Account** | Our customers (Pro tier) | Businesses selling products/services via their Slydes |
 | **End Customer** | Their customers | People buying from businesses on Slydes |
+
+**Key Point**: Slydes takes 0% of transactions. Sellers keep 100% of their sales (minus Stripe's standard processing fees).
 
 ---
 
@@ -39,12 +54,12 @@ Customer → Upgrade to Creator/Pro → Stripe Checkout → Payment to Slydes
 **What**: End customers paying OUR customers for products/services
 
 ```
-Buyer → Checkout on Seller's Slyde → Stripe Connect → Payment to Seller (minus 5%)
+Buyer → Checkout on Seller's Slyde → Stripe Connect → Payment to Seller (100%)
 ```
 
 - **Endpoint**: `/api/stripe/checkout`
 - **Account Type**: Stripe Connect Express
-- **Revenue**: 5% platform fee on every transaction
+- **Platform Fee**: **0%** - Seller receives full amount
 
 ---
 
@@ -77,9 +92,10 @@ We use **Express accounts** because:
 │  │                                                      │      │
 │  │  • Buyer pays £100                                   │      │
 │  │  • Stripe processes payment                          │      │
-│  │  • Platform fee (5%): £5 → Slydes                   │      │
-│  │  • Seller receives: £95                              │      │
-│  │  • Stripe fees: Paid by seller from their £95       │      │
+│  │  • Platform fee: £0 (Slydes takes 0%)               │      │
+│  │  • Seller receives: £100                             │      │
+│  │  • Stripe processing fees: ~£1.60 (from seller)     │      │
+│  │  • Seller net: ~£98.40                               │      │
 │  └──────────────────────────────────────────────────────┘      │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -155,25 +171,19 @@ return {
 **File**: `apps/studio/src/app/api/stripe/checkout/route.ts`
 
 ```typescript
-const session = await stripe.checkout.sessions.create({
-  mode: 'payment',
-  line_items: items.map(item => ({
-    price_data: {
-      currency: 'gbp',
-      product_data: { name: item.name },
-      unit_amount: item.priceCents,
-    },
-    quantity: item.quantity,
-  })),
-  // KEY: Route payment to seller's account
-  payment_intent_data: {
-    application_fee_amount: calculatePlatformFee(totalCents), // 5%
+// No application_fee_amount - seller receives 100%
+const session = await stripe.checkout.sessions.create(
+  {
+    line_items: lineItems,
+    mode: 'payment',
+    success_url: successUrl,
+    cancel_url: cancelUrl,
   },
-  success_url: successUrl,
-  cancel_url: cancelUrl,
-}, {
-  stripeAccount: connectedAccountId, // acct_xxx
-})
+  {
+    // Process on the connected account
+    stripeAccount: connectedAccountId,
+  }
+)
 ```
 
 ### 3. Handling Webhooks
@@ -203,8 +213,8 @@ CREATE TABLE orders (
   customer_name TEXT,
   line_items JSONB,
   subtotal_cents INTEGER,
-  platform_fee_cents INTEGER,
-  seller_payout_cents INTEGER,
+  platform_fee_cents INTEGER,  -- Always 0
+  seller_payout_cents INTEGER, -- Equals subtotal_cents
   currency TEXT DEFAULT 'gbp',
   status TEXT DEFAULT 'paid',
   created_at TIMESTAMPTZ DEFAULT NOW()
@@ -215,27 +225,28 @@ CREATE TABLE orders (
 
 ## Fee Structure
 
-### Platform Fee: 5%
+### Platform Fee: 0%
 
-Defined in `apps/studio/src/lib/stripe/server.ts`:
+**Slydes takes no commission on transactions.**
 
-```typescript
-export const PLATFORM_FEE_PERCENT = 5
-
-export function calculatePlatformFee(amountCents: number): number {
-  return Math.round(amountCents * (PLATFORM_FEE_PERCENT / 100))
-}
-```
+Sellers keep 100% of their sales. The only deduction is Stripe's standard processing fees.
 
 ### Example Transaction
 
 | Item | Amount |
 |------|--------|
 | Customer pays | £100.00 |
-| Platform fee (5%) | £5.00 → Slydes |
-| Seller receives | £95.00 |
-| Stripe processing (~1.4% + 20p) | ~£1.60 (from seller's £95) |
-| **Seller net** | ~£93.40 |
+| Platform fee | £0.00 (Slydes takes 0%) |
+| Seller receives | £100.00 |
+| Stripe processing (~1.4% + 20p) | ~£1.60 |
+| **Seller net** | ~£98.40 |
+
+### Why 0%?
+
+Slydes monetizes through **subscriptions** (Creator £25/mo, Pro £50/mo), not transaction fees. This is better for sellers:
+- Predictable costs
+- No surprise deductions
+- Keeps 100% of sales revenue
 
 ---
 
@@ -270,11 +281,11 @@ export function calculatePlatformFee(amountCents: number): number {
 
 | Feature | Free | Creator | Pro |
 |---------|------|---------|-----|
-| Display products | ✅ | ✅ | ✅ |
-| Enquire/Book CTAs | ❌ | ✅ | ✅ |
-| Connect Stripe | ❌ | ❌ | ✅ |
-| Accept payments | ❌ | ❌ | ✅ |
-| Order management | ❌ | ❌ | ✅ |
+| Display products | Yes | Yes | Yes |
+| Enquire/Book CTAs | No | Yes | Yes |
+| Connect Stripe | No | No | Yes |
+| Accept payments | No | No | Yes |
+| Order management | No | No | Yes |
 
 ---
 
@@ -282,19 +293,19 @@ export function calculatePlatformFee(amountCents: number): number {
 
 ### Fits Our Vision
 
-✅ **Two-sided marketplace**: Businesses create → Consumers discover → Transactions happen
-✅ **Platform revenue model**: 5% cut aligns with documented business model
-✅ **Pro tier value**: Commerce is the premium feature worth £50/mo
-✅ **Practice what we preach**: Our demo Slydes can showcase real checkout
+- **Two-sided marketplace**: Businesses create → Consumers discover → Transactions happen
+- **Subscription revenue model**: Pro tier at £50/mo unlocks commerce
+- **Seller-friendly**: 0% commission keeps sellers happy
+- **Practice what we preach**: Our demo Slydes can showcase real checkout
 
 ### Documentation Cross-Reference
 
 | Document | Alignment |
 |----------|-----------|
-| [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) | ✅ Pro tier = commerce features |
-| [BUSINESS-MODEL.md](./BUSINESS-MODEL.md) | ✅ 5% transaction fee documented |
-| [MVP-MONETISATION.md](./MVP-MONETISATION.md) | ✅ Connect is Phase 1 commerce |
-| [PLATFORM-OVERVIEW.md](./PLATFORM-OVERVIEW.md) | ✅ Enables B2C transactions |
+| [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) | "Slydes takes 0% of your sales" |
+| [BUSINESS-MODEL.md](./BUSINESS-MODEL.md) | Subscription-based revenue |
+| [MVP-MONETISATION.md](./MVP-MONETISATION.md) | Connect is Phase 1 commerce |
+| [PLATFORM-OVERVIEW.md](./PLATFORM-OVERVIEW.md) | Enables B2C transactions |
 
 ---
 
@@ -331,15 +342,18 @@ Use test API keys (starts with `sk_test_` and `pk_test_`):
 
 ---
 
-## Next Steps
+## Platform Setup Checklist
 
-1. ✅ `STRIPE_SECRET_KEY` configured
-2. ✅ `STRIPE_WEBHOOK_SECRET` configured
-3. ✅ Code exports `accounts` and `accountLinks`
-4. ⬜ Add `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (for client-side UI)
-5. ⬜ Register webhook endpoint in Stripe Dashboard
-6. ⬜ Test Connect onboarding flow
-7. ⬜ Test end-to-end checkout
+All platform keys are configured. **No further Stripe setup required.**
+
+- [x] `STRIPE_SECRET_KEY` — Platform secret key
+- [x] `STRIPE_WEBHOOK_SECRET` — Webhook verification
+- [x] `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` — Client-side key
+- [x] Code exports `accounts` and `accountLinks`
+- [x] 0% platform fee (sellers keep 100%)
+- [x] Webhook endpoint registered
+
+**Ready for customers to connect their accounts.**
 
 ---
 
@@ -348,7 +362,6 @@ Use test API keys (starts with `sk_test_` and `pk_test_`):
 - [Stripe Connect Docs](https://stripe.com/docs/connect)
 - [Express Accounts](https://stripe.com/docs/connect/express-accounts)
 - [Testing Connect](https://stripe.com/docs/connect/testing)
-- [Platform Fee Collection](https://stripe.com/docs/connect/direct-charges#collect-fees)
 
 ---
 

@@ -45,16 +45,3 @@ export const stripe = {
     return getStripe().customers
   },
 } as unknown as Stripe
-
-/**
- * Platform fee percentage (5%)
- * This is what Slydes takes from each transaction
- */
-export const PLATFORM_FEE_PERCENT = 5
-
-/**
- * Calculate platform fee in cents
- */
-export function calculatePlatformFee(amountCents: number): number {
-  return Math.round(amountCents * (PLATFORM_FEE_PERCENT / 100))
-}

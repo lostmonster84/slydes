@@ -48,7 +48,7 @@ import { DevicePreview } from '@/components/slyde-demo'
 import { HomeSlydeScreen } from '@/components/home-slyde/HomeSlydeScreen'
 import { InventoryGridView } from '@/components/home-slyde/InventoryGridView'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
-import type { FrameData, FAQItem, BusinessInfo, FrameInfoContent, CTAIconType, ListItem } from '@/components/slyde-demo/frameData'
+import type { FrameData, FAQItem, BusinessInfo, FrameInfoContent, CTAIconType, ListItem, ListData } from '@/components/slyde-demo/frameData'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { useOrganization } from '@/hooks'
 import {
@@ -57,6 +57,10 @@ import {
   readChildFrames,
   writeChildFrames,
   deleteChildFrames,
+  readLists,
+  addList,
+  updateList,
+  deleteList,
   type DemoHomeSlyde,
   type DemoHomeSlydeCategory,
 } from '@/lib/demoHomeSlyde'
@@ -106,12 +110,16 @@ import { Toggle } from '@/components/ui/Toggle'
 const HQ_PRIMARY_GRADIENT = 'bg-gradient-to-r from-blue-600 to-cyan-500'
 const HQ_PRIMARY_SHADOW = 'shadow-lg shadow-blue-500/15'
 
-// Simplified selection: just Home or Category
-type SelectionType = 'home' | 'category'
+// Selection types: Home, Category, List, Item, or ItemFrame
+type SelectionType = 'home' | 'category' | 'list' | 'frame' | 'item' | 'itemFrame'
 
 interface Selection {
   type: SelectionType
-  categoryId?: string // Only set when type === 'category'
+  categoryId?: string  // Only set when type === 'category'
+  listId?: string      // Only set when type === 'list'
+  frameId?: string     // Only set when type === 'frame' (category frames)
+  itemId?: string      // Only set when type === 'item'
+  itemFrameId?: string // Only set when type === 'itemFrame'
 }
 
 // Curated Lucide icons for categories (CONSTX: consistent with HQ design)
@@ -189,16 +197,32 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
   const [showSound, setShowSound] = useState(homeSlyde.showSound ?? true)
   const [showReviews, setShowReviews] = useState(homeSlyde.showReviews ?? true)
 
+  // Lists state - independent lists that can be connected via CTA
+  const [lists, setLists] = useState<ListData[]>(homeSlyde.lists ?? [])
+
   // Selection state - what's shown in the right panel
   const [selection, setSelection] = useState<Selection>({ type: 'home' })
 
-  // Editing level state - tracks whether we're editing Home or a Child Slyde
-  type EditingLevel = 'home' | 'child' | 'list'
+  // Editing level state - tracks which level of the hierarchy we're editing
+  // home   → Edit Home Slyde (categories, video, branding)
+  // child  → Edit Category Slyde (frames for a category)
+  // list   → Edit List (items in a list)
+  // item   → Edit Item Slyde (frames for a specific item)
+  type EditingLevel = 'home' | 'child' | 'list' | 'item'
   const [editingLevel, setEditingLevel] = useState<EditingLevel>('home')
-  const [editingChildId, setEditingChildId] = useState<string | null>(null)
+  const [editingChildId, setEditingChildId] = useState<string | null>(null)   // category ID when in child level
+  const [editingListId, setEditingListId] = useState<string | null>(null)     // list ID when in list level
+  const [editingItemId, setEditingItemId] = useState<string | null>(null)     // item ID when in item level
 
   // List View preview state
   const [listViewFrame, setListViewFrame] = useState<FrameData | null>(null)
+
+  // Get current list being edited
+  const editingList = editingListId ? lists.find(l => l.id === editingListId) : null
+  // Get current item being edited
+  const editingItem = editingList && editingItemId
+    ? editingList.items.find(i => i.id === editingItemId)
+    : null
 
   // Get the category being edited (for breadcrumb)
   const editingCategory = editingChildId ? categories.find(c => c.id === editingChildId) : null
@@ -239,6 +263,7 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
     setVideoSrc(homeSlyde.videoSrc)
     setPosterSrc(homeSlyde.posterSrc || '')
     setCategories(homeSlyde.categories)
+    setLists(homeSlyde.lists ?? [])
     setShowCategoryIcons(homeSlyde.showCategoryIcons ?? false)
     setShowHearts(homeSlyde.showHearts ?? true)
     setShowShare(homeSlyde.showShare ?? true)
@@ -281,9 +306,11 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
       showReviews,
       // Preserve existing childFrames from localStorage
       childFrames: current.childFrames,
+      // Save lists
+      lists,
     }
     writeDemoHomeSlyde(next)
-  }, [videoSrc, posterSrc, categories, primaryCtaEnabled, primaryCtaText, primaryCtaAction, showCategoryIcons, showHearts, showShare, showSound, showReviews, homeSlyde])
+  }, [videoSrc, posterSrc, categories, primaryCtaEnabled, primaryCtaText, primaryCtaAction, showCategoryIcons, showHearts, showShare, showSound, showReviews, lists, homeSlyde])
 
   useEffect(() => {
     const timeout = setTimeout(persistHomeSlyde, 300)
@@ -373,6 +400,36 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
     : null
 
   // ============================================
+  // LIST CRUD
+  // ============================================
+
+  const addNewList = useCallback(() => {
+    const newId = `list-${Date.now()}`
+    const newList: ListData = {
+      id: newId,
+      name: 'New List',
+      items: [],
+    }
+    setLists((prev) => [...prev, newList])
+    setSelection({ type: 'list', listId: newId })
+  }, [])
+
+  const updateListById = useCallback((id: string, updates: Partial<ListData>) => {
+    setLists((prev) => prev.map((l) => (l.id === id ? { ...l, ...updates } : l)))
+  }, [])
+
+  const deleteListById = useCallback((id: string) => {
+    setLists((prev) => prev.filter((l) => l.id !== id))
+    if (selection.type === 'list' && selection.listId === id) {
+      setSelection({ type: 'home' })
+    }
+  }, [selection])
+
+  const selectedList = selection.type === 'list' && selection.listId
+    ? lists.find((l) => l.id === selection.listId)
+    : null
+
+  // ============================================
   // CHILD SLYDE (FRAMES) EDITING STATE
   // ============================================
 
@@ -424,6 +481,11 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
   // Get frames for currently editing child
   const currentFrames = editingChildId ? (childFrames[editingChildId] || []) : []
   const selectedFrame = currentFrames.find(f => f.id === selectedFrameId) || currentFrames[0]
+
+  // Get item frames for currently editing item
+  const currentItemFrames = editingItem?.frames ?? []
+  const selectedItemFrameId = selection.type === 'itemFrame' ? selection.itemFrameId : currentItemFrames[0]?.id
+  const selectedItemFrame = currentItemFrames.find(f => f.id === selectedItemFrameId) || currentItemFrames[0]
 
   // Load frames when entering child edit mode (from localStorage or create starter frames)
   useEffect(() => {
@@ -499,6 +561,73 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
       setSelectedFrameId(remaining[0].id)
     }
   }, [editingChildId, childFrames])
+
+  // Item frame helpers - for editing frames within an item (Item Slyde)
+  const updateItemFrame = useCallback((frameId: string, updates: Partial<FrameData>) => {
+    if (!editingListId || !editingItemId) return
+    setLists(prev => prev.map(l =>
+      l.id === editingListId
+        ? {
+            ...l,
+            items: l.items.map(i =>
+              i.id === editingItemId
+                ? { ...i, frames: (i.frames || []).map(f => f.id === frameId ? { ...f, ...updates } : f) }
+                : i
+            )
+          }
+        : l
+    ))
+  }, [editingListId, editingItemId])
+
+  const addItemFrame = useCallback(() => {
+    if (!editingListId || !editingItemId) return
+    const newFrame: FrameData = {
+      id: `frame-${Date.now()}`,
+      order: (currentItemFrames.length || 0) + 1,
+      title: `Frame ${(currentItemFrames.length || 0) + 1}`,
+      subtitle: '',
+      heartCount: 0,
+      faqCount: 0,
+      accentColor: brandProfile.secondaryColor || '#22D3EE',
+      background: { type: 'image', src: '' },
+    }
+    setLists(prev => prev.map(l =>
+      l.id === editingListId
+        ? {
+            ...l,
+            items: l.items.map(i =>
+              i.id === editingItemId
+                ? { ...i, frames: [...(i.frames || []), newFrame] }
+                : i
+            )
+          }
+        : l
+    ))
+    setSelection({ type: 'itemFrame', itemFrameId: newFrame.id })
+  }, [editingListId, editingItemId, currentItemFrames.length, brandProfile.secondaryColor])
+
+  const deleteItemFrame = useCallback((frameId: string) => {
+    if (!editingListId || !editingItemId) return
+    const frames = currentItemFrames
+    if (frames.length <= 1) return // Don't delete last frame
+    setLists(prev => prev.map(l =>
+      l.id === editingListId
+        ? {
+            ...l,
+            items: l.items.map(i =>
+              i.id === editingItemId
+                ? { ...i, frames: (i.frames || []).filter(f => f.id !== frameId) }
+                : i
+            )
+          }
+        : l
+    ))
+    // Select another frame
+    const remaining = frames.filter(f => f.id !== frameId)
+    if (remaining.length > 0) {
+      setSelection({ type: 'itemFrame', itemFrameId: remaining[0].id })
+    }
+  }, [editingListId, editingItemId, currentItemFrames])
 
   // Business info for SlydeScreen preview
   const businessInfo: BusinessInfo = {
@@ -719,6 +848,7 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                     )}
                   </div>
                 </div>
+
                   </>
                 )}
 
@@ -792,6 +922,274 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                         )}
                       </div>
                     </div>
+
+                    {/* Lists Section - Available at child level too */}
+                    <div className="pt-3 border-t border-gray-200 dark:border-white/10 mt-3">
+                      <div className="flex items-center justify-between px-3 mb-2">
+                        <span className="text-[11px] font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
+                          Lists ({lists.length})
+                        </span>
+                        <button
+                          onClick={addNewList}
+                          className="p-1 text-blue-600 dark:text-cyan-400 hover:bg-blue-50 dark:hover:bg-cyan-400/10 rounded-lg transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-1">
+                        {lists.map((list) => {
+                          const isSelected = selection.type === 'list' && selection.listId === list.id
+                          return (
+                            <button
+                              key={list.id}
+                              onClick={() => setSelection({ type: 'list', listId: list.id })}
+                              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
+                                isSelected
+                                  ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
+                                  : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
+                              }`}
+                            >
+                              <List className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-gray-400'}`} />
+                              <span className="text-[13px] font-medium truncate flex-1">{list.name}</span>
+                              <span className={`text-[11px] ${isSelected ? 'text-white/70' : 'text-gray-400'}`}>
+                                {list.items.length}
+                              </span>
+                            </button>
+                          )
+                        })}
+
+                        {lists.length === 0 && (
+                          <button
+                            onClick={addNewList}
+                            className="w-full flex items-center justify-center gap-2 px-3 py-4 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                            <span className="text-[12px] font-medium">Add list</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* ====== LIST LEVEL NAVIGATION (Items in a List) ====== */}
+                {editingLevel === 'list' && editingListId && editingList && (
+                  <>
+                    {/* Back to Slydes button */}
+                    <button
+                      onClick={() => {
+                        setEditingLevel('child')
+                        setEditingListId(null)
+                        setSelection({ type: 'list', listId: editingListId })
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left transition-all hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70 mb-3"
+                    >
+                      <ArrowLeft className="w-4 h-4 shrink-0" />
+                      <span className="text-[13px] font-medium">Back to Slydes</span>
+                    </button>
+
+                    {/* List Name Header */}
+                    <div className="px-3 mb-3">
+                      <h3 className="text-[15px] font-semibold text-gray-900 dark:text-white">{editingList.name}</h3>
+                      <p className="text-[11px] text-gray-500 dark:text-white/50">{editingList.items.length} items</p>
+                    </div>
+
+                    {/* Items Section */}
+                    <div className="pt-3 border-t border-gray-200 dark:border-white/10">
+                      <div className="flex items-center justify-between px-3 mb-2">
+                        <span className="text-[11px] font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
+                          Items ({editingList.items.length})
+                        </span>
+                        <button
+                          onClick={() => {
+                            const newItem: ListItem = {
+                              id: `item-${Date.now()}`,
+                              title: 'New Item',
+                            }
+                            const updatedItems = [...editingList.items, newItem]
+                            setLists(prev => prev.map(l =>
+                              l.id === editingListId ? { ...l, items: updatedItems } : l
+                            ))
+                          }}
+                          className="p-1 text-blue-600 dark:text-cyan-400 hover:bg-blue-50 dark:hover:bg-cyan-400/10 rounded-lg transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-1">
+                        {editingList.items.map((item) => {
+                          const isSelected = selection.type === 'item' && selection.itemId === item.id
+                          const frameCount = item.frames?.length ?? 0
+                          return (
+                            <button
+                              key={item.id}
+                              onClick={() => setSelection({ type: 'item', itemId: item.id })}
+                              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
+                                isSelected
+                                  ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
+                                  : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
+                              }`}
+                            >
+                              {item.image ? (
+                                <img src={item.image} alt="" className="w-8 h-8 rounded-lg object-cover" />
+                              ) : (
+                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isSelected ? 'bg-white/20' : 'bg-gray-100 dark:bg-white/10'}`}>
+                                  <ShoppingBag className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-gray-400'}`} />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <span className="text-[13px] font-medium truncate block">{item.title}</span>
+                                {item.price && (
+                                  <span className={`text-[11px] ${isSelected ? 'text-white/70' : 'text-gray-400'}`}>
+                                    {item.price}
+                                  </span>
+                                )}
+                              </div>
+                              <span className={`text-[11px] ${isSelected ? 'text-white/70' : 'text-gray-400'}`}>
+                                {frameCount > 0 ? `${frameCount} frames` : 'No frames'}
+                              </span>
+                            </button>
+                          )
+                        })}
+
+                        {editingList.items.length === 0 && (
+                          <button
+                            onClick={() => {
+                              const newItem: ListItem = {
+                                id: `item-${Date.now()}`,
+                                title: 'New Item',
+                              }
+                              const updatedItems = [...editingList.items, newItem]
+                              setLists(prev => prev.map(l =>
+                                l.id === editingListId ? { ...l, items: updatedItems } : l
+                              ))
+                            }}
+                            className="w-full flex items-center justify-center gap-2 px-3 py-4 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                            <span className="text-[12px] font-medium">Add item</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* ====== ITEM LEVEL NAVIGATION (Frames for an Item) ====== */}
+                {editingLevel === 'item' && editingItemId && editingItem && editingList && (
+                  <>
+                    {/* Back to List button */}
+                    <button
+                      onClick={() => {
+                        setEditingLevel('list')
+                        setEditingItemId(null)
+                        setSelection({ type: 'item', itemId: editingItemId })
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left transition-all hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70 mb-3"
+                    >
+                      <ArrowLeft className="w-4 h-4 shrink-0" />
+                      <span className="text-[13px] font-medium">Back to {editingList.name}</span>
+                    </button>
+
+                    {/* Item Header */}
+                    <div className="px-3 mb-3">
+                      <h3 className="text-[15px] font-semibold text-gray-900 dark:text-white">{editingItem.title}</h3>
+                      <p className="text-[11px] text-gray-500 dark:text-white/50">{(editingItem.frames?.length ?? 0)} frames</p>
+                    </div>
+
+                    {/* Item Frames Section */}
+                    <div className="pt-3 border-t border-gray-200 dark:border-white/10">
+                      <div className="flex items-center justify-between px-3 mb-2">
+                        <span className="text-[11px] font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
+                          Frames ({editingItem.frames?.length ?? 0})
+                        </span>
+                        <button
+                          onClick={() => {
+                            const frameCount = editingItem.frames?.length ?? 0
+                            const newFrame: FrameData = {
+                              id: `item-frame-${Date.now()}`,
+                              order: frameCount + 1,
+                              title: `Frame ${frameCount + 1}`,
+                              background: { type: 'image', src: '' },
+                              heartCount: 0,
+                              faqCount: 0,
+                              accentColor: brandProfile.primaryColor,
+                            }
+                            const updatedFrames = [...(editingItem.frames ?? []), newFrame]
+                            // Update item frames
+                            setLists(prev => prev.map(l =>
+                              l.id === editingListId
+                                ? {
+                                    ...l,
+                                    items: l.items.map(i =>
+                                      i.id === editingItemId ? { ...i, frames: updatedFrames } : i
+                                    )
+                                  }
+                                : l
+                            ))
+                          }}
+                          className="p-1 text-blue-600 dark:text-cyan-400 hover:bg-blue-50 dark:hover:bg-cyan-400/10 rounded-lg transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-1">
+                        {(editingItem.frames ?? []).map((frame, idx) => {
+                          const isSelected = selection.type === 'itemFrame' && selection.itemFrameId === frame.id
+                          return (
+                            <button
+                              key={frame.id}
+                              onClick={() => setSelection({ type: 'itemFrame', itemFrameId: frame.id })}
+                              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
+                                isSelected
+                                  ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
+                                  : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
+                              }`}
+                            >
+                              <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-bold ${
+                                isSelected ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-white/10 text-gray-500'
+                              }`}>
+                                {idx + 1}
+                              </div>
+                              <span className="text-[13px] font-medium truncate flex-1">{frame.title}</span>
+                            </button>
+                          )
+                        })}
+
+                        {(editingItem.frames?.length ?? 0) === 0 && (
+                          <button
+                            onClick={() => {
+                              const newFrame: FrameData = {
+                                id: `item-frame-${Date.now()}`,
+                                order: 1,
+                                title: 'Frame 1',
+                                background: { type: 'image', src: '' },
+                                heartCount: 0,
+                                faqCount: 0,
+                                accentColor: brandProfile.primaryColor,
+                              }
+                              setLists(prev => prev.map(l =>
+                                l.id === editingListId
+                                  ? {
+                                      ...l,
+                                      items: l.items.map(i =>
+                                        i.id === editingItemId ? { ...i, frames: [newFrame] } : i
+                                      )
+                                    }
+                                  : l
+                              ))
+                            }}
+                            className="w-full flex items-center justify-center gap-2 px-3 py-4 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                            <span className="text-[12px] font-medium">Add frame</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </>
                 )}
 
@@ -803,28 +1201,66 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
               <DevicePreview enableTilt={false}>
                 {editingLevel === 'home' ? (
                   <HomeSlydeScreen data={previewData} onCategoryTap={() => {}} />
-                ) : editingLevel === 'list' && listViewFrame?.listItems ? (
-                  <InventoryGridView
-                    categoryName={listViewFrame.title || 'Items'}
-                    items={listViewFrame.listItems.map(item => ({
-                      id: item.id,
-                      title: item.title,
-                      subtitle: item.subtitle || '',
-                      price: item.price || '',
-                      image: item.image || '',
-                      badge: item.badge,
-                      frames: [],
-                    }))}
-                    onItemTap={(itemId) => {
-                      // TODO: Navigate to item slyde
-                      console.log('Item tapped:', itemId)
-                    }}
-                    onBack={() => {
-                      setEditingLevel('child')
-                      setListViewFrame(null)
-                    }}
-                    accentColor={brandProfile.primaryColor}
-                  />
+                ) : editingLevel === 'list' && editingList ? (
+                  // LIST LEVEL PREVIEW: Show InventoryGridView with list items
+                  editingList.items.length > 0 ? (
+                    <InventoryGridView
+                      categoryName={editingList.name}
+                      items={editingList.items.map(item => ({
+                        id: item.id,
+                        title: item.title,
+                        subtitle: item.subtitle || '',
+                        price: item.price || '',
+                        image: item.image || '',
+                        badge: item.badge,
+                        frames: (item.frames || []) as any[], // Cast to any[] for type compatibility
+                      }))}
+                      onItemTap={(itemId) => {
+                        // Select the tapped item in Navigator
+                        setSelection({ type: 'item', itemId })
+                      }}
+                      onBack={() => {
+                        setEditingLevel('child')
+                        setEditingListId(null)
+                        setSelection({ type: 'list', listId: editingListId! })
+                      }}
+                      accentColor={brandProfile.primaryColor}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
+                      <div className="text-center text-white/60 px-8">
+                        <List className="w-10 h-10 mx-auto mb-3 text-white/30" />
+                        <p className="text-sm">No items in list</p>
+                        <p className="text-xs mt-1 text-white/40">Add items using the Navigator</p>
+                      </div>
+                    </div>
+                  )
+                ) : editingLevel === 'item' && editingItem ? (
+                  // ITEM LEVEL PREVIEW: Show Item Slyde frames
+                  (editingItem.frames?.length ?? 0) > 0 ? (
+                    <SlydeScreen
+                      frames={editingItem.frames!}
+                      business={businessInfo}
+                      faqs={[]}
+                      initialFrameIndex={0}
+                      onFrameChange={() => {}}
+                      autoAdvance={false}
+                      context="category"
+                      onBack={() => {
+                        setEditingLevel('list')
+                        setEditingItemId(null)
+                        setSelection({ type: 'item', itemId: editingItemId! })
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
+                      <div className="text-center text-white/60 px-8">
+                        <Layers className="w-10 h-10 mx-auto mb-3 text-white/30" />
+                        <p className="text-sm">No frames yet</p>
+                        <p className="text-xs mt-1 text-white/40">Add frames using the Navigator</p>
+                      </div>
+                    </div>
+                  )
                 ) : currentFrames.length > 0 ? (
                   <SlydeScreen
                     frames={currentFrames}
@@ -840,7 +1276,11 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                       setSelection({ type: 'category', categoryId: editingChildId || undefined })
                     }}
                     onListView={(frame) => {
-                      if (frame.listItems && frame.listItems.length > 0) {
+                      // Check if connected to a list OR has inline items
+                      const connectedList = frame.cta?.listId ? lists.find(l => l.id === frame.cta!.listId) : null
+                      const hasItems = (connectedList && connectedList.items.length > 0) || (frame.listItems && frame.listItems.length > 0)
+
+                      if (frame.cta?.listId || hasItems) {
                         setListViewFrame(frame)
                         setEditingLevel('list')
                       }
@@ -856,7 +1296,10 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                 )}
               </DevicePreview>
               <p className="mt-4 text-sm text-gray-500 dark:text-white/50 font-mono">
-                {editingLevel === 'home' ? 'Home Slyde Preview' : editingLevel === 'list' ? 'List View Preview' : `${editingCategory?.name || 'Child Slyde'} Preview`}
+                {editingLevel === 'home' && 'Home Slyde Preview'}
+                {editingLevel === 'child' && `${editingCategory?.name || 'Category'} Preview`}
+                {editingLevel === 'list' && `${editingList?.name || 'List'} Preview`}
+                {editingLevel === 'item' && `${editingItem?.title || 'Item'} Slyde Preview`}
               </p>
             </main>
 
@@ -866,7 +1309,10 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                 <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
                   {editingLevel === 'home' && selection.type === 'home' && 'Home Settings'}
                   {editingLevel === 'home' && selection.type === 'category' && (selectedCategory?.name || 'Category')}
+                  {editingLevel === 'child' && selection.type === 'list' && (selectedList?.name || 'List')}
                   {editingLevel === 'child' && selectedFrame && `Frame ${currentFrames.findIndex(f => f.id === selectedFrame.id) + 1}`}
+                  {editingLevel === 'list' && selection.type === 'item' && 'Item Details'}
+                  {editingLevel === 'item' && selection.type === 'itemFrame' && 'Frame Editor'}
                 </h2>
               </div>
 
@@ -1248,6 +1694,295 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                   </>
                 )}
 
+                {/* LIST INSPECTOR (when list is selected at child level) */}
+                {editingLevel === 'child' && selection.type === 'list' && selectedList && (
+                  <>
+                    <div>
+                      <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">List Name</label>
+                      <input
+                        type="text"
+                        value={selectedList.name}
+                        onChange={(e) => updateListById(selectedList.id, { name: e.target.value })}
+                        className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                        placeholder="e.g. Our Vehicles, Hair Products"
+                      />
+                    </div>
+
+                    {/* List Items */}
+                    <div className="pt-3 border-t border-gray-200 dark:border-white/10">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-[13px] font-semibold text-gray-900 dark:text-white">
+                          Items ({selectedList.items.length})
+                        </span>
+                        <button
+                          onClick={() => {
+                            const newItem: ListItem = {
+                              id: `item-${Date.now()}`,
+                              title: 'New Item',
+                            }
+                            updateListById(selectedList.id, {
+                              items: [...selectedList.items, newItem],
+                            })
+                          }}
+                          className="text-[12px] font-medium text-blue-600 dark:text-cyan-400 hover:underline"
+                        >
+                          + Add Item
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                        {selectedList.items.map((item, idx) => (
+                          <div
+                            key={item.id}
+                            className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10"
+                          >
+                            <div className="flex items-start gap-2">
+                              <div className="flex-1 space-y-2">
+                                <input
+                                  type="text"
+                                  value={item.title}
+                                  onChange={(e) => {
+                                    const newItems = [...selectedList.items]
+                                    newItems[idx] = { ...item, title: e.target.value }
+                                    updateListById(selectedList.id, { items: newItems })
+                                  }}
+                                  className="w-full px-2 py-1.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded text-sm text-gray-900 dark:text-white"
+                                  placeholder="Item title"
+                                />
+                                <input
+                                  type="text"
+                                  value={item.subtitle || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...selectedList.items]
+                                    newItems[idx] = { ...item, subtitle: e.target.value }
+                                    updateListById(selectedList.id, { items: newItems })
+                                  }}
+                                  className="w-full px-2 py-1.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded text-sm text-gray-900 dark:text-white"
+                                  placeholder="Subtitle (optional)"
+                                />
+                                <div className="flex gap-2">
+                                  <input
+                                    type="text"
+                                    value={item.price || ''}
+                                    onChange={(e) => {
+                                      const newItems = [...selectedList.items]
+                                      newItems[idx] = { ...item, price: e.target.value }
+                                      updateListById(selectedList.id, { items: newItems })
+                                    }}
+                                    className="w-1/2 px-2 py-1.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded text-sm text-gray-900 dark:text-white"
+                                    placeholder="£18.50"
+                                  />
+                                  <input
+                                    type="text"
+                                    value={item.badge || ''}
+                                    onChange={(e) => {
+                                      const newItems = [...selectedList.items]
+                                      newItems[idx] = { ...item, badge: e.target.value }
+                                      updateListById(selectedList.id, { items: newItems })
+                                    }}
+                                    className="w-1/2 px-2 py-1.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded text-sm text-gray-900 dark:text-white"
+                                    placeholder="Badge"
+                                  />
+                                </div>
+                                <input
+                                  type="text"
+                                  value={item.image || ''}
+                                  onChange={(e) => {
+                                    const newItems = [...selectedList.items]
+                                    newItems[idx] = { ...item, image: e.target.value }
+                                    updateListById(selectedList.id, { items: newItems })
+                                  }}
+                                  className="w-full px-2 py-1.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded text-sm text-gray-900 dark:text-white"
+                                  placeholder="Image URL (optional)"
+                                />
+                              </div>
+                              <button
+                                onClick={() => {
+                                  const newItems = selectedList.items.filter((_, i) => i !== idx)
+                                  updateListById(selectedList.id, { items: newItems })
+                                }}
+                                className="p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+
+                        {selectedList.items.length === 0 && (
+                          <div className="text-center py-6 text-gray-400 dark:text-white/40 text-sm">
+                            No items yet. Click "+ Add Item" to create one.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Edit List - Enter list editing level */}
+                    <div className="pt-3 border-t border-gray-200 dark:border-white/10">
+                      <button
+                        onClick={() => {
+                          setEditingLevel('list')
+                          setEditingListId(selectedList.id)
+                          setSelection({ type: 'item', itemId: selectedList.items[0]?.id })
+                        }}
+                        className={`flex items-center justify-center gap-2 w-full px-4 py-2.5 text-white text-sm font-medium rounded-xl ${HQ_PRIMARY_GRADIENT} ${HQ_PRIMARY_SHADOW} hover:opacity-90 transition-opacity`}
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                        Edit List Items
+                      </button>
+                    </div>
+
+                    {/* Delete List */}
+                    <div className="pt-3 border-t border-gray-200 dark:border-white/10">
+                      <button
+                        onClick={() => deleteListById(selectedList.id)}
+                        className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-red-600 dark:text-red-400 text-sm font-medium rounded-xl hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete List
+                      </button>
+                    </div>
+                  </>
+                )}
+
+                {/* ITEM INSPECTOR (when editing list level and item is selected) */}
+                {editingLevel === 'list' && selection.type === 'item' && selection.itemId && editingList && (
+                  (() => {
+                    const selectedItem = editingList.items.find(i => i.id === selection.itemId)
+                    if (!selectedItem) return null
+                    return (
+                      <>
+                        <div>
+                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Item Title</label>
+                          <input
+                            type="text"
+                            value={selectedItem.title}
+                            onChange={(e) => {
+                              setLists(prev => prev.map(l =>
+                                l.id === editingListId
+                                  ? { ...l, items: l.items.map(i => i.id === selectedItem.id ? { ...i, title: e.target.value } : i) }
+                                  : l
+                              ))
+                            }}
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                            placeholder="e.g. BMW M3 Competition"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Subtitle</label>
+                          <input
+                            type="text"
+                            value={selectedItem.subtitle || ''}
+                            onChange={(e) => {
+                              setLists(prev => prev.map(l =>
+                                l.id === editingListId
+                                  ? { ...l, items: l.items.map(i => i.id === selectedItem.id ? { ...i, subtitle: e.target.value } : i) }
+                                  : l
+                              ))
+                            }}
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                            placeholder="e.g. 2023 Model • 12,000 miles"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Price</label>
+                            <input
+                              type="text"
+                              value={selectedItem.price || ''}
+                              onChange={(e) => {
+                                setLists(prev => prev.map(l =>
+                                  l.id === editingListId
+                                    ? { ...l, items: l.items.map(i => i.id === selectedItem.id ? { ...i, price: e.target.value } : i) }
+                                    : l
+                                ))
+                              }}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="£45,000"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Badge</label>
+                            <input
+                              type="text"
+                              value={selectedItem.badge || ''}
+                              onChange={(e) => {
+                                setLists(prev => prev.map(l =>
+                                  l.id === editingListId
+                                    ? { ...l, items: l.items.map(i => i.id === selectedItem.id ? { ...i, badge: e.target.value } : i) }
+                                    : l
+                                ))
+                              }}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="Best Seller"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Image URL</label>
+                          <input
+                            type="text"
+                            value={selectedItem.image || ''}
+                            onChange={(e) => {
+                              setLists(prev => prev.map(l =>
+                                l.id === editingListId
+                                  ? { ...l, items: l.items.map(i => i.id === selectedItem.id ? { ...i, image: e.target.value } : i) }
+                                  : l
+                              ))
+                            }}
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                            placeholder="https://..."
+                          />
+                        </div>
+
+                        {/* Item Slyde Section */}
+                        <div className="pt-3 border-t border-gray-200 dark:border-white/10">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-[13px] font-semibold text-gray-900 dark:text-white">
+                              Item Slyde
+                            </span>
+                            <span className="text-[11px] text-gray-400 dark:text-white/40">
+                              {(selectedItem.frames?.length ?? 0)} frames
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => {
+                              setEditingLevel('item')
+                              setEditingItemId(selectedItem.id)
+                              setSelection({ type: 'itemFrame', itemFrameId: selectedItem.frames?.[0]?.id })
+                            }}
+                            className={`flex items-center justify-center gap-2 w-full px-4 py-2.5 text-white text-sm font-medium rounded-xl ${HQ_PRIMARY_GRADIENT} ${HQ_PRIMARY_SHADOW} hover:opacity-90 transition-opacity`}
+                          >
+                            <ChevronRight className="w-4 h-4" />
+                            Edit Item Frames
+                          </button>
+                        </div>
+
+                        {/* Delete Item */}
+                        <div className="pt-3 border-t border-gray-200 dark:border-white/10">
+                          <button
+                            onClick={() => {
+                              setLists(prev => prev.map(l =>
+                                l.id === editingListId
+                                  ? { ...l, items: l.items.filter(i => i.id !== selectedItem.id) }
+                                  : l
+                              ))
+                              setSelection({ type: 'item', itemId: undefined })
+                            }}
+                            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-red-600 dark:text-red-400 text-sm font-medium rounded-xl hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Delete Item
+                          </button>
+                        </div>
+                      </>
+                    )
+                  })()
+                )}
+
                 {/* FRAME INSPECTOR (when editing child level) */}
                 {editingLevel === 'child' && selectedFrame && (
                   <>
@@ -1431,137 +2166,105 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                                     className="w-full mt-2 px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
                                   />
                                 )}
-                                {/* List Items Section - shown when action is 'list' */}
+                                {/* Connect to List - shown when action is 'list' */}
                                 {selectedFrame.cta.action === 'list' && (
+                                  <div className="mt-3">
+                                    <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Connect to List</label>
+                                    {lists.length === 0 ? (
+                                      <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-dashed border-gray-200 dark:border-white/15 text-center">
+                                        <p className="text-[12px] text-gray-500 dark:text-white/40 mb-2">No lists created yet</p>
+                                        <button
+                                          onClick={() => {
+                                            addNewList()
+                                            // Switch back to home level to edit the new list
+                                            setEditingLevel('home')
+                                          }}
+                                          className="text-[12px] font-medium text-blue-600 dark:text-cyan-400 hover:underline"
+                                        >
+                                          + Create a list first
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <>
+                                        <select
+                                          value={selectedFrame.cta.listId || ''}
+                                          onChange={(e) => {
+                                            updateFrame(selectedFrame.id, {
+                                              cta: { ...selectedFrame.cta!, listId: e.target.value || undefined }
+                                            })
+                                          }}
+                                          className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                                        >
+                                          <option value="">Select a list...</option>
+                                          {lists.map((list) => (
+                                            <option key={list.id} value={list.id}>
+                                              {list.name} ({list.items.length} items)
+                                            </option>
+                                          ))}
+                                        </select>
+                                        {selectedFrame.cta.listId && (
+                                          <button
+                                            onClick={() => {
+                                              setSelection({ type: 'list', listId: selectedFrame.cta!.listId })
+                                              setEditingLevel('home')
+                                            }}
+                                            className="mt-2 text-[12px] font-medium text-blue-600 dark:text-cyan-400 hover:underline flex items-center gap-1"
+                                          >
+                                            <ExternalLink className="w-3 h-3" />
+                                            Edit list items
+                                          </button>
+                                        )}
+                                      </>
+                                    )}
+                                  </div>
+                                )}
+                                {/* DEPRECATED: Old inline list items - keeping for backward compat */}
+                                {selectedFrame.cta.action === 'list' && selectedFrame.listItems && selectedFrame.listItems.length > 0 && !selectedFrame.cta.listId && (
                                   <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10">
+                                    <div className="p-2 bg-yellow-50 dark:bg-yellow-500/10 rounded-lg text-[11px] text-yellow-700 dark:text-yellow-400 mb-3">
+                                      ⚠️ Legacy inline items detected. Create a list and connect it above to migrate.
+                                    </div>
                                     <div className="flex items-center justify-between mb-3">
                                       <label className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                         <List className="w-4 h-4 text-gray-500 dark:text-white/50" />
-                                        List Items ({selectedFrame.listItems?.length || 0})
+                                        Inline Items ({selectedFrame.listItems?.length || 0})
                                       </label>
-                                      <button
-                                        onClick={() => {
-                                          const newItem: ListItem = {
-                                            id: `item-${Date.now()}`,
-                                            title: 'New Item',
-                                            subtitle: '',
-                                            price: '',
-                                          }
-                                          updateFrame(selectedFrame.id, {
-                                            listItems: [...(selectedFrame.listItems || []), newItem]
-                                          })
-                                        }}
-                                        className="text-[12px] font-medium text-blue-600 dark:text-cyan-400 hover:text-blue-700 dark:hover:text-cyan-300 flex items-center gap-1"
-                                      >
-                                        <Plus className="w-3.5 h-3.5" />
-                                        Add Item
-                                      </button>
                                     </div>
-                                    {(!selectedFrame.listItems || selectedFrame.listItems.length === 0) ? (
-                                      <div className="text-center py-6 text-gray-400 dark:text-white/30 text-[12px]">
-                                        No items yet. Add items to create a browseable list.
-                                      </div>
-                                    ) : (
-                                      <div className="space-y-2">
-                                        {selectedFrame.listItems.map((item, index) => (
-                                          <div
-                                            key={item.id}
-                                            className="flex items-center gap-2 p-2.5 rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5"
-                                          >
-                                            <GripVertical className="w-4 h-4 text-gray-300 dark:text-white/20 cursor-grab flex-shrink-0" />
-                                            {/* Thumbnail */}
-                                            <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-white/10 flex-shrink-0 overflow-hidden">
-                                              {item.image ? (
-                                                <img src={item.image} alt="" className="w-full h-full object-cover" />
-                                              ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-white/30">
-                                                  <ImageIcon className="w-4 h-4" />
-                                                </div>
-                                              )}
-                                            </div>
-                                            {/* Title & Price */}
-                                            <div className="flex-1 min-w-0">
-                                              <input
-                                                type="text"
-                                                value={item.title}
-                                                onChange={(e) => {
-                                                  const updatedItems = [...(selectedFrame.listItems || [])]
-                                                  updatedItems[index] = { ...item, title: e.target.value }
-                                                  updateFrame(selectedFrame.id, { listItems: updatedItems })
-                                                }}
-                                                className="w-full text-[13px] font-medium text-gray-900 dark:text-white bg-transparent border-none p-0 focus:outline-none focus:ring-0"
-                                                placeholder="Item title"
-                                              />
-                                              <input
-                                                type="text"
-                                                value={item.price || ''}
-                                                onChange={(e) => {
-                                                  const updatedItems = [...(selectedFrame.listItems || [])]
-                                                  updatedItems[index] = { ...item, price: e.target.value }
-                                                  updateFrame(selectedFrame.id, { listItems: updatedItems })
-                                                }}
-                                                className="w-full text-[11px] text-blue-600 dark:text-cyan-400 bg-transparent border-none p-0 focus:outline-none focus:ring-0"
-                                                placeholder="£0.00"
-                                              />
-                                            </div>
-                                            {/* Delete */}
-                                            <button
-                                              onClick={() => {
-                                                const updatedItems = (selectedFrame.listItems || []).filter((_, i) => i !== index)
-                                                updateFrame(selectedFrame.id, { listItems: updatedItems })
-                                              }}
-                                              className="p-1 text-gray-400 dark:text-white/30 hover:text-red-500 dark:hover:text-red-400 transition-colors flex-shrink-0"
-                                            >
-                                              <Trash2 className="w-3.5 h-3.5" />
-                                            </button>
+                                    <div className="space-y-2">
+                                      {selectedFrame.listItems.map((item, index) => (
+                                        <div
+                                          key={item.id}
+                                          className="flex items-center gap-2 p-2.5 rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5"
+                                        >
+                                          <GripVertical className="w-4 h-4 text-gray-300 dark:text-white/20 cursor-grab flex-shrink-0" />
+                                          {/* Thumbnail */}
+                                          <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-white/10 flex-shrink-0 overflow-hidden">
+                                            {item.image ? (
+                                              <img src={item.image} alt="" className="w-full h-full object-cover" />
+                                            ) : (
+                                              <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-white/30">
+                                                <ImageIcon className="w-4 h-4" />
+                                              </div>
+                                            )}
                                           </div>
-                                        ))}
-                                      </div>
-                                    )}
-                                    {/* Detailed edit for first item (or make this expandable per-item later) */}
-                                    {selectedFrame.listItems && selectedFrame.listItems.length > 0 && (
-                                      <div className="mt-3 space-y-2">
-                                        <p className="text-[11px] font-medium text-gray-500 dark:text-white/50">
-                                          Edit First Item Details:
-                                        </p>
-                                        <input
-                                          type="text"
-                                          value={selectedFrame.listItems[0].subtitle || ''}
-                                          onChange={(e) => {
-                                            const updatedItems = [...selectedFrame.listItems!]
-                                            updatedItems[0] = { ...updatedItems[0], subtitle: e.target.value }
-                                            updateFrame(selectedFrame.id, { listItems: updatedItems })
-                                          }}
-                                          placeholder="Subtitle (e.g., Medium hold • High shine)"
-                                          className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 text-[12px]"
-                                        />
-                                        <input
-                                          type="url"
-                                          value={selectedFrame.listItems[0].image || ''}
-                                          onChange={(e) => {
-                                            const updatedItems = [...selectedFrame.listItems!]
-                                            updatedItems[0] = { ...updatedItems[0], image: e.target.value }
-                                            updateFrame(selectedFrame.id, { listItems: updatedItems })
-                                          }}
-                                          placeholder="Image URL (https://...)"
-                                          className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 text-[12px]"
-                                        />
-                                        <input
-                                          type="text"
-                                          value={selectedFrame.listItems[0].badge || ''}
-                                          onChange={(e) => {
-                                            const updatedItems = [...selectedFrame.listItems!]
-                                            updatedItems[0] = { ...updatedItems[0], badge: e.target.value }
-                                            updateFrame(selectedFrame.id, { listItems: updatedItems })
-                                          }}
-                                          placeholder="Badge (e.g., Best Seller, New)"
-                                          className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 text-[12px]"
-                                        />
-                                        <p className="text-[10px] text-gray-400 dark:text-white/30 italic mt-2">
-                                          Item Slydes (deep-dive frames per item) coming soon.
-                                        </p>
-                                      </div>
-                                    )}
+                                          {/* Title & Price */}
+                                          <div className="flex-1 min-w-0">
+                                            <div className="text-[13px] font-medium text-gray-900 dark:text-white truncate">{item.title}</div>
+                                            <div className="text-[11px] text-blue-600 dark:text-cyan-400">{item.price || ''}</div>
+                                          </div>
+                                          {/* Delete */}
+                                          <button
+                                            onClick={() => {
+                                              const updatedItems = (selectedFrame.listItems || []).filter((_, i) => i !== index)
+                                              updateFrame(selectedFrame.id, { listItems: updatedItems })
+                                            }}
+                                            className="p-1 text-gray-400 dark:text-white/30 hover:text-red-500 dark:hover:text-red-400 transition-colors flex-shrink-0"
+                                          >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                          </button>
+                                        </div>
+                                      ))}
+                                    </div>
                                   </div>
                                 )}
                               </div>
@@ -1665,6 +2368,207 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                             <button
                               onClick={() => deleteFrame(selectedFrame.id)}
                               disabled={currentFrames.length <= 1}
+                              className="w-full py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              Delete This Frame
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+
+                {/* ITEM FRAME INSPECTOR (when editing item level) */}
+                {editingLevel === 'item' && selectedItemFrame && (
+                  <>
+                    {/* Content Section */}
+                    <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                      <button
+                        onClick={() => toggleSection('content')}
+                        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                      >
+                        <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                          <Type className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                          Content
+                        </span>
+                        <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${expandedSections.content ? 'rotate-180' : ''}`} />
+                      </button>
+                      {expandedSections.content && (
+                        <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Title</label>
+                            <input
+                              type="text"
+                              value={selectedItemFrame.title}
+                              onChange={(e) => updateItemFrame(selectedItemFrame.id, { title: e.target.value })}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Subtitle</label>
+                            <input
+                              type="text"
+                              value={selectedItemFrame.subtitle || ''}
+                              onChange={(e) => updateItemFrame(selectedItemFrame.id, { subtitle: e.target.value })}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Badge</label>
+                            <input
+                              type="text"
+                              value={selectedItemFrame.badge || ''}
+                              onChange={(e) => updateItemFrame(selectedItemFrame.id, { badge: e.target.value })}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="e.g. Best Seller"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Background Section */}
+                    <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                      <button
+                        onClick={() => toggleSection('background')}
+                        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                      >
+                        <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                          <ImageIcon className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                          Background
+                        </span>
+                        <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${expandedSections.background ? 'rotate-180' : ''}`} />
+                      </button>
+                      {expandedSections.background && (
+                        <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Type</label>
+                            <div className="grid grid-cols-2 gap-2">
+                              <button
+                                onClick={() => updateItemFrame(selectedItemFrame.id, { background: { type: 'image', src: selectedItemFrame.background?.src || '' } })}
+                                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+                                  selectedItemFrame.background?.type === 'image'
+                                    ? 'bg-blue-600 dark:bg-cyan-500 text-white'
+                                    : 'bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/60 hover:bg-gray-200 dark:hover:bg-white/15'
+                                }`}
+                              >
+                                Image
+                              </button>
+                              <button
+                                onClick={() => updateItemFrame(selectedItemFrame.id, { background: { type: 'video', src: selectedItemFrame.background?.src || '' } })}
+                                className={`px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+                                  selectedItemFrame.background?.type === 'video'
+                                    ? 'bg-blue-600 dark:bg-cyan-500 text-white'
+                                    : 'bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/60 hover:bg-gray-200 dark:hover:bg-white/15'
+                                }`}
+                              >
+                                Video
+                              </button>
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                              {selectedItemFrame.background?.type === 'video' ? 'Video URL' : 'Image URL'}
+                            </label>
+                            <input
+                              type="text"
+                              value={selectedItemFrame.background?.src || ''}
+                              onChange={(e) => updateItemFrame(selectedItemFrame.id, { background: { type: selectedItemFrame.background?.type || 'image', src: e.target.value } })}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="https://..."
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* CTA Section */}
+                    <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                      <button
+                        onClick={() => toggleSection('cta')}
+                        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                      >
+                        <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                          <MousePointerClick className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                          Call to Action
+                        </span>
+                        <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${expandedSections.cta ? 'rotate-180' : ''}`} />
+                      </button>
+                      {expandedSections.cta && (
+                        <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Button Text</label>
+                            <input
+                              type="text"
+                              value={selectedItemFrame.cta?.text || ''}
+                              onChange={(e) => updateItemFrame(selectedItemFrame.id, { cta: { text: e.target.value, icon: selectedItemFrame.cta?.icon || 'arrow', action: selectedItemFrame.cta?.action } })}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="Book Now"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Icon</label>
+                            <select
+                              value={selectedItemFrame.cta?.icon || 'arrow'}
+                              onChange={(e) => updateItemFrame(selectedItemFrame.id, { cta: { text: selectedItemFrame.cta?.text || 'Action', icon: e.target.value as CTAIconType, action: selectedItemFrame.cta?.action } })}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                            >
+                              <option value="arrow">Arrow</option>
+                              <option value="book">Book</option>
+                              <option value="call">Call</option>
+                              <option value="view">View</option>
+                              <option value="menu">Menu</option>
+                              <option value="list">List</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Action URL</label>
+                            <input
+                              type="text"
+                              value={selectedItemFrame.cta?.action || ''}
+                              onChange={(e) => updateItemFrame(selectedItemFrame.id, { cta: { text: selectedItemFrame.cta?.text || 'Action', icon: selectedItemFrame.cta?.icon || 'arrow', action: e.target.value } })}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="https://..."
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Style Section */}
+                    <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                      <button
+                        onClick={() => toggleSection('style')}
+                        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                      >
+                        <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                          <Palette className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                          Style
+                        </span>
+                        <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${expandedSections.style ? 'rotate-180' : ''}`} />
+                      </button>
+                      {expandedSections.style && (
+                        <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Accent Color</label>
+                            <div className="grid grid-cols-6 gap-2">
+                              {['#2563EB', '#06B6D4', '#0F172A', '#059669', '#475569', '#1D4ED8'].map((color) => (
+                                <button
+                                  key={color}
+                                  onClick={() => updateItemFrame(selectedItemFrame.id, { accentColor: color })}
+                                  className={`w-full aspect-square rounded-lg ${
+                                    selectedItemFrame.accentColor === color ? 'ring-2 ring-offset-2 ring-gray-900 dark:ring-white dark:ring-offset-[#2c2c2e]' : ''
+                                  }`}
+                                  style={{ backgroundColor: color }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <div className="pt-3 border-t border-gray-200 dark:border-white/10">
+                            <button
+                              onClick={() => deleteItemFrame(selectedItemFrame.id)}
+                              disabled={currentItemFrames.length <= 1}
                               className="w-full py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               Delete This Frame

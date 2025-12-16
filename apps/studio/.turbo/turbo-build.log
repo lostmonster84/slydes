@@ -6,12 +6,66 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 2.6s
+ ✓ Compiled successfully in 5.9s
    Skipping linting
    Checking validity of types ...
    Collecting page data ...
+   Generating static pages (0/42) ...
+   Generating static pages (10/42) 
+   Generating static pages (20/42) 
+   Generating static pages (31/42) 
+ ✓ Generating static pages (42/42)
+   Finalizing page optimization ...
+   Collecting build traces ...
 
-> Build error occurred
-SyntaxError: Unexpected end of JSON input
-    at JSON.parse (<anonymous>)
- ELIFECYCLE  Command failed with exit code 1.
+Route (app)                                 Size  First Load JS
+┌ ƒ /                                      15 kB         261 kB
+├ ○ /_not-found                            991 B         103 kB
+├ ○ /analytics                           10.4 kB         230 kB
+├ ƒ /api/billing/create-checkout           176 B         102 kB
+├ ƒ /api/billing/portal                    176 B         102 kB
+├ ƒ /api/billing/webhook                   176 B         102 kB
+├ ƒ /api/feedback                          176 B         102 kB
+├ ƒ /api/media/attach-to-frame             176 B         102 kB
+├ ƒ /api/media/create-image-upload         176 B         102 kB
+├ ƒ /api/media/create-upload               176 B         102 kB
+├ ƒ /api/media/create-video-upload         176 B         102 kB
+├ ƒ /api/media/sync-video-status           176 B         102 kB
+├ ƒ /api/media/video-status                176 B         102 kB
+├ ƒ /api/stripe/checkout                   176 B         102 kB
+├ ƒ /api/stripe/connect                    176 B         102 kB
+├ ƒ /api/stripe/demo-checkout              176 B         102 kB
+├ ƒ /api/stripe/webhook                    176 B         102 kB
+├ ƒ /auth/auth-code-error                  164 B         105 kB
+├ ƒ /auth/callback                         176 B         102 kB
+├ ƒ /auth/confirm                          176 B         102 kB
+├ ƒ /auth/signout                          176 B         102 kB
+├ ○ /brand                               4.23 kB         183 kB
+├ ○ /checkout/success                    1.51 kB         107 kB
+├ ○ /dashboard                            4.2 kB         183 kB
+├ ○ /icon.svg                                0 B            0 B
+├ ○ /inbox                               3.02 kB         182 kB
+├ ○ /lists                               2.67 kB         181 kB
+├ ○ /login                               3.09 kB         164 kB
+├ ○ /onboarding                          7.54 kB         206 kB
+├ ○ /preview                             2.72 kB         178 kB
+├ ƒ /settings                            1.18 kB         106 kB
+├ ○ /settings/billing                    5.63 kB         169 kB
+├ ƒ /settings/media                      4.14 kB         168 kB
+├ ○ /settings/payments                   2.84 kB         105 kB
+├ ○ /settings/profile                    2.49 kB         166 kB
+├ ○ /shop                                4.43 kB         248 kB
+├ ○ /shop/orders                          4.3 kB         183 kB
+├ ○ /shop/products                       1.31 kB         180 kB
+└ ○ /slydes                              5.64 kB         184 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/960-d2a9785a0faedc69.js       45.5 kB
+  ├ chunks/b653352e-6220146327652a4e.js  54.2 kB
+  └ other shared chunks (total)          1.94 kB
+
+
+ƒ Middleware                             85.7 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

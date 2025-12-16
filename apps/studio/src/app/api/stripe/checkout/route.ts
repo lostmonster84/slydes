@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe, calculatePlatformFee } from '@/lib/stripe/server'
+import { stripe } from '@/lib/stripe/server'
 
 interface CartItem {
   id: string
@@ -24,8 +24,8 @@ interface CheckoutRequest {
  * POST /api/stripe/checkout
  *
  * Creates a Stripe Checkout session for the cart items.
- * Payment goes directly to the seller's connected account,
- * with Slydes taking a platform fee.
+ * Payment goes directly to the seller's connected account.
+ * Slydes takes 0% platform fee - seller receives 100%.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -46,15 +46,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Calculate total amount in cents
-    const totalCents = items.reduce(
-      (sum, item) => sum + item.price_cents * item.quantity,
-      0
-    )
-
-    // Calculate platform fee (5%)
-    const platformFee = calculatePlatformFee(totalCents)
-
     // Create line items for Stripe Checkout
     const lineItems = items.map((item) => ({
       price_data: {
@@ -69,16 +60,13 @@ export async function POST(request: NextRequest) {
     }))
 
     // Create Checkout Session with Connect
+    // No application_fee_amount - seller receives 100%
     const session = await stripe.checkout.sessions.create(
       {
         line_items: lineItems,
         mode: 'payment',
         success_url: successUrl,
         cancel_url: cancelUrl,
-        // This sends payment to the connected account
-        payment_intent_data: {
-          application_fee_amount: platformFee,
-        },
       },
       {
         // Process on the connected account

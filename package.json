@@ -10,7 +10,8 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
-    "clean": "turbo clean && rm -rf node_modules"
+    "clean": "turbo clean && rm -rf node_modules",
+    "fix": "node scripts/cleanup-dev.js"
   },
   "devDependencies": {
     "turbo": "^2.3.3",

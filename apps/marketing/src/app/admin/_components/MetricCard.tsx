@@ -1,7 +1,10 @@
+import { InfoIcon } from './InfoTooltip'
+
 interface MetricCardProps {
   label: string
   value: string | number
   subtext?: string
+  tooltip?: string
   trend?: {
     value: number
     label: string
@@ -10,26 +13,27 @@ interface MetricCardProps {
   color?: 'default' | 'blue' | 'green' | 'amber'
 }
 
+// Apple HIG dark mode colors
 const COLOR_CLASSES = {
   default: {
-    iconBg: 'bg-gray-100',
-    iconText: 'text-gray-600',
-    valueText: 'text-gray-900',
+    iconBg: 'bg-[#3a3a3c]',
+    iconText: 'text-[#98989d]',
+    valueText: 'text-white',
   },
   blue: {
-    iconBg: 'bg-leader-blue/10',
-    iconText: 'text-leader-blue',
-    valueText: 'text-leader-blue',
+    iconBg: 'bg-blue-500/20',
+    iconText: 'text-blue-400',
+    valueText: 'text-blue-400',
   },
   green: {
-    iconBg: 'bg-green-100',
-    iconText: 'text-green-600',
-    valueText: 'text-green-600',
+    iconBg: 'bg-green-500/20',
+    iconText: 'text-green-400',
+    valueText: 'text-green-400',
   },
   amber: {
-    iconBg: 'bg-amber-100',
-    iconText: 'text-amber-600',
-    valueText: 'text-amber-600',
+    iconBg: 'bg-amber-500/20',
+    iconText: 'text-amber-400',
+    valueText: 'text-amber-400',
   },
 }
 
@@ -37,6 +41,7 @@ export function MetricCard({
   label,
   value,
   subtext,
+  tooltip,
   trend,
   icon,
   color = 'default',
@@ -44,9 +49,12 @@ export function MetricCard({
   const colors = COLOR_CLASSES[color]
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
+    <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-5">
       <div className="flex items-start justify-between mb-3">
-        <p className="text-sm font-medium text-gray-500">{label}</p>
+        <div className="flex items-center gap-1">
+          <p className="text-sm font-medium text-[#98989d]">{label}</p>
+          {tooltip && <InfoIcon tooltip={tooltip} light />}
+        </div>
         {icon && (
           <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${colors.iconBg}`}>
             <span className={colors.iconText}>{icon}</span>
@@ -61,14 +69,14 @@ export function MetricCard({
           {trend && (
             <span
               className={`text-sm font-medium ${
-                trend.value >= 0 ? 'text-green-600' : 'text-red-600'
+                trend.value >= 0 ? 'text-green-400' : 'text-red-400'
               }`}
             >
               {trend.value >= 0 ? '+' : ''}
               {trend.value} {trend.label}
             </span>
           )}
-          {subtext && <span className="text-sm text-gray-400">{subtext}</span>}
+          {subtext && <span className="text-sm text-[#636366]">{subtext}</span>}
         </div>
       )}
     </div>
