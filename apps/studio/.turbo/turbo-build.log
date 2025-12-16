@@ -6,49 +6,12 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
-<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (129kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
- ✓ Compiled successfully in 4.8s
-   Linting and checking validity of types ...
- ⨯ ESLint: Converting circular structure to JSON     --> starting at object with constructor 'Object'     |     property 'configs' -> object with constructor 'Object'     |     property 'flat' -> object with constructor 'Object'     |     ...     |     property 'plugins' -> object with constructor 'Object'     --- property 'react' closes the circle Referenced from: /Users/james/Projects/slydes/.eslintrc.json
+ ✓ Compiled successfully in 2.6s
+   Skipping linting
+   Checking validity of types ...
    Collecting page data ...
-   Generating static pages (0/23) ...
-   Generating static pages (5/23) 
-   Generating static pages (11/23) 
-   Generating static pages (17/23) 
- ✓ Generating static pages (23/23)
-   Finalizing page optimization ...
-   Collecting build traces ...
 
-Route (app)                                 Size  First Load JS
-┌ ƒ /                                    36.2 kB         244 kB
-├ ○ /_not-found                            987 B         103 kB
-├ ○ /analytics                           10.8 kB         219 kB
-├ ƒ /api/feedback                          141 B         102 kB
-├ ƒ /api/media/attach-to-frame             141 B         102 kB
-├ ƒ /api/media/create-image-upload         141 B         102 kB
-├ ƒ /api/media/create-video-upload         141 B         102 kB
-├ ƒ /api/media/video-status                141 B         102 kB
-├ ƒ /auth/auth-code-error                  163 B         105 kB
-├ ƒ /auth/callback                         141 B         102 kB
-├ ƒ /auth/confirm                          141 B         102 kB
-├ ƒ /auth/signout                          141 B         102 kB
-├ ○ /brand                               5.49 kB         176 kB
-├ ○ /dashboard                           5.55 kB         176 kB
-├ ○ /inbox                               4.42 kB         175 kB
-├ ○ /login                                  3 kB         163 kB
-├ ○ /onboarding                          5.02 kB         203 kB
-├ ƒ /settings                              163 B         105 kB
-├ ƒ /settings/media                      3.58 kB         167 kB
-├ ○ /settings/profile                    2.49 kB         166 kB
-└ ○ /slydes                              7.85 kB         178 kB
-+ First Load JS shared by all             102 kB
-  ├ chunks/960-d2a9785a0faedc69.js       45.5 kB
-  ├ chunks/b653352e-d291cf2a8b94e4ca.js  54.2 kB
-  └ other shared chunks (total)          1.93 kB
-
-
-ƒ Middleware                             85.7 kB
-
-○  (Static)   prerendered as static content
-ƒ  (Dynamic)  server-rendered on demand
-
+> Build error occurred
+SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+ ELIFECYCLE  Command failed with exit code 1.

@@ -1,14 +1,26 @@
-# Slydes – Future Pricing Tiers (Pro & Agency)
+# Slydes – Future Pricing Tiers (Agency)
 
 Status: NOT IN MVP
 Purpose: Directional clarity only
 
-This document defines the intended future pricing tiers for Slydes.
+This document defines the intended future pricing tier for Slydes.
 Nothing in this document ships until behaviour justifies it.
 
 ---
 
-## Why Define This Now
+## Current Tiers (Live)
+
+See [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) for source of truth.
+
+| Tier | Price | Purpose |
+|------|-------|---------|
+| Free | £0 | Try the format |
+| Creator | £25/mo | Analytics, growth, lead generation |
+| Pro | £50/mo | Full commerce (Buy Now, Cart, Checkout) |
+
+---
+
+## Why Define Future Tiers Now
 
 Future tiers exist to:
 - guide product decisions
@@ -17,53 +29,6 @@ Future tiers exist to:
 
 This is not a roadmap.
 This is a boundary.
-
----
-
-## Future Tier: Pro
-
-**For serious creators and small teams**
-
-Pro exists for users who:
-- rely on Slydes for conversion
-- send meaningful traffic
-- want deeper insight into behaviour
-- iterate based on performance
-
-Pro is not about "more features".
-It is about **more leverage**.
-
----
-
-### Indicative Price
-£59 / month
-
-(Annual billing may be added later once retention is proven.)
-
----
-
-### Intended Includes
-
-- Unlimited published Slydes
-- Higher media and traffic limits
-- Advanced analytics:
-  - drop-off points
-  - CTA interactions
-  - per-slyde performance
-- Multiple drafts and versions
-- Priority support
-- Early access to new formats and experiments
-
----
-
-### What Pro Is Not
-
-- Not a team plan
-- Not an agency plan
-- Not enterprise
-- Not seat-based
-
-Pro is still individual-first.
 
 ---
 
@@ -77,9 +42,9 @@ Agency exists for:
 - operators managing multiple brands or clients
 
 This tier only ships once:
-- creator behaviour is clear
+- Creator/Pro behaviour is clear
 - Slydes is used repeatedly per client
-- agencies are already hacking around limitations
+- Agencies are already hacking around limitations
 
 ---
 
@@ -101,7 +66,7 @@ Seat count alone is not the value driver.
 - Everything in Pro
 - Multiple workspaces / clients
 - Clear client separation
-- Team seats (eg 5 included)
+- Team seats (e.g., 5 included)
 - White-label or reduced Slydes branding
 - Higher traffic and media limits
 - Agency-friendly workflows
@@ -118,43 +83,39 @@ Agency should feel powerful, not heavy.
 
 ---
 
-## What Must Be True Before Shipping These Tiers
+## What Must Be True Before Shipping Agency
 
-### Pro
-- Users actively asking for deeper analytics
-- Users publishing multiple Slydes
-- Clear correlation between analytics usage and retention
-
-### Agency
 - Multiple Slydes per client is common
 - Creators managing multiple brands manually
 - Willingness to pay is obvious without selling
 
-If these are not true, these tiers do not ship.
+If these are not true, Agency does not ship.
 
 ---
 
-## Relationship to MVP Pricing
+## Relationship to Current Pricing
 
-MVP pricing remains:
+Current pricing:
 
-- Free
-- Creator (£25 / month)
+- Free — try the format
+- Creator — analytics + lead generation (£25/mo)
+- Pro — full commerce (£50/mo)
 
-Nothing in MVP should:
-- depend on Pro or Agency existing
-- leak Pro-only features
+Nothing in current tiers should:
+- depend on Agency existing
+- leak Agency-only features
 - create artificial pain to upsell
 
 Upgrades must feel earned, not forced.
 
 ---
 
-## One-Line Future Summary
+## One-Line Summary
 
-- Creator: build and publish
-- Pro: optimise and iterate
-- Agency: manage and scale
+- Free: try the format
+- Creator: analytics + leads
+- Pro: commerce + orders
+- Agency (future): multi-client at scale
 
 ---
 
@@ -162,5 +123,9 @@ Upgrades must feel earned, not forced.
 
 Future pricing exists to support success, not invent it.
 
-If behaviour does not demand these tiers,
-they should never be built.
+If behaviour does not demand Agency tier,
+it should never be built.
+
+---
+
+*Last updated: December 16, 2025*

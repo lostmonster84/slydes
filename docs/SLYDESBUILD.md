@@ -6,8 +6,8 @@
 > Copy this to Slydes.io to build the platform with confidence.
 >
 > **Created**: December 12, 2025
-> **Last Updated**: December 14, 2025 (Updated to canonical Frame terminology)
-> **Status**: ✅ Production Ready - All endpoints wired, complete wireframe
+> **Last Updated**: December 16, 2025 (Added Commerce System documentation)
+> **Status**: ✅ Production Ready - All endpoints wired, complete wireframe + commerce
 > **Demo**: `/demo-slyde` route
 > **Structure Reference**: See `STRUCTURE.md` for canonical hierarchy
 
@@ -34,8 +34,9 @@
 17. [Data Structures](#data-structures)
 18. [Color System](#color-system)
 19. [Typography](#typography)
-20. [Implementation Checklist](#implementation-checklist)
-21. [API & Analytics Layer](#api--analytics-layer)
+20. [Commerce System](#commerce-system)
+21. [Implementation Checklist](#implementation-checklist)
+22. [API & Analytics Layer](#api--analytics-layer)
 
 ---
 
@@ -379,6 +380,151 @@ interface SlydeData {
 }
 ```
 
+### Inventory Item Schema (Commerce)
+
+```typescript
+type CommerceMode = 'none' | 'enquire' | 'buy_now' | 'add_to_cart'
+
+interface InventoryItem {
+  id: string
+  title: string
+  subtitle?: string
+  price: string              // Display price e.g., "$29.99"
+  price_cents?: number       // Stripe price in cents e.g., 2999
+  commerce_mode: CommerceMode
+  frames: FrameData[]        // Item detail frames
+  thumbnail?: string
+}
+```
+
+### Cart Item Schema
+
+```typescript
+interface CartItem {
+  item: InventoryItem
+  quantity: number
+}
+```
+
+---
+
+## Commerce System
+
+### Overview
+
+Commerce is a **PAID FEATURE** available only on Pro tier plans. When commerce is disabled (Free tier or toggle off), ALL commerce UI elements are hidden - no buttons, no cart, no checkout.
+
+### Feature Gating
+
+| Plan Tier | Commerce Features |
+|-----------|-------------------|
+| **Free** | None - all commerce UI hidden |
+| **Creator** | None - all commerce UI hidden |
+| **Pro** | Full commerce: add_to_cart, buy_now, enquire modes |
+
+### Commerce Modes
+
+Each inventory item can have one of four `commerce_mode` values:
+
+| Mode | Button | Behavior |
+|------|--------|----------|
+| `none` | Chevron (>) | View-only, navigates to detail |
+| `enquire` | "Enquire" pill | Opens contact/inquiry form |
+| `buy_now` | "Buy" pill | Direct to Stripe checkout |
+| `add_to_cart` | Circle + button | iOS App Store style quick-add |
+
+### iOS App Store Quick-Add Button
+
+The `add_to_cart` mode uses iOS App Store-style interaction:
+
+```
+STATE: Default           STATE: Added
+┌───────────────┐       ┌───────────────┐
+│               │       │               │
+│      [+]      │  →    │      [✓]      │  ← green flash
+│               │       │               │
+└───────────────┘       └───────────────┘
+```
+
+**Specifications**:
+- Size: `w-8 h-8 rounded-full`
+- Default: Accent color background with white `+` icon
+- Success: Green (#22c55e) background with white `✓` icon
+- Animation: 0.15s spring transition, 800ms success state duration
+- Icon stroke: `strokeWidth={2.5}`
+
+### Floating Cart Button
+
+Appears in InventoryGridView when items are in cart:
+
+```
+Position: bottom-right, safe from home indicator
+┌─────────────────────────────────┐
+│                                 │
+│        [List content]           │
+│                                 │
+│                          ┌────┐ │
+│                          │🛒 3│ │  ← Cart button with count
+│                          └────┘ │
+│         ━━━━━━━━━━━                │  ← Home indicator
+└─────────────────────────────────┘
+```
+
+**Specifications**:
+- Position: `bottom-6 right-4` (above home indicator)
+- Size: `px-4 py-3 rounded-full`
+- Background: Accent color
+- Animation: `scale-in` on appear, `scale-bounce` on count change
+- Badge: White circle with count number
+
+### Cart Sheet (iOS-style)
+
+Bottom sheet showing cart contents:
+
+```
+┌─────────────────────────────────┐
+│          ━━━━━                   │  ← Drag handle
+│                                 │
+│  Your Cart                      │
+│  ──────────────────────────────│
+│  ┌────┐ Item Name         $29  │
+│  │ 📷 │ Subtitle          [-1+]│
+│  └────┘                        │
+│  ──────────────────────────────│
+│  ┌────┐ Item Name         $49  │
+│  │ 📷 │ Subtitle          [-1+]│
+│  └────┘                        │
+│                                 │
+│  ┌────────────────────────────┐ │
+│  │   Checkout • $78 total     │ │  ← Accent color CTA
+│  └────────────────────────────┘ │
+└─────────────────────────────────┘
+```
+
+**Sheet Specifications**:
+- Background: `bg-[#1c1c1e]`
+- Border radius: `rounded-t-3xl`
+- Drag handle: `w-10 h-1 rounded-full bg-white/20`
+- Entry animation: iOS spring (`damping: 28, stiffness: 320`)
+
+### Stripe Connect Requirements
+
+Commerce features require:
+1. Pro tier subscription active
+2. Stripe Connect account linked
+3. `chargesEnabled: true` on Stripe account
+
+**Platform fee**: 5% on all transactions
+
+### Implementation Notes
+
+When commerce is OFF (Free/Creator tier):
+- `InventoryGridView`: Show chevron (>) instead of commerce buttons
+- `ItemSlydeView`: Hide commerce CTA, show frame CTA only
+- `CartButton`: Do not render
+- `CartSheet`: Do not render
+- All `commerce_mode` values treated as `'none'`
+
 ---
 
 ## Implementation Checklist
@@ -398,6 +544,14 @@ interface SlydeData {
 - [x] CTAButton - Primary action button with **real endpoints**
 - [x] SlydesPromoFrame - Final Frame for lead generation
 
+### Commerce Components (Pro Tier Only)
+
+- [x] CommerceButton - Quick-add button with mode variants (enquire/buy_now/add_to_cart)
+- [x] CartButton - Floating button with item count badge
+- [x] CartSheet - iOS-style bottom sheet for cart contents
+- [ ] CheckoutFlow - Stripe checkout integration
+- [x] PaymentsSettings - Stripe Connect onboarding page
+
 ### Features
 
 - [x] Frame navigation (swipe/tap/drag)
@@ -411,6 +565,18 @@ interface SlydeData {
 - [x] CTA buttons wired to real actions
 - [x] Rating display clickable → navigates to reviews Frame
 - [x] Drag-to-close gesture on AboutSheet (iOS-style)
+
+### Commerce Features (Pro Tier Only)
+
+- [x] iOS App Store quick-add button animation (+/✓ transition)
+- [x] Cart state management (add/remove/quantity)
+- [x] Floating cart button with count badge
+- [x] Cart sheet with item list and checkout CTA
+- [x] Commerce mode switching (none/enquire/buy_now/add_to_cart)
+- [x] Feature gating - hide all commerce UI when disabled
+- [ ] Stripe Checkout session creation
+- [ ] Stripe Connect onboarding flow
+- [ ] Order confirmation page
 
 ---
 

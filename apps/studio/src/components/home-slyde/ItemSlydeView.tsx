@@ -1,8 +1,9 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Heart, HelpCircle, Share2, Info, ChevronUp, ChevronLeft } from 'lucide-react'
+import { ChevronUp, ChevronLeft, ShoppingCart, MessageCircle, Zap, Plus, Check } from 'lucide-react'
+import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
 import type { InventoryItem } from './data/highlandMotorsData'
 
 interface ItemSlydeViewProps {
@@ -11,6 +12,9 @@ interface ItemSlydeViewProps {
   onFrameChange: (index: number) => void
   onBack: () => void
   accentColor: string
+  onAddToCart?: (item: InventoryItem) => void
+  onBuyNow?: (item: InventoryItem) => void
+  onEnquire?: (item: InventoryItem) => void
 }
 
 /**
@@ -27,10 +31,26 @@ export function ItemSlydeView({
   onFrameChange,
   onBack,
   accentColor,
+  onAddToCart,
+  onBuyNow,
+  onEnquire,
 }: ItemSlydeViewProps) {
   const frames = item.frames
   const currentFrame = frames[frameIndex] || frames[0]
   const totalFrames = frames.length
+  const commerceMode = item.commerce_mode
+
+  // Heart state (local for demo)
+  const [isHearted, setIsHearted] = useState(false)
+  const [heartCount, setHeartCount] = useState(248)
+  const [showAddSuccess, setShowAddSuccess] = useState(false)
+
+  const handleHeartTap = useCallback(() => {
+    setIsHearted((prev) => {
+      setHeartCount((count) => (prev ? count - 1 : count + 1))
+      return !prev
+    })
+  }, [])
 
   const nextFrame = useCallback(() => {
     if (frameIndex < totalFrames - 1) {
@@ -41,6 +61,31 @@ export function ItemSlydeView({
   const handleTap = useCallback(() => {
     nextFrame()
   }, [nextFrame])
+
+  const handleCommerceClick = useCallback(() => {
+    if (commerceMode === 'add_to_cart' && onAddToCart) {
+      onAddToCart(item)
+      setShowAddSuccess(true)
+      setTimeout(() => setShowAddSuccess(false), 800)
+    } else if (commerceMode === 'buy_now' && onBuyNow) {
+      onBuyNow(item)
+    } else if (commerceMode === 'enquire' && onEnquire) {
+      onEnquire(item)
+    }
+  }, [commerceMode, item, onAddToCart, onBuyNow, onEnquire])
+
+  // Get commerce button config
+  const getCommerceButton = () => {
+    if (!commerceMode || commerceMode === 'none') return null
+    const configs = {
+      enquire: { icon: MessageCircle, label: 'Enquire Now', fullWidth: true },
+      buy_now: { icon: Zap, label: 'Buy Now', fullWidth: true },
+      add_to_cart: { icon: ShoppingCart, label: 'Add to Cart', fullWidth: true },
+    }
+    return configs[commerceMode] || null
+  }
+
+  const commerceButton = getCommerceButton()
 
   return (
     <div className="relative w-full h-full overflow-hidden">
@@ -59,12 +104,13 @@ export function ItemSlydeView({
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
 
-      {/* Back button */}
+      {/* iOS Back button */}
       <button
         onClick={onBack}
-        className="absolute top-10 left-3 z-30 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center"
+        className="absolute top-12 left-3 z-30 flex items-center gap-0.5 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm"
       >
         <ChevronLeft className="w-5 h-5 text-white" />
+        <span className="text-white text-[15px] font-medium pr-1">Back</span>
       </button>
 
       {/* Tap zone for navigation */}
@@ -73,63 +119,19 @@ export function ItemSlydeView({
         onClick={handleTap}
       />
 
-      {/* === TOP SECTION === */}
-      <div className="absolute top-10 left-0 right-0 px-4 z-10">
-        <AnimatePresence mode="wait">
-          {currentFrame.badge && (
-            <motion.div
-              key={`badge-${currentFrame.id}`}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="inline-flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 ml-10"
-            >
-              <span
-                className="text-xs font-bold"
-                style={{ color: accentColor }}
-              >
-                {currentFrame.badge}
-              </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
 
-      {/* === RIGHT SIDE ACTIONS === */}
-      <div className="absolute right-3 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-3">
-        {/* Frame indicator */}
-        <div className="text-[10px] text-white/60 font-medium mb-2">
-          {frameIndex + 1}/{totalFrames}
-        </div>
-
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Heart className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-[10px] text-white/60">248</span>
-        </button>
-
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <HelpCircle className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-[10px] text-white/60">FAQ</span>
-        </button>
-
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Share2 className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-[10px] text-white/60">Share</span>
-        </button>
-
-        <button className="flex flex-col items-center gap-1">
-          <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Info className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-[10px] text-white/60">Info</span>
-        </button>
-      </div>
+      {/* === RIGHT SIDE ACTIONS === (using shared SocialActionStack) */}
+      <SocialActionStack
+        heartCount={heartCount}
+        isHearted={isHearted}
+        faqCount={12}
+        onHeartTap={handleHeartTap}
+        onFAQTap={() => {}}
+        onShareTap={() => {}}
+        onInfoTap={() => {}}
+        slideIndicator={`${frameIndex + 1}/${totalFrames}`}
+        className="absolute right-3 top-1/2 -translate-y-1/2 z-40"
+      />
 
       {/* === BOTTOM CONTENT === */}
       <div className="absolute bottom-0 left-0 right-0 p-4 pb-6 z-10">
@@ -153,15 +155,27 @@ export function ItemSlydeView({
               </p>
             )}
 
-            {/* CTA Button */}
-            {currentFrame.cta && (
+            {/* Commerce Button (takes priority over frame CTA) */}
+            {commerceButton ? (
+              <button
+                onClick={handleCommerceClick}
+                className="w-full py-3 rounded-full font-semibold text-sm text-white transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+                style={{ backgroundColor: accentColor }}
+              >
+                <commerceButton.icon className="w-4 h-4" />
+                {commerceButton.label}
+                {item.price && (
+                  <span className="ml-1 opacity-80">• {item.price}</span>
+                )}
+              </button>
+            ) : currentFrame.cta ? (
               <button
                 className="w-full py-3 rounded-full font-semibold text-sm text-white transition-all"
                 style={{ backgroundColor: accentColor }}
               >
                 {currentFrame.cta.text}
               </button>
-            )}
+            ) : null}
           </motion.div>
         </AnimatePresence>
 

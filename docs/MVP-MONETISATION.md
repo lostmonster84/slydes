@@ -1,11 +1,13 @@
 # Slydes – MVP Monetisation Pack
 
 This document contains:
-1. Pricing page copy (2 cards, zero fluff)
+1. Pricing page copy (3 cards)
 2. In-product upgrade prompts
 3. Metrics to track in the first 30 days
 
 Status: MVP – Locked
+
+> **Source of truth**: [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md)
 
 ---
 
@@ -42,7 +44,8 @@ For anyone who wants to publish a Slyde and see how it feels in the wild.
 **Does not include**
 - Analytics
 - Multiple Slydes
-- Advanced media limits
+- Inventory browsing
+- Commerce features
 
 CTA:
 **Create your first Slyde**
@@ -65,17 +68,45 @@ When Slydes becomes more than an experiment.
   - views
   - swipe depth
   - completion rate
-- Faster publishing workflows
+- Inventory browsing
+- Enquire / Book CTAs
+- Up to 6 categories
 
 CTA:
 **Upgrade to Creator**
 
 ---
 
-### Pricing Page Footer (Optional)
+### Pro Plan
+
+**For businesses that sell**
+
+£50 / month
+
+Full commerce. Sell directly. Get paid.
+
+**Includes**
+- Everything in Creator
+- Unlimited Slydes
+- Unlimited categories
+- Buy Now CTAs
+- Add to Cart + Checkout
+- Order management
+- Stripe Connect integration
+- Priority support
+
+CTA:
+**Upgrade to Pro**
+
+---
+
+### Pricing Page Footer
 
 No credit card required to start.
-Upgrade when you want clarity, not before.
+Upgrade when you need more.
+
+Slydes takes 0% of your sales.
+Payments processed by Stripe.
 
 ---
 
@@ -148,6 +179,39 @@ Upgrade to Creator
 
 ---
 
+### Prompt 5: Commerce Feature Access
+
+**Trigger**
+User tries to enable Buy Now or Add to Cart.
+
+**Message**
+Commerce features are available on Pro.
+
+Sell directly with Buy Now, Cart, and Checkout powered by Stripe.
+
+CTA:
+Upgrade to Pro
+
+Secondary (quiet):
+Use Enquire/Book instead (Creator)
+
+---
+
+### Prompt 6: Inventory Browsing Access
+
+**Trigger**
+User tries to enable inventory on a category (Free tier).
+
+**Message**
+Inventory browsing is available on Creator.
+
+Show grids of items and let customers explore.
+
+CTA:
+Upgrade to Creator
+
+---
+
 ### What We Do NOT Do
 
 - No countdown timers
@@ -164,7 +228,7 @@ Upgrade is contextual, not emotional.
 These metrics decide whether:
 - pricing is right
 - free limits are correct
-- Creator is compelling
+- Creator and Pro are compelling
 
 Ignore everything else.
 
@@ -193,31 +257,46 @@ No sharing means no perceived value.
 
 ---
 
-### C. Free → Paid Conversion Signals
+### C. Free → Creator Conversion Signals
 
 Track:
 - % of free users who:
   - try to create a second Slyde
   - click analytics
   - hit media limits
+  - try to enable inventory
 - Time from first share → upgrade
 
 These moments should naturally cluster around upgrade.
 
 ---
 
-### D. Paid User Behaviour
+### D. Creator → Pro Conversion Signals
+
+Track:
+- % of Creator users who:
+  - try to enable Buy Now
+  - try to enable Cart/Checkout
+  - ask about commerce features
+- Time from Creator upgrade → Pro upgrade
+
+Commerce need should be obvious.
+
+---
+
+### E. Paid User Behaviour
 
 Track:
 - Average number of Slydes per paid user
 - Analytics usage frequency
+- Commerce activation rate (Pro)
 - Retention after first upgrade
 
 If paid users don't actively use analytics, the value prop is wrong.
 
 ---
 
-### E. Drop-Off Diagnostics
+### F. Drop-Off Diagnostics
 
 Track:
 - Where users abandon creation
@@ -242,5 +321,10 @@ Only behaviour matters in the first 30 days.
 ## One-Sentence Summary
 
 Free proves the format.
-£25 buys clarity.
+Creator unlocks growth.
+Pro enables commerce.
 Metrics decide what comes next.
+
+---
+
+*Last updated: December 16, 2025*

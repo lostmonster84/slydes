@@ -1,16 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Gift, Check, X } from 'lucide-react'
 import { redeemUnlockCode, hasUnlockCode, clearUnlockCode } from '@/lib/whitelist'
 
 export function PromoCodeInput() {
   const [code, setCode] = useState('')
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
-  const [isUnlocked, setIsUnlocked] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return hasUnlockCode()
-  })
+  const [isUnlocked, setIsUnlocked] = useState(false)
+
+  // Check unlock state after hydration to avoid mismatch
+  useEffect(() => {
+    setIsUnlocked(hasUnlockCode())
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

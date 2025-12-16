@@ -31,19 +31,21 @@ Slydes operates as a **two-sided platform** connecting businesses (supply) with 
 
 ---
 
-#### PRICING MODEL: SIMPLIFIED TWO-TIER
+#### PRICING MODEL: THREE-TIER
 
-> **See [PAY-TIERS.md](./PAY-TIERS.md) for source of truth on pricing and currency conversions.**
+> **See [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) for source of truth on pricing and payments.**
 
-**Freemium Model** (Free + Creator)
+**Freemium Model** (Free + Creator + Pro)
 
 | Tier | Price | Features | Target Customer |
 |------|-------|----------|-----------------|
 | **Free** | £0 | 1 Slyde, Slydes watermark, no analytics | Testing, early creators |
-| **Creator** | £25/mo or £250/yr | Up to 10 Slydes, analytics, no watermark, increased media limits | Most businesses (100%) |
+| **Creator** | £25/mo or £250/yr | Up to 10 Slydes, analytics, no watermark, Enquire/Book CTAs | Lead generation businesses |
+| **Pro** | £50/mo or £500/yr | Unlimited Slydes, full commerce (Buy Now, Cart, Checkout) | E-commerce, direct sellers |
 
-**Annual Discount**: 17% off
+**Annual Discount**: 17% off (2 months free)
 - Creator Annual: £250/year (vs £300)
+- Pro Annual: £500/year (vs £600)
 
 ---
 
@@ -76,16 +78,18 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 **Projected MRR (End of 2025)**:
 
-> See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing.
+> See [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) for current pricing.
 
 | Tier | Customers | MRR/Customer | Total MRR |
 |------|-----------|--------------|-----------|
 | Free | 8,000 | £0 | £0 (viral growth engine) |
-| Creator Monthly | 800 | £25 | £20,000 |
-| Creator Annual | 1,200 | £20.83 | £25,000 |
-| **Total Paid** | **2,000** | — | **£45,000** |
+| Creator Monthly | 600 | £25 | £15,000 |
+| Creator Annual | 800 | £20.83 | £16,667 |
+| Pro Monthly | 300 | £50 | £15,000 |
+| Pro Annual | 300 | £41.67 | £12,500 |
+| **Total Paid** | **2,000** | — | **£59,167** |
 
-**ARR at End of 2025**: ~£540K
+**ARR at End of 2025**: ~£710K
 
 ---
 
@@ -297,7 +301,7 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 ### Lifetime Value (LTV)
 
-> See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing.
+> See [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) for current pricing.
 
 **Average Customer**:
 - Monthly subscription: £25 (Creator tier)
@@ -377,7 +381,7 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 ### Gross Margin
 
-> See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing.
+> See [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) for current pricing.
 
 **Phase 1-2** (Subscription Only):
 - Revenue per customer: £25/month
@@ -406,7 +410,7 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 **Break-Even Point (Subscription Only)**:
 - $175K / $14 = **12,500 customers**
-- At £25/month (see PAY-TIERS.md) = **£312K MRR**
+- At avg £35/month (Creator + Pro mix) = **£438K MRR**
 
 **Timeline**:
 - Q4 2025: ~$38K MRR (2,000 customers) — Not profitable yet
@@ -449,7 +453,7 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 **Positioned Between**:
 - **Too Cheap**: Linktree (£7/mo) — too simple
 - **Too Expensive**: Custom dev (£8K-40K) — inaccessible
-- **Sweet Spot**: £25/mo (see PAY-TIERS.md) — accessible + premium features
+- **Sweet Spot**: £25-50/mo — accessible + premium features
 
 **Value Perception**:
 - Traditional website: £4K-£16K upfront + £80/mo hosting
@@ -460,7 +464,7 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 ### Pricing Psychology
 
-> See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing and tiers.
+> See [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) for current pricing and tiers.
 
 **Free Tier**:
 - **Purpose**: Remove friction, let businesses try risk-free
@@ -484,7 +488,7 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 
 **Strategy**: Grandfather existing customers, raise prices for new signups
 
-> See [PAY-TIERS.md](./PAY-TIERS.md) for current pricing.
+> See [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) for current pricing.
 > See [FUTURE-PRICING.md](./FUTURE-PRICING.md) for planned future tiers.
 
 ---
@@ -563,7 +567,7 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 **Target: >100%**
 
 **How**:
-- Start: Customer pays £25/mo (Creator - see PAY-TIERS.md)
+- Start: Customer pays £25/mo (Creator) or £50/mo (Pro)
 - Month 12: Adds transaction revenue (£40/mo through bookings)
 - Revenue per customer grows from £25 to £65
 - **Year 1 NRR**: 260% (incredible expansion)
@@ -639,7 +643,7 @@ Even with 5% churn, transaction revenue more than offsets it.
 
 ---
 
-*Pricing source of truth: [PAY-TIERS.md](./PAY-TIERS.md). Revenue projections shown in mixed currencies for investor context.*
+*Pricing source of truth: [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md). Revenue projections shown in mixed currencies for investor context.*
 
 
 

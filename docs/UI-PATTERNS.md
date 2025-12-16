@@ -225,18 +225,18 @@ Categories are the items shown in the Home Slyde drawer. Each category links to 
 | Plan | Max Categories |
 |------|----------------|
 | Free | 4 |
-| Pro | 6 |
-| Enterprise | Unlimited |
+| Creator | 6 |
+| Pro | Unlimited |
 
 ### What Is Inventory?
 
 Inventory is an **optional paid feature** that lets categories contain a list of items.
 
-**Without Inventory** (default):
+**Without Inventory** (Free):
 - Category Slyde ends with a CTA (e.g., "Book Service")
 - User completes action externally
 
-**With Inventory** (Pro/Enterprise):
+**With Inventory** (Creator+):
 - Category Slyde has "View All" button on final frame
 - Opens Inventory Grid showing all items
 - Each item links to an Item Slyde
@@ -252,76 +252,177 @@ Inventory is how we show items (cars, products, properties). Commerce is what ha
 
 Each inventory item chooses exactly **one primary CTA mode**:
 
-- **Enquire / Book** (default for services, rentals, bookings)
+- **Enquire / Book** (Creator+)
   - CTA opens an external link, phone call, enquiry form, or message action
-- **Buy now** (MVP commerce)
+- **Buy now** (Pro only)
   - CTA creates a Stripe Checkout Session and redirects to Stripe
-- **Add to cart** (paid tier)
+- **Add to cart** (Pro only)
   - CTA adds item to cart; checkout uses Stripe Checkout with multiple line items
 
 #### Paid Feature Gating (Studio UI)
 
-We gate at two levels:
+We gate at three levels:
 
-1) **Organization entitlement** (plan feature): Inventory/Commerce enabled for the organization.
-- If disabled: hide Inventory nav + hide/lock `has_inventory` controls.
+| Feature | Free | Creator | Pro |
+|---------|------|---------|-----|
+| Inventory browsing | ✗ | ✓ | ✓ |
+| Enquire / Book CTA | ✗ | ✓ | ✓ |
+| Buy Now | ✗ | ✗ | ✓ |
+| Cart + Checkout | ✗ | ✗ | ✓ |
+
+1) **Organization entitlement** (plan feature):
+- Free: No inventory, no commerce
+- Creator: Inventory + Enquire/Book CTAs
+- Pro: Full commerce (Buy Now, Cart, Checkout)
 
 2) **Category toggle**: `has_inventory`
 - `false` → category ends with CTA (no grid)
 - `true` → category can show "View All" → Inventory Grid → Item Slydes
 
+3) **Commerce mode** (Pro only): `commerce_mode`
+- `enquire` → external link, phone, form (Creator default)
+- `buy_now` → Stripe Checkout (Pro)
+- `cart` → Add to cart + Checkout (Pro)
+
 ### Cart UX Pattern (Add to cart + Checkout CTA)
 
-When **Cart** is enabled (paid tier), we support *two* “add” entry points and *one* consistent checkout CTA.
+When **Cart** is enabled (Pro tier), we support *two* "add" entry points and *one* consistent checkout CTA.
 
-#### 1) Inventory Grid: Quick-add button (primary for retail)
+> **⚠️ PAID FEATURE**: Commerce features (Cart, Buy Now, Checkout) require Pro tier and Stripe Connect.
+> When commerce is disabled, all commerce UI elements are hidden - no buttons, no cart, no checkout.
 
-Each item card has a compact button:
-- **Default state**: `Add`
-- **Added state**: `Added` (or a checkmark) + tapping again removes (optional) or opens cart (optional)
+#### 1) Inventory Grid: iOS App Store-style Quick-add Button
+
+Each item row has a circular add button (iOS HIG compliant):
+
+```
+┌────────────────────────────────────────────────────┐
+│ [Thumb]  Title                              [+]    │
+│          £18.50                                    │
+├────────────────────────────────────────────────────┤
+```
+
+- **Layout**: Thumbnail + Title (2 lines max) + Price only. **No subtitle** (removed for scanability)
+- **Default state**: Accent-colored circle with `+` icon (`w-8 h-8 rounded-full`)
+- **Added state**: Green circle (`#22c55e`) with `✓` checkmark for 800ms
+- **Animation**: `scale: 0 → 1` with `duration: 0.15s`
+
+Implementation (`CommerceButton` in `InventoryGridView.tsx`):
+```tsx
+// iOS App Store style - circle button with + or ✓
+<motion.button
+  onClick={handleClick}
+  animate={{ backgroundColor: showSuccess ? '#22c55e' : accentColor }}
+  transition={{ duration: 0.15 }}
+  className="w-8 h-8 rounded-full flex items-center justify-center"
+>
+  {showSuccess ? <Check /> : <Plus />}
+</motion.button>
+```
 
 Rules:
-- The item card remains tappable to open the Item Slyde (deep dive).
-- The quick-add button should not hijack the entire card tap.
+- The item row remains tappable to open the Item Slyde (deep dive).
+- The quick-add button intercepts its own tap (`e.stopPropagation()`).
+- Success feedback is local to the button (no toast, no cart drawer auto-open).
 
-#### 2) Item Slyde: Primary CTA becomes Add to cart
+#### 2) Item Slyde: Full-width Commerce CTA
 
-On the final “Action” frame:
-- CTA label: `Add to cart` (or `Add this vehicle`)
-- Secondary action (optional): `View cart`
+On the Item Slyde, the commerce button is full-width at the bottom:
+- `add_to_cart`: "Add to Cart • £19.00" with ShoppingCart icon
+- `buy_now`: "Buy Now • £19.00" with Zap icon
+- `enquire`: "Enquire Now" with MessageCircle icon
 
-#### 3) Persistent Checkout CTA (bottom bar)
+#### 3) Floating Cart Button (Non-intrusive)
 
-When cart has ≥ 1 item:
-- Show a **sticky bottom bar** (above safe-area) with:
-  - left: item count + subtotal (e.g., `3 items • £1,240`)
-  - right: primary CTA button `Checkout`
+When cart has ≥ 1 item, show a floating cart button:
+
+```
+┌─────────────────────────────────────────┐
+│                                   [🛒7] │  ← Floating cart (top-right)
+│                                         │
+│           INVENTORY GRID                │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+- **Position**: `absolute top-4 right-4 z-40`
+- **Size**: `w-11 h-11 rounded-full`
+- **Badge**: `w-5 h-5` positioned at `-top-1 -right-1`
+- **Color**: White badge with accent text on accent background
 
 Behavior:
-- `Checkout` opens Stripe Checkout for the current cart.
-- If cart is empty, the bar is hidden.
-- The bar should appear in:
-  - Inventory Grid
-  - Item Slydes (while browsing)
+- Tap opens cart sheet (not intrusive auto-open on add)
+- Cart sheet has iOS-style handle bar, swipe-to-delete items
+- Checkout button at bottom of cart sheet
+
+#### 4) Cart Sheet (iOS-style Bottom Sheet)
+
+```
+┌─────────────────────────────────────────┐
+│              ═══                        │  ← iOS handle bar
+│              Cart                       │
+├─────────────────────────────────────────┤
+│  Title                        [−][2][+] │  ← Swipeable row
+│  Subtitle                       £18.50  │
+│  ← swipe to delete                      │
+├─────────────────────────────────────────┤
+│  Total                          £37.00  │
+│  [        Checkout        ]             │
+└─────────────────────────────────────────┘
+```
+
+Components:
+- Handle bar: `w-9 h-[5px] rounded-full bg-white/30`
+- Swipe-to-delete: Framer Motion `drag="x"` with `-80px` threshold
+- iOS stepper: `w-7 h-6` buttons with `−`/`+` icons
+- Checkout button: Full-width, accent-colored, `h-11 rounded-xl`
 
 #### Cart persistence
 
-Cart should persist per organization:
-- MVP: localStorage (client) + optional “clear on checkout success”
+Cart persists per organization:
+- MVP: localStorage (client) + clear on checkout success
 - Later: server-backed cart for cross-device continuity
 
-### Inventory Grid
+### Inventory Grid (iOS HIG Compliant)
 
-The Inventory Grid displays items in a scrollable list/grid format.
+The Inventory Grid displays items in an iOS-style grouped list format. Optimized for scanability.
 
-**Each item shows**:
-- Thumbnail image
-- Title (e.g., "BMW 320d M Sport")
-- Subtitle (e.g., "2022 - 15,000 miles")
-- Price (e.g., "£28,995")
-- Badge (optional, e.g., "Featured", "New In")
+**Layout**: iOS Settings-style grouped list
+- Background: `bg-[#1c1c1e]` (iOS system dark)
+- Grouped container: `bg-[#2c2c2e] rounded-xl mx-4`
+- Separators: `h-[0.5px] bg-white/10 ml-[76px]` (inset from left)
 
-**Tap item** → Opens that item's Item Slyde
+**Navigation Bar**:
+```
+┌─────────────────────────────────────────┐
+│ < Back                                  │
+│ Styling  8                              │  ← Large title + count
+└─────────────────────────────────────────┘
+```
+- Back button: Accent-colored with chevron + "Back" text
+- Title: `text-[34px] font-bold tracking-tight` (iOS large title)
+- Count: `text-[15px] text-white/40` inline with title
+
+**Each item row** (simplified for scanability):
+```
+┌────────────────────────────────────────────────────┐
+│ [12x12]  Product Title                       [+]   │
+│  thumb   £18.50                                    │
+├────────────────────────────────────────────────────┤
+```
+- **Thumbnail**: `w-12 h-12 rounded-lg` with product image (fallback: gradient placeholder)
+- **Title**: `text-[15px] font-medium text-white line-clamp-2` (allows 2 lines)
+- **Price**: `text-[15px] font-semibold` in accent color
+- **NO subtitle** - removed for scanability (AIDA: don't block Interest with noise)
+- Commerce button OR chevron (mutually exclusive)
+
+**Why no subtitle?**
+- Subtitles caused truncation issues ("AC Dail...", "Condit...ner")
+- Grid is for quick scanning → Title + Price is enough
+- Details live in the Item Slyde (tap to see full info)
+
+**Tap item row** → Opens that item's Item Slyde
+**Tap commerce button** → Adds to cart (with green tick feedback)
 
 ### User Journey: Without Inventory
 
@@ -451,7 +552,7 @@ No shortcuts to inventory. The grid is earned through immersion.
 **Contents**:
 1. Header: Business logo, name, location
 2. About section: Expandable text + highlights
-3. Contact buttons: Phone, Email, Message
+3. Contact buttons: Call, Email, Message (iOS 17+ style)
 
 **Use case**: "Tell me about this business"
 
@@ -463,9 +564,36 @@ No shortcuts to inventory. The grid is earned through immersion.
 1. Header: "Frame X of Y" + frame title
 2. Frame headline & description
 3. Frame items (bullet points)
-4. Collapsible business contact (bottom)
+4. Collapsible business contact (bottom) with iOS 17+ contact pills
 
 **Use case**: "Tell me more about what I'm looking at"
+
+### Contact Buttons (iOS 17+ Style)
+
+Modern contact actions use horizontal pill buttons with iOS system colors:
+
+```
+┌────────────────────────────────────────────────────┐
+│ [📞 Call]  [✉️ Email]  [💬 Message]                  │
+└────────────────────────────────────────────────────┘
+```
+
+**Styling**:
+- Layout: `flex items-center gap-2` (horizontal row)
+- Each button: `flex-1 h-11 rounded-xl` (pill shape)
+- Icon: `w-[18px] h-[18px]` + label `text-[15px] font-semibold`
+
+**iOS System Colors**:
+| Action | Background | Active State |
+|--------|------------|--------------|
+| Call | `#30d158` (green) | `#28b84d` |
+| Email | `#0a84ff` (blue) | `#0070e0` |
+| Message | `#5856d6` (purple) | `#4b49c0` |
+
+**Why this design?**
+- OLD: Circular icons with text labels below (iOS 10 era)
+- NEW: Colored pill buttons inline (iOS 17+ Contact Card style)
+- Benefits: Larger touch targets, clearer affordance, premium feel
 
 ### ShareSheet
 
@@ -638,6 +766,148 @@ Click "Home Slyde" to return to Home level editing.
 
 ---
 
+## iOS Human Interface Guidelines (HIG) Compliance
+
+All mobile UI components follow Apple's iOS Human Interface Guidelines. This is the gold standard as we will be releasing on Apple phones.
+
+### System Colors (Dark Mode)
+
+| Color | Hex | Usage |
+|-------|-----|-------|
+| System Background | `#1c1c1e` | Main screen background |
+| Secondary Background | `#2c2c2e` | Grouped containers, cards |
+| Tertiary Background | `#3a3a3c` | Thumbnails, placeholders |
+| Separator | `white/10` | List dividers (0.5px) |
+| Label | `white` | Primary text |
+| Secondary Label | `white/50` | Subtitles, descriptions |
+| Tertiary Label | `white/40` | Counts, metadata |
+
+### Component Patterns
+
+#### Back Buttons
+
+**In immersive views** (CategorySlydeView, ItemSlydeView):
+```tsx
+<button className="absolute top-12 left-3 z-30 flex items-center gap-0.5 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm">
+  <ChevronLeft className="w-5 h-5 text-white" />
+  <span className="text-white text-[15px] font-medium pr-1">Back</span>
+</button>
+```
+
+**In list views** (InventoryGridView):
+```tsx
+<button className="flex items-center gap-0.5 -ml-1" style={{ color: accentColor }}>
+  <ChevronLeft className="w-5 h-5" />
+  <span className="text-[17px]">Back</span>
+</button>
+```
+
+#### Bottom Sheets
+
+All sheets use the iOS spring animation and handle bar:
+```tsx
+<motion.div
+  initial={{ y: '100%' }}
+  animate={{ y: 0 }}
+  exit={{ y: '100%' }}
+  transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+  className="bg-[#1c1c1e] rounded-t-[20px]"
+>
+  {/* Handle bar */}
+  <div className="flex justify-center pt-2 pb-3">
+    <div className="w-9 h-[5px] rounded-full bg-white/30" />
+  </div>
+</motion.div>
+```
+
+#### Grouped Lists
+
+iOS Settings-style grouped list:
+```tsx
+<div className="mx-4 bg-[#2c2c2e] rounded-xl overflow-hidden">
+  {items.map((item, i) => (
+    <>
+      <button className="w-full flex items-center gap-3 px-4 py-3">
+        {/* content */}
+      </button>
+      {i < items.length - 1 && (
+        <div className="ml-[76px] h-[0.5px] bg-white/10" />
+      )}
+    </>
+  ))}
+</div>
+```
+
+#### Large Titles
+
+iOS navigation bar with large title:
+```tsx
+<div className="pt-12 pb-2 px-4 bg-[#1c1c1e]">
+  <button>{/* Back */}</button>
+  <h1 className="text-white text-[34px] font-bold tracking-tight mt-1">
+    {title}
+  </h1>
+</div>
+```
+
+### Animation Standards
+
+| Animation | Duration | Easing |
+|-----------|----------|--------|
+| Sheet slide | spring | `damping: 28, stiffness: 320` |
+| Success tick | 0.15s | ease-out |
+| Content fade | 0.3s | ease-out |
+| Button press | 0.1s | ease-out |
+
+### Touch Targets
+
+- Minimum touch target: 44x44pt (iOS standard)
+- Stepper buttons: `w-7 h-6` minimum
+- Circle buttons: `w-8 h-8` (commerce) or `w-11 h-11` (cart FAB)
+
+---
+
+## Commerce Feature Gating
+
+> **CRITICAL**: Commerce is a PAID feature. When disabled, ALL commerce UI must be hidden.
+
+### What Gets Hidden When Commerce is Off
+
+| Component | Visibility |
+|-----------|------------|
+| `CommerceButton` in InventoryGridView | Hidden (shows chevron instead) |
+| `FloatingCartButton` | Hidden completely |
+| Commerce CTA in ItemSlydeView | Hidden (shows regular CTA or nothing) |
+| Cart sheet | Never opens |
+| Checkout flow | Inaccessible |
+
+### Implementation Pattern
+
+```tsx
+// In InventoryGridView
+{item.commerce_mode && item.commerce_mode !== 'none' ? (
+  <CommerceButton mode={item.commerce_mode} ... />
+) : (
+  <ChevronRight className="w-5 h-5 text-white/20" />
+)}
+
+// In HomeSlydeViewer
+{commerceEnabled && cart.itemCount > 0 && (
+  <FloatingCartButton ... />
+)}
+```
+
+### Stripe Connect Requirement
+
+Commerce features require:
+1. Organization has Pro tier (`plan >= 'pro'`)
+2. Organization has connected Stripe account (`stripe_account_id` is set)
+3. Stripe account is fully onboarded (`chargesEnabled === true`)
+
+If any condition is false, commerce UI is hidden.
+
+---
+
 ## Related Documents
 
 For deep dives into specific topics:
@@ -651,4 +921,5 @@ For deep dives into specific topics:
 ---
 
 *Document Status: CANONICAL*
+*Last Updated: December 16, 2025 - iOS HIG compliance + Commerce patterns + iOS 17+ contact buttons + Inventory grid thumbnails*
 *This is the master reference for Slydes platform behavior.*

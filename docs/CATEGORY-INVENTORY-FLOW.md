@@ -234,9 +234,13 @@ create table public.inventory_items (
   -- Display (shown in grid)
   title text not null,                    -- e.g., "BMW 320d M Sport"
   subtitle text,                          -- e.g., "2022 - 15,000 miles"
-  price text,                             -- e.g., "GBP28,995" (formatted string)
+  price text,                             -- e.g., "£28,995" (formatted string)
+  price_cents integer,                    -- Price in cents for Stripe (2899500)
   thumbnail_url text,                     -- Square image for grid
   badge text,                             -- e.g., "Featured", "New In"
+
+  -- Commerce (PAID FEATURE - Pro tier only)
+  commerce_mode text default 'none',      -- 'none' | 'enquire' | 'buy_now' | 'add_to_cart'
 
   -- Linked Child Slyde (the item deep-dive)
   item_slyde_id uuid references public.slydes(id) on delete set null,
@@ -253,6 +257,14 @@ create table public.inventory_items (
 create index inventory_items_category_idx on public.inventory_items(category_id);
 create index inventory_items_display_order_idx on public.inventory_items(display_order);
 ```
+
+**Commerce Mode Values**:
+| Mode | Plan | Behavior |
+|------|------|----------|
+| `none` | All | No commerce button, shows chevron |
+| `enquire` | Creator+ | Opens enquiry form/link/phone |
+| `buy_now` | Pro | Direct Stripe Checkout |
+| `add_to_cart` | Pro | Adds to cart, checkout later |
 
 ---
 

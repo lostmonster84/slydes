@@ -2,12 +2,12 @@
 
 import { useEffect, useMemo, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
-import { ChevronDown, TrendingUp, TrendingDown, Clock, MousePointer, Share2, MapPin, Info } from 'lucide-react'
+import { ChevronDown, TrendingUp, TrendingDown, Clock, MousePointer, Share2, MapPin, Info, Lock, Sparkles, BarChart3, ArrowRight } from 'lucide-react'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import Link from 'next/link'
 import { useDemoBusiness } from '@/lib/demoBusiness'
-import { hasUnlockCode } from '@/lib/whitelist'
+import { useEffectivePlan } from '@/hooks/useEffectivePlan'
+import { UpgradeModal } from '@/components/billing/UpgradeModal'
 
 /**
  * Slydes HQ — Analytics (Forensics Lab)
@@ -83,10 +83,212 @@ function InfoButton({ label, description }: { label: string; description: string
   )
 }
 
+/**
+ * Dev toggle for switching between free/creator
+ */
+function PlanToggle({ plan, setPlan }: { plan: 'free' | 'creator'; setPlan: (p: 'free' | 'creator') => void }) {
+  return (
+    <button
+      onClick={() => setPlan(plan === 'free' ? 'creator' : 'free')}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-full transition-colors ${
+        plan === 'creator'
+          ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-cyan-500/30 text-cyan-400'
+          : 'bg-gray-100 border border-gray-200 text-gray-600 dark:bg-white/10 dark:border-white/20 dark:text-white/60'
+      }`}
+      title="Toggle plan (dev only)"
+    >
+      {plan === 'creator' ? (
+        <>
+          <Sparkles className="w-3.5 h-3.5" />
+          Creator
+        </>
+      ) : (
+        <>
+          <Lock className="w-3.5 h-3.5" />
+          Free
+        </>
+      )}
+    </button>
+  )
+}
+
+/**
+ * Teaser shown to free users - analytics-specific marketing with funnel visualization
+ */
+function AnalyticsTeaser() {
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white overflow-hidden">
+      <div className="flex h-screen">
+        <HQSidebarConnected activePage="analytics" />
+
+        <main className="flex-1 flex flex-col overflow-hidden">
+          <header className="h-16 border-b border-gray-200 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#1c1c1e]/80">
+            <div>
+              <h1 className="text-xl font-bold font-display tracking-tight text-gray-900 dark:text-white">Analytics</h1>
+              <p className="text-sm text-gray-500 dark:text-white/60">Deep-dive into your Slyde performance</p>
+            </div>
+          </header>
+
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+            <div className="max-w-5xl mx-auto">
+              {/* Hero - centered layout */}
+              <div className="text-center mb-12">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200/60 mb-6 dark:from-blue-500/10 dark:to-cyan-500/10 dark:border-blue-500/20">
+                  <BarChart3 className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                  <span className="text-sm font-semibold text-blue-700 dark:text-cyan-300">Deep Analytics</span>
+                </div>
+
+                <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-gray-900 dark:text-white mb-4">
+                  Find where viewers drop off
+                </h2>
+
+                <p className="text-lg text-gray-600 dark:text-white/60 max-w-2xl mx-auto">
+                  See exactly which frame loses people. Fix it. Watch completion rates climb.
+                </p>
+              </div>
+
+              {/* Mock Analytics Dashboard */}
+              <div className="relative">
+                {/* Blur overlay with CTA */}
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-gradient-to-t from-gray-50 via-gray-50/80 to-transparent dark:from-[#1c1c1e] dark:via-[#1c1c1e]/80">
+                  <div className="text-center">
+                    <button
+                      onClick={() => setShowUpgradeModal(true)}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/20"
+                    >
+                      <Lock className="w-4 h-4" />
+                      Upgrade to Creator
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                    <p className="mt-3 text-sm text-gray-500 dark:text-white/50">£25/month • Cancel anytime</p>
+                  </div>
+                </div>
+
+                {/* Stats row */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 blur-[2px] pointer-events-none select-none">
+                  {[
+                    { label: 'Total starts', value: '1,240', sub: '+18% vs last week' },
+                    { label: 'Completion rate', value: '56%', sub: '72% avg depth' },
+                    { label: 'CTA clicks', value: '166', sub: '13.4% click rate' },
+                    { label: 'Bounce rate', value: '12%', sub: '4.2s per frame' },
+                  ].map((stat) => (
+                    <div key={stat.label} className="p-4 rounded-xl bg-white border border-gray-200 dark:bg-[#2c2c2e] dark:border-white/10">
+                      <div className="text-xs text-gray-500 dark:text-white/50">{stat.label}</div>
+                      <div className="mt-1 text-2xl font-mono font-bold text-gray-900 dark:text-white">{stat.value}</div>
+                      <div className="mt-1 text-xs text-gray-400 dark:text-white/40">{stat.sub}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Drop-off funnel visualization */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 blur-[2px] pointer-events-none select-none">
+                  {/* Funnel chart */}
+                  <div className="p-6 rounded-2xl bg-white border border-gray-200 dark:bg-[#2c2c2e] dark:border-white/10">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center">
+                        <TrendingDown className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-gray-900 dark:text-white">Where people leave</div>
+                        <div className="text-xs text-gray-500 dark:text-white/50">Frame-by-frame drop-off</div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      {[
+                        { frame: 'Frame 1 (Hook)', pct: 100, drop: null },
+                        { frame: 'Frame 2 (How)', pct: 78, drop: 22 },
+                        { frame: 'Frame 3 (What)', pct: 55, drop: 23 },
+                        { frame: 'Frame 4 (Trust)', pct: 49, drop: 6 },
+                        { frame: 'Frame 5 (Proof)', pct: 45, drop: 4 },
+                        { frame: 'Frame 6 (Action)', pct: 40, drop: 5 },
+                      ].map((f) => (
+                        <div key={f.frame}>
+                          <div className="flex items-center justify-between text-sm mb-1">
+                            <span className="text-gray-700 dark:text-white/80">{f.frame}</span>
+                            <div className="flex items-center gap-2">
+                              {f.drop && <span className="text-xs text-gray-400 dark:text-white/40">-{f.drop}%</span>}
+                              <span className="font-mono font-semibold text-gray-900 dark:text-white">{f.pct}%</span>
+                            </div>
+                          </div>
+                          <div className="h-2 bg-gray-100 rounded-full overflow-hidden dark:bg-white/10">
+                            <div
+                              className="h-full bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full"
+                              style={{ width: `${f.pct}%` }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Traffic sources + Best CTA */}
+                  <div className="space-y-6">
+                    <div className="p-6 rounded-2xl bg-white border border-gray-200 dark:bg-[#2c2c2e] dark:border-white/10">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center">
+                          <MapPin className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900 dark:text-white">Traffic sources</div>
+                          <div className="text-xs text-gray-500 dark:text-white/50">Where viewers come from</div>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        {[
+                          { source: 'QR codes', pct: 42 },
+                          { source: 'Bio links', pct: 28 },
+                          { source: 'Direct', pct: 18 },
+                          { source: 'Ads', pct: 12 },
+                        ].map((s) => (
+                          <div key={s.source} className="flex items-center gap-3">
+                            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden dark:bg-white/10">
+                              <div
+                                className="h-full bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full"
+                                style={{ width: `${s.pct}%` }}
+                              />
+                            </div>
+                            <span className="text-xs text-gray-600 dark:text-white/60 w-16">{s.source}</span>
+                            <span className="font-mono text-xs font-semibold text-gray-900 dark:text-white w-8 text-right">{s.pct}%</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200/60 dark:from-blue-500/10 dark:to-cyan-500/10 dark:border-blue-500/20">
+                      <div className="flex items-center gap-2 mb-3">
+                        <MousePointer className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                        <span className="text-sm font-semibold text-blue-700 dark:text-cyan-300">Best performing CTA</span>
+                      </div>
+                      <div className="text-lg font-semibold text-gray-900 dark:text-white">"Book now"</div>
+                      <div className="text-sm text-gray-600 dark:text-white/60">Camping • Frame 6</div>
+                      <div className="mt-2 font-mono text-2xl font-bold text-blue-700 dark:text-cyan-300">14.1%</div>
+                      <div className="text-xs text-gray-500 dark:text-white/50">click rate</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      {/* Ambient glow */}
+      <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[180px] pointer-events-none dark:bg-blue-500/12" />
+      <div className="fixed bottom-0 right-1/4 w-[520px] h-[520px] bg-cyan-500/10 rounded-full blur-[180px] pointer-events-none dark:bg-cyan-500/12" />
+
+      {/* Upgrade Modal */}
+      <UpgradeModal isOpen={showUpgradeModal} onClose={() => setShowUpgradeModal(false)} targetTier="creator" feature="Analytics" />
+    </div>
+  )
+}
+
 function HQAnalyticsContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [plan, setPlan] = useState<'free' | 'creator'>('creator')
+  const { canAccessAnalytics, isLoading: planLoading } = useEffectivePlan()
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [view, setView] = useState<'overview' | 'slyde'>('overview')
   const [range, setRange] = useState<'7d' | '30d' | '90d'>('30d')
   const [compare, setCompare] = useState(true)
@@ -97,6 +299,29 @@ function HQAnalyticsContent() {
   // Real analytics (fetched) — merges into mocked shape so UI stays stable.
   const [realGlobal, setRealGlobal] = useState<null | Partial<any>>(null)
   const [realSlyde, setRealSlyde] = useState<null | Partial<SlydeData>>(null)
+
+  // Dev toggle for plan switching
+  const [plan, setPlan] = useState<'free' | 'creator'>('creator')
+  const [hydrated, setHydrated] = useState(false)
+
+  // Hydrate plan from localStorage
+  useEffect(() => {
+    const stored = window.localStorage.getItem('slydes_demo_plan')
+    if (stored === 'free' || stored === 'creator') {
+      setPlan(stored)
+    }
+    setHydrated(true)
+  }, [])
+
+  // Persist plan changes
+  useEffect(() => {
+    if (hydrated) {
+      window.localStorage.setItem('slydes_demo_plan', plan)
+    }
+  }, [plan, hydrated])
+
+  // Use dev toggle plan instead of hook for testing
+  const isCreator = plan === 'creator'
   const [analyticsConfigured, setAnalyticsConfigured] = useState(true)
 
   // Deep-link support: ?slyde=camping
@@ -106,25 +331,6 @@ function HQAnalyticsContent() {
       setSelectedSlyde(slydeParam)
     }
   }, [searchParams])
-
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem('slydes_demo_plan')
-      if (stored === 'free' || stored === 'creator') setPlan(stored)
-    } catch {
-      // ignore
-    }
-  }, [])
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem('slydes_demo_plan', plan)
-    } catch {
-      // ignore
-    }
-  }, [plan])
-
-  const isCreator = plan === 'creator' || hasUnlockCode()
 
   const slydesDataMock: Record<SlydeId, SlydeData> = useMemo(
     () => ({
@@ -393,6 +599,11 @@ function HQAnalyticsContent() {
     }
   }, [globalStatsMock, realGlobal])
 
+  // Show teaser for free users (after hydration) - must be after all hooks
+  if (hydrated && !isCreator) {
+    return <AnalyticsTeaser />
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white overflow-hidden">
       <div className="flex h-screen">
@@ -402,7 +613,7 @@ function HQAnalyticsContent() {
         {/* Main */}
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
-          <header className="h-16 border-b border-gray-200 flex items-center px-8 shrink-0 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#1c1c1e]/80">
+          <header className="h-16 border-b border-gray-200 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#1c1c1e]/80">
             <div>
               <h1 className="text-xl font-bold font-display tracking-tight text-gray-900 dark:text-white">Analytics</h1>
               <p className="text-sm text-gray-500 dark:text-white/60">
@@ -411,63 +622,8 @@ function HQAnalyticsContent() {
             </div>
           </header>
 
-          <div className="flex-1 overflow-y-auto p-6 lg:p-8">
-            <div>
-              <div className="relative">
-                {/* Locked overlay (Free) — matches MVP-MONETISATION.md Prompt 2 */}
-                {!isCreator && (
-                  <div className="absolute inset-0 z-20 flex items-start justify-center pt-16">
-                    <div className="w-full max-w-xl rounded-3xl border border-gray-200 bg-white/95 backdrop-blur-xl shadow-xl overflow-hidden dark:border-white/10 dark:bg-[#2c2c2e]/95">
-                      {/* Gradient accent */}
-                      <div className="h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
-                      
-                      <div className="p-8">
-                        {/* Icon */}
-                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 flex items-center justify-center mb-5 dark:from-blue-500/15 dark:to-cyan-500/15 dark:border-blue-500/20">
-                          <svg className="w-7 h-7 text-blue-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                          </svg>
-                        </div>
-
-                        <div className="text-2xl font-display font-bold text-gray-900 dark:text-white mb-2">
-                          Analytics are available on Creator
-                        </div>
-                        <div className="text-gray-600 dark:text-white/70 mb-6">
-                          See how people swipe, where they drop off, and what works.
-                        </div>
-
-                        {/* Pricing highlight */}
-                        <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 mb-6 dark:from-blue-500/10 dark:to-cyan-500/10 dark:border-blue-500/20">
-                          <div className="flex items-baseline gap-2">
-                            <span className="text-2xl font-display font-bold text-gray-900 dark:text-white">£25</span>
-                            <span className="text-gray-500 dark:text-white/50">/month</span>
-                          </div>
-                          <div className="mt-1 text-sm text-gray-600 dark:text-white/60">
-                            Views • Swipe depth • Completion rate
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col gap-3">
-                          <Link
-                            href="/settings"
-                            className="w-full py-3 px-5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15 text-center"
-                          >
-                            Unlock analytics
-                          </Link>
-                          <button 
-                            onClick={() => router.push('/')}
-                            className="w-full py-3 px-5 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
-                          >
-                            Continue without analytics
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Content (blurred on Free) */}
-                <div className={`space-y-6 ${!isCreator ? 'blur-[8px] opacity-60 pointer-events-none select-none' : ''}`}>
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+            <div className="space-y-6">
                   {/* View toggle - Apple-style segmented control */}
                   <div className="inline-flex items-center p-1 rounded-lg bg-white/5 border border-white/10">
                     <button
@@ -1285,8 +1441,6 @@ function HQAnalyticsContent() {
                   </div>
                     </>
                   )}
-                </div>
-              </div>
             </div>
           </div>
         </main>

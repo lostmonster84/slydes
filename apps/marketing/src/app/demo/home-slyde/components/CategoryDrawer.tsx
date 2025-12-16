@@ -195,37 +195,46 @@ export function CategoryDrawer({
               })}
             </div>
 
-            {/* Contact Buttons - exact same as AboutSheet */}
-            <div className="px-4 py-4 border-t border-white/10">
-              <div className="flex items-center justify-evenly gap-4">
+            {/* Contact Buttons - Circular floating style */}
+            <div className="px-4 pt-4 pb-6">
+              <div className="flex justify-center gap-6">
                 <button
                   onClick={(e) => e.stopPropagation()}
                   className="flex flex-col items-center gap-1.5"
                 >
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-white" />
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center active:scale-95 transition-transform"
+                    style={{ backgroundColor: `${accentColor}20` }}
+                  >
+                    <Phone className="w-5 h-5" style={{ color: accentColor }} />
                   </div>
-                  <span className="text-white/70 text-[10px]">Call</span>
+                  <span className="text-white/60 text-[11px]">Call</span>
                 </button>
 
                 <button
                   onClick={(e) => e.stopPropagation()}
                   className="flex flex-col items-center gap-1.5"
                 >
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-white" />
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center active:scale-95 transition-transform"
+                    style={{ backgroundColor: `${accentColor}20` }}
+                  >
+                    <Mail className="w-5 h-5" style={{ color: accentColor }} />
                   </div>
-                  <span className="text-white/70 text-[10px]">Email</span>
+                  <span className="text-white/60 text-[11px]">Email</span>
                 </button>
 
                 <button
                   onClick={(e) => e.stopPropagation()}
                   className="flex flex-col items-center gap-1.5"
                 >
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <MessageCircle className="w-5 h-5 text-white" />
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center active:scale-95 transition-transform"
+                    style={{ backgroundColor: `${accentColor}20` }}
+                  >
+                    <MessageCircle className="w-5 h-5" style={{ color: accentColor }} />
                   </div>
-                  <span className="text-white/70 text-[10px]">Message</span>
+                  <span className="text-white/60 text-[11px]">Message</span>
                 </button>
               </div>
             </div>

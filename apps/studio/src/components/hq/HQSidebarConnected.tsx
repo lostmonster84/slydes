@@ -111,7 +111,7 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
     { id: 'home-slyde', label: 'Studio', href: '/', icon: Smartphone },
     { id: 'slydes', label: 'Slydes', href: '/slydes', icon: Layers, badge: slydeCount > 0 ? slydeCount : undefined },
     { id: 'analytics', label: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { id: 'shop', label: 'Shop', href: '/shop', icon: ShoppingBag, comingSoon: true },
+    { id: 'shop', label: 'Shop', href: '/shop', icon: ShoppingBag },
     { id: 'inbox', label: 'Inbox', href: '/inbox', icon: Inbox, comingSoon: true },
   ]
 

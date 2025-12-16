@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@/lib/supabase/server'
+import { PLAN_CONFIG, getStripePriceId } from '@/lib/plans'
 
-type Tier = 'pro' | 'enterprise'
+type PaidTier = 'creator' | 'pro'
 
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY
@@ -27,72 +28,85 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
   }
 
-  let payload: unknown
+  let payload: { plan?: PaidTier; annual?: boolean }
   try {
     payload = await request.json()
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const tier = (payload as any)?.tier as Tier | undefined
-  if (tier !== 'pro' && tier !== 'enterprise') {
-    return NextResponse.json({ error: 'Invalid tier' }, { status: 400 })
+  const plan = payload.plan
+  const annual = payload.annual ?? false
+
+  if (plan !== 'creator' && plan !== 'pro') {
+    return NextResponse.json({ error: 'Invalid plan. Must be "creator" or "pro"' }, { status: 400 })
   }
 
   const origin = request.headers.get('origin') || 'https://studio.slydes.io'
+  const config = PLAN_CONFIG[plan]
 
-  // MVP pricing (monthly). Replace with Stripe Price IDs later if desired.
-  const priceDataByTier: Record<Tier, { name: string; description: string; unit_amount: number }> = {
-    pro: {
-      name: 'Slydes Creator',
-      description: 'Inventory/Listings unlocked. Unlimited Slydes. Advanced analytics.',
-      unit_amount: 1900,
-    },
-    enterprise: {
-      name: 'Slydes Commerce',
-      description: 'Cart + Checkout unlocked. Everything in Creator.',
-      unit_amount: 4900,
-    },
-  }
-
+  // Get user's profile for org ID and potential existing Stripe customer
   const { data: profile } = await supabase
     .from('profiles')
-    .select('current_organization_id')
+    .select('current_organization_id, stripe_customer_id')
     .eq('id', user.id)
     .maybeSingle()
 
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
-    line_items: [
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: priceDataByTier[tier].name,
-            description: priceDataByTier[tier].description,
-            images: ['https://slydes.io/og-image.png'],
+  // Try to use pre-configured Stripe Price ID, fallback to inline price
+  const stripePriceId = getStripePriceId(plan, annual)
+
+  // Build line items
+  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = stripePriceId
+    ? [{ price: stripePriceId, quantity: 1 }]
+    : [
+        {
+          price_data: {
+            currency: 'gbp',
+            product_data: {
+              name: `Slydes ${config.label}`,
+              description: config.features.slice(0, 3).join('. ') + '.',
+              images: ['https://slydes.io/og-image.png'],
+            },
+            unit_amount: (annual ? config.annualPrice : config.monthlyPrice) * 100,
+            recurring: { interval: annual ? 'year' : 'month' },
           },
-          unit_amount: priceDataByTier[tier].unit_amount,
-          recurring: { interval: 'month' },
+          quantity: 1,
         },
-        quantity: 1,
-      },
-    ],
+      ]
+
+  // Create checkout session
+  const sessionParams: Stripe.Checkout.SessionCreateParams = {
+    payment_method_types: ['card'],
+    line_items: lineItems,
     mode: 'subscription',
     success_url: `${origin}/settings/billing?success=1&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/settings/billing?canceled=1`,
-    customer_email: user.email || undefined,
     allow_promotion_codes: true,
     billing_address_collection: 'required',
     metadata: {
-      memberType: tier,
+      plan,
+      annual: annual ? 'true' : 'false',
       userId: user.id,
       orgId: profile?.current_organization_id || '',
       source: 'studio',
     },
-  })
+  }
 
-  return NextResponse.json({ url: session.url })
+  // Use existing customer if available, otherwise set email
+  if (profile?.stripe_customer_id) {
+    sessionParams.customer = profile.stripe_customer_id
+  } else {
+    sessionParams.customer_email = user.email || undefined
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.create(sessionParams)
+    return NextResponse.json({ url: session.url })
+  } catch (err) {
+    console.error('Stripe checkout error:', err)
+    return NextResponse.json(
+      { error: 'Failed to create checkout session' },
+      { status: 500 }
+    )
+  }
 }
-
-

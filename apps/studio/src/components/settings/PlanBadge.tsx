@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { hasUnlockCode } from '@/lib/whitelist'
+import { getPlanLabel, type PlanTier } from '@/lib/plans'
 
 interface PlanBadgeProps {
-  dbPlan: 'free' | 'pro' | 'enterprise' | null | undefined
+  dbPlan: PlanTier | null | undefined
 }
 
 export function PlanBadge({ dbPlan }: PlanBadgeProps) {
@@ -24,15 +25,17 @@ export function PlanBadge({ dbPlan }: PlanBadgeProps) {
   }
 
   // Otherwise show DB plan
+  const plan = dbPlan ?? 'free'
+
   return (
     <span className={`px-3 py-1 text-xs font-medium rounded-full ${
-      dbPlan === 'pro'
-        ? 'bg-leader-blue/20 text-leader-blue'
-        : dbPlan === 'enterprise'
+      plan === 'pro'
         ? 'bg-purple-500/20 text-purple-400'
+        : plan === 'creator'
+        ? 'bg-leader-blue/20 text-leader-blue'
         : 'bg-white/10 text-white/60'
     }`}>
-      {dbPlan === 'pro' ? 'Pro' : dbPlan === 'enterprise' ? 'Enterprise' : 'Free'}
+      {getPlanLabel(plan)}
     </span>
   )
 }

@@ -189,7 +189,7 @@ export function InfoSheet({
                       {/* Contact buttons - naturally spaced across full width */}
                       <div className="flex justify-evenly pt-3 pb-2">
                         {business.contact.phone && (
-                          <a 
+                          <a
                             href={`tel:${business.contact.phone}`}
                             onClick={(e) => e.stopPropagation()}
                             className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
@@ -199,7 +199,7 @@ export function InfoSheet({
                           </a>
                         )}
                         {business.contact.email && (
-                          <a 
+                          <a
                             href={`mailto:${business.contact.email}`}
                             onClick={(e) => e.stopPropagation()}
                             className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
@@ -209,7 +209,7 @@ export function InfoSheet({
                           </a>
                         )}
                         {business.contact.phone && (
-                          <a 
+                          <a
                             href={`sms:${business.contact.phone}`}
                             onClick={(e) => e.stopPropagation()}
                             className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"

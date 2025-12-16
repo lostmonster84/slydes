@@ -81,12 +81,13 @@ export function CategorySlydeView({
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
 
-      {/* Back button */}
+      {/* iOS Back button */}
       <button
         onClick={onBack}
-        className="absolute top-10 left-3 z-30 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center"
+        className="absolute top-12 left-3 z-30 flex items-center gap-0.5 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm"
       >
         <ChevronLeft className="w-5 h-5 text-white" />
+        <span className="text-white text-[15px] font-medium pr-1">Back</span>
       </button>
 
       {/* Tap zone for navigation */}
@@ -95,22 +96,6 @@ export function CategorySlydeView({
         onClick={handleTap}
       />
 
-      {/* === TOP SECTION === */}
-      <div className="absolute top-10 left-0 right-0 px-4 z-10">
-        <AnimatePresence mode="wait">
-          {currentFrame.badge && (
-            <motion.div
-              key={`badge-${currentFrame.id}`}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="inline-flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 ml-10"
-            >
-              <span className="text-xs font-medium text-white">{currentFrame.badge}</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
 
       {/* === RIGHT SIDE ACTIONS === (using shared SocialActionStack) */}
       <SocialActionStack

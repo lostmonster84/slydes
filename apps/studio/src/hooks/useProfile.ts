@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { getEffectivePlan } from '@/lib/whitelist'
+import type { PlanTier } from '@/lib/plans'
 
 export interface Profile {
   id: string
@@ -13,7 +14,10 @@ export interface Profile {
   avatar_url: string | null
   onboarding_completed: boolean
   current_organization_id: string | null
-  plan: 'free' | 'pro' | 'enterprise'
+  plan: PlanTier
+  stripe_customer_id: string | null
+  stripe_subscription_id: string | null
+  subscription_status: 'active' | 'cancelled' | 'past_due' | null
   created_at: string
   updated_at: string
 }
@@ -48,7 +52,7 @@ export function useProfile() {
         // Apply whitelist override for plan
         setProfile({
           ...data,
-          plan: getEffectivePlan(data.email, data.plan),
+          plan: getEffectivePlan(data.email, data.plan ?? 'free'),
         })
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to fetch profile'))

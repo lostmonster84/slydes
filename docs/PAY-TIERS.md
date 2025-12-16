@@ -1,14 +1,18 @@
 # Slydes Pricing Tiers
 
-> **Source of Truth** for all pricing across the platform.
+> **Canonical reference**: [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) is the source of truth.
+>
+> This document provides quick-reference tier details.
+>
+> Last updated: December 16, 2025
 
 ---
 
 ## Overview
 
-Simple two-tier model: **Free** and **Creator**.
+Three-tier model: **Free**, **Creator**, and **Pro**.
 
-No intermediate tiers. No complexity. Free to try, pay when you need more.
+Free to try. Creator for growth. Pro for commerce.
 
 ---
 
@@ -17,91 +21,122 @@ No intermediate tiers. No complexity. Free to try, pay when you need more.
 **Primary**: GBP (£)
 **Display**: Auto-detect user location, show local currency
 
-| Currency | Creator Monthly | Creator Annual |
-|----------|-----------------|----------------|
-| GBP (£)  | £25/month       | £250/year      |
-| USD ($)  | $29/month       | $290/year      |
-| EUR (€)  | €27/month       | €270/year      |
+| Currency | Creator Monthly | Creator Annual | Pro Monthly | Pro Annual |
+|----------|-----------------|----------------|-------------|------------|
+| GBP (£) | £25 | £250 | £50 | £500 |
+| USD ($) | $29 | $290 | $59 | $590 |
+| EUR (€) | €27 | €270 | €55 | €550 |
 
-Implementation: Currency switcher in pricing UI. Store preference.
+**Annual discount**: 17% off (2 months free)
 
 ---
 
 ## Tier Breakdown
 
-### Free Tier — £0/month
+### Free — £0/month
 
 **Purpose**: Let users experience Slydes, drive viral growth through branded outro.
 
 | Feature | Limit |
 |---------|-------|
 | Published Slydes | 1 |
+| Categories | 4 |
 | Full mobile experience | ✓ |
 | Shareable public link | ✓ |
 | Core creation tools | ✓ |
 | Analytics | ✗ |
-| Multiple Slydes | ✗ |
-| Advanced media limits | ✗ |
+| Inventory browsing | ✗ |
 | **Slydes watermark** | **Required** |
-
-**Mandatory Watermark**: Every free Slyde displays Slydes branding.
-
-This drives organic discovery and viral growth.
 
 ---
 
-### Creator Tier — £25/month (or £250/year)
+### Creator — £25/month (or £250/year)
 
-**Purpose**: For people who care about results. When Slydes becomes more than an experiment.
+**Purpose**: For businesses that care about results. Analytics, no watermark, lead generation.
 
 | Feature | Included |
 |---------|----------|
 | Published Slydes | Up to 10 |
+| Categories | Up to 6 |
 | No Slydes watermark | ✓ |
-| Increased video/media limits | ✓ |
 | Basic analytics | ✓ |
 | - Views | ✓ |
 | - Swipe depth | ✓ |
 | - Completion rate | ✓ |
-| Faster publishing workflows | ✓ |
+| Inventory browsing | ✓ |
+| Enquire / Book CTAs | ✓ |
+| Commerce (Buy Now, Cart) | ✗ |
 
-**Annual discount**: £250/year = ~17% savings (£20.83/month effective)
+**Inventory browsing**: Show grids of items, let users explore Item Slydes.
+**Enquire / Book CTAs**: External links, phone calls, enquiry forms.
+
+---
+
+### Pro — £50/month (or £500/year)
+
+**Purpose**: For businesses that sell directly. Full commerce with Stripe.
+
+| Feature | Included |
+|---------|----------|
+| Everything in Creator | ✓ |
+| Published Slydes | Unlimited |
+| Categories | Unlimited |
+| Buy Now | ✓ |
+| Add to Cart | ✓ |
+| Stripe Checkout | ✓ |
+| Order management | ✓ |
+| Priority support | ✓ |
+
+**Commerce**: Customers can purchase directly. Orders tracked in dashboard.
+
+---
+
+## Feature Gating Summary
+
+| Feature | Free | Creator | Pro |
+|---------|------|---------|-----|
+| Published Slydes | 1 | 10 | Unlimited |
+| Categories | 4 | 6 | Unlimited |
+| Watermark | Required | Removed | Removed |
+| Analytics | ✗ | ✓ | ✓ |
+| Inventory (browse) | ✗ | ✓ | ✓ |
+| Enquire / Book CTA | ✗ | ✓ | ✓ |
+| Buy Now | ✗ | ✗ | ✓ |
+| Cart + Checkout | ✗ | ✗ | ✓ |
+| Order management | ✗ | ✗ | ✓ |
 
 ---
 
 ## Upgrade Triggers
 
-What makes free users upgrade (from MVP-MONETISATION.md):
-
-1. **Second Slyde** — Attempts to create more than 1
-2. **Analytics** — Clicks analytics or similar
-3. **Watermark** — Wants to remove branding
-4. **Media limits** — Hits video/storage cap
-
----
-
-## Pricing Philosophy
-
-- **Free tier = prove the format** — No time limit, feature-limited instead
-- **£25/month = clarity** — Pay when attention matters
-- **Annual option** — Reward commitment with savings
-- **No enterprise tier (yet)** — Keep it simple at launch
+| Trigger | From | To |
+|---------|------|----|
+| Create second Slyde | Free | Creator |
+| Access analytics | Free | Creator |
+| Remove watermark | Free | Creator |
+| Hit media limits | Free | Creator |
+| Enable Buy Now | Creator | Pro |
+| Enable Cart/Checkout | Creator | Pro |
+| Need order management | Creator | Pro |
 
 ---
 
 ## Commission for Partners
 
-Founding Partners earn **25% commission for life** on referred Creator subscribers:
-- £25/month × 25% = **£6.25/month per subscriber**
-- Recurring as long as subscriber stays active
+Founding Partners earn **25% commission for life** on referred paid subscribers:
+- Creator: £25/mo × 25% = **£6.25/month per subscriber**
+- Pro: £50/mo × 25% = **£12.50/month per subscriber**
+
+Recurring as long as subscriber stays active.
 
 ---
 
-## Future Tiers (NOT IN MVP)
+## Related Documents
 
-See [FUTURE-PRICING.md](./FUTURE-PRICING.md) for Pro (£59/month) and Agency (£149/month) tiers.
-These only ship when behaviour justifies it.
+- [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) — Source of truth (payments, Stripe, fees)
+- [MVP-MONETISATION.md](./MVP-MONETISATION.md) — Upgrade prompts and copy
+- [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) — Founding Partners details
 
 ---
 
-*Last updated: December 14, 2025*
+*Last updated: December 16, 2025*

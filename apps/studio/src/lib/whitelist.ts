@@ -1,3 +1,5 @@
+import type { PlanTier } from './plans'
+
 /**
  * Pro Access Unlock System
  *
@@ -70,12 +72,12 @@ export function isWhitelisted(email: string | null | undefined): boolean {
  */
 export function getEffectivePlan(
   email: string | null | undefined,
-  dbPlan: 'free' | 'pro' | 'enterprise'
-): 'free' | 'pro' | 'enterprise' {
-  // Email whitelist always wins
+  dbPlan: PlanTier
+): PlanTier {
+  // Email whitelist always wins (gives Pro)
   if (isWhitelisted(email)) return 'pro'
 
-  // Check for unlock code (client-side only)
+  // Check for unlock code (client-side only) - gives Pro
   if (typeof window !== 'undefined' && hasUnlockCode()) return 'pro'
 
   return dbPlan
