@@ -278,8 +278,14 @@ export function SlydeScreen({
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't capture keys when user is typing in an input/textarea
+      const target = e.target as HTMLElement
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+        return
+      }
+
       if (showFAQ || showInfo || showShare || showAbout) return
-      
+
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
         e.preventDefault()
         setCurrentFrame((prev) => (prev + 1) % frames.length)
@@ -288,7 +294,7 @@ export function SlydeScreen({
         setCurrentFrame((prev) => (prev - 1 + frames.length) % frames.length)
       }
     }
-    
+
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [frames.length, showFAQ, showInfo, showShare, showAbout])
@@ -470,7 +476,7 @@ export function SlydeScreen({
                     }}
                   />
                 )
-              ) : (
+              ) : currentFrameData.background.src ? (
                 <img
                   src={currentFrameData.background.src}
                   alt=""
@@ -479,6 +485,46 @@ export function SlydeScreen({
                     objectPosition: currentFrameData.background.position || 'center',
                   }}
                 />
+              ) : (
+                <div className="absolute inset-0 w-full h-full bg-[#0a0a0f] overflow-hidden">
+                  {/* Animated floating orb */}
+                  <motion.div
+                    className="absolute w-[300px] h-[300px] rounded-full blur-[80px] opacity-40"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(37,99,235,0.8) 0%, rgba(6,182,212,0.4) 50%, transparent 70%)',
+                    }}
+                    animate={{
+                      x: ['-20%', '60%', '20%', '-20%'],
+                      y: ['0%', '40%', '80%', '0%'],
+                      scale: [1, 1.2, 0.9, 1],
+                    }}
+                    transition={{
+                      duration: 12,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    }}
+                  />
+                  {/* Secondary subtle orb */}
+                  <motion.div
+                    className="absolute w-[200px] h-[200px] rounded-full blur-[60px] opacity-30"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(6,182,212,0.6) 0%, rgba(37,99,235,0.3) 50%, transparent 70%)',
+                      right: '10%',
+                      bottom: '20%',
+                    }}
+                    animate={{
+                      x: ['0%', '-40%', '20%', '0%'],
+                      y: ['0%', '-30%', '10%', '0%'],
+                      scale: [1, 0.8, 1.1, 1],
+                    }}
+                    transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                      delay: 2,
+                    }}
+                  />
+                </div>
               )}
             </motion.div>
           </AnimatePresence>
@@ -615,9 +661,13 @@ export function SlydeScreen({
                 />
               )}
 
-              {/* CTA Button - only on Action/Slydes frames (driven by templateType, not ID) */}
+              {/* CTA Button - on Action/Slydes frames or inventory frames */}
               {currentFrameData.cta && (
-                (currentFrameData.templateType === 'action' || currentFrameData.templateType === 'slydes' || currentFrameData.id === 'action' || currentFrameData.id === 'slydes')
+                currentFrameData.templateType === 'action' ||
+                currentFrameData.templateType === 'slydes' ||
+                currentFrameData.id === 'action' ||
+                currentFrameData.id === 'slydes' ||
+                currentFrameData.listId  // Show CTA on inventory frames
               ) && (
                 <CTAButton
                   text={currentFrameData.cta.text}

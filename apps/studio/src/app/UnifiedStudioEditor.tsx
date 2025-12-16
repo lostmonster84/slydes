@@ -81,6 +81,8 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { Toggle } from '@/components/ui/Toggle'
+import { InventoryGridView } from '@/components/home-slyde/InventoryGridView'
+import type { InventoryItem } from '@/components/home-slyde/data/highlandMotorsData'
 
 // HQ design tokens
 const HQ_PRIMARY_GRADIENT = 'bg-gradient-to-r from-blue-600 to-cyan-500'
@@ -182,6 +184,7 @@ export function UnifiedStudioEditor() {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
   const [expandedLists, setExpandedLists] = useState<Set<string>>(new Set())
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
+  const [expandedFrames, setExpandedFrames] = useState<Set<string>>(new Set()) // For frames with inventory
 
   // =============================================
   // SELECTION STATE
@@ -193,6 +196,7 @@ export function UnifiedStudioEditor() {
   // =============================================
   const [previewFrameIndex, setPreviewFrameIndex] = useState(0)
   const [itemPreviewFrameIndex, setItemPreviewFrameIndex] = useState(0)
+  const [showingInventoryForListId, setShowingInventoryForListId] = useState<string | null>(null)
 
   // =============================================
   // INLINE EDITING STATE
@@ -313,6 +317,15 @@ export function UnifiedStudioEditor() {
     })
   }
 
+  const toggleFrame = (frameId: string) => {
+    setExpandedFrames(prev => {
+      const next = new Set(prev)
+      if (next.has(frameId)) next.delete(frameId)
+      else next.add(frameId)
+      return next
+    })
+  }
+
   // =============================================
   // INLINE EDITING
   // =============================================
@@ -333,13 +346,15 @@ export function UnifiedStudioEditor() {
   const addCategory = useCallback(() => {
     if (categories.length >= 6) return
     const newId = `cat-${Date.now()}`
+    const slydeNumber = categories.length + 1
+    const newName = `New Slyde ${slydeNumber}`
     setCategories(prev => [
       ...prev,
-      { id: newId, icon: 'sparkles', name: 'New Category', description: '', childSlydeId: 'default', hasInventory: false },
+      { id: newId, icon: 'sparkles', name: newName, description: '', childSlydeId: 'default', hasInventory: false },
     ])
     setSelection({ type: 'category', categoryId: newId })
     setExpandedSections(prev => ({ ...prev, categories: true }))
-    startEditing(newId, 'New Category')
+    startEditing(newId, newName)
   }, [categories.length])
 
   const updateCategory = useCallback((id: string, updates: Partial<DemoHomeSlydeCategory>) => {
@@ -388,12 +403,14 @@ export function UnifiedStudioEditor() {
   const addCategoryFrame = useCallback((categoryId: string) => {
     const frames = childFrames[categoryId] || []
     const newId = `frame-${Date.now()}`
+    const frameNumber = frames.length + 1
+    const newTitle = `Frame ${frameNumber}`
     const newFrame: FrameData = {
       id: newId,
-      order: frames.length + 1,
+      order: frameNumber,
       templateType: 'custom',
-      title: 'New Frame',
-      subtitle: '',
+      title: newTitle,
+      subtitle: 'Add your subtitle here',
       heartCount: 0,
       faqCount: 0,
       background: { type: 'image', src: '' },
@@ -404,7 +421,7 @@ export function UnifiedStudioEditor() {
       [categoryId]: [...(prev[categoryId] || []), newFrame],
     }))
     setSelection({ type: 'categoryFrame', categoryId, categoryFrameId: newId })
-    startEditing(newId, 'New Frame')
+    startEditing(newId, newTitle)
   }, [childFrames, brandProfile.secondaryColor])
 
   const updateCategoryFrame = useCallback((categoryId: string, frameId: string, updates: Partial<FrameData>) => {
@@ -497,12 +514,17 @@ export function UnifiedStudioEditor() {
   // =============================================
   const addItemFrame = useCallback((listId: string, itemId: string) => {
     const newId = `frame-${Date.now()}`
+    // Find current item to get frame count
+    const currentList = lists.find(l => l.id === listId)
+    const currentItem = currentList?.items.find(i => i.id === itemId)
+    const frameNumber = (currentItem?.frames?.length || 0) + 1
+    const newTitle = `Frame ${frameNumber}`
     const newFrame: FrameData = {
       id: newId,
-      order: 1,
+      order: frameNumber,
       templateType: 'custom',
-      title: 'New Frame',
-      subtitle: '',
+      title: newTitle,
+      subtitle: 'Add your subtitle here',
       heartCount: 0,
       faqCount: 0,
       background: { type: 'image', src: '' },
@@ -519,8 +541,8 @@ export function UnifiedStudioEditor() {
       : l
     ))
     setSelection({ type: 'itemFrame', listId, itemId, itemFrameId: newId })
-    startEditing(newId, 'New Frame')
-  }, [brandProfile.secondaryColor])
+    startEditing(newId, newTitle)
+  }, [lists, brandProfile.secondaryColor])
 
   const updateItemFrame = useCallback((listId: string, itemId: string, frameId: string, updates: Partial<FrameData>) => {
     setLists(prev => prev.map(l => l.id === listId
@@ -666,14 +688,14 @@ export function UnifiedStudioEditor() {
                   </div>
                 </div>
 
-                {/* ========== CATEGORIES SECTION ========== */}
+                {/* ========== SLYDES SECTION ========== */}
                 <div className="pt-3 border-t border-gray-200 dark:border-white/10 mt-3">
                   <button
                     onClick={() => toggleSection('categories')}
                     className="w-full flex items-center justify-between px-2 py-1 mb-1"
                   >
                     <span className="text-[11px] font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
-                      Categories ({categories.length}/6)
+                      Slydes ({categories.length}/6)
                     </span>
                     <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.categories ? 'rotate-90' : ''}`} />
                   </button>
@@ -689,7 +711,7 @@ export function UnifiedStudioEditor() {
 
                         return (
                           <div key={cat.id}>
-                            {/* Category Row */}
+                            {/* Slyde Row */}
                             <div
                               onClick={() => {
                                 setSelection({ type: 'category', categoryId: cat.id })
@@ -698,7 +720,7 @@ export function UnifiedStudioEditor() {
                               }}
                               className={`group w-full flex items-center gap-2 px-2 py-2 rounded-xl text-left transition-all cursor-pointer ${
                                 isSelected
-                                  ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
+                                  ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
                                   : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
                               }`}
                             >
@@ -710,10 +732,10 @@ export function UnifiedStudioEditor() {
                                 }}
                                 className={`p-0.5 rounded transition-transform ${isExpanded ? 'rotate-90' : ''}`}
                               >
-                                <ChevronRight className={`w-4 h-4 ${isSelected ? 'text-white/70' : 'text-gray-400'}`} />
+                                <ChevronRight className={`w-4 h-4 ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
                               </button>
 
-                              <IconComponent className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-gray-400'}`} />
+                              <IconComponent className={`w-4 h-4 ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
 
                               {isEditing ? (
                                 <input
@@ -746,7 +768,7 @@ export function UnifiedStudioEditor() {
                                   >
                                     {cat.name}
                                   </span>
-                                  <span className={`text-[10px] ${isSelected ? 'text-white/70' : 'text-gray-400'}`}>
+                                  <span className="text-[10px] text-gray-400 dark:text-white/40">
                                     {catFrames.length}f
                                   </span>
                                   <button
@@ -754,11 +776,7 @@ export function UnifiedStudioEditor() {
                                       e.stopPropagation()
                                       deleteCategory(cat.id)
                                     }}
-                                    className={`p-0.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 ${
-                                      isSelected
-                                        ? 'text-white/70 hover:text-white hover:bg-white/20'
-                                        : 'text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10'
-                                    }`}
+                                    className="p-0.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10"
                                   >
                                     <Trash2 className="w-3 h-3" />
                                   </button>
@@ -770,72 +788,235 @@ export function UnifiedStudioEditor() {
                             {isExpanded && (
                               <div className="ml-4 pl-2 border-l border-gray-200 dark:border-white/10 mt-0.5 space-y-0.5">
                                 {catFrames.map((frame, idx) => {
-                                  const isFrameSelected = selection.type === 'categoryFrame' && selection.categoryFrameId === frame.id
+                                  const isFrameSelected = selection.type === 'categoryFrame' && selection.categoryId === cat.id && selection.categoryFrameId === frame.id
                                   const isFrameEditing = editingId === frame.id
+                                  const isFrameExpanded = expandedFrames.has(frame.id)
+                                  const connectedList = frame.listId ? lists.find(l => l.id === frame.listId) : null
+                                  const hasInventory = !!connectedList
 
                                   return (
-                                    <div
-                                      key={frame.id}
-                                      onClick={() => {
-                                        setSelection({ type: 'categoryFrame', categoryId: cat.id, categoryFrameId: frame.id })
-                                        setPreviewFrameIndex(idx)
-                                      }}
-                                      className={`group w-full flex items-center gap-2 px-2 py-1.5 rounded-xl text-left transition-all cursor-pointer ${
-                                        isFrameSelected
-                                          ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
-                                          : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
-                                      }`}
-                                    >
-                                      <div className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold ${
-                                        isFrameSelected ? 'bg-white/20 text-white' : 'bg-gray-200 dark:bg-white/10 text-gray-500'
-                                      }`}>
-                                        {idx + 1}
-                                      </div>
-
-                                      {isFrameEditing ? (
-                                        <input
-                                          ref={editInputRef}
-                                          type="text"
-                                          value={editingValue}
-                                          onChange={(e) => setEditingValue(e.target.value)}
-                                          onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                              if (editingValue.trim()) updateCategoryFrame(cat.id, frame.id, { title: editingValue.trim() })
-                                              cancelEditing()
-                                            }
-                                            if (e.key === 'Escape') cancelEditing()
-                                          }}
-                                          onBlur={() => {
-                                            if (editingValue.trim()) updateCategoryFrame(cat.id, frame.id, { title: editingValue.trim() })
-                                            cancelEditing()
-                                          }}
-                                          onClick={(e) => e.stopPropagation()}
-                                          className="flex-1 px-1.5 py-0.5 text-[12px] bg-white dark:bg-gray-800 border border-blue-500 rounded text-gray-900 dark:text-white focus:outline-none"
-                                        />
-                                      ) : (
-                                        <>
-                                          <span className="text-[12px] font-medium truncate flex-1">
-                                            {frame.title || `Frame ${idx + 1}`}
-                                          </span>
+                                    <div key={frame.id}>
+                                      {/* Frame Row */}
+                                      <div
+                                        onClick={() => {
+                                          setSelection({ type: 'categoryFrame', categoryId: cat.id, categoryFrameId: frame.id })
+                                          setPreviewFrameIndex(idx)
+                                        }}
+                                        className={`group w-full flex items-center gap-2 px-2 py-1.5 rounded-xl text-left transition-all cursor-pointer ${
+                                          isFrameSelected
+                                            ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
+                                            : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
+                                        }`}
+                                      >
+                                        {/* Chevron for frames with inventory */}
+                                        {hasInventory ? (
                                           <button
                                             onClick={(e) => {
                                               e.stopPropagation()
-                                              deleteCategoryFrame(cat.id, frame.id)
+                                              toggleFrame(frame.id)
                                             }}
-                                            disabled={catFrames.length <= 1}
-                                            className={`p-0.5 rounded-lg transition-all ${
-                                              catFrames.length <= 1
-                                                ? 'opacity-20 cursor-not-allowed'
-                                                : `opacity-0 group-hover:opacity-100 ${
-                                                    isFrameSelected
-                                                      ? 'text-white/70 hover:text-white hover:bg-white/20'
-                                                      : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
-                                                  }`
-                                            }`}
+                                            className={`p-0.5 rounded transition-transform ${isFrameExpanded ? 'rotate-90' : ''}`}
                                           >
-                                            <Trash2 className="w-2.5 h-2.5" />
+                                            <ChevronRight className={`w-4 h-4 ${isFrameSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
                                           </button>
-                                        </>
+                                        ) : (
+                                          <div className="w-5" />
+                                        )}
+
+                                        <div className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold ${
+                                          isFrameSelected ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-white/10 text-gray-500'
+                                        }`}>
+                                          {idx + 1}
+                                        </div>
+
+                                        {isFrameEditing ? (
+                                          <input
+                                            ref={editInputRef}
+                                            type="text"
+                                            value={editingValue}
+                                            onChange={(e) => setEditingValue(e.target.value)}
+                                            onKeyDown={(e) => {
+                                              if (e.key === 'Enter') {
+                                                if (editingValue.trim()) updateCategoryFrame(cat.id, frame.id, { title: editingValue.trim() })
+                                                cancelEditing()
+                                              }
+                                              if (e.key === 'Escape') cancelEditing()
+                                            }}
+                                            onBlur={() => {
+                                              if (editingValue.trim()) updateCategoryFrame(cat.id, frame.id, { title: editingValue.trim() })
+                                              cancelEditing()
+                                            }}
+                                            onClick={(e) => e.stopPropagation()}
+                                            className="flex-1 px-1.5 py-0.5 text-[12px] bg-white dark:bg-gray-800 border border-blue-500 rounded text-gray-900 dark:text-white focus:outline-none"
+                                          />
+                                        ) : (
+                                          <>
+                                            <span className="text-[12px] font-medium truncate flex-1">
+                                              {frame.title || `Frame ${idx + 1}`}
+                                            </span>
+                                            {/* Inventory badge */}
+                                            {hasInventory && (
+                                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300">
+                                                📦 {connectedList.items.length}
+                                              </span>
+                                            )}
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation()
+                                                deleteCategoryFrame(cat.id, frame.id)
+                                              }}
+                                              disabled={catFrames.length <= 1}
+                                              className={`p-0.5 rounded-lg transition-all ${
+                                                catFrames.length <= 1
+                                                  ? 'opacity-20 cursor-not-allowed'
+                                                  : 'opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10'
+                                              }`}
+                                            >
+                                              <Trash2 className="w-2.5 h-2.5" />
+                                            </button>
+                                          </>
+                                        )}
+                                      </div>
+
+                                      {/* Inventory Items (nested under frame) */}
+                                      {isFrameExpanded && hasInventory && (
+                                        <div className="ml-6 pl-2 border-l border-cyan-200 dark:border-cyan-500/20 mt-0.5 space-y-0.5">
+                                          {connectedList.items.map((item) => {
+                                            const isItemSelected = selection.type === 'item' && selection.itemId === item.id
+                                            const isItemExpanded = expandedItems.has(item.id)
+                                            const itemFrames = item.frames || []
+
+                                            return (
+                                              <div key={item.id}>
+                                                {/* Item Row */}
+                                                <div
+                                                  onClick={() => setSelection({ type: 'item', listId: connectedList.id, itemId: item.id })}
+                                                  className={`group w-full flex items-center gap-2 px-2 py-1.5 rounded-xl text-left transition-all cursor-pointer ${
+                                                    isItemSelected
+                                                      ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
+                                                      : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
+                                                  }`}
+                                                >
+                                                  {itemFrames.length > 0 ? (
+                                                    <button
+                                                      onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        toggleItem(item.id)
+                                                      }}
+                                                      className={`p-0.5 rounded transition-transform ${isItemExpanded ? 'rotate-90' : ''}`}
+                                                    >
+                                                      <ChevronRight className={`w-4 h-4 ${isItemSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
+                                                    </button>
+                                                  ) : (
+                                                    <div className="w-5" />
+                                                  )}
+
+                                                  {item.image ? (
+                                                    <img src={item.image} alt="" className="w-5 h-5 rounded object-cover" />
+                                                  ) : (
+                                                    <Package className={`w-4 h-4 ${isItemSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
+                                                  )}
+
+                                                  <span className="text-[12px] font-medium truncate flex-1">
+                                                    {item.title}
+                                                  </span>
+                                                  {itemFrames.length > 0 && (
+                                                    <span className="text-[10px] text-gray-400 dark:text-white/40">
+                                                      {itemFrames.length}f
+                                                    </span>
+                                                  )}
+                                                  <button
+                                                    onClick={(e) => {
+                                                      e.stopPropagation()
+                                                      deleteItem(connectedList.id, item.id)
+                                                    }}
+                                                    className="p-0.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10"
+                                                  >
+                                                    <Trash2 className="w-2.5 h-2.5" />
+                                                  </button>
+                                                </div>
+
+                                                {/* Item Frames (nested under item) */}
+                                                {isItemExpanded && itemFrames.length > 0 && (
+                                                  <div className="ml-4 pl-2 border-l border-gray-200 dark:border-white/10 mt-0.5 space-y-0.5">
+                                                    {itemFrames.map((itemFrame, frameIdx) => {
+                                                      const isItemFrameSelected = selection.type === 'itemFrame' && selection.itemFrameId === itemFrame.id
+
+                                                      return (
+                                                        <div
+                                                          key={itemFrame.id}
+                                                          onClick={() => {
+                                                            setSelection({ type: 'itemFrame', listId: connectedList.id, itemId: item.id, itemFrameId: itemFrame.id })
+                                                            setItemPreviewFrameIndex(frameIdx)
+                                                          }}
+                                                          className={`group w-full flex items-center gap-2 px-2 py-1 rounded-lg text-left transition-all cursor-pointer ${
+                                                            isItemFrameSelected
+                                                              ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
+                                                              : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
+                                                          }`}
+                                                        >
+                                                          <div className={`w-4 h-4 rounded flex items-center justify-center text-[9px] font-bold ${
+                                                            isItemFrameSelected ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-white/10 text-gray-500'
+                                                          }`}>
+                                                            {frameIdx + 1}
+                                                          </div>
+                                                          <span className="text-[11px] font-medium truncate flex-1">
+                                                            {itemFrame.title || `Frame ${frameIdx + 1}`}
+                                                          </span>
+                                                          <button
+                                                            onClick={(e) => {
+                                                              e.stopPropagation()
+                                                              deleteItemFrame(connectedList.id, item.id, itemFrame.id)
+                                                            }}
+                                                            disabled={itemFrames.length <= 1}
+                                                            className={`p-0.5 rounded transition-all ${
+                                                              itemFrames.length <= 1
+                                                                ? 'opacity-20 cursor-not-allowed'
+                                                                : 'opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500'
+                                                            }`}
+                                                          >
+                                                            <Trash2 className="w-2 h-2" />
+                                                          </button>
+                                                        </div>
+                                                      )
+                                                    })}
+
+                                                    {/* Add Item Frame */}
+                                                    <button
+                                                      onClick={() => addItemFrame(connectedList.id, item.id)}
+                                                      className="w-full flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors text-[10px]"
+                                                    >
+                                                      <Plus className="w-2.5 h-2.5" />
+                                                      <span>Add frame</span>
+                                                    </button>
+                                                  </div>
+                                                )}
+
+                                                {/* Add frame when item expanded but no frames yet */}
+                                                {isItemExpanded && itemFrames.length === 0 && (
+                                                  <div className="ml-4 pl-2 border-l border-gray-200 dark:border-white/10 mt-0.5">
+                                                    <button
+                                                      onClick={() => addItemFrame(connectedList.id, item.id)}
+                                                      className="w-full flex items-center justify-center gap-1 px-2 py-1.5 rounded-lg border border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors text-[10px]"
+                                                    >
+                                                      <Plus className="w-2.5 h-2.5" />
+                                                      <span>Add frame</span>
+                                                    </button>
+                                                  </div>
+                                                )}
+                                              </div>
+                                            )
+                                          })}
+
+                                          {/* Add Item */}
+                                          <button
+                                            onClick={() => addItem(connectedList.id)}
+                                            className="w-full flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl border border-dashed border-cyan-200 dark:border-cyan-500/20 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 transition-colors text-[11px]"
+                                          >
+                                            <Plus className="w-3 h-3" />
+                                            <span>Add item</span>
+                                          </button>
+                                        </div>
                                       )}
                                     </div>
                                   )
@@ -855,298 +1036,16 @@ export function UnifiedStudioEditor() {
                         )
                       })}
 
-                      {/* Add Category */}
+                      {/* Add Slyde */}
                       {categories.length < 6 && (
                         <button
                           onClick={addCategory}
                           className="w-full flex items-center justify-center gap-1.5 px-2 py-2.5 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
                         >
                           <Plus className="w-3.5 h-3.5" />
-                          <span className="text-[11px] font-medium">Add category</span>
+                          <span className="text-[11px] font-medium">Add slyde</span>
                         </button>
                       )}
-                    </div>
-                  )}
-                </div>
-
-                {/* ========== LISTS SECTION ========== */}
-                <div className="pt-3 border-t border-gray-200 dark:border-white/10 mt-3">
-                  <button
-                    onClick={() => toggleSection('lists')}
-                    className="w-full flex items-center justify-between px-2 py-1 mb-1"
-                  >
-                    <span className="text-[11px] font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
-                      Lists ({lists.length})
-                    </span>
-                    <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.lists ? 'rotate-90' : ''}`} />
-                  </button>
-
-                  {expandedSections.lists && (
-                    <div className="space-y-0.5">
-                      {lists.map((list) => {
-                        const isListSelected = selection.type === 'list' && selection.listId === list.id
-                        const isListExpanded = expandedLists.has(list.id)
-                        const isListEditing = editingId === list.id
-
-                        return (
-                          <div key={list.id}>
-                            {/* List Row */}
-                            <div
-                              onClick={() => setSelection({ type: 'list', listId: list.id })}
-                              className={`group w-full flex items-center gap-2 px-2 py-2 rounded-xl text-left transition-all cursor-pointer ${
-                                isListSelected
-                                  ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
-                                  : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
-                              }`}
-                            >
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  toggleList(list.id)
-                                }}
-                                className={`p-0.5 rounded transition-transform ${isListExpanded ? 'rotate-90' : ''}`}
-                              >
-                                <ChevronRight className={`w-4 h-4 ${isListSelected ? 'text-white/70' : 'text-gray-400'}`} />
-                              </button>
-
-                              <List className={`w-4 h-4 ${isListSelected ? 'text-white' : 'text-gray-400'}`} />
-
-                              {isListEditing ? (
-                                <input
-                                  ref={editInputRef}
-                                  type="text"
-                                  value={editingValue}
-                                  onChange={(e) => setEditingValue(e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      if (editingValue.trim()) updateListById(list.id, { name: editingValue.trim() })
-                                      cancelEditing()
-                                    }
-                                    if (e.key === 'Escape') cancelEditing()
-                                  }}
-                                  onBlur={() => {
-                                    if (editingValue.trim()) updateListById(list.id, { name: editingValue.trim() })
-                                    cancelEditing()
-                                  }}
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="flex-1 px-1.5 py-0.5 text-[13px] bg-white dark:bg-gray-800 border border-blue-500 rounded text-gray-900 dark:text-white focus:outline-none"
-                                />
-                              ) : (
-                                <>
-                                  <span
-                                    className="text-[13px] font-medium truncate flex-1"
-                                    onDoubleClick={(e) => {
-                                      e.stopPropagation()
-                                      startEditing(list.id, list.name)
-                                    }}
-                                  >
-                                    {list.name}
-                                  </span>
-                                  <span className={`text-[10px] ${isListSelected ? 'text-white/70' : 'text-gray-400'}`}>
-                                    {list.items.length}
-                                  </span>
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      deleteListById(list.id)
-                                    }}
-                                    className={`p-0.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 ${
-                                      isListSelected
-                                        ? 'text-white/70 hover:text-white hover:bg-white/20'
-                                        : 'text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10'
-                                    }`}
-                                  >
-                                    <Trash2 className="w-3 h-3" />
-                                  </button>
-                                </>
-                              )}
-                            </div>
-
-                            {/* Items (nested) */}
-                            {isListExpanded && (
-                              <div className="ml-4 pl-2 border-l border-gray-200 dark:border-white/10 mt-0.5 space-y-0.5">
-                                {list.items.map((item) => {
-                                  const isItemSelected = selection.type === 'item' && selection.itemId === item.id
-                                  const isItemExpanded = expandedItems.has(item.id)
-                                  const isItemEditing = editingId === item.id
-                                  const itemFrames = item.frames || []
-
-                                  return (
-                                    <div key={item.id}>
-                                      {/* Item Row */}
-                                      <div
-                                        onClick={() => setSelection({ type: 'item', listId: list.id, itemId: item.id })}
-                                        className={`group w-full flex items-center gap-2 px-2 py-2 rounded-xl text-left transition-all cursor-pointer ${
-                                          isItemSelected
-                                            ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
-                                            : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
-                                        }`}
-                                      >
-                                        {itemFrames.length > 0 ? (
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation()
-                                              toggleItem(item.id)
-                                            }}
-                                            className={`p-0.5 rounded transition-transform ${isItemExpanded ? 'rotate-90' : ''}`}
-                                          >
-                                            <ChevronRight className={`w-4 h-4 ${isItemSelected ? 'text-white/70' : 'text-gray-400'}`} />
-                                          </button>
-                                        ) : (
-                                          <div className="w-5" />
-                                        )}
-
-                                        {item.image ? (
-                                          <img src={item.image} alt="" className="w-6 h-6 rounded-lg object-cover" />
-                                        ) : (
-                                          <Package className={`w-4 h-4 ${isItemSelected ? 'text-white' : 'text-gray-400'}`} />
-                                        )}
-
-                                        {isItemEditing ? (
-                                          <input
-                                            ref={editInputRef}
-                                            type="text"
-                                            value={editingValue}
-                                            onChange={(e) => setEditingValue(e.target.value)}
-                                            onKeyDown={(e) => {
-                                              if (e.key === 'Enter') {
-                                                if (editingValue.trim()) updateItem(list.id, item.id, { title: editingValue.trim() })
-                                                cancelEditing()
-                                              }
-                                              if (e.key === 'Escape') cancelEditing()
-                                            }}
-                                            onBlur={() => {
-                                              if (editingValue.trim()) updateItem(list.id, item.id, { title: editingValue.trim() })
-                                              cancelEditing()
-                                            }}
-                                            onClick={(e) => e.stopPropagation()}
-                                            className="flex-1 px-1.5 py-0.5 text-[13px] bg-white dark:bg-gray-800 border border-blue-500 rounded text-gray-900 dark:text-white focus:outline-none"
-                                          />
-                                        ) : (
-                                          <>
-                                            <span className="text-[13px] font-medium truncate flex-1">
-                                              {item.title}
-                                            </span>
-                                            {itemFrames.length > 0 && (
-                                              <span className={`text-[10px] ${isItemSelected ? 'text-white/70' : 'text-gray-400'}`}>
-                                                {itemFrames.length}f
-                                              </span>
-                                            )}
-                                            <button
-                                              onClick={(e) => {
-                                                e.stopPropagation()
-                                                deleteItem(list.id, item.id)
-                                              }}
-                                              className={`p-0.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 ${
-                                                isItemSelected
-                                                  ? 'text-white/70 hover:text-white hover:bg-white/20'
-                                                  : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
-                                              }`}
-                                            >
-                                              <Trash2 className="w-3 h-3" />
-                                            </button>
-                                          </>
-                                        )}
-                                      </div>
-
-                                      {/* Item Frames (nested) */}
-                                      {isItemExpanded && itemFrames.length > 0 && (
-                                        <div className="ml-4 pl-2 border-l border-gray-200 dark:border-white/10 mt-0.5 space-y-0.5">
-                                          {itemFrames.map((frame, idx) => {
-                                            const isFrameSelected = selection.type === 'itemFrame' && selection.itemFrameId === frame.id
-
-                                            return (
-                                              <div
-                                                key={frame.id}
-                                                onClick={() => {
-                                                  setSelection({ type: 'itemFrame', listId: list.id, itemId: item.id, itemFrameId: frame.id })
-                                                  setItemPreviewFrameIndex(idx)
-                                                }}
-                                                className={`group w-full flex items-center gap-2 px-2 py-1.5 rounded-xl text-left transition-all cursor-pointer ${
-                                                  isFrameSelected
-                                                    ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
-                                                    : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
-                                                }`}
-                                              >
-                                                <div className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold ${
-                                                  isFrameSelected ? 'bg-white/20 text-white' : 'bg-gray-200 dark:bg-white/10 text-gray-500'
-                                                }`}>
-                                                  {idx + 1}
-                                                </div>
-                                                <span className="text-[12px] font-medium truncate flex-1">
-                                                  {frame.title || `Frame ${idx + 1}`}
-                                                </span>
-                                                <button
-                                                  onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    deleteItemFrame(list.id, item.id, frame.id)
-                                                  }}
-                                                  disabled={itemFrames.length <= 1}
-                                                  className={`p-0.5 rounded-lg transition-all ${
-                                                    itemFrames.length <= 1
-                                                      ? 'opacity-20 cursor-not-allowed'
-                                                      : `opacity-0 group-hover:opacity-100 ${
-                                                          isFrameSelected
-                                                            ? 'text-white/70 hover:text-white hover:bg-white/20'
-                                                            : 'text-gray-400 hover:text-red-500'
-                                                        }`
-                                                  }`}
-                                                >
-                                                  <Trash2 className="w-2.5 h-2.5" />
-                                                </button>
-                                              </div>
-                                            )
-                                          })}
-
-                                          {/* Add Item Frame */}
-                                          <button
-                                            onClick={() => addItemFrame(list.id, item.id)}
-                                            className="w-full flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
-                                          >
-                                            <Plus className="w-3 h-3" />
-                                            <span className="text-[11px] font-medium">Add frame</span>
-                                          </button>
-                                        </div>
-                                      )}
-
-                                      {/* Add frame button when item expanded but has 0 frames */}
-                                      {isItemExpanded && itemFrames.length === 0 && (
-                                        <div className="ml-4 pl-2 border-l border-gray-200 dark:border-white/10 mt-0.5">
-                                          <button
-                                            onClick={() => addItemFrame(list.id, item.id)}
-                                            className="w-full flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
-                                          >
-                                            <Plus className="w-3 h-3" />
-                                            <span className="text-[11px] font-medium">Add frame</span>
-                                          </button>
-                                        </div>
-                                      )}
-                                    </div>
-                                  )
-                                })}
-
-                                {/* Add Item */}
-                                <button
-                                  onClick={() => addItem(list.id)}
-                                  className="w-full flex items-center justify-center gap-1.5 px-2 py-2.5 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
-                                >
-                                  <Plus className="w-3.5 h-3.5" />
-                                  <span className="text-[11px] font-medium">Add item</span>
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        )
-                      })}
-
-                      {/* Add List */}
-                      <button
-                        onClick={addNewList}
-                        className="w-full flex items-center justify-center gap-1.5 px-2 py-2.5 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span className="text-[11px] font-medium">Add list</span>
-                      </button>
                     </div>
                   )}
                 </div>
@@ -1169,7 +1068,37 @@ export function UnifiedStudioEditor() {
 
                   {/* Category Preview */}
                   {(selection.type === 'category' || selection.type === 'categoryFrame') && selectedCategory && (
-                    selectedCategoryFrames.length > 0 ? (
+                    showingInventoryForListId ? (() => {
+                      // Show inventory grid when "View All" is clicked
+                      const inventoryList = lists.find(l => l.id === showingInventoryForListId)
+                      if (!inventoryList) return null
+
+                      // Map ListItem to InventoryItem (with defaults for required fields)
+                      // Using 'as any' to bridge between frameData.FrameData and highlandMotorsData.FrameData
+                      const inventoryItems: InventoryItem[] = inventoryList.items.map(item => ({
+                        id: item.id,
+                        title: item.title,
+                        subtitle: item.subtitle || '',
+                        price: item.price || '',
+                        image: item.image || '',
+                        badge: item.badge,
+                        frames: (item.frames || []) as any,
+                      }))
+
+                      return (
+                        <InventoryGridView
+                          categoryName={inventoryList.name}
+                          items={inventoryItems}
+                          onItemTap={(itemId) => {
+                            // Select the item
+                            setSelection({ type: 'item', listId: inventoryList.id, itemId })
+                            setShowingInventoryForListId(null)
+                          }}
+                          onBack={() => setShowingInventoryForListId(null)}
+                          accentColor={brandProfile.primaryColor}
+                        />
+                      )
+                    })() : selectedCategoryFrames.length > 0 ? (
                       <SlydeScreen
                         frames={selectedCategoryFrames}
                         business={businessInfo}
@@ -1177,6 +1106,13 @@ export function UnifiedStudioEditor() {
                         context="category"
                         initialFrameIndex={previewFrameIndex}
                         onFrameChange={setPreviewFrameIndex}
+                        autoAdvance={false}
+                        onListView={(frame) => {
+                          // When "View All" CTA is clicked, show the inventory grid
+                          if (frame.listId) {
+                            setShowingInventoryForListId(frame.listId)
+                          }
+                        }}
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white">
@@ -1220,6 +1156,7 @@ export function UnifiedStudioEditor() {
                       context="category"
                       initialFrameIndex={itemPreviewFrameIndex}
                       onFrameChange={setItemPreviewFrameIndex}
+                      autoAdvance={false}
                     />
                   )}
 
@@ -1481,11 +1418,11 @@ export function UnifiedStudioEditor() {
                 </div>
               )}
 
-              {/* CATEGORY INSPECTOR */}
+              {/* SLYDE INSPECTOR */}
               {selection.type === 'category' && selectedCategory && (
                 <div className="p-6 space-y-6">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Category</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Slyde</h3>
                     <button
                       onClick={() => deleteCategory(selectedCategory.id)}
                       className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg"
@@ -1538,61 +1475,6 @@ export function UnifiedStudioEditor() {
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-gray-200 dark:border-white/10">
-                      <div className="flex items-center justify-between mb-3">
-                        <div>
-                          <span className="text-sm font-medium text-gray-700 dark:text-white/70">Has Inventory</span>
-                          <p className="text-xs text-gray-500 dark:text-white/40 mt-0.5">Show inventory items from connected list</p>
-                        </div>
-                        <Toggle
-                          enabled={!!selectedCategory.hasInventory}
-                          onChange={(enabled) => updateCategory(selectedCategory.id, { hasInventory: enabled })}
-                        />
-                      </div>
-                      {selectedCategory.hasInventory && (
-                        <div className="space-y-3">
-                          <div>
-                            <label className="block text-xs text-gray-500 mb-1">CTA Button Text</label>
-                            <input
-                              type="text"
-                              value={selectedCategory.ctaText || 'View All'}
-                              onChange={(e) => updateCategory(selectedCategory.id, { ctaText: e.target.value })}
-                              className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs text-gray-500 mb-1">Connected List</label>
-                            {lists.length === 0 ? (
-                              <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-dashed border-gray-200 dark:border-white/15 text-center">
-                                <p className="text-[12px] text-gray-500 dark:text-white/40 mb-2">No lists created yet</p>
-                                <button
-                                  onClick={() => {
-                                    addNewList()
-                                    setExpandedSections(prev => ({ ...prev, lists: true }))
-                                  }}
-                                  className="text-[12px] font-medium text-blue-600 dark:text-cyan-400 hover:underline"
-                                >
-                                  + Create a list first
-                                </button>
-                              </div>
-                            ) : (
-                              <select
-                                value={selectedCategory.listId || ''}
-                                onChange={(e) => updateCategory(selectedCategory.id, { listId: e.target.value || undefined })}
-                                className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                              >
-                                <option value="">Select a list...</option>
-                                {lists.map((list) => (
-                                  <option key={list.id} value={list.id}>
-                                    {list.name} ({list.items.length} items)
-                                  </option>
-                                ))}
-                              </select>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </div>
               )}
@@ -1602,6 +1484,97 @@ export function UnifiedStudioEditor() {
                 <div className="p-6 space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Frame Editor</h3>
+                  </div>
+
+                  {/* Inventory Section - Prominent at top */}
+                  <div className="rounded-xl border-2 border-dashed border-cyan-300 dark:border-cyan-500/30 bg-cyan-50/50 dark:bg-cyan-500/5 p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <List className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">Inventory</span>
+                      </div>
+                      <Toggle
+                        enabled={!!selectedCategoryFrame.listId}
+                        onChange={(enabled) => {
+                          if (enabled && lists.length > 0) {
+                            updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                              listId: lists[0].id,
+                              inventoryCtaText: 'View All',
+                              cta: {
+                                text: 'View All',
+                                icon: 'list' as const,
+                                action: 'list',
+                                listId: lists[0].id
+                              }
+                            })
+                          } else {
+                            updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                              listId: undefined,
+                              inventoryCtaText: undefined,
+                              cta: undefined
+                            })
+                          }
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-white/50">
+                      Connect a list to show inventory items on this frame
+                    </p>
+
+                    {selectedCategoryFrame.listId && (
+                      <div className="space-y-3 pt-2 border-t border-cyan-200 dark:border-cyan-500/20">
+                        <div>
+                          <label className="block text-[12px] font-medium text-gray-600 dark:text-white/60 mb-1">Connected List</label>
+                          <select
+                            value={selectedCategoryFrame.listId || ''}
+                            onChange={(e) => {
+                              const newListId = e.target.value || undefined
+                              updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                                listId: newListId,
+                                cta: newListId ? {
+                                  text: selectedCategoryFrame.inventoryCtaText || 'View All',
+                                  icon: 'list' as const,
+                                  action: 'list',
+                                  listId: newListId
+                                } : undefined
+                              })
+                            }}
+                            className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+                          >
+                            <option value="">Select a list...</option>
+                            {lists.map((list) => (
+                              <option key={list.id} value={list.id}>
+                                {list.name} ({list.items.length} items)
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-[12px] font-medium text-gray-600 dark:text-white/60 mb-1">CTA Button Text</label>
+                          <input
+                            type="text"
+                            value={selectedCategoryFrame.inventoryCtaText ?? ''}
+                            onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                              inventoryCtaText: e.target.value || undefined,
+                              cta: selectedCategoryFrame.cta ? {
+                                ...selectedCategoryFrame.cta,
+                                text: e.target.value || 'View All'
+                              } : undefined
+                            })}
+                            placeholder="e.g. View All, Browse Items..."
+                            className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {!selectedCategoryFrame.listId && lists.length === 0 && (
+                      <div className="pt-2 border-t border-cyan-200 dark:border-cyan-500/20">
+                        <p className="text-xs text-gray-500 dark:text-white/40">
+                          No lists created yet. <a href="/lists" className="text-cyan-600 dark:text-cyan-400 hover:underline">Create a list</a> first.
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   {/* Content Section */}
@@ -1685,18 +1658,6 @@ export function UnifiedStudioEditor() {
                             placeholder="URL or upload..."
                             className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                           />
-                        </div>
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Heart count</label>
-                          <input
-                            type="number"
-                            value={selectedCategoryFrame.heartCount || 0}
-                            onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { heartCount: parseInt(e.target.value) || 0 })}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                          />
-                          <p className="mt-1.5 text-[12px] text-gray-500 dark:text-white/40">
-                            Popularity signal shown on the frame
-                          </p>
                         </div>
                       </div>
                     )}
@@ -2228,15 +2189,6 @@ export function UnifiedStudioEditor() {
                             })}
                             placeholder="URL or upload..."
                             className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Heart count</label>
-                          <input
-                            type="number"
-                            value={selectedItemFrame.heartCount || 0}
-                            onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { heartCount: parseInt(e.target.value) || 0 })}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                           />
                         </div>
                       </div>

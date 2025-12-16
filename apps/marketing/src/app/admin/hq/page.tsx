@@ -18,6 +18,7 @@ import {
   MailIcon,
 } from '../_components/MetricCard'
 import { InfoIcon } from '../_components/InfoTooltip'
+import { SmartBriefing, BriefingData } from '../_components/SmartBriefing'
 
 type IntegrationStatus = {
   status: 'healthy' | 'warning' | 'error'
@@ -65,9 +66,85 @@ type MetricsData = {
   }
 }
 
+type RevenueData = {
+  subscribers: { total: number; pro: number; creator: number; free: number }
+  mrr: number
+  arr: number
+  allUsers: { created_at: string }[]
+}
+
+type OrganizationsData = {
+  organizations: { published_slydes: number }[]
+  stats: { total: number; thisMonth: number }
+}
+
+function buildBriefingData(
+  health: HealthData,
+  metrics: MetricsData,
+  revenue: RevenueData | null,
+  orgs: OrganizationsData | null
+): BriefingData {
+  const integrations = Object.values(health.integrations)
+  const healthyCount = integrations.filter(i => i.status === 'healthy').length
+  const warningCount = integrations.filter(i => i.status === 'warning').length
+  const errorCount = integrations.filter(i => i.status === 'error').length
+
+  // Calculate new customers today/this week from allUsers
+  const now = new Date()
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const weekStart = new Date(todayStart)
+  weekStart.setDate(weekStart.getDate() - 7)
+
+  let newToday = 0
+  let newThisWeek = 0
+  if (revenue?.allUsers) {
+    for (const user of revenue.allUsers) {
+      const created = new Date(user.created_at)
+      if (created >= todayStart) newToday++
+      if (created >= weekStart) newThisWeek++
+    }
+  }
+
+  return {
+    health: {
+      overall: health.overall,
+      healthyCount,
+      warningCount,
+      errorCount,
+    },
+    customers: {
+      total: revenue?.subscribers.total ?? metrics.users.total,
+      pro: revenue?.subscribers.pro ?? metrics.revenue.proUsers,
+      creator: revenue?.subscribers.creator ?? metrics.revenue.creatorUsers,
+      free: revenue?.subscribers.free ?? (metrics.users.total - metrics.revenue.proUsers - metrics.revenue.creatorUsers),
+      newToday,
+      newThisWeek,
+    },
+    organizations: {
+      total: orgs?.stats.total ?? metrics.organizations.total,
+      newThisMonth: orgs?.stats.thisMonth ?? 0,
+      withPublishedSlydes: orgs?.organizations.filter(o => o.published_slydes > 0).length ?? 0,
+    },
+    revenue: {
+      mrr: revenue?.mrr ?? metrics.revenue.mrr,
+      arr: revenue?.arr ?? (metrics.revenue.mrr * 12),
+    },
+    waitlist: {
+      total: metrics.waitlist.total,
+      thisWeek: metrics.waitlist.thisWeek,
+    },
+    content: {
+      totalSlydes: metrics.content.totalSlydes,
+      publishedSlydes: metrics.content.publishedSlydes,
+    },
+  }
+}
+
 export default function AdminOverviewPage() {
   const [health, setHealth] = useState<HealthData | null>(null)
   const [metrics, setMetrics] = useState<MetricsData | null>(null)
+  const [revenue, setRevenue] = useState<RevenueData | null>(null)
+  const [orgs, setOrgs] = useState<OrganizationsData | null>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -76,22 +153,28 @@ export default function AdminOverviewPage() {
     setError(null)
 
     try {
-      const [healthRes, metricsRes] = await Promise.all([
+      const [healthRes, metricsRes, revenueRes, orgsRes] = await Promise.all([
         fetch('/api/admin/health'),
         fetch('/api/admin/metrics'),
+        fetch('/api/admin/revenue'),
+        fetch('/api/admin/organizations'),
       ])
 
       if (!healthRes.ok || !metricsRes.ok) {
         throw new Error('Failed to fetch data')
       }
 
-      const [healthData, metricsData] = await Promise.all([
+      const [healthData, metricsData, revenueData, orgsData] = await Promise.all([
         healthRes.json(),
         metricsRes.json(),
+        revenueRes.ok ? revenueRes.json() : null,
+        orgsRes.ok ? orgsRes.json() : null,
       ])
 
       setHealth(healthData)
       setMetrics(metricsData)
+      setRevenue(revenueData)
+      setOrgs(orgsData)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong')
     } finally {
@@ -130,6 +213,15 @@ export default function AdminOverviewPage() {
         <h1 className="text-2xl font-semibold text-white">Overview</h1>
         <p className="text-[#98989d]">System health and key metrics at a glance</p>
       </div>
+
+      {/* Smart Briefing */}
+      {health && metrics && (
+        <div className="mb-8">
+          <SmartBriefing
+            data={buildBriefingData(health, metrics, revenue, orgs)}
+          />
+        </div>
+      )}
 
       {/* Health Banner */}
       {health && (

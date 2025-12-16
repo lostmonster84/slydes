@@ -4,6 +4,7 @@ import { useState, useEffect, ReactNode } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { AskHQ } from './_components/AskHQ'
 
 interface AdminLayoutProps {
   children: ReactNode
@@ -298,6 +299,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <main className={`flex-1 ${isNavCollapsed ? 'ml-16' : 'ml-60'} transition-all duration-200`}>
         {children}
       </main>
+
+      {/* Ask HQ Chat */}
+      <AskHQ />
     </div>
   )
 }

@@ -10,6 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.71.2",
     "@slydes/media": "workspace:*",
     "@supabase/supabase-js": "^2.87.1",
     "framer-motion": "^11.5.4",

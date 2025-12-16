@@ -130,7 +130,7 @@ export function CategoryDrawer({
               {/* Header */}
               <div className="flex items-center justify-between px-4 pb-3">
                 <div className="w-8" /> {/* Spacer for centering */}
-                <h2 className="text-white text-[17px] font-semibold">Categories</h2>
+                <h2 className="text-white text-[17px] font-semibold">Slydes</h2>
                 <button
                   onClick={(e) => {
                     e.stopPropagation()

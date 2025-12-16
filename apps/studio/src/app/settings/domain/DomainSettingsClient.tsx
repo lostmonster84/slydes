@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Globe, AlertTriangle, CheckCircle2, Copy, ExternalLink, RefreshCw, Trash2 } from 'lucide-react'
+import { Globe, AlertTriangle, CheckCircle2, Copy, ExternalLink, RefreshCw, Trash2, Wrench, Send, Sparkles } from 'lucide-react'
 
 interface DomainSettingsClientProps {
   orgId: string
@@ -404,6 +404,94 @@ export function DomainSettingsClient({
           </button>
 
           {error && <p className="text-red-400 text-sm mt-2">{error}</p>}
+        </div>
+      )}
+
+      {/* Setup Options */}
+      {!isVerified && (
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+          <h3 className="font-semibold mb-4">Need help with DNS setup?</h3>
+          <div className="grid gap-3">
+            {/* Option 1: Do it yourself */}
+            <div className="flex items-start gap-4 p-4 bg-white/5 rounded-xl">
+              <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Wrench className="w-5 h-5 text-white/60" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-medium text-sm">Do it yourself</h4>
+                <p className="text-white/50 text-xs mt-1">
+                  Follow the instructions above to add the CNAME record in your domain provider.
+                </p>
+              </div>
+              <span className="text-green-500 text-sm font-medium">Free</span>
+            </div>
+
+            {/* Option 2: Send to developer */}
+            <button
+              onClick={() => {
+                const subject = encodeURIComponent(`DNS Setup Request: ${domain}`)
+                const body = encodeURIComponent(
+`Hi,
+
+Please add the following CNAME record to our DNS:
+
+Type: CNAME
+Host/Name: ${domain.split('.')[0]}
+Value/Target: ${cnameTarget}
+
+This will connect ${domain} to our Slydes mobile experience.
+
+Thanks!`
+                )
+                window.location.href = `mailto:?subject=${subject}&body=${body}`
+              }}
+              className="flex items-start gap-4 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors text-left"
+            >
+              <div className="w-10 h-10 bg-leader-blue/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Send className="w-5 h-5 text-leader-blue" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-medium text-sm">Send to your developer</h4>
+                <p className="text-white/50 text-xs mt-1">
+                  Email the DNS instructions to your developer or IT team.
+                </p>
+              </div>
+              <span className="text-green-500 text-sm font-medium">Free</span>
+            </button>
+
+            {/* Option 3: We'll do it for you */}
+            <button
+              onClick={async () => {
+                try {
+                  const res = await fetch('/api/domain/setup-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ domain, orgId, orgName }),
+                  })
+                  const data = await res.json()
+                  if (data.url) {
+                    window.location.href = data.url
+                  } else {
+                    setError(data.error || 'Failed to start checkout')
+                  }
+                } catch {
+                  setError('Failed to start checkout')
+                }
+              }}
+              className="flex items-start gap-4 p-4 bg-gradient-to-r from-leader-blue/20 to-electric-cyan/20 border border-leader-blue/30 rounded-xl hover:from-leader-blue/30 hover:to-electric-cyan/30 transition-colors text-left w-full"
+            >
+              <div className="w-10 h-10 bg-gradient-to-br from-leader-blue to-electric-cyan rounded-lg flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-medium text-sm">We&apos;ll do it for you</h4>
+                <p className="text-white/50 text-xs mt-1">
+                  Our team will configure your DNS. Just share your domain provider login or we&apos;ll guide you through it.
+                </p>
+              </div>
+              <span className="text-electric-cyan text-sm font-medium">£49</span>
+            </button>
+          </div>
         </div>
       )}
 
