@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useDemoBusiness } from '@/lib/demoBusiness'
 import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
+import { usePlan } from '@/hooks/usePlan'
 
 /**
  * Slydes HQ — Slydes List
@@ -17,7 +18,7 @@ import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 
 export default function HQMockupPage() {
   const router = useRouter()
-  const [plan, setPlan] = useState<'free' | 'creator'>('creator')
+  const { plan, isPaid } = usePlan()
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [shareModal, setShareModal] = useState<{ open: boolean; slyde: string; name: string }>({ open: false, slyde: '', name: '' })
   const [copied, setCopied] = useState(false)
@@ -58,8 +59,6 @@ export default function HQMockupPage() {
 
   useEffect(() => {
     try {
-      const stored = window.localStorage.getItem('slydes_demo_plan')
-      if (stored === 'free' || stored === 'creator') setPlan(stored)
       const storedViewMode = window.localStorage.getItem('slydes_view_mode')
       if (storedViewMode === 'card' || storedViewMode === 'list') setViewMode(storedViewMode)
     } catch {
@@ -69,21 +68,14 @@ export default function HQMockupPage() {
 
   useEffect(() => {
     try {
-      window.localStorage.setItem('slydes_demo_plan', plan)
-    } catch {
-      // ignore
-    }
-  }, [plan])
-
-  useEffect(() => {
-    try {
       window.localStorage.setItem('slydes_view_mode', viewMode)
     } catch {
       // ignore
     }
   }, [viewMode])
 
-  const isCreator = plan === 'creator'
+  // isPaid = creator OR pro (both have more Slydes than free tier)
+  const isCreator = isPaid
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white overflow-hidden">

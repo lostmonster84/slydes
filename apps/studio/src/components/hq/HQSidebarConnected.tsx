@@ -11,17 +11,18 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, Smartphone, BarChart3, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List, HelpCircle, Map, Sun, Moon, Monitor, Link2, Check, Share2 } from 'lucide-react'
+import { TrendingUp, Smartphone, BarChart3, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List, HelpCircle, Map, Sun, Moon, Monitor, Link2, Check, Share2, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { FeatureSuggestionModal } from './FeatureSuggestionModal'
 import { useOrganization } from '@/hooks/useOrganization'
 import { useSlydes } from '@/hooks/useSlydes'
 import { useLists } from '@/hooks/useLists'
 import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
+import { usePlan } from '@/hooks/usePlan'
 import { DevPanel } from '@/components/dev/DevPanel'
 
 interface HQSidebarConnectedProps {
-  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'lists' | 'faqs' | 'analytics' | 'shop' | 'brand' | 'settings' | 'inbox'
+  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'lists' | 'faqs' | 'analytics' | 'shop' | 'brand' | 'settings' | 'inbox' | 'affiliates'
 }
 
 export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
@@ -38,17 +39,9 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   const [featureModalOpen, setFeatureModalOpen] = useState(false)
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system')
   const [linkCopied, setLinkCopied] = useState(false)
-  const [plan, setPlan] = useState<'free' | 'creator'>('creator')
+  const { plan, isPaid } = usePlan()
   const accountMenuRef = useRef<HTMLDivElement>(null)
   const accountButtonRef = useRef<HTMLButtonElement>(null)
-
-  // Load plan from localStorage (matches dashboard)
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem('slydes_demo_plan')
-      if (stored === 'free' || stored === 'creator') setPlan(stored)
-    } catch { /* ignore */ }
-  }, [])
 
   // Get the shareable link - use org slug for now (username feature coming soon)
   const shareableLink = organization ? `slydes.io/${organization.slug}` : ''
@@ -189,8 +182,8 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   const totalItems = lists.reduce((acc, l) => acc + l.items.length, 0)
   const faqCount = Object.values(homeSlyde.childFAQs ?? {}).reduce((acc, faqs) => acc + faqs.length, 0)
 
-  // Dashboard (standalone at top) - Pro users see "Momentum AI"
-  const dashboardItem = { id: 'dashboard', label: plan === 'creator' ? 'Momentum AI' : 'Momentum', href: '/dashboard', icon: TrendingUp }
+  // Dashboard (standalone at top) - Paid users see "Momentum AI"
+  const dashboardItem = { id: 'dashboard', label: isPaid ? 'Momentum AI' : 'Momentum', href: '/dashboard', icon: TrendingUp }
 
   // Editor group - these are the content creation tools
   const editorItems = [
@@ -201,10 +194,15 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   ]
 
   // Business tools
-  const navItems: Array<{ id: string; label: string; href: string; icon: typeof BarChart3; badge?: number; comingSoon?: boolean }> = [
+  const navItems: Array<{ id: string; label: string; href: string; icon: typeof BarChart3; badge?: number; comingSoon?: boolean; inProgress?: boolean }> = [
     { id: 'analytics', label: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { id: 'shop', label: 'Shop', href: '/shop', icon: ShoppingBag },
+    { id: 'shop', label: 'Shop', href: '/shop', icon: ShoppingBag, inProgress: true },
   ]
+
+  // Admin tools (only shown in dev or for admin users)
+  const adminItems = process.env.NODE_ENV === 'development' ? [
+    { id: 'affiliates', label: 'Affiliates', href: '/admin/affiliates', icon: Users },
+  ] : []
 
   // Brand and Settings are in the account dropdown menu only
 
@@ -329,19 +327,20 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
           {navItems.map((item) => {
             const isActive = activePage === item.id
             const Icon = item.icon
+            const isDisabled = item.comingSoon || item.inProgress
             return (
               <Link
                 key={item.id}
-                href={item.comingSoon ? '#' : item.href}
+                href={isDisabled ? '#' : item.href}
                 onClick={(e) => {
-                  if (item.comingSoon) {
+                  if (isDisabled) {
                     e.preventDefault()
                     return
                   }
                   setMobileOpen(false)
                 }}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
-                  item.comingSoon
+                  isDisabled
                     ? 'opacity-50 cursor-not-allowed text-gray-400 dark:text-white/40'
                     : isActive
                       ? 'bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 dark:from-blue-500/15 dark:to-cyan-500/15 dark:text-cyan-300'
@@ -359,12 +358,44 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
                     {item.badge}
                   </span>
                 )}
+                {item.inProgress && (
+                  <span className="ml-auto px-2 py-0.5 text-[10px] font-bold rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white">In Progress</span>
+                )}
                 {item.comingSoon && (
                   <span className="ml-auto text-[10px] font-semibold text-gray-400 dark:text-white/50">Coming soon</span>
                 )}
               </Link>
             )
           })}
+
+          {/* Admin Group - only in dev */}
+          {adminItems.length > 0 && (
+            <>
+              <div className="my-3 border-t border-gray-200 dark:border-white/10" />
+              <div className="px-3 pt-1 pb-2">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40">Admin</span>
+              </div>
+              {adminItems.map((item) => {
+                const isActive = activePage === item.id
+                const Icon = item.icon
+                return (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
+                      isActive
+                        ? 'bg-gradient-to-r from-blue-50 to-cyan-50 text-blue-700 dark:from-blue-500/15 dark:to-cyan-500/15 dark:text-cyan-300'
+                        : 'text-gray-600 hover:bg-gray-100 dark:text-white/70 dark:hover:bg-white/10'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5 shrink-0" />
+                    <span className="font-medium truncate">{item.label}</span>
+                  </Link>
+                )
+              })}
+            </>
+          )}
         </nav>
 
         {/* Suggest a feature - Mobile */}
@@ -515,18 +546,19 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
           {navItems.map((item) => {
             const isActive = activePage === item.id
             const Icon = item.icon
+            const isDisabled = item.comingSoon || item.inProgress
 
             return (
               <Link
                 key={item.id}
-                href={item.comingSoon ? '#' : item.href}
+                href={isDisabled ? '#' : item.href}
                 onClick={(e) => {
-                  if (item.comingSoon) {
+                  if (isDisabled) {
                     e.preventDefault()
                   }
                 }}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors relative ${
-                  item.comingSoon
+                  isDisabled
                     ? 'opacity-50 cursor-not-allowed text-gray-400 dark:text-white/40'
                     : isActive
                       ? 'bg-gray-100 text-gray-900 dark:bg-white/10 dark:text-white cursor-pointer'
@@ -534,7 +566,7 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
                 }`}
                 title={collapsed ? item.label : undefined}
               >
-                {isActive && !item.comingSoon && (
+                {isActive && !isDisabled && (
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-blue-600 to-cyan-500 rounded-r-full" />
                 )}
                 <Icon className="w-5 h-5 shrink-0" />
@@ -544,6 +576,11 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
                     {item.badge && (
                       <span className="ml-auto text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full dark:bg-white/20 dark:text-white/80">
                         {item.badge}
+                      </span>
+                    )}
+                    {item.inProgress && (
+                      <span className="ml-auto px-2 py-0.5 text-[10px] font-bold rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white">
+                        In Progress
                       </span>
                     )}
                     {item.comingSoon && (
@@ -556,6 +593,40 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
               </Link>
             )
           })}
+
+          {/* Admin Group - only in dev */}
+          {adminItems.length > 0 && (
+            <>
+              <div className="my-3 border-t border-gray-200 dark:border-white/10" />
+              {!collapsed && (
+                <div className="px-3 pt-1 pb-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-white/40">Admin</span>
+                </div>
+              )}
+              {adminItems.map((item) => {
+                const isActive = activePage === item.id
+                const Icon = item.icon
+                return (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors relative ${
+                      isActive
+                        ? 'bg-gray-100 text-gray-900 dark:bg-white/10 dark:text-white cursor-pointer'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white/60 dark:hover:text-white dark:hover:bg-white/10 cursor-pointer'
+                    }`}
+                    title={collapsed ? item.label : undefined}
+                  >
+                    {isActive && (
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-blue-600 to-cyan-500 rounded-r-full" />
+                    )}
+                    <Icon className="w-5 h-5 shrink-0" />
+                    {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
+                  </Link>
+                )
+              })}
+            </>
+          )}
 
         </nav>
 

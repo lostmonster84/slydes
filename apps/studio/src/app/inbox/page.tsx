@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import Link from 'next/link'
 import { useDemoBusiness } from '@/lib/demoBusiness'
+import { usePlan } from '@/hooks/usePlan'
 
 /**
  * Slydes HQ — Inbox (Picture)
@@ -13,27 +14,8 @@ import { useDemoBusiness } from '@/lib/demoBusiness'
  */
 
 export default function HQInboxPage() {
-  const [plan, setPlan] = useState<'free' | 'creator'>('creator')
+  const { isPaid } = usePlan()
   const demoBusiness = useDemoBusiness()
-
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem('slydes_demo_plan')
-      if (stored === 'free' || stored === 'creator') setPlan(stored)
-    } catch {
-      // ignore
-    }
-  }, [])
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem('slydes_demo_plan', plan)
-    } catch {
-      // ignore
-    }
-  }, [plan])
-
-  const isCreator = plan === 'creator'
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white overflow-hidden">

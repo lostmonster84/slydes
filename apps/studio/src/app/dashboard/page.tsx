@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { X, RefreshCw, Sparkles, BarChart3, PenLine, Target, Zap } from 'lucide-react'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { useSlydes, useOrganization, useMomentum } from '@/hooks'
+import { usePlan } from '@/hooks/usePlan'
 import { MomentumAI, MomentumAITrigger } from '@/components/momentum-ai'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -27,22 +28,14 @@ export default function HQDashboardPage() {
   const { slydes, isLoading: slydesLoading } = useSlydes()
   const { organization } = useOrganization()
   const { data: momentum, isLoading: momentumLoading, refetch, range, setRange } = useMomentum()
-
-  // Plan state (still from localStorage for MVP)
-  const [plan, setPlan] = useState<'free' | 'creator'>('creator')
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem('slydes_demo_plan')
-      if (stored === 'free' || stored === 'creator') setPlan(stored)
-    } catch { /* ignore */ }
-  }, [])
+  const { plan, isFree, isPro } = usePlan()
 
   const hasSlydes = slydes.length > 0
   const hasData = momentum?.hasData ?? false
 
   // Handle Create Slyde click — gate for Free users with existing Slydes
   const handleCreateSlyde = () => {
-    if (plan === 'free' && hasSlydes) {
+    if (isFree && hasSlydes) {
       setShowUpgradeModal(true)
     } else {
       router.push('/')
@@ -328,7 +321,7 @@ export default function HQDashboardPage() {
 
                     {/* ACTION: Momentum AI — the "what's next" after data story */}
                     {/* Shows for free users with upsell, hidden for Pro (they have the floating button) */}
-                    {plan === 'free' && (
+                    {isFree && (
                       <div className="relative rounded-2xl bg-gradient-to-br from-blue-50 via-white to-cyan-50 border border-blue-200/60 overflow-hidden dark:from-blue-500/10 dark:via-[#2c2c2e] dark:to-cyan-500/10 dark:border-blue-500/20">
                         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
                         <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400/10 rounded-full blur-2xl pointer-events-none" />
@@ -579,7 +572,7 @@ export default function HQDashboardPage() {
       <MomentumAI
         isOpen={showMomentumAI}
         onClose={() => setShowMomentumAI(false)}
-        isPro={plan === 'creator'}
+        isPro={isPro}
       />
     </div>
   )

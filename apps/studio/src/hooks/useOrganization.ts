@@ -15,6 +15,12 @@ export interface Organization {
   primary_color: string
   home_video_stream_uid: string | null
   home_video_poster_url: string | null
+  instagram_handle: string | null
+  instagram_followers: number | null
+  instagram_updated_at: string | null
+  tiktok_handle: string | null
+  tiktok_followers: number | null
+  tiktok_updated_at: string | null
   created_at: string
   updated_at: string
 }

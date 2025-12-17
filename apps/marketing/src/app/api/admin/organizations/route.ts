@@ -11,6 +11,10 @@ interface OrganizationData {
   created_at: string
   slydes_count: number
   published_slydes: number
+  instagram_handle: string | null
+  instagram_followers: number | null
+  tiktok_handle: string | null
+  tiktok_followers: number | null
 }
 
 interface OrganizationsResponse {
@@ -69,7 +73,11 @@ export async function GET(request: NextRequest) {
         business_type,
         website,
         created_at,
-        owner_id
+        owner_id,
+        instagram_handle,
+        instagram_followers,
+        tiktok_handle,
+        tiktok_followers
       `)
       .order('created_at', { ascending: false })
 
@@ -115,6 +123,10 @@ export async function GET(request: NextRequest) {
         created_at: org.created_at,
         slydes_count: slydeCounts.total,
         published_slydes: slydeCounts.published,
+        instagram_handle: org.instagram_handle,
+        instagram_followers: org.instagram_followers,
+        tiktok_handle: org.tiktok_handle,
+        tiktok_followers: org.tiktok_followers,
       }
     })
 

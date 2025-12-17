@@ -59,6 +59,8 @@ export default function OrganizationsPage() {
   const [error, setError] = useState<string | null>(null)
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [sortBy, setSortBy] = useState<'name' | 'slydes' | 'created'>('created')
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
 
   const fetchData = useCallback(async () => {
     setIsRefreshing(true)
@@ -94,6 +96,30 @@ export default function OrganizationsPage() {
         org.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
         org.owner_email.toLowerCase().includes(searchQuery.toLowerCase())
     )
+    .sort((a, b) => {
+      let aVal: number | string = 0
+      let bVal: number | string = 0
+
+      switch (sortBy) {
+        case 'name':
+          aVal = a.name.toLowerCase()
+          bVal = b.name.toLowerCase()
+          break
+        case 'slydes':
+          aVal = a.slydes_count
+          bVal = b.slydes_count
+          break
+        case 'created':
+          aVal = new Date(a.created_at).getTime()
+          bVal = new Date(b.created_at).getTime()
+          break
+      }
+
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        return sortDir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal)
+      }
+      return sortDir === 'asc' ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number)
+    })
 
   const exportCSV = () => {
     const headers = ['Name', 'Slug', 'Type', 'Owner', 'Slydes', 'Published', 'Created']
@@ -231,6 +257,29 @@ export default function OrganizationsPage() {
                 className="pl-10 pr-4 py-2 bg-[#3a3a3c] border border-white/10 rounded-lg text-white placeholder-[#636366] text-sm w-72 focus:outline-none focus:border-white/20"
               />
             </div>
+
+            {/* Sort by */}
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              className="px-3 py-2 bg-[#3a3a3c] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/20"
+            >
+              <option value="created">Sort by Created</option>
+              <option value="slydes">Sort by Slydes</option>
+              <option value="name">Sort by Name</option>
+            </select>
+
+            {/* Sort direction */}
+            <button
+              onClick={() => setSortDir(sortDir === 'asc' ? 'desc' : 'asc')}
+              className="px-3 py-2 bg-[#3a3a3c] border border-white/10 rounded-lg text-white text-sm hover:bg-[#48484a] transition-colors flex items-center gap-2"
+              title={sortDir === 'asc' ? 'Ascending' : 'Descending'}
+            >
+              {sortDir === 'desc' ? 'Newest First' : 'Oldest First'}
+              <svg className="w-4 h-4 text-[#636366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
 
             {/* Type filter */}
             {businessTypes.length > 0 && (

@@ -58,6 +58,8 @@ export type DemoHomeSlyde = {
   childFrames?: Record<string, FrameData[]>
   // Child Slyde FAQs keyed by category ID
   childFAQs?: Record<string, FAQItem[]>
+  // Home-level FAQs (shown in Home InfoSheet)
+  homeFAQs?: FAQItem[]
   // FAQ Inbox - unanswered questions from customers
   faqInbox?: FAQInboxItem[]
   // Lists - independent entities that can be connected via CTA action 'list'
@@ -84,6 +86,8 @@ export const DEFAULT_DEMO_HOME_SLYDE: DemoHomeSlyde = {
   childFrames: {},
   // Empty child FAQs by default - editor populates these
   childFAQs: {},
+  // Empty home FAQs by default
+  homeFAQs: [],
   // Empty FAQ inbox by default
   faqInbox: [],
   // Empty lists by default - user creates these
@@ -160,6 +164,8 @@ export function readDemoHomeSlyde(): DemoHomeSlyde {
     childFAQs: parsed.childFAQs && typeof parsed.childFAQs === 'object'
       ? (parsed.childFAQs as Record<string, FAQItem[]>)
       : {},
+    // Parse homeFAQs - stored as FAQItem[]
+    homeFAQs: Array.isArray(parsed.homeFAQs) ? parsed.homeFAQs : [],
     // Parse faqInbox - stored as FAQInboxItem[]
     faqInbox: Array.isArray(parsed.faqInbox) ? parsed.faqInbox : [],
     // Parse lists - stored as ListData[]
@@ -342,6 +348,29 @@ export function deleteChildFAQs(categoryId: string) {
   writeDemoHomeSlyde({
     ...current,
     childFAQs: rest,
+  })
+}
+
+// ============================================
+// Home FAQs Helpers
+// ============================================
+
+/**
+ * Read Home-level FAQs from localStorage
+ */
+export function readHomeFAQs(): FAQItem[] {
+  const current = readDemoHomeSlyde()
+  return current.homeFAQs ?? []
+}
+
+/**
+ * Write Home-level FAQs to localStorage
+ */
+export function writeHomeFAQs(faqs: FAQItem[]) {
+  const current = readDemoHomeSlyde()
+  writeDemoHomeSlyde({
+    ...current,
+    homeFAQs: faqs,
   })
 }
 

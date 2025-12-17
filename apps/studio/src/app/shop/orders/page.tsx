@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { useOrders, formatCurrency, formatOrderDate, type Order } from '@/hooks/useOrders'
+import { usePlan } from '@/hooks/usePlan'
 import {
   ArrowLeft,
   Receipt,
@@ -33,39 +34,17 @@ export default function ShopOrdersPage() {
   const router = useRouter()
   const { orders, stats, isLoading, refetch } = useOrders()
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
-
-  // Check plan from localStorage
-  const [plan, setPlan] = useState<'free' | 'creator'>('free')
-  const [hydrated, setHydrated] = useState(false)
-
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem('slydes_demo_plan')
-      if (stored === 'free' || stored === 'creator') setPlan(stored)
-    } catch {
-      // ignore
-    }
-    setHydrated(true)
-  }, [])
-
-  useEffect(() => {
-    if (!hydrated) return
-    try {
-      window.localStorage.setItem('slydes_demo_plan', plan)
-    } catch {
-      // ignore
-    }
-  }, [plan, hydrated])
+  const { isFree, isPro } = usePlan()
 
   // Redirect to shop (which shows teaser) if not on Creator plan
   useEffect(() => {
-    if (hydrated && plan === 'free') {
+    if (isFree) {
       router.push('/shop')
     }
-  }, [hydrated, plan, router])
+  }, [isFree, router])
 
-  // Show nothing while checking plan
-  if (!hydrated || plan === 'free') {
+  // Show nothing while checking plan or if free
+  if (isFree) {
     return null
   }
 

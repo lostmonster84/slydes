@@ -2,10 +2,10 @@
 
 > **"You and me against the world, James."**
 >
-> **This file EVOLVES with every session** 
-> **Updated**: December 11, 2025 - Session 3 ✅ COMPLETE 
-> **Energy Level**: MAXIMUM 🔥 
-> **Growth Stage**: 🌿 Early Growth (Session 3 - Strategic docs + waitlist)
+> **This file EVOLVES with every session**
+> **Updated**: December 17, 2025 - Session 4 ✅ COMPLETE
+> **Energy Level**: MAXIMUM 🔥
+> **Growth Stage**: 🌿 Early Growth (Session 4 - Account management + share links)
 
 ---
 
@@ -132,6 +132,19 @@ What are we tackling? 🚀
 - When in doubt, copy existing patterns exactly
 - Reference: `HomeSlydeEditorClient.tsx` for Navigator/Inspector patterns
 - Reference: `HQSidebarConnected.tsx` for sidebar nav patterns
+
+**7. STUDIO EDITOR - Preview vs Inspector Mental Model** 🎯
+- **Inspector** = What you're EDITING (controlled by selection)
+- **Preview** = What you're VIEWING (context-appropriate)
+- The hierarchy:
+  | Level | Editing | Preview Shows |
+  |-------|---------|---------------|
+  | **Home** | Background, video, layout | Home screen |
+  | **Section** | Metadata (name, subtitle, icon) | **Home screen** (see names in drawer) |
+  | **Frame** | Content, background, CTAs | **That frame** (build visually) |
+- **Sections are pointers** - labels in the drawer, edit while viewing Home
+- **Frames are content** - full-screen experiences, edit while viewing them
+- Adding items should NOT auto-select - user clicks when ready
 - **If it looks different, it's WRONG**
 
 ---
@@ -399,6 +412,59 @@ What are we tackling? 🚀
 - Continue website refinements
 - Start customer outreach with new documentation
 - Recruit 50 Founding Partners (influencer program)
+
+**Session 4** (Dec 17, 2025) ✅ COMPLETE:
+
+**Part 1: Account Management System**
+- Built complete account settings tab in Studio
+- Username changer (`slydes.io/username` - creator profile URL)
+- Business URL changer (`lostmonster.slydes.io` - org subdomain)
+- Business name editor (updates sidebar instantly via useOrganization hook)
+- Sign out functionality
+- Delete account with confirmation (type username/email to confirm)
+
+**Part 2: API Routes**
+- `/api/account/username` - GET (availability) + PUT (update)
+- `/api/account/slug` - GET (availability) + PUT (update)
+- `/api/account/delete` - DELETE (uses admin client, cascades org deletion)
+- All routes include validation, reserved word checks, error handling
+
+**Part 3: Share Link Feature (AIDA-Optimized)**
+- Persistent pill in Studio header - always visible while editing
+- One-click copy with visual feedback (green checkmark, "Copied!")
+- Also in sidebar dropdown (top of menu) and mobile drawer
+- Zero friction: see link → click → paste → share
+
+**Part 4: Marketing Routes Unified**
+- Renamed `[businessSlug]` to `[slug]` for unified routing
+- Route checks username first, then org slug
+- Created `CreatorProfileClient.tsx` - shows creator's businesses
+- Updated `PublicHomeClient.tsx` to accept server-side props
+
+**Part 5: Database Migration**
+- `014_add_username.sql` - adds username column to profiles
+- Unique constraint, URL-safe format check, index for lookups
+- Helper function `is_username_available()`
+
+**Session 4 Learnings**:
+- James spotted org name vs profile company_name confusion immediately
+- AIDA analysis drove share link placement (visible during creation = higher share rate)
+- "Effortlessly click copy - PASTE" = zero friction is the goal
+- Stress testing catches pre-existing bugs (DevPanel export, login page build)
+- Linters can break code - always verify after auto-fixes
+
+**What Worked This Session**:
+- ✅ Built complete account management in one session
+- ✅ AIDA analysis guided UX decisions
+- ✅ Thorough stress testing caught issues early
+- ✅ Fixed pre-existing DevPanel export bug
+- ✅ TypeScript clean across both apps
+
+**Technical Patterns Used**:
+- `useOrganization` hook for real-time sidebar updates
+- Admin client for auth.admin.deleteUser()
+- Debounced availability checking
+- Unified dynamic route with priority checking
 
 ---
 

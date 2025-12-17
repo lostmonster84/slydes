@@ -1,28 +1,33 @@
 'use client'
 
 /**
- * usePlan - Single source of truth for plan state
+ * usePlan - Single source of truth for plan state (dev/demo)
  *
  * This hook provides consistent plan state across the entire app.
  * DevPanel updates this, and all components read from it.
  *
- * Plan types:
- * - 'free': Free tier (limited features, 3 AI messages/day)
- * - 'creator': Pro tier (full access, unlimited AI)
+ * Plan types (matches plans.ts):
+ * - 'free': Free tier (1 Slyde, watermark)
+ * - 'creator': Creator tier (10 Slydes, analytics, no watermark)
+ * - 'pro': Pro tier (unlimited, commerce, checkout)
  *
  * Note: In production, this will be replaced with real subscription data.
  * For now, it's stored in localStorage for dev/demo purposes.
  */
 
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
+import type { PlanTier } from '@/lib/plans'
 
-export type PlanType = 'free' | 'creator'
+// Re-export PlanTier as PlanType for backwards compatibility
+export type PlanType = PlanTier
 
 interface PlanContextValue {
   plan: PlanType
   setPlan: (plan: PlanType) => void
-  isPro: boolean
   isFree: boolean
+  isCreator: boolean
+  isPro: boolean
+  isPaid: boolean // creator or pro
 }
 
 const PlanContext = createContext<PlanContextValue | null>(null)
@@ -30,14 +35,14 @@ const PlanContext = createContext<PlanContextValue | null>(null)
 const STORAGE_KEY = 'slydes_demo_plan'
 
 export function PlanProvider({ children }: { children: ReactNode }) {
-  const [plan, setPlanState] = useState<PlanType>('creator')
+  const [plan, setPlanState] = useState<PlanType>('pro')
   const [hydrated, setHydrated] = useState(false)
 
   // Load from localStorage on mount
   useEffect(() => {
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY)
-      if (stored === 'free' || stored === 'creator') {
+      if (stored === 'free' || stored === 'creator' || stored === 'pro') {
         setPlanState(stored)
       }
     } catch {
@@ -57,8 +62,10 @@ export function PlanProvider({ children }: { children: ReactNode }) {
   }, [])
 
   // Derived state
-  const isPro = plan === 'creator'
   const isFree = plan === 'free'
+  const isCreator = plan === 'creator'
+  const isPro = plan === 'pro'
+  const isPaid = plan !== 'free'
 
   // Don't render children until hydrated to prevent mismatch
   if (!hydrated) {
@@ -66,7 +73,7 @@ export function PlanProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <PlanContext.Provider value={{ plan, setPlan, isPro, isFree }}>
+    <PlanContext.Provider value={{ plan, setPlan, isFree, isCreator, isPro, isPaid }}>
       {children}
     </PlanContext.Provider>
   )

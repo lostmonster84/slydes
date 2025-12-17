@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { Upload, Lock, Check } from 'lucide-react'
 import { readDemoBrandProfile, writeDemoBrandProfile } from '@/lib/demoBrand'
+import { usePlan } from '@/hooks/usePlan'
 
 // Force dynamic rendering to avoid build-time Supabase calls
 export const dynamic = 'force-dynamic'
@@ -31,7 +32,7 @@ const VOICE_PRESETS = [
 ]
 
 export default function HQBrandPage() {
-  const [plan, setPlan] = useState<'free' | 'creator'>('creator')
+  const { isPaid } = usePlan()
   const [primaryColor, setPrimaryColor] = useState('#2563EB')
   const [secondaryColor, setSecondaryColor] = useState('#06B6D4')
   const [businessName, setBusinessName] = useState('WildTrax')
@@ -40,23 +41,6 @@ export default function HQBrandPage() {
   const [selectedVoice, setSelectedVoice] = useState('bold')
   const [hasLogo, setHasLogo] = useState(true)
   const [savedTick, setSavedTick] = useState(0)
-
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem('slydes_demo_plan')
-      if (stored === 'free' || stored === 'creator') setPlan(stored)
-    } catch {
-      // ignore
-    }
-  }, [])
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem('slydes_demo_plan', plan)
-    } catch {
-      // ignore
-    }
-  }, [plan])
 
   // Load persisted brand profile (demo)
   useEffect(() => {
@@ -77,7 +61,8 @@ export default function HQBrandPage() {
     })
   }, [businessName, tagline, primaryColor, secondaryColor])
 
-  const isCreator = plan === 'creator'
+  // isPaid = creator OR pro (both have brand customization access)
+  const isCreator = isPaid
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white overflow-hidden">

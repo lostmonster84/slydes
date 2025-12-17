@@ -25,12 +25,29 @@
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { DevicePreview } from '@/components/slyde-demo'
 import { HomeSlydeScreen } from '@/components/home-slyde/HomeSlydeScreen'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
 import type { FrameData, FAQItem, BusinessInfo, CTAIconType, ListItem, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
-import { useOrganization } from '@/hooks'
+import { useOrganization, useSocialFollowers } from '@/hooks'
 import {
   useDemoHomeSlyde,
   writeDemoHomeSlyde,
@@ -100,6 +117,7 @@ import type { BackgroundType } from '@/lib/demoHomeSlyde'
 import { InventoryGridView } from '@/components/home-slyde/InventoryGridView'
 import type { InventoryItem } from '@/components/home-slyde/data/highlandMotorsData'
 import { useFAQs } from '@/hooks/useFAQs'
+import { useHomeFAQs } from '@/hooks/useHomeFAQs'
 
 // HQ design tokens
 const HQ_PRIMARY_GRADIENT = 'bg-gradient-to-r from-blue-600 to-cyan-500'
@@ -151,10 +169,329 @@ function getCategoryIcon(iconId: string): LucideIcon {
   return CATEGORY_ICONS.find((i) => i.id === iconId)?.Icon || Smartphone
 }
 
+// Size classes type
+type SizeClasses = {
+  text: string
+  textSmall: string
+  textXSmall: string
+  textMeta: string
+  padding: string
+  paddingSmall: string
+  icon: string
+  iconSmall: string
+  badge: string
+}
+
+// Sortable Section Row component
+function SortableSectionRow({
+  cat,
+  isSelected,
+  isExpanded,
+  isEditing,
+  catFrames,
+  showCategoryIcons,
+  editingValue,
+  setEditingValue,
+  editInputRef,
+  updateCategory,
+  cancelEditing,
+  startEditing,
+  deleteCategory,
+  toggleCategory,
+  setSelection,
+  loadCategoryFrames,
+  setPreviewFrameIndex,
+  sizes,
+  children,
+}: {
+  cat: DemoHomeSlydeCategory
+  isSelected: boolean
+  isExpanded: boolean
+  isEditing: boolean
+  catFrames: FrameData[]
+  showCategoryIcons: boolean
+  editingValue: string
+  setEditingValue: (v: string) => void
+  editInputRef: React.RefObject<HTMLInputElement>
+  updateCategory: (id: string, updates: Partial<DemoHomeSlydeCategory>) => void
+  cancelEditing: () => void
+  startEditing: (id: string, value: string) => void
+  deleteCategory: (id: string) => void
+  toggleCategory: (id: string) => void
+  setSelection: (s: Selection) => void
+  loadCategoryFrames: (id: string) => void
+  setPreviewFrameIndex: (i: number) => void
+  sizes: SizeClasses
+  children?: React.ReactNode
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: cat.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  }
+
+  const IconComponent = getCategoryIcon(cat.icon)
+
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      {/* Section Row - click to expand/select, hold+drag to reorder, double click name to rename */}
+      <div
+        onClick={() => {
+          toggleCategory(cat.id)
+          setSelection({ type: 'category', categoryId: cat.id })
+          loadCategoryFrames(cat.id)
+          setPreviewFrameIndex(0)
+        }}
+        className={`group w-full flex items-center gap-2 ${sizes.padding} rounded-xl text-left transition-all cursor-pointer ${
+          isSelected
+            ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
+            : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
+        } ${isDragging ? 'cursor-grabbing' : ''}`}
+      >
+        <div className={`p-0.5 transition-transform ${isExpanded ? 'rotate-90' : ''}`}>
+          <ChevronRight className={`${sizes.icon} ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
+        </div>
+
+        {showCategoryIcons && (
+          <IconComponent className={`${sizes.icon} ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
+        )}
+
+        {isEditing ? (
+          <input
+            ref={editInputRef}
+            type="text"
+            value={editingValue}
+            onChange={(e) => setEditingValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                if (editingValue.trim()) updateCategory(cat.id, { name: editingValue.trim() })
+                cancelEditing()
+              }
+              if (e.key === 'Escape') cancelEditing()
+            }}
+            onBlur={() => {
+              if (editingValue.trim()) updateCategory(cat.id, { name: editingValue.trim() })
+              cancelEditing()
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className={`flex-1 px-1.5 py-0.5 ${sizes.text} bg-white dark:bg-gray-800 border border-blue-500 rounded text-gray-900 dark:text-white focus:outline-none`}
+          />
+        ) : (
+          <>
+            <span
+              className={`${sizes.text} font-medium truncate flex-1`}
+              onDoubleClick={(e) => {
+                e.stopPropagation()
+                startEditing(cat.id, cat.name)
+              }}
+            >
+              {cat.name}
+            </span>
+            <span className={`${sizes.textMeta} text-gray-400 dark:text-white/40`}>
+              {catFrames.length}f
+            </span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                deleteCategory(cat.id)
+              }}
+              onDoubleClick={(e) => e.stopPropagation()}
+              className="p-0.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10"
+            >
+              <Trash2 className={sizes.iconSmall} />
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Children (frames) */}
+      {isExpanded && children}
+    </div>
+  )
+}
+
+// Sortable Frame Row component
+function SortableFrameRow({
+  frame,
+  idx,
+  categoryId,
+  isFrameSelected,
+  isFrameEditing,
+  isFrameExpanded,
+  hasInventory,
+  connectedList,
+  catFramesLength,
+  editingValue,
+  setEditingValue,
+  editInputRef,
+  updateCategoryFrame,
+  cancelEditing,
+  startEditing,
+  deleteCategoryFrame,
+  toggleFrame,
+  setPreviewMode,
+  setSelection,
+  setPreviewFrameIndex,
+  sizes,
+  children,
+}: {
+  frame: FrameData
+  idx: number
+  categoryId: string
+  isFrameSelected: boolean
+  isFrameEditing: boolean
+  isFrameExpanded: boolean
+  hasInventory: boolean
+  connectedList: ListData | null | undefined
+  catFramesLength: number
+  editingValue: string
+  setEditingValue: (v: string) => void
+  editInputRef: React.RefObject<HTMLInputElement>
+  updateCategoryFrame: (catId: string, frameId: string, updates: Partial<FrameData>) => void
+  cancelEditing: () => void
+  startEditing: (id: string, value: string) => void
+  deleteCategoryFrame: (catId: string, frameId: string) => void
+  toggleFrame: (id: string) => void
+  setPreviewMode: (mode: 'home' | 'category' | 'list' | 'item') => void
+  setSelection: (s: Selection) => void
+  setPreviewFrameIndex: (i: number) => void
+  sizes: SizeClasses
+  children?: React.ReactNode
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: frame.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  }
+
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      {/* Frame Row - click to select, hold+drag to reorder, double click name to rename */}
+      <div
+        onClick={() => {
+          if (hasInventory) toggleFrame(frame.id)
+          setPreviewMode('category')
+          setSelection({ type: 'categoryFrame', categoryId, categoryFrameId: frame.id })
+          setPreviewFrameIndex(idx)
+        }}
+        className={`group w-full flex items-center gap-2 ${sizes.paddingSmall} rounded-xl text-left transition-all cursor-pointer ${
+          isFrameSelected
+            ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
+            : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
+        } ${isDragging ? 'cursor-grabbing' : ''}`}
+      >
+        {/* Chevron for frames with inventory */}
+        {hasInventory ? (
+          <div className={`p-0.5 transition-transform ${isFrameExpanded ? 'rotate-90' : ''}`}>
+            <ChevronRight className={`${sizes.icon} ${isFrameSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
+          </div>
+        ) : (
+          <div className="w-5" />
+        )}
+
+        <div className={`${sizes.badge} rounded flex items-center justify-center font-bold ${
+          isFrameSelected ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-white/10 text-gray-500'
+        }`}>
+          {idx + 1}
+        </div>
+
+        {isFrameEditing ? (
+          <input
+            ref={editInputRef}
+            type="text"
+            value={editingValue}
+            onChange={(e) => setEditingValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                if (editingValue.trim()) updateCategoryFrame(categoryId, frame.id, { title: editingValue.trim() })
+                cancelEditing()
+              }
+              if (e.key === 'Escape') cancelEditing()
+            }}
+            onBlur={() => {
+              if (editingValue.trim()) updateCategoryFrame(categoryId, frame.id, { title: editingValue.trim() })
+              cancelEditing()
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className={`flex-1 px-1.5 py-0.5 ${sizes.textSmall} bg-white dark:bg-gray-800 border border-blue-500 rounded text-gray-900 dark:text-white focus:outline-none`}
+          />
+        ) : (
+          <>
+            <span
+              className={`${sizes.textSmall} font-medium truncate flex-1`}
+              onDoubleClick={(e) => {
+                e.stopPropagation()
+                startEditing(frame.id, frame.title || `Frame ${idx + 1}`)
+              }}
+            >
+              {frame.title || `Frame ${idx + 1}`}
+            </span>
+            {/* Inventory badge */}
+            {hasInventory && connectedList && (
+              <span className={`${sizes.textMeta} px-1.5 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300`}>
+                📦 {connectedList.items.length}
+              </span>
+            )}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                deleteCategoryFrame(categoryId, frame.id)
+              }}
+              onDoubleClick={(e) => e.stopPropagation()}
+              disabled={catFramesLength <= 1}
+              className={`p-0.5 rounded-lg transition-all ${
+                catFramesLength <= 1
+                  ? 'opacity-20 cursor-not-allowed'
+                  : 'opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10'
+              }`}
+            >
+              <Trash2 className={sizes.iconSmall} />
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Children (inventory items) */}
+      {isFrameExpanded && hasInventory && children}
+    </div>
+  )
+}
+
 export function UnifiedStudioEditor() {
   const searchParams = useSearchParams()
   const { organization, isLoading: orgLoading } = useOrganization()
+  const { saveInstagramHandle, fetchTikTokFollowers } = useSocialFollowers(organization?.id)
   const { data: homeSlyde, hydrated: homeSlydeHydrated } = useDemoHomeSlyde()
+
+  // DnD sensors for drag and drop reordering
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // 8px movement required before drag starts
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
 
   // Brand profile
   const brandProfile = {
@@ -236,9 +573,92 @@ export function UnifiedStudioEditor() {
   const [navigatorViewMode, setNavigatorViewMode] = useState<'tree' | 'list'>('tree')
 
   // =============================================
-  // SELECTION STATE
+  // NAVIGATOR SIZE (S/M/L)
+  // =============================================
+  const [navigatorSize, setNavigatorSize] = useState<'S' | 'M' | 'L'>('M')
+
+  // Size classes for navigator and inspector elements
+  const sizeClasses = {
+    S: {
+      // Navigator
+      text: 'text-[13px]',
+      textSmall: 'text-[12px]',
+      textXSmall: 'text-[11px]',
+      textMeta: 'text-[10px]',
+      padding: 'px-2 py-2',
+      paddingSmall: 'px-2 py-1.5',
+      icon: 'w-4 h-4',
+      iconSmall: 'w-3.5 h-3.5',
+      badge: 'w-5 h-5 text-[10px]',
+      // Inspector
+      inspectorPadding: 'p-4',
+      inspectorTitle: 'text-base',
+      inspectorSectionTitle: 'text-[12px]',
+      inspectorLabel: 'text-[12px]',
+      inspectorInput: 'text-[13px] px-2.5 py-1.5',
+      inspectorHint: 'text-[10px]',
+      inspectorSectionPadding: 'px-3 py-2.5',
+      inspectorContentPadding: 'p-3',
+    },
+    M: {
+      // Navigator
+      text: 'text-[15px]',
+      textSmall: 'text-[14px]',
+      textXSmall: 'text-[13px]',
+      textMeta: 'text-[12px]',
+      padding: 'px-3 py-2.5',
+      paddingSmall: 'px-2.5 py-2',
+      icon: 'w-5 h-5',
+      iconSmall: 'w-4 h-4',
+      badge: 'w-6 h-6 text-[11px]',
+      // Inspector
+      inspectorPadding: 'p-5',
+      inspectorTitle: 'text-lg',
+      inspectorSectionTitle: 'text-[13px]',
+      inspectorLabel: 'text-[13px]',
+      inspectorInput: 'text-sm px-3 py-2',
+      inspectorHint: 'text-[11px]',
+      inspectorSectionPadding: 'px-4 py-3',
+      inspectorContentPadding: 'p-4',
+    },
+    L: {
+      // Navigator
+      text: 'text-[17px]',
+      textSmall: 'text-[16px]',
+      textXSmall: 'text-[15px]',
+      textMeta: 'text-[13px]',
+      padding: 'px-3 py-3',
+      paddingSmall: 'px-3 py-2.5',
+      icon: 'w-6 h-6',
+      iconSmall: 'w-5 h-5',
+      badge: 'w-7 h-7 text-[12px]',
+      // Inspector
+      inspectorPadding: 'p-6',
+      inspectorTitle: 'text-xl',
+      inspectorSectionTitle: 'text-[14px]',
+      inspectorLabel: 'text-[14px]',
+      inspectorInput: 'text-base px-3.5 py-2.5',
+      inspectorHint: 'text-[12px]',
+      inspectorSectionPadding: 'px-4 py-3.5',
+      inspectorContentPadding: 'p-5',
+    },
+  }
+
+  const sizes = sizeClasses[navigatorSize]
+
+  // =============================================
+  // SELECTION STATE (controls Inspector)
   // =============================================
   const [selection, setSelection] = useState<Selection>({ type: 'home' })
+
+  // =============================================
+  // PREVIEW MODE (controls what Preview shows - decoupled from selection)
+  // - 'home' = show HomeSlydeScreen (default, stays here when editing sections)
+  // - 'category' = show SlydeScreen with category frames (when editing frames)
+  // - 'list' = show InventoryGridView
+  // - 'item' = show item frames
+  // =============================================
+  const [previewMode, setPreviewMode] = useState<'home' | 'category' | 'list' | 'item'>('home')
 
   // =============================================
   // PREVIEW FRAME INDEX (syncs with selected frame)
@@ -270,6 +690,7 @@ export function UnifiedStudioEditor() {
     style: false,
     info: false,
     faqs: false,
+    homeFaqs: false,
   })
 
   const toggleInspectorSection = (section: string) => {
@@ -281,23 +702,23 @@ export function UnifiedStudioEditor() {
     const getDefaultSections = (type: Selection['type']) => {
       switch (type) {
         case 'home':
-          // Background open first (visual-first), Business Info closed
-          return { brand: false, video: true, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, cta: false }
+          // Business Info open first (identity-first), Background closed
+          return { brand: true, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
         case 'category':
           // Slyde name/subtitle are always visible (not in collapsible), FAQ section closed
-          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, cta: false }
+          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
         case 'categoryFrame':
         case 'itemFrame':
-          // Background open first (visual-first), Content and CTA closed
-          return { brand: false, video: true, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, cta: false }
+          // Content open first (what does this frame say?), Background closed
+          return { brand: false, video: false, socialMedia: false, settings: false, content: true, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
         case 'list':
           // List name is always visible (not in collapsible)
-          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, cta: false }
+          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
         case 'item':
           // Item fields are always visible (not in collapsible)
-          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, cta: false }
+          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
         default:
-          return { brand: false, video: true, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, cta: false }
+          return { brand: false, video: true, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
       }
     }
     setInspectorSections(getDefaultSections(selection.type))
@@ -352,10 +773,13 @@ export function UnifiedStudioEditor() {
       showReviews,
       socialLinks: Object.values(socialLinks).some(Boolean) ? socialLinks : undefined,
       childFrames: homeSlyde.childFrames,
+      childFAQs: homeSlyde.childFAQs,
+      homeFAQs: homeSlyde.homeFAQs,
+      faqInbox: homeSlyde.faqInbox,
       lists,
     }
     writeDemoHomeSlyde(next)
-  }, [backgroundType, videoSrc, imageSrc, videoFilter, videoVignette, videoSpeed, posterSrc, categories, showCategoryIcons, showHearts, showShare, showSound, showReviews, socialLinks, lists, homeSlyde.childFrames])
+  }, [backgroundType, videoSrc, imageSrc, videoFilter, videoVignette, videoSpeed, posterSrc, categories, showCategoryIcons, showHearts, showShare, showSound, showReviews, socialLinks, lists, homeSlyde.childFrames, homeSlyde.childFAQs, homeSlyde.homeFAQs, homeSlyde.faqInbox])
 
   useEffect(() => {
     const timeout = setTimeout(persistHomeSlyde, 300)
@@ -426,14 +850,13 @@ export function UnifiedStudioEditor() {
     if (categories.length >= 6) return
     const newId = `cat-${Date.now()}`
     const slydeNumber = categories.length + 1
-    const newName = `New Slyde ${slydeNumber}`
+    const newName = `New Section ${slydeNumber}`
     setCategories(prev => [
       ...prev,
       { id: newId, icon: 'sparkles', name: newName, description: '', childSlydeId: 'default', hasInventory: false },
     ])
-    setSelection({ type: 'category', categoryId: newId })
     setExpandedSections(prev => ({ ...prev, categories: true }))
-    startEditing(newId, newName)
+    // Don't auto-select - user stays in current context and clicks when ready
   }, [categories.length])
 
   const updateCategory = useCallback((id: string, updates: Partial<DemoHomeSlydeCategory>) => {
@@ -448,9 +871,22 @@ export function UnifiedStudioEditor() {
       return rest
     })
     if (selection.categoryId === id) {
+      setPreviewMode('home')
       setSelection({ type: 'home' })
     }
   }, [selection.categoryId])
+
+  // Reorder sections via drag-and-drop
+  const handleSectionDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event
+    if (over && active.id !== over.id) {
+      setCategories(prev => {
+        const oldIndex = prev.findIndex(c => c.id === active.id)
+        const newIndex = prev.findIndex(c => c.id === over.id)
+        return arrayMove(prev, oldIndex, newIndex)
+      })
+    }
+  }, [])
 
   // =============================================
   // CATEGORY FRAME CRUD
@@ -497,8 +933,7 @@ export function UnifiedStudioEditor() {
       ...prev,
       [categoryId]: [...(prev[categoryId] || []), newFrame],
     }))
-    setSelection({ type: 'categoryFrame', categoryId, categoryFrameId: newId })
-    startEditing(newId, newTitle)
+    // Don't auto-select or auto-edit - user clicks when ready (consistent with sections)
   }, [childFrames, brandProfile.secondaryColor])
 
   const updateCategoryFrame = useCallback((categoryId: string, frameId: string, updates: Partial<FrameData>) => {
@@ -519,6 +954,22 @@ export function UnifiedStudioEditor() {
       setSelection({ type: 'category', categoryId })
     }
   }, [childFrames, selection.categoryFrameId])
+
+  // Reorder frames within a category via drag-and-drop
+  const handleFrameDragEnd = useCallback((categoryId: string) => (event: DragEndEvent) => {
+    const { active, over } = event
+    if (over && active.id !== over.id) {
+      setChildFrames(prev => {
+        const frames = prev[categoryId] || []
+        const oldIndex = frames.findIndex(f => f.id === active.id)
+        const newIndex = frames.findIndex(f => f.id === over.id)
+        return {
+          ...prev,
+          [categoryId]: arrayMove(frames, oldIndex, newIndex),
+        }
+      })
+    }
+  }, [])
 
   // Persist category frames
   useEffect(() => {
@@ -564,6 +1015,7 @@ export function UnifiedStudioEditor() {
     setLists(prev => prev.filter(l => l.id !== id))
     // Reset selection if ANY selection within this list
     if (selection.listId === id) {
+      setPreviewMode('home')
       setSelection({ type: 'home' })
     }
   }, [selection.listId])
@@ -680,7 +1132,16 @@ export function UnifiedStudioEditor() {
   // FAQs for selected category
   const { faqs: categoryFAQs, addFAQ, updateFAQ, deleteFAQ, reorderFAQs } = useFAQs(selection.categoryId || null)
 
-  // State for editing FAQs
+  // Home-level FAQs
+  const {
+    faqs: homeFAQs,
+    addFAQ: addHomeFAQ,
+    updateFAQ: updateHomeFAQ,
+    deleteFAQ: deleteHomeFAQ,
+    reorderFAQs: reorderHomeFAQs
+  } = useHomeFAQs()
+
+  // State for editing FAQs (shared between Home and Section FAQs)
   const [editingFAQId, setEditingFAQId] = useState<string | null>(null)
   const [editingFAQQuestion, setEditingFAQQuestion] = useState('')
   const [editingFAQAnswer, setEditingFAQAnswer] = useState('')
@@ -895,33 +1356,53 @@ export function UnifiedStudioEditor() {
           <div className="flex-1 flex overflow-hidden">
 
             {/* NAVIGATOR - Collapsible Tree */}
-            <div className="w-72 border-r border-gray-200 dark:border-white/10 bg-white/80 backdrop-blur-xl dark:bg-[#1c1c1e]/80 overflow-y-auto">
-              {/* View Mode Toggle */}
+            <div className={`${navigatorSize === 'S' ? 'w-72' : navigatorSize === 'M' ? 'w-80' : 'w-96'} border-r border-gray-200 dark:border-white/10 bg-white/80 backdrop-blur-xl dark:bg-[#1c1c1e]/80 overflow-y-auto transition-all duration-200`}>
+              {/* View Mode Toggle + Size Toggle */}
               <div className="px-4 pt-3 pb-2 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
                 <span className="text-[11px] font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">Navigator</span>
-                <div className="flex items-center gap-0.5 p-0.5 bg-gray-100 dark:bg-white/5 rounded-lg">
-                  <button
-                    onClick={() => setNavigatorViewMode('tree')}
-                    className={`p-1.5 rounded-md transition-all ${
-                      navigatorViewMode === 'tree'
-                        ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm'
-                        : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
-                    }`}
-                    title="Tree view"
-                  >
-                    <ListTree className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => setNavigatorViewMode('list')}
-                    className={`p-1.5 rounded-md transition-all ${
-                      navigatorViewMode === 'list'
-                        ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm'
-                        : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
-                    }`}
-                    title="List view"
-                  >
-                    <LayoutList className="w-3.5 h-3.5" />
-                  </button>
+                <div className="flex items-center gap-2">
+                  {/* Size Toggle */}
+                  <div className="flex items-center gap-0.5 p-0.5 bg-gray-100 dark:bg-white/5 rounded-lg">
+                    {(['S', 'M', 'L'] as const).map((size) => (
+                      <button
+                        key={size}
+                        onClick={() => setNavigatorSize(size)}
+                        className={`px-1.5 py-1 rounded-md transition-all text-[10px] font-semibold ${
+                          navigatorSize === size
+                            ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm'
+                            : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                        }`}
+                        title={`${size === 'S' ? 'Small' : size === 'M' ? 'Medium' : 'Large'} text`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                  {/* View Mode Toggle */}
+                  <div className="flex items-center gap-0.5 p-0.5 bg-gray-100 dark:bg-white/5 rounded-lg">
+                    <button
+                      onClick={() => setNavigatorViewMode('tree')}
+                      className={`p-1.5 rounded-md transition-all ${
+                        navigatorViewMode === 'tree'
+                          ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm'
+                          : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                      }`}
+                      title="Tree view"
+                    >
+                      <ListTree className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setNavigatorViewMode('list')}
+                      className={`p-1.5 rounded-md transition-all ${
+                        navigatorViewMode === 'list'
+                          ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm'
+                          : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                      }`}
+                      title="List view"
+                    >
+                      <LayoutList className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -933,209 +1414,101 @@ export function UnifiedStudioEditor() {
                     {/* HOME SECTION */}
                     <div>
                       <div
-                        onClick={() => setSelection({ type: 'home' })}
-                        className={`group w-full flex items-center gap-2 px-2 py-2 rounded-xl text-left transition-all cursor-pointer ${
+                        onClick={() => {
+                          setPreviewMode('home')
+                          setSelection({ type: 'home' })
+                        }}
+                        className={`group w-full flex items-center gap-2 ${sizes.padding} rounded-xl text-left transition-all cursor-pointer ${
                           selection.type === 'home'
                             ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
                             : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
                         }`}
                       >
-                        <HomeIcon className={`w-4 h-4 ${selection.type === 'home' ? 'text-white' : 'text-gray-400 dark:text-white/40'}`} />
-                        <span className="text-[13px] font-medium flex-1">Home</span>
+                        <HomeIcon className={`${sizes.icon} ${selection.type === 'home' ? 'text-white' : 'text-gray-400 dark:text-white/40'}`} />
+                        <span className={`${sizes.text} font-medium flex-1`}>Home</span>
                       </div>
                     </div>
 
-                    {/* SLYDES SECTION */}
+                    {/* SECTIONS */}
                 <div className="pt-3 border-t border-gray-200 dark:border-white/10 mt-3">
                   <button
                     onClick={() => toggleSection('categories')}
                     className="w-full flex items-center justify-between px-2 py-1 mb-1"
                   >
                     <span className="text-[11px] font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
-                      Slydes ({categories.length}/6)
+                      Sections ({categories.length}/6)
                     </span>
                     <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.categories ? 'rotate-90' : ''}`} />
                   </button>
 
                   {expandedSections.categories && (
-                    <div className="space-y-0.5">
-                      {categories.map((cat) => {
-                        const isSelected = selection.type === 'category' && selection.categoryId === cat.id
-                        const isExpanded = expandedCategories.has(cat.id)
-                        const isEditing = editingId === cat.id
-                        const catFrames = childFrames[cat.id] || []
-                        const IconComponent = getCategoryIcon(cat.icon)
+                    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleSectionDragEnd}>
+                      <SortableContext items={categories.map(c => c.id)} strategy={verticalListSortingStrategy}>
+                        <div className="space-y-0.5">
+                          {categories.map((cat) => {
+                            const isSelected = selection.type === 'category' && selection.categoryId === cat.id
+                            const isExpanded = expandedCategories.has(cat.id)
+                            const isEditing = editingId === cat.id
+                            const catFrames = childFrames[cat.id] || []
 
-                        return (
-                          <div key={cat.id}>
-                            {/* Slyde Row */}
-                            <div
-                              onClick={() => {
-                                setSelection({ type: 'category', categoryId: cat.id })
-                                loadCategoryFrames(cat.id)
-                                setPreviewFrameIndex(0) // Reset to first frame when switching categories
-                              }}
-                              className={`group w-full flex items-center gap-2 px-2 py-2 rounded-xl text-left transition-all cursor-pointer ${
-                                isSelected
-                                  ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
-                                  : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
-                              }`}
-                            >
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  toggleCategory(cat.id)
-                                  loadCategoryFrames(cat.id)
-                                }}
-                                className={`p-0.5 rounded transition-transform ${isExpanded ? 'rotate-90' : ''}`}
+                            return (
+                              <SortableSectionRow
+                                key={cat.id}
+                                cat={cat}
+                                isSelected={isSelected}
+                                isExpanded={isExpanded}
+                                isEditing={isEditing}
+                                catFrames={catFrames}
+                                showCategoryIcons={showCategoryIcons}
+                                editingValue={editingValue}
+                                setEditingValue={setEditingValue}
+                                editInputRef={editInputRef}
+                                updateCategory={updateCategory}
+                                cancelEditing={cancelEditing}
+                                startEditing={startEditing}
+                                deleteCategory={deleteCategory}
+                                toggleCategory={toggleCategory}
+                                setSelection={setSelection}
+                                loadCategoryFrames={loadCategoryFrames}
+                                setPreviewFrameIndex={setPreviewFrameIndex}
+                                sizes={sizes}
                               >
-                                <ChevronRight className={`w-4 h-4 ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
-                              </button>
+                                {/* Category Frames (nested) */}
+                                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleFrameDragEnd(cat.id)}>
+                                  <SortableContext items={catFrames.map(f => f.id)} strategy={verticalListSortingStrategy}>
+                                    <div className="ml-4 pl-2 border-l border-gray-200 dark:border-white/10 mt-0.5 space-y-0.5">
+                                      {catFrames.map((frame, idx) => {
+                                        const isFrameSelected = selection.type === 'categoryFrame' && selection.categoryId === cat.id && selection.categoryFrameId === frame.id
+                                        const isFrameEditing = editingId === frame.id
+                                        const isFrameExpanded = expandedFrames.has(frame.id)
+                                        const connectedList = frame.listId ? lists.find(l => l.id === frame.listId) : null
+                                        const hasInventory = !!connectedList
 
-                              {showCategoryIcons && (
-                                <IconComponent className={`w-4 h-4 ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
-                              )}
-
-                              {isEditing ? (
-                                <input
-                                  ref={editInputRef}
-                                  type="text"
-                                  value={editingValue}
-                                  onChange={(e) => setEditingValue(e.target.value)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                      if (editingValue.trim()) updateCategory(cat.id, { name: editingValue.trim() })
-                                      cancelEditing()
-                                    }
-                                    if (e.key === 'Escape') cancelEditing()
-                                  }}
-                                  onBlur={() => {
-                                    if (editingValue.trim()) updateCategory(cat.id, { name: editingValue.trim() })
-                                    cancelEditing()
-                                  }}
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="flex-1 px-1.5 py-0.5 text-[13px] bg-white dark:bg-gray-800 border border-blue-500 rounded text-gray-900 dark:text-white focus:outline-none"
-                                />
-                              ) : (
-                                <>
-                                  <span
-                                    className="text-[13px] font-medium truncate flex-1"
-                                    onDoubleClick={(e) => {
-                                      e.stopPropagation()
-                                      startEditing(cat.id, cat.name)
-                                    }}
-                                  >
-                                    {cat.name}
-                                  </span>
-                                  <span className="text-[10px] text-gray-400 dark:text-white/40">
-                                    {catFrames.length}f
-                                  </span>
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      deleteCategory(cat.id)
-                                    }}
-                                    className="p-0.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10"
-                                  >
-                                    <Trash2 className="w-3 h-3" />
-                                  </button>
-                                </>
-                              )}
-                            </div>
-
-                            {/* Category Frames (nested) */}
-                            {isExpanded && (
-                              <div className="ml-4 pl-2 border-l border-gray-200 dark:border-white/10 mt-0.5 space-y-0.5">
-                                {catFrames.map((frame, idx) => {
-                                  const isFrameSelected = selection.type === 'categoryFrame' && selection.categoryId === cat.id && selection.categoryFrameId === frame.id
-                                  const isFrameEditing = editingId === frame.id
-                                  const isFrameExpanded = expandedFrames.has(frame.id)
-                                  const connectedList = frame.listId ? lists.find(l => l.id === frame.listId) : null
-                                  const hasInventory = !!connectedList
-
-                                  return (
-                                    <div key={frame.id}>
-                                      {/* Frame Row */}
-                                      <div
-                                        onClick={() => {
-                                          setSelection({ type: 'categoryFrame', categoryId: cat.id, categoryFrameId: frame.id })
-                                          setPreviewFrameIndex(idx)
-                                        }}
-                                        className={`group w-full flex items-center gap-2 px-2 py-1.5 rounded-xl text-left transition-all cursor-pointer ${
-                                          isFrameSelected
-                                            ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
-                                            : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
-                                        }`}
-                                      >
-                                        {/* Chevron for frames with inventory */}
-                                        {hasInventory ? (
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation()
-                                              toggleFrame(frame.id)
-                                            }}
-                                            className={`p-0.5 rounded transition-transform ${isFrameExpanded ? 'rotate-90' : ''}`}
+                                        return (
+                                          <SortableFrameRow
+                                            key={frame.id}
+                                            frame={frame}
+                                            idx={idx}
+                                            categoryId={cat.id}
+                                            isFrameSelected={isFrameSelected}
+                                            isFrameEditing={isFrameEditing}
+                                            isFrameExpanded={isFrameExpanded}
+                                            hasInventory={hasInventory}
+                                            connectedList={connectedList}
+                                            catFramesLength={catFrames.length}
+                                            editingValue={editingValue}
+                                            setEditingValue={setEditingValue}
+                                            editInputRef={editInputRef}
+                                            updateCategoryFrame={updateCategoryFrame}
+                                            cancelEditing={cancelEditing}
+                                            startEditing={startEditing}
+                                            deleteCategoryFrame={deleteCategoryFrame}
+                                            toggleFrame={toggleFrame}
+                                            setPreviewMode={setPreviewMode}
+                                            setSelection={setSelection}
+                                            setPreviewFrameIndex={setPreviewFrameIndex}
+                                            sizes={sizes}
                                           >
-                                            <ChevronRight className={`w-4 h-4 ${isFrameSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
-                                          </button>
-                                        ) : (
-                                          <div className="w-5" />
-                                        )}
-
-                                        <div className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold ${
-                                          isFrameSelected ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-white/10 text-gray-500'
-                                        }`}>
-                                          {idx + 1}
-                                        </div>
-
-                                        {isFrameEditing ? (
-                                          <input
-                                            ref={editInputRef}
-                                            type="text"
-                                            value={editingValue}
-                                            onChange={(e) => setEditingValue(e.target.value)}
-                                            onKeyDown={(e) => {
-                                              if (e.key === 'Enter') {
-                                                if (editingValue.trim()) updateCategoryFrame(cat.id, frame.id, { title: editingValue.trim() })
-                                                cancelEditing()
-                                              }
-                                              if (e.key === 'Escape') cancelEditing()
-                                            }}
-                                            onBlur={() => {
-                                              if (editingValue.trim()) updateCategoryFrame(cat.id, frame.id, { title: editingValue.trim() })
-                                              cancelEditing()
-                                            }}
-                                            onClick={(e) => e.stopPropagation()}
-                                            className="flex-1 px-1.5 py-0.5 text-[12px] bg-white dark:bg-gray-800 border border-blue-500 rounded text-gray-900 dark:text-white focus:outline-none"
-                                          />
-                                        ) : (
-                                          <>
-                                            <span className="text-[12px] font-medium truncate flex-1">
-                                              {frame.title || `Frame ${idx + 1}`}
-                                            </span>
-                                            {/* Inventory badge */}
-                                            {hasInventory && (
-                                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300">
-                                                📦 {connectedList.items.length}
-                                              </span>
-                                            )}
-                                            <button
-                                              onClick={(e) => {
-                                                e.stopPropagation()
-                                                deleteCategoryFrame(cat.id, frame.id)
-                                              }}
-                                              disabled={catFrames.length <= 1}
-                                              className={`p-0.5 rounded-lg transition-all ${
-                                                catFrames.length <= 1
-                                                  ? 'opacity-20 cursor-not-allowed'
-                                                  : 'opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10'
-                                              }`}
-                                            >
-                                              <Trash2 className="w-2.5 h-2.5" />
-                                            </button>
-                                          </>
-                                        )}
-                                      </div>
 
                                       {/* Inventory Items (nested under frame) */}
                                       {isFrameExpanded && hasInventory && (
@@ -1280,35 +1653,38 @@ export function UnifiedStudioEditor() {
                                           </button>
                                         </div>
                                       )}
+                                          </SortableFrameRow>
+                                        )
+                                      })}
+
+                                      {/* Add Frame */}
+                                      <button
+                                        onClick={() => addCategoryFrame(cat.id)}
+                                        className={`w-full flex items-center justify-center gap-1.5 ${sizes.paddingSmall} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors`}
+                                      >
+                                        <Plus className={sizes.iconSmall} />
+                                        <span className={`${sizes.textXSmall} font-medium`}>Add frame</span>
+                                      </button>
                                     </div>
-                                  )
-                                })}
+                                  </SortableContext>
+                                </DndContext>
+                              </SortableSectionRow>
+                            )
+                          })}
 
-                                {/* Add Frame */}
-                                <button
-                                  onClick={() => addCategoryFrame(cat.id)}
-                                  className="w-full flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
-                                >
-                                  <Plus className="w-3 h-3" />
-                                  <span className="text-[11px] font-medium">Add frame</span>
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        )
-                      })}
-
-                      {/* Add Slyde */}
-                      {categories.length < 6 && (
-                        <button
-                          onClick={addCategory}
-                          className="w-full flex items-center justify-center gap-1.5 px-2 py-2.5 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
-                          <span className="text-[11px] font-medium">Add slyde</span>
-                        </button>
-                      )}
-                    </div>
+                          {/* Add Section */}
+                          {categories.length < 6 && (
+                            <button
+                              onClick={addCategory}
+                              className={`w-full flex items-center justify-center gap-1.5 ${sizes.padding} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors`}
+                            >
+                              <Plus className={sizes.icon} />
+                              <span className={`${sizes.textSmall} font-medium`}>Add section</span>
+                            </button>
+                          )}
+                        </div>
+                      </SortableContext>
+                    </DndContext>
                   )}
                 </div>
                 </>
@@ -1333,21 +1709,27 @@ export function UnifiedStudioEditor() {
                           ? getCategoryIcon(item.icon)
                           : null
 
-                      // Handle click
+                      // Handle click - sections stay on Home preview, frames/items switch preview
                       const handleClick = () => {
                         if (item.type === 'home') {
+                          setPreviewMode('home')
                           setSelection({ type: 'home' })
                         } else if (item.type === 'category') {
+                          // Sections = metadata, stay on Home preview
                           setSelection({ type: 'category', categoryId: item.categoryId })
                           loadCategoryFrames(item.categoryId!)
                           setPreviewFrameIndex(0)
                         } else if (item.type === 'categoryFrame') {
+                          // Frames = content, switch preview
+                          setPreviewMode('category')
                           setSelection({ type: 'categoryFrame', categoryId: item.categoryId, categoryFrameId: item.categoryFrameId })
                           setPreviewFrameIndex(item.frameIndex ?? 0)
                         } else if (item.type === 'item') {
+                          setPreviewMode('item')
                           setItemPreviewFrameIndex(0)
                           setSelection({ type: 'item', listId: item.listId, itemId: item.itemId, categoryId: item.categoryId })
                         } else if (item.type === 'itemFrame') {
+                          setPreviewMode('item')
                           setSelection({ type: 'itemFrame', listId: item.listId, itemId: item.itemId, itemFrameId: item.itemFrameId, categoryId: item.categoryId })
                           setItemPreviewFrameIndex(item.frameIndex ?? 0)
                         }
@@ -1415,8 +1797,8 @@ export function UnifiedStudioEditor() {
               <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.03),transparent_50%)]" />
               <div className="relative z-50 isolate pointer-events-auto">
                 <DevicePreview enableTilt={false}>
-                  {/* Home Preview */}
-                  {selection.type === 'home' && (
+                  {/* Home Preview - shown when previewMode is 'home' OR when editing a section (sections are metadata, view in Home context) */}
+                  {(previewMode === 'home' || selection.type === 'category') && (
                     <HomeSlydeScreen
                       data={previewData}
                       backgroundType={backgroundType}
@@ -1425,16 +1807,16 @@ export function UnifiedStudioEditor() {
                       videoVignette={videoVignette}
                       videoSpeed={videoSpeed}
                       onCategoryTap={(categoryId) => {
-                        // Expand the category in navigator and select it
+                        // Tapping a category in preview = select it for editing (but stay on Home preview)
                         setExpandedCategories(prev => new Set([...prev, categoryId]))
-                        setPreviewFrameIndex(0)
                         setSelection({ type: 'category', categoryId })
+                        loadCategoryFrames(categoryId)
                       }}
                     />
                   )}
 
-                  {/* Category Preview */}
-                  {(selection.type === 'category' || selection.type === 'categoryFrame') && selectedCategory && (
+                  {/* Category/Frame Preview - only when editing frames (not sections) */}
+                  {previewMode === 'category' && selection.type === 'categoryFrame' && selectedCategory && (
                     selectedCategoryFrames.length > 0 ? (
                       <SlydeScreen
                         frames={selectedCategoryFrames}
@@ -1444,11 +1826,15 @@ export function UnifiedStudioEditor() {
                         initialFrameIndex={previewFrameIndex}
                         onFrameChange={setPreviewFrameIndex}
                         autoAdvance={false}
-                        onBack={() => setSelection({ type: 'home' })}
+                        onBack={() => {
+                          setPreviewMode('home')
+                          setSelection({ type: 'home' })
+                        }}
                         onListView={(frame) => {
                           // When "View All" CTA is clicked, select the list
                           if (frame.listId) {
                             setExpandedLists(prev => new Set([...prev, frame.listId!]))
+                            setPreviewMode('list')
                             setSelection({ type: 'list', listId: frame.listId, categoryId: selection.categoryId })
                           }
                         }}
@@ -1459,6 +1845,7 @@ export function UnifiedStudioEditor() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
+                            setPreviewMode('home')
                             setSelection({ type: 'home' })
                           }}
                           className="absolute top-4 left-4 z-50 flex items-center gap-1 text-white/80 hover:text-white transition-colors bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full"
@@ -1474,7 +1861,7 @@ export function UnifiedStudioEditor() {
                   )}
 
                   {/* List Preview - Shows InventoryGridView */}
-                  {selection.type === 'list' && selectedList && (
+                  {previewMode === 'list' && selectedList && (
                     <InventoryGridView
                       categoryName={selectedList.name}
                       items={selectedList.items.map(item => ({
@@ -1488,22 +1875,20 @@ export function UnifiedStudioEditor() {
                       onItemTap={(itemId) => {
                         // Expand the item in navigator and select it
                         setExpandedItems(prev => new Set([...prev, itemId]))
+                        setPreviewMode('item')
                         setSelection({ type: 'item', listId: selectedList.id, itemId, categoryId: selection.categoryId })
                       }}
                       onBack={() => {
-                        // Go back to category if we came from one, otherwise go home
-                        if (selection.categoryId) {
-                          setSelection({ type: 'category', categoryId: selection.categoryId })
-                        } else {
-                          setSelection({ type: 'home' })
-                        }
+                        // Go back to home
+                        setPreviewMode('home')
+                        setSelection({ type: 'home' })
                       }}
                       accentColor={brandProfile.primaryColor}
                     />
                   )}
 
                   {/* Item Preview - Shows SlydeScreen if item has frames */}
-                  {selection.type === 'item' && selectedItem && (
+                  {previewMode === 'item' && selectedItem && (
                     selectedItem.frames && selectedItem.frames.length > 0 ? (
                       <SlydeScreen
                         frames={selectedItem.frames}
@@ -1514,10 +1899,12 @@ export function UnifiedStudioEditor() {
                         onFrameChange={setItemPreviewFrameIndex}
                         autoAdvance={false}
                         onBack={() => {
-                          // Go back to list
+                          // Go back to list or home
                           if (selection.listId) {
+                            setPreviewMode('list')
                             setSelection({ type: 'list', listId: selection.listId, categoryId: selection.categoryId })
                           } else {
+                            setPreviewMode('home')
                             setSelection({ type: 'home' })
                           }
                         }}
@@ -1529,8 +1916,10 @@ export function UnifiedStudioEditor() {
                           onClick={(e) => {
                             e.stopPropagation()
                             if (selection.listId) {
+                              setPreviewMode('list')
                               setSelection({ type: 'list', listId: selection.listId, categoryId: selection.categoryId })
                             } else {
+                              setPreviewMode('home')
                               setSelection({ type: 'home' })
                             }
                           }}
@@ -1551,54 +1940,114 @@ export function UnifiedStudioEditor() {
                       </div>
                     )
                   )}
-
-                  {/* Item Frame Preview */}
-                  {selection.type === 'itemFrame' && selectedItem && selectedItem.frames && selectedItem.frames.length > 0 && (
-                    <SlydeScreen
-                      frames={selectedItem.frames}
-                      business={businessInfo}
-                      faqs={[]}
-                      context="category"
-                      initialFrameIndex={itemPreviewFrameIndex}
-                      onFrameChange={setItemPreviewFrameIndex}
-                      autoAdvance={false}
-                      onBack={() => setSelection({ type: 'item', listId: selection.listId!, itemId: selection.itemId! })}
-                    />
-                  )}
-
-                  {/* Empty state */}
-                  {selection.type === null && (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white">
-                      <Smartphone className="w-12 h-12 text-gray-500 mb-4" />
-                      <p className="text-gray-400">Select something to preview</p>
-                    </div>
-                  )}
                 </DevicePreview>
               </div>
             </div>
 
             {/* INSPECTOR - Contextual Editor */}
-            <div className="w-80 border-l border-gray-200 dark:border-white/10 bg-white/80 backdrop-blur-xl dark:bg-[#2c2c2e]/80 overflow-y-auto">
+            <div className={`${navigatorSize === 'S' ? 'w-80' : navigatorSize === 'M' ? 'w-96' : 'w-[28rem]'} border-l border-gray-200 dark:border-white/10 bg-white/80 backdrop-blur-xl dark:bg-[#2c2c2e]/80 overflow-y-auto transition-all duration-200`}>
 
               {/* HOME INSPECTOR */}
               {selection.type === 'home' && (
-                <div className="p-6 space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Home Settings</h3>
+                <div className={`${sizes.inspectorPadding} space-y-4`}>
+                  <h3 className={`${sizes.inspectorTitle} font-semibold text-gray-900 dark:text-white`}>Home Settings</h3>
 
-                  {/* Background Section - Visual-first, always at top */}
+                  {/* Business Info Section - Identity first */}
+                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                    <button
+                      onClick={() => toggleInspectorSection('brand')}
+                      className={`w-full flex items-center justify-between ${sizes.inspectorSectionPadding} bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}
+                    >
+                      <span className={`${sizes.inspectorSectionTitle} font-semibold text-gray-900 dark:text-white flex items-center gap-2`}>
+                        <Building2 className={`${sizes.icon} text-gray-500 dark:text-white/50`} />
+                        Business Info
+                      </span>
+                      <ChevronDown className={`${sizes.icon} text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.brand ? '' : '-rotate-90'}`} />
+                    </button>
+                    {inspectorSections.brand && (
+                      <div className={`${sizes.inspectorContentPadding} space-y-3 border-t border-gray-200 dark:border-white/10`}>
+                        <div>
+                          <label className={`block ${sizes.inspectorLabel} font-medium text-gray-700 dark:text-white/70 mb-1.5`}>Business Name</label>
+                          <input
+                            type="text"
+                            value={brandName}
+                            onChange={(e) => setBrandName(e.target.value)}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                          />
+                          <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Shown on home screen and profile pill</p>
+                        </div>
+                        <div>
+                          <label className={`block ${sizes.inspectorLabel} font-medium text-gray-700 dark:text-white/70 mb-1.5`}>Tagline</label>
+                          <input
+                            type="text"
+                            value={tagline}
+                            onChange={(e) => setTagline(e.target.value)}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                          />
+                          <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Appears below your business name</p>
+                        </div>
+                        <div>
+                          <label className={`block ${sizes.inspectorLabel} font-medium text-gray-700 dark:text-white/70 mb-1.5`}>About</label>
+                          <textarea
+                            value={about}
+                            onChange={(e) => setAbout(e.target.value)}
+                            rows={3}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none`}
+                            placeholder="Tell customers about your business..."
+                          />
+                          <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Shown when visitors tap your profile</p>
+                        </div>
+                        <div>
+                          <label className={`block ${sizes.inspectorLabel} font-medium text-gray-700 dark:text-white/70 mb-1.5`}>Location</label>
+                          <input
+                            type="text"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                            placeholder="London, Highlands, etc."
+                          />
+                          <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>City or area displayed in your profile</p>
+                        </div>
+                        <div>
+                          <label className={`block ${sizes.inspectorLabel} font-medium text-gray-700 dark:text-white/70 mb-1.5`}>Phone</label>
+                          <input
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                            placeholder="+44 123..."
+                          />
+                          <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Call button in your profile sheet</p>
+                        </div>
+                        <div>
+                          <label className={`block ${sizes.inspectorLabel} font-medium text-gray-700 dark:text-white/70 mb-1.5`}>Email</label>
+                          <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                            placeholder="hello@..."
+                          />
+                          <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Email button in your profile sheet</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Background Section - Visual layer */}
                   <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
                     <button
                       onClick={() => toggleInspectorSection('video')}
-                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                      className={`w-full flex items-center justify-between ${sizes.inspectorSectionPadding} bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}
                     >
-                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                        <Video className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                      <span className={`${sizes.inspectorSectionTitle} font-semibold text-gray-900 dark:text-white flex items-center gap-2`}>
+                        <Video className={`${sizes.icon} text-gray-500 dark:text-white/50`} />
                         Background
                       </span>
-                      <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.video ? '' : '-rotate-90'}`} />
+                      <ChevronDown className={`${sizes.icon} text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.video ? '' : '-rotate-90'}`} />
                     </button>
                     {inspectorSections.video && (
-                      <div className="p-4 border-t border-gray-200 dark:border-white/10">
+                      <div className={`${sizes.inspectorContentPadding} border-t border-gray-200 dark:border-white/10`}>
                         <BackgroundMediaInput
                           backgroundType={backgroundType}
                           onBackgroundTypeChange={setBackgroundType}
@@ -1617,103 +2066,21 @@ export function UnifiedStudioEditor() {
                     )}
                   </div>
 
-                  {/* Business Info Section */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
-                    <button
-                      onClick={() => toggleInspectorSection('brand')}
-                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
-                    >
-                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                        <Building2 className="w-4 h-4 text-gray-500 dark:text-white/50" />
-                        Business Info
-                      </span>
-                      <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.brand ? '' : '-rotate-90'}`} />
-                    </button>
-                    {inspectorSections.brand && (
-                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Business Name</label>
-                          <input
-                            type="text"
-                            value={brandName}
-                            onChange={(e) => setBrandName(e.target.value)}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                          />
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Shown on home screen and profile pill</p>
-                        </div>
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Tagline</label>
-                          <input
-                            type="text"
-                            value={tagline}
-                            onChange={(e) => setTagline(e.target.value)}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                          />
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Appears below your business name</p>
-                        </div>
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">About</label>
-                          <textarea
-                            value={about}
-                            onChange={(e) => setAbout(e.target.value)}
-                            rows={3}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none"
-                            placeholder="Tell customers about your business..."
-                          />
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Shown when visitors tap your profile</p>
-                        </div>
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Location</label>
-                          <input
-                            type="text"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                            placeholder="London, Highlands, etc."
-                          />
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">City or area displayed in your profile</p>
-                        </div>
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Phone</label>
-                          <input
-                            type="tel"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                            placeholder="+44 123..."
-                          />
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Call button in your profile sheet</p>
-                        </div>
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Email</label>
-                          <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                            placeholder="hello@..."
-                          />
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Email button in your profile sheet</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
                   {/* Social Media Section */}
                   <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
                     <button
                       onClick={() => toggleInspectorSection('socialMedia')}
-                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                      className={`w-full flex items-center justify-between ${sizes.inspectorSectionPadding} bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}
                     >
-                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                        <AtSign className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                      <span className={`${sizes.inspectorSectionTitle} font-semibold text-gray-900 dark:text-white flex items-center gap-2`}>
+                        <AtSign className={`${sizes.icon} text-gray-500 dark:text-white/50`} />
                         Social Media
                       </span>
-                      <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.socialMedia ? '' : '-rotate-90'}`} />
+                      <ChevronDown className={`${sizes.icon} text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.socialMedia ? '' : '-rotate-90'}`} />
                     </button>
                     {inspectorSections.socialMedia && (
-                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
-                        <p className="text-xs text-gray-500 dark:text-white/40">
+                      <div className={`${sizes.inspectorContentPadding} space-y-3 border-t border-gray-200 dark:border-white/10`}>
+                        <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40`}>
                           Add your social profiles. The Connect button will appear when at least one link is set.
                         </p>
 
@@ -1723,13 +2090,33 @@ export function UnifiedStudioEditor() {
                             <Instagram className="w-3.5 h-3.5" />
                             Instagram
                           </label>
-                          <input
-                            type="url"
-                            value={socialLinks.instagram || ''}
-                            onChange={(e) => setSocialLinks(prev => ({ ...prev, instagram: e.target.value || undefined }))}
-                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                            placeholder="https://instagram.com/yourbusiness"
-                          />
+                          <div className="flex gap-2">
+                            <input
+                              type="url"
+                              value={socialLinks.instagram || ''}
+                              onChange={(e) => {
+                                setSocialLinks(prev => ({ ...prev, instagram: e.target.value || undefined }))
+                                if (e.target.value) {
+                                  saveInstagramHandle(e.target.value)
+                                }
+                              }}
+                              className="flex-1 px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                              placeholder="https://instagram.com/yourbusiness"
+                            />
+                            <input
+                              type="number"
+                              defaultValue={organization?.instagram_followers || ''}
+                              onChange={(e) => {
+                                const followers = e.target.value ? parseInt(e.target.value, 10) : undefined
+                                if (socialLinks.instagram) {
+                                  saveInstagramHandle(socialLinks.instagram, followers)
+                                }
+                              }}
+                              className="w-24 px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              placeholder="Followers"
+                            />
+                          </div>
+                          <p className="text-[10px] text-gray-400 dark:text-white/30 mt-1">Helps us tailor your experience</p>
                         </div>
 
                         {/* TikTok */}
@@ -1739,11 +2126,22 @@ export function UnifiedStudioEditor() {
                               <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
                             </svg>
                             TikTok
+                            {organization?.tiktok_followers && (
+                              <span className="ml-auto text-[10px] text-blue-500 font-medium">
+                                {organization.tiktok_followers.toLocaleString()} followers
+                              </span>
+                            )}
                           </label>
                           <input
                             type="url"
                             value={socialLinks.tiktok || ''}
-                            onChange={(e) => setSocialLinks(prev => ({ ...prev, tiktok: e.target.value || undefined }))}
+                            onChange={(e) => {
+                              setSocialLinks(prev => ({ ...prev, tiktok: e.target.value || undefined }))
+                              // Auto-fetch follower count when URL is entered
+                              if (e.target.value) {
+                                fetchTikTokFollowers(e.target.value)
+                              }
+                            }}
                             className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                             placeholder="https://tiktok.com/@yourbusiness"
                           />
@@ -1830,7 +2228,7 @@ export function UnifiedStudioEditor() {
                       <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
                         <p className="text-[11px] text-gray-500 dark:text-white/40">Control which elements appear on your home screen</p>
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600 dark:text-white/60">Show slyde icons</span>
+                          <span className="text-sm text-gray-600 dark:text-white/60">Show section icons</span>
                           <Toggle enabled={showCategoryIcons} onChange={setShowCategoryIcons} />
                         </div>
                         <div className="flex items-center justify-between">
@@ -1852,14 +2250,142 @@ export function UnifiedStudioEditor() {
                       </div>
                     )}
                   </div>
+
+                  {/* Home FAQs Section */}
+                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                    <button
+                      onClick={() => toggleInspectorSection('homeFaqs')}
+                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                    >
+                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <HelpCircle className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                        Home FAQ ({homeFAQs.length})
+                      </span>
+                      <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.homeFaqs ? '' : '-rotate-90'}`} />
+                    </button>
+                    {inspectorSections.homeFaqs && (
+                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                        <p className="text-[12px] text-gray-500 dark:text-white/50">
+                          Business-wide questions shown in the Home info button (ⓘ)
+                        </p>
+
+                        {/* Home FAQ List */}
+                        {homeFAQs.map((faq) => (
+                          <div
+                            key={faq.id}
+                            className={`rounded-lg border ${
+                              editingFAQId === faq.id
+                                ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-500/5'
+                                : 'border-gray-200 dark:border-white/10 bg-white dark:bg-white/5'
+                            } overflow-hidden`}
+                          >
+                            {editingFAQId === faq.id ? (
+                              /* Edit mode */
+                              <div className="p-3 space-y-3">
+                                <div>
+                                  <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1">Question</label>
+                                  <input
+                                    type="text"
+                                    value={editingFAQQuestion}
+                                    onChange={(e) => setEditingFAQQuestion(e.target.value)}
+                                    className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                    placeholder="What's your question?"
+                                    autoFocus
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1">Answer</label>
+                                  <textarea
+                                    value={editingFAQAnswer}
+                                    onChange={(e) => setEditingFAQAnswer(e.target.value)}
+                                    rows={3}
+                                    className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none"
+                                    placeholder="Provide a helpful answer..."
+                                  />
+                                </div>
+                                <div className="flex items-center justify-between pt-2">
+                                  <button
+                                    onClick={() => {
+                                      deleteHomeFAQ(faq.id)
+                                      setEditingFAQId(null)
+                                    }}
+                                    className="px-3 py-1.5 text-[12px] text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+                                  >
+                                    Delete
+                                  </button>
+                                  <div className="flex gap-2">
+                                    <button
+                                      onClick={() => setEditingFAQId(null)}
+                                      className="px-3 py-1.5 text-[12px] text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors"
+                                    >
+                                      Cancel
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        updateHomeFAQ(faq.id, {
+                                          question: editingFAQQuestion,
+                                          answer: editingFAQAnswer,
+                                        })
+                                        setEditingFAQId(null)
+                                      }}
+                                      className="px-3 py-1.5 text-[12px] bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                    >
+                                      Save
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              /* Display mode */
+                              <button
+                                onClick={() => {
+                                  setEditingFAQId(faq.id)
+                                  setEditingFAQQuestion(faq.question)
+                                  setEditingFAQAnswer(faq.answer)
+                                }}
+                                className="w-full p-3 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                              >
+                                <div className="flex items-start gap-2">
+                                  <GripVertical className="w-4 h-4 text-gray-300 dark:text-white/20 mt-0.5 flex-shrink-0" />
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-[13px] font-medium text-gray-900 dark:text-white truncate">
+                                      {faq.question || 'Untitled question'}
+                                    </p>
+                                    <p className="text-[12px] text-gray-500 dark:text-white/50 truncate mt-0.5">
+                                      {faq.answer || 'No answer yet'}
+                                    </p>
+                                  </div>
+                                  <Pencil className="w-3.5 h-3.5 text-gray-400 dark:text-white/30 flex-shrink-0" />
+                                </div>
+                              </button>
+                            )}
+                          </div>
+                        ))}
+
+                        {/* Add Home FAQ Button */}
+                        <button
+                          onClick={() => {
+                            const newId = addHomeFAQ({ question: '', answer: '' })
+                            setEditingFAQId(newId)
+                            setEditingFAQQuestion('')
+                            setEditingFAQAnswer('')
+                          }}
+                          className="w-full py-3 border-2 border-dashed border-gray-200 dark:border-white/10 rounded-lg text-[13px] text-gray-500 dark:text-white/50 hover:border-gray-300 dark:hover:border-white/20 hover:text-gray-600 dark:hover:text-white/60 transition-colors flex items-center justify-center gap-2"
+                        >
+                          <Plus className="w-4 h-4" />
+                          Add FAQ
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
-              {/* SLYDE INSPECTOR */}
+              {/* SECTION INSPECTOR */}
               {selection.type === 'category' && selectedCategory && (
                 <div className="p-6 space-y-6">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Slyde</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Section</h3>
                     <button
                       onClick={() => deleteCategory(selectedCategory.id)}
                       className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg"
@@ -1870,18 +2396,18 @@ export function UnifiedStudioEditor() {
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-1.5">Slyde Name</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-1.5">Section Name</label>
                       <input
                         type="text"
                         value={selectedCategory.name}
                         onChange={(e) => updateCategory(selectedCategory.id, { name: e.target.value })}
                         className="w-full px-3 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                       />
-                      <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">The main title shown in the Slydes drawer</p>
+                      <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">The main title shown in the sections drawer</p>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-1.5">Slyde Subtitle</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-1.5">Section Subtitle</label>
                       <input
                         type="text"
                         value={selectedCategory.description || ''}
@@ -1925,14 +2451,14 @@ export function UnifiedStudioEditor() {
                       >
                         <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                           <HelpCircle className="w-4 h-4 text-gray-500 dark:text-white/50" />
-                          Slyde FAQ ({categoryFAQs.length})
+                          Section FAQ ({categoryFAQs.length})
                         </span>
                         <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.faqs ? '' : '-rotate-90'}`} />
                       </button>
                       {inspectorSections.faqs && (
                         <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
                           <p className="text-[12px] text-gray-500 dark:text-white/50">
-                            Questions shown in the info button (ⓘ) for this Slyde
+                            Questions shown in the info button (ⓘ) for this section
                           </p>
 
                           {/* FAQ List */}
@@ -2056,7 +2582,45 @@ export function UnifiedStudioEditor() {
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Frame Editor</h3>
                   </div>
 
-                  {/* Background Section - Visual-first, always at top */}
+                  {/* Content Section - What does this frame say? */}
+                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                    <button
+                      onClick={() => toggleInspectorSection('content')}
+                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                    >
+                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <Type className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                        Content
+                      </span>
+                      <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${inspectorSections.content ? '' : '-rotate-90'}`} />
+                    </button>
+                    {inspectorSections.content && (
+                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                        <div>
+                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Title</label>
+                          <input
+                            type="text"
+                            value={selectedCategoryFrame.title || ''}
+                            onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { title: e.target.value })}
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                          />
+                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Main heading shown on this frame</p>
+                        </div>
+                        <div>
+                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Subtitle</label>
+                          <input
+                            type="text"
+                            value={selectedCategoryFrame.subtitle || ''}
+                            onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { subtitle: e.target.value })}
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                          />
+                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Supporting text below the title</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Background Section - Visual layer */}
                   <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
                     <button
                       onClick={() => toggleInspectorSection('video')}
@@ -2096,44 +2660,6 @@ export function UnifiedStudioEditor() {
                             background: { ...selectedCategoryFrame.background, speed }
                           })}
                         />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content Section */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
-                    <button
-                      onClick={() => toggleInspectorSection('content')}
-                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
-                    >
-                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                        <Type className="w-4 h-4 text-gray-500 dark:text-white/50" />
-                        Content
-                      </span>
-                      <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${inspectorSections.content ? '' : '-rotate-90'}`} />
-                    </button>
-                    {inspectorSections.content && (
-                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Title</label>
-                          <input
-                            type="text"
-                            value={selectedCategoryFrame.title || ''}
-                            onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { title: e.target.value })}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                          />
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Main heading shown on this frame</p>
-                        </div>
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Subtitle</label>
-                          <input
-                            type="text"
-                            value={selectedCategoryFrame.subtitle || ''}
-                            onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { subtitle: e.target.value })}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                          />
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Supporting text below the title</p>
-                        </div>
                       </div>
                     )}
                   </div>

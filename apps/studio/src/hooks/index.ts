@@ -31,3 +31,6 @@ export type {
   LastWin,
   SlydeAnalytics,
 } from './useMomentum'
+
+// Social followers
+export { useSocialFollowers } from './useSocialFollowers'
