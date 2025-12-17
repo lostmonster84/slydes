@@ -4,7 +4,7 @@ import { Resend } from 'resend'
 // Lazy init to avoid build-time errors when env var not set
 const getResend = () => new Resend(process.env.RESEND_API_KEY)
 
-const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'james@lostmonter.io'
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'james@lostmonster.io'
 
 export async function POST(request: Request) {
   try {
