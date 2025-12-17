@@ -196,6 +196,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true })
     }
 
+    if (action === 'delete_application') {
+      const { error } = await supabase
+        .from('affiliate_applications')
+        .delete()
+        .eq('id', applicationId)
+
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 })
+      }
+
+      return NextResponse.json({ success: true })
+    }
+
     if (action === 'update_affiliate') {
       const { error } = await supabase
         .from('affiliates')
