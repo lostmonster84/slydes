@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { FrameData, ListData } from '@/components/slyde-demo/frameData'
+import type { FrameData, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
 
 export type DemoHomeSlydeCategory = {
   id: string
@@ -40,6 +40,8 @@ export type DemoHomeSlyde = {
   childFrames?: Record<string, FrameData[]>
   // Lists - independent entities that can be connected via CTA action 'list'
   lists?: ListData[]
+  // Social media links for the Connect feature
+  socialLinks?: SocialLinks
 }
 
 export const DEMO_HOME_SLYDE_STORAGE_KEY = 'slydes_demo_home_slyde'
@@ -114,6 +116,10 @@ export function readDemoHomeSlyde(): DemoHomeSlyde {
       : {},
     // Parse lists - stored as ListData[]
     lists: Array.isArray(parsed.lists) ? parsed.lists : [],
+    // Parse socialLinks
+    socialLinks: parsed.socialLinks && typeof parsed.socialLinks === 'object'
+      ? (parsed.socialLinks as SocialLinks)
+      : undefined,
   }
 }
 
@@ -255,4 +261,5 @@ export function deleteList(listId: string) {
     lists: (current.lists ?? []).filter(l => l.id !== listId),
   })
 }
+
 

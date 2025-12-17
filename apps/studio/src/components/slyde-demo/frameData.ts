@@ -112,6 +112,15 @@ export interface Review {
   verified: boolean
 }
 
+export interface SocialLinks {
+  instagram?: string
+  tiktok?: string
+  facebook?: string
+  youtube?: string
+  twitter?: string
+  linkedin?: string
+}
+
 export interface BusinessInfo {
   id: string
   name: string
@@ -131,6 +140,7 @@ export interface BusinessInfo {
     email?: string
     website?: string
   }
+  social?: SocialLinks
   image?: string
   accentColor: string
 }
@@ -176,6 +186,12 @@ export const wildtraxBusiness: BusinessInfo = {
     phone: '+44 1234 567890',
     email: 'hello@wildtrax.co.uk',
     website: 'https://wildtrax.co.uk'
+  },
+  social: {
+    instagram: 'https://instagram.com/wildtrax',
+    tiktok: 'https://tiktok.com/@wildtrax',
+    facebook: 'https://facebook.com/wildtrax',
+    youtube: 'https://youtube.com/@wildtrax'
   },
   accentColor: 'bg-red-600'
 }

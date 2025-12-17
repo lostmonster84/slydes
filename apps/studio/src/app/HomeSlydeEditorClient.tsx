@@ -102,8 +102,14 @@ import {
   Phone,
   Book,
   List,
+  AtSign,
+  Instagram,
+  Facebook,
+  Linkedin,
+  Youtube,
   type LucideIcon,
 } from 'lucide-react'
+import type { SocialLinks } from '@/components/slyde-demo/frameData'
 import { Toggle } from '@/components/ui/Toggle'
 
 // HQ design tokens
@@ -197,6 +203,9 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
   const [showSound, setShowSound] = useState(homeSlyde.showSound ?? true)
   const [showReviews, setShowReviews] = useState(homeSlyde.showReviews ?? true)
 
+  // Social links state for Connect button
+  const [socialLinks, setSocialLinks] = useState<SocialLinks>(homeSlyde.socialLinks ?? {})
+
   // Lists state - independent lists that can be connected via CTA
   const [lists, setLists] = useState<ListData[]>(homeSlyde.lists ?? [])
 
@@ -234,6 +243,7 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
     info: false,
     cta: false,
     settings: false,
+    socialMedia: false, // Social Media section
     content: true,  // Frame inspector: open by default
     style: false,   // Frame inspector
   })
@@ -269,6 +279,7 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
     setShowShare(homeSlyde.showShare ?? true)
     setShowSound(homeSlyde.showSound ?? true)
     setShowReviews(homeSlyde.showReviews ?? true)
+    setSocialLinks(homeSlyde.socialLinks ?? {})
     if (homeSlyde.primaryCta) {
       setPrimaryCtaEnabled(true)
       setPrimaryCtaText(homeSlyde.primaryCta.text)
@@ -304,13 +315,15 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
       showShare,
       showSound,
       showReviews,
+      // Save social links for Connect button
+      socialLinks: Object.keys(socialLinks).length > 0 ? socialLinks : undefined,
       // Preserve existing childFrames from localStorage
       childFrames: current.childFrames,
       // Save lists
       lists,
     }
     writeDemoHomeSlyde(next)
-  }, [videoSrc, posterSrc, categories, primaryCtaEnabled, primaryCtaText, primaryCtaAction, showCategoryIcons, showHearts, showShare, showSound, showReviews, lists, homeSlyde])
+  }, [videoSrc, posterSrc, categories, primaryCtaEnabled, primaryCtaText, primaryCtaAction, showCategoryIcons, showHearts, showShare, showSound, showReviews, socialLinks, lists, homeSlyde])
 
   useEffect(() => {
     const timeout = setTimeout(persistHomeSlyde, 300)
@@ -1588,6 +1601,121 @@ export function HomeSlydeEditorClient({ initialCategoryId }: HomeSlydeEditorClie
                             onChange={setShowCategoryIcons}
                             label="Category Icons"
                           />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Social Media Section */}
+                    <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                      <button
+                        onClick={() => toggleSection('socialMedia')}
+                        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                      >
+                        <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                          <AtSign className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                          Social Media
+                        </span>
+                        <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${expandedSections.socialMedia ? 'rotate-180' : ''}`} />
+                      </button>
+                      {expandedSections.socialMedia && (
+                        <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                          <p className="text-[11px] text-gray-500 dark:text-white/40 mb-3">
+                            Add your social profiles. The Connect button will appear when at least one link is set.
+                          </p>
+
+                          {/* Instagram */}
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1 flex items-center gap-1.5">
+                              <Instagram className="w-3.5 h-3.5" />
+                              Instagram
+                            </label>
+                            <input
+                              type="url"
+                              value={socialLinks.instagram || ''}
+                              onChange={(e) => setSocialLinks(prev => ({ ...prev, instagram: e.target.value || undefined }))}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="https://instagram.com/yourbusiness"
+                            />
+                          </div>
+
+                          {/* TikTok */}
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1 flex items-center gap-1.5">
+                              <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                              </svg>
+                              TikTok
+                            </label>
+                            <input
+                              type="url"
+                              value={socialLinks.tiktok || ''}
+                              onChange={(e) => setSocialLinks(prev => ({ ...prev, tiktok: e.target.value || undefined }))}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="https://tiktok.com/@yourbusiness"
+                            />
+                          </div>
+
+                          {/* Facebook */}
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1 flex items-center gap-1.5">
+                              <Facebook className="w-3.5 h-3.5" />
+                              Facebook
+                            </label>
+                            <input
+                              type="url"
+                              value={socialLinks.facebook || ''}
+                              onChange={(e) => setSocialLinks(prev => ({ ...prev, facebook: e.target.value || undefined }))}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="https://facebook.com/yourbusiness"
+                            />
+                          </div>
+
+                          {/* YouTube */}
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1 flex items-center gap-1.5">
+                              <Youtube className="w-3.5 h-3.5" />
+                              YouTube
+                            </label>
+                            <input
+                              type="url"
+                              value={socialLinks.youtube || ''}
+                              onChange={(e) => setSocialLinks(prev => ({ ...prev, youtube: e.target.value || undefined }))}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="https://youtube.com/@yourbusiness"
+                            />
+                          </div>
+
+                          {/* Twitter/X */}
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1 flex items-center gap-1.5">
+                              <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                              </svg>
+                              X (Twitter)
+                            </label>
+                            <input
+                              type="url"
+                              value={socialLinks.twitter || ''}
+                              onChange={(e) => setSocialLinks(prev => ({ ...prev, twitter: e.target.value || undefined }))}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="https://x.com/yourbusiness"
+                            />
+                          </div>
+
+                          {/* LinkedIn */}
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1 flex items-center gap-1.5">
+                              <Linkedin className="w-3.5 h-3.5" />
+                              LinkedIn
+                            </label>
+                            <input
+                              type="url"
+                              value={socialLinks.linkedin || ''}
+                              onChange={(e) => setSocialLinks(prev => ({ ...prev, linkedin: e.target.value || undefined }))}
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                              placeholder="https://linkedin.com/company/yourbusiness"
+                            />
+                          </div>
                         </div>
                       )}
                     </div>

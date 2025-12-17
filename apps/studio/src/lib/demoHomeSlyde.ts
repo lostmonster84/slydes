@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { FrameData, ListData } from '@/components/slyde-demo/frameData'
+import type { FrameData, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
 
 export type DemoHomeSlydeCategory = {
   id: string
@@ -44,6 +44,8 @@ export type DemoHomeSlyde = {
   showShare?: boolean
   showSound?: boolean
   showReviews?: boolean
+  // Social links for the Connect button
+  socialLinks?: SocialLinks
   // Child Slyde frames keyed by category ID
   childFrames?: Record<string, FrameData[]>
   // Lists - independent entities that can be connected via CTA action 'list'
@@ -64,6 +66,8 @@ export const DEFAULT_DEMO_HOME_SLYDE: DemoHomeSlyde = {
   showShare: true,
   showSound: true,
   showReviews: true,
+  // Empty social links by default
+  socialLinks: undefined,
   // Empty child frames by default - editor populates these
   childFrames: {},
   // Empty lists by default - user creates these
@@ -113,6 +117,10 @@ export function readDemoHomeSlyde(): DemoHomeSlyde {
     showShare: typeof parsed.showShare === 'boolean' ? parsed.showShare : true,
     showSound: typeof parsed.showSound === 'boolean' ? parsed.showSound : true,
     showReviews: typeof parsed.showReviews === 'boolean' ? parsed.showReviews : true,
+    // Parse socialLinks - stored as SocialLinks object
+    socialLinks: parsed.socialLinks && typeof parsed.socialLinks === 'object'
+      ? (parsed.socialLinks as SocialLinks)
+      : undefined,
     // Parse childFrames - stored as Record<string, FrameData[]>
     childFrames: parsed.childFrames && typeof parsed.childFrames === 'object'
       ? (parsed.childFrames as Record<string, FrameData[]>)

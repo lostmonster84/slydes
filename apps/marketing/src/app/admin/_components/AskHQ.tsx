@@ -99,16 +99,28 @@ export function AskHQ() {
         <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-[#1c1c1e] rounded-2xl shadow-2xl border border-white/10 flex flex-col z-50 overflow-hidden">
           {/* Header */}
           <div className="px-4 py-3 border-b border-white/10 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-leader-blue flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-            </div>
+            {messages.length > 0 ? (
+              <button
+                onClick={() => setMessages([])}
+                className="w-8 h-8 rounded-full bg-[#2c2c2e] hover:bg-[#3a3a3c] flex items-center justify-center transition-colors"
+                title="New chat"
+              >
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+              </button>
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-leader-blue flex items-center justify-center">
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+              </div>
+            )}
             <div>
               <h3 className="text-sm font-semibold text-white">Ask HQ</h3>
               <p className="text-xs text-[#636366]">Powered by Claude</p>
@@ -184,7 +196,7 @@ export function AskHQ() {
                 className="flex-1 px-4 py-2.5 bg-[#2c2c2e] border border-white/10 rounded-xl text-white placeholder-[#636366] text-sm focus:outline-none focus:border-white/20 disabled:opacity-50"
               />
               <button
-                onClick={sendMessage}
+                onClick={() => sendMessage()}
                 disabled={!input.trim() || isLoading}
                 className="px-4 py-2.5 bg-leader-blue text-white rounded-xl hover:bg-blue-600 disabled:opacity-50 disabled:hover:bg-leader-blue transition-colors"
               >

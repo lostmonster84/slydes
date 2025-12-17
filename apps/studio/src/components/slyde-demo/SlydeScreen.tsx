@@ -11,6 +11,7 @@ import { CTAButton } from './CTAButton'
 import { FAQSheet } from './FAQSheet'
 import { InfoSheet } from './InfoSheet'
 import { ShareSheet } from './ShareSheet'
+import { ConnectSheet } from './ConnectSheet'
 import { AboutSheet } from './AboutSheet'
 import { SlydesPromoSlide } from './SlydesPromoSlide'
 import { 
@@ -108,6 +109,7 @@ export function SlydeScreen({
   const [showFAQ, setShowFAQ] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
   const [showShare, setShowShare] = useState(false)
+  const [showConnect, setShowConnect] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
   const [touchCursor, setTouchCursor] = useState({ x: 0, y: 0, visible: false })
 
@@ -266,14 +268,14 @@ export function SlydeScreen({
 
   // Auto-advance frames
   useEffect(() => {
-    if (!autoAdvance || showFAQ || showInfo || showShare || showAbout) return
+    if (!autoAdvance || showFAQ || showInfo || showShare || showConnect || showAbout) return
     
     const interval = setInterval(() => {
       setCurrentFrame((prev) => (prev + 1) % frames.length)
     }, autoAdvanceInterval)
     
     return () => clearInterval(interval)
-  }, [autoAdvance, autoAdvanceInterval, frames.length, showFAQ, showInfo, showShare, showAbout])
+  }, [autoAdvance, autoAdvanceInterval, frames.length, showFAQ, showInfo, showShare, showConnect, showAbout])
 
   // Keyboard navigation
   useEffect(() => {
@@ -284,7 +286,7 @@ export function SlydeScreen({
         return
       }
 
-      if (showFAQ || showInfo || showShare || showAbout) return
+      if (showFAQ || showInfo || showShare || showConnect || showAbout) return
 
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
         e.preventDefault()
@@ -297,7 +299,7 @@ export function SlydeScreen({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [frames.length, showFAQ, showInfo, showShare, showAbout])
+  }, [frames.length, showFAQ, showInfo, showShare, showConnect, showAbout])
 
   // Handle heart tap
   const handleHeartTap = useCallback(() => {
@@ -361,6 +363,11 @@ export function SlydeScreen({
       })
       flushAnalytics()
     }
+  }, [])
+
+  // Handle connect - opens social links sheet
+  const handleConnect = useCallback(() => {
+    setShowConnect(true)
   }, [])
 
   // Handle FAQ question submission
@@ -549,7 +556,7 @@ export function SlydeScreen({
       {/* NUCLEAR FIX: left-14 to avoid back button, conditional pointer-events-none when sheets open */}
       <motion.div
         className={`absolute left-14 right-16 top-24 bottom-40 z-20 ${
-          (showFAQ || showInfo || showShare || showAbout) ? 'pointer-events-none' : ''
+          (showFAQ || showInfo || showShare || showConnect || showAbout) ? 'pointer-events-none' : ''
         }`}
         onClick={() => nextFrame()}
         drag="y"
@@ -621,7 +628,9 @@ export function SlydeScreen({
             }
           }}
           onShareTap={handleShare}
+          onConnectTap={handleConnect}
           onInfoTap={() => setShowInfo(true)}
+          socialLinks={business.social}
           slideIndicator={frameIndicator}
           className="absolute right-3 top-1/2 -translate-y-1/2 z-40"
         />
@@ -678,14 +687,8 @@ export function SlydeScreen({
                 />
               )}
 
-              {/* CTA Button - on Action/Slydes frames or inventory frames */}
+              {/* CTA Button - render whenever cta is defined on the frame */}
               {currentFrameData.cta && (
-                currentFrameData.templateType === 'action' ||
-                currentFrameData.templateType === 'slydes' ||
-                currentFrameData.id === 'action' ||
-                currentFrameData.id === 'slydes' ||
-                currentFrameData.listId  // Show CTA on inventory frames
-              ) && (
                 <CTAButton
                   text={currentFrameData.cta.text}
                   icon={currentFrameData.cta.icon}
@@ -775,6 +778,13 @@ export function SlydeScreen({
         business={business}
         slideTitle={currentFrameData.title}
         shareUrl={shareUrl}
+      />
+
+      <ConnectSheet
+        isOpen={showConnect}
+        onClose={() => setShowConnect(false)}
+        business={business}
+        socialLinks={business.social}
       />
 
       <AboutSheet

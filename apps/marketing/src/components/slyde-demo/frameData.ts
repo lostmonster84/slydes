@@ -106,6 +106,18 @@ export interface Review {
   verified: boolean
 }
 
+/**
+ * SocialLinks - Social media profile URLs for the Connect feature
+ */
+export interface SocialLinks {
+  instagram?: string
+  tiktok?: string
+  facebook?: string
+  youtube?: string
+  twitter?: string
+  linkedin?: string
+}
+
 export interface BusinessInfo {
   id: string
   name: string
@@ -127,6 +139,7 @@ export interface BusinessInfo {
   }
   image?: string
   accentColor: string
+  social?: SocialLinks
 }
 
 /**
@@ -1018,5 +1031,6 @@ export const justDriveSlides = justDriveFrames
 export const wildtraxSlides = campingFrames
 /** @deprecated Use campingFAQs instead */
 export const wildtraxFAQs = campingFAQs
+
 
 

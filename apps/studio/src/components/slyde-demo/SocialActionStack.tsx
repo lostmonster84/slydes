@@ -1,7 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Heart, HelpCircle, Share2, Info } from 'lucide-react'
+import { Heart, HelpCircle, Share2, Info, AtSign } from 'lucide-react'
+import type { SocialLinks } from './frameData'
 
 interface SocialActionStackProps {
   heartCount: number
@@ -10,12 +11,14 @@ interface SocialActionStackProps {
   onHeartTap: () => void
   onFAQTap?: () => void
   onShareTap: () => void
+  onConnectTap?: () => void
   onInfoTap: () => void
   slideIndicator?: string // e.g., "3/9"
   hideFAQ?: boolean // Hide FAQ button (e.g., for Home Slyde)
   hideInfo?: boolean // Hide Info button (e.g., for Home Slyde)
   hideHeart?: boolean // Hide Heart button
   hideShare?: boolean // Hide Share button
+  socialLinks?: SocialLinks // Social links - Connect button hidden if empty
   className?: string
 }
 
@@ -35,7 +38,8 @@ function formatCount(count: number): string {
  * 1. Heart - Like/save with count
  * 2. FAQ - Question mark with FAQ count
  * 3. Share - Share button with label
- * 4. Info - Business info (no label)
+ * 4. Connect - Social links (only if links exist)
+ * 5. Info - Business info (no label)
  * 
  * Specs:
  * - Container: absolute right-3, vertical flex, gap-5
@@ -45,6 +49,12 @@ function formatCount(count: number): string {
  * 
  * @see SLYDESBUILD.md for full specification
  */
+// Check if any social links are configured
+function hasSocialLinks(links?: SocialLinks): boolean {
+  if (!links) return false
+  return !!(links.instagram || links.tiktok || links.facebook || links.youtube || links.twitter || links.linkedin)
+}
+
 export function SocialActionStack({
   heartCount,
   isHearted,
@@ -52,14 +62,18 @@ export function SocialActionStack({
   onHeartTap,
   onFAQTap,
   onShareTap,
+  onConnectTap,
   onInfoTap,
   slideIndicator,
   hideFAQ = false,
   hideInfo = false,
   hideHeart = false,
   hideShare = false,
+  socialLinks,
   className = ''
 }: SocialActionStackProps) {
+  // Only show Connect button if social links exist
+  const showConnect = hasSocialLinks(socialLinks) && onConnectTap
   return (
     <div
       className={`flex flex-col items-center gap-5 pointer-events-auto ${className}`}
@@ -126,6 +140,24 @@ export function SocialActionStack({
             <Share2 className="w-5 h-5 text-white" />
           </div>
           <span className="text-white text-[10px] font-medium">Share</span>
+        </motion.button>
+      )}
+
+      {/* Connect Button (only if social links exist) */}
+      {showConnect && (
+        <motion.button
+          className="flex flex-col items-center gap-1"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={(e) => {
+            e.stopPropagation()
+            onConnectTap()
+          }}
+        >
+          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <AtSign className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-white text-[10px] font-medium">Connect</span>
         </motion.button>
       )}
 
