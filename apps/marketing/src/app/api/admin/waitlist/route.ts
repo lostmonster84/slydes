@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { createSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 // Simple auth check - verify cookie exists and is recent
 function isAuthenticated(request: NextRequest): boolean {
   const token = request.cookies.get('admin_token')?.value
   if (!token) return false
-  
+
   try {
     const decoded = Buffer.from(token, 'base64').toString()
     const timestamp = parseInt(decoded.split('-').pop() || '0')
@@ -22,6 +22,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const supabase = createSupabaseAdmin()
+
     // Get total count
     const { count: totalCount } = await supabase
       .from('waitlist')
