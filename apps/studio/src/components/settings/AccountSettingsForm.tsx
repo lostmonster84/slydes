@@ -3,12 +3,19 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Loader2, AtSign, LogOut, Trash2, Check, X, AlertTriangle } from 'lucide-react'
+import { Loader2, AtSign, LogOut, Trash2, Check, X, AlertTriangle, Globe } from 'lucide-react'
 
 interface Profile {
   id: string
   email: string | null
   username: string | null
+  current_organization_id: string | null
+}
+
+interface Organization {
+  id: string
+  name: string
+  slug: string
 }
 
 export function AccountSettingsForm() {
@@ -17,6 +24,13 @@ export function AccountSettingsForm() {
 
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [org, setOrg] = useState<Organization | null>(null)
+
+  // Slug state (business URL)
+  const [slug, setSlug] = useState('')
+  const [slugStatus, setSlugStatus] = useState<'idle' | 'checking' | 'available' | 'taken' | 'invalid' | 'saved'>('idle')
+  const [slugError, setSlugError] = useState<string | null>(null)
+  const [savingSlug, setSavingSlug] = useState(false)
 
   // Username state
   const [username, setUsername] = useState('')
@@ -31,7 +45,7 @@ export function AccountSettingsForm() {
   const [deleteError, setDeleteError] = useState<string | null>(null)
 
   useEffect(() => {
-    async function fetchProfile() {
+    async function fetchData() {
       const { data: { user } } = await supabase.auth.getUser()
 
       if (!user) {
@@ -39,21 +53,110 @@ export function AccountSettingsForm() {
         return
       }
 
-      const { data } = await supabase
+      const { data: profileData } = await supabase
         .from('profiles')
-        .select('id, email, username')
+        .select('id, email, username, current_organization_id')
         .eq('id', user.id)
         .single()
 
-      if (data) {
-        setProfile(data)
-        setUsername(data.username || '')
+      if (profileData) {
+        setProfile(profileData)
+        setUsername(profileData.username || '')
+
+        // Fetch org if exists
+        if (profileData.current_organization_id) {
+          const { data: orgData } = await supabase
+            .from('organizations')
+            .select('id, name, slug')
+            .eq('id', profileData.current_organization_id)
+            .single()
+
+          if (orgData) {
+            setOrg(orgData)
+            setSlug(orgData.slug || '')
+          }
+        }
       }
       setLoading(false)
     }
 
-    fetchProfile()
+    fetchData()
   }, [supabase, router])
+
+  // Debounced slug availability check
+  const checkSlugAvailability = useCallback(async (value: string) => {
+    if (!value || value === org?.slug) {
+      setSlugStatus('idle')
+      setSlugError(null)
+      return
+    }
+
+    setSlugStatus('checking')
+    setSlugError(null)
+
+    try {
+      const res = await fetch(`/api/account/slug?slug=${encodeURIComponent(value)}`)
+      const data = await res.json()
+
+      if (data.available) {
+        setSlugStatus('available')
+        setSlugError(null)
+      } else {
+        setSlugStatus(data.error?.includes('taken') ? 'taken' : 'invalid')
+        setSlugError(data.error)
+      }
+    } catch {
+      setSlugStatus('invalid')
+      setSlugError('Failed to check availability')
+    }
+  }, [org?.slug])
+
+  // Debounce slug check
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (slug && slug !== org?.slug) {
+        checkSlugAvailability(slug)
+      }
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [slug, checkSlugAvailability, org?.slug])
+
+  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
+    setSlug(value)
+    setSlugStatus('idle')
+  }
+
+  const handleSaveSlug = async () => {
+    if (slugStatus !== 'available') return
+
+    setSavingSlug(true)
+
+    try {
+      const res = await fetch('/api/account/slug', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug })
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        setSlugStatus('saved')
+        setOrg(prev => prev ? { ...prev, slug } : null)
+        setTimeout(() => setSlugStatus('idle'), 3000)
+      } else {
+        setSlugError(data.error)
+        setSlugStatus('invalid')
+      }
+    } catch {
+      setSlugError('Failed to save URL')
+      setSlugStatus('invalid')
+    }
+
+    setSavingSlug(false)
+  }
 
   // Debounced username availability check
   const checkUsernameAvailability = useCallback(async (value: string) => {
@@ -170,13 +273,83 @@ export function AccountSettingsForm() {
 
   const usernamePreview = username || 'yourusername'
 
+  const slugPreview = slug || 'yourbusiness'
+
   return (
     <div className="space-y-8">
+      {/* Business URL Section */}
+      {org && (
+        <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-2xl p-6">
+          <h2 className="text-lg font-semibold mb-2">Business URL</h2>
+          <p className="text-gray-500 dark:text-white/60 text-sm mb-4">
+            Your Slydes site: <span className="text-leader-blue font-mono">{slugPreview}.slydes.io</span>
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="slug" className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
+                Choose your URL
+              </label>
+              <div className="relative">
+                <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-white/40" />
+                <input
+                  id="slug"
+                  type="text"
+                  value={slug}
+                  onChange={handleSlugChange}
+                  placeholder="yourbusiness"
+                  maxLength={30}
+                  className="w-full bg-gray-50 border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-xl py-3 pl-12 pr-12 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent transition-all font-mono"
+                />
+                <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                  {slugStatus === 'checking' && (
+                    <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                  )}
+                  {slugStatus === 'available' && (
+                    <Check className="w-5 h-5 text-green-500" />
+                  )}
+                  {(slugStatus === 'taken' || slugStatus === 'invalid') && (
+                    <X className="w-5 h-5 text-red-500" />
+                  )}
+                  {slugStatus === 'saved' && (
+                    <Check className="w-5 h-5 text-green-500" />
+                  )}
+                </div>
+              </div>
+              {slugError && (
+                <p className="text-red-500 text-sm mt-2">{slugError}</p>
+              )}
+              {slugStatus === 'saved' && (
+                <p className="text-green-500 text-sm mt-2">URL saved!</p>
+              )}
+              <p className="text-gray-400 dark:text-white/40 text-xs mt-2">
+                3-30 characters. Lowercase letters, numbers, and hyphens only.
+              </p>
+            </div>
+
+            <button
+              onClick={handleSaveSlug}
+              disabled={slugStatus !== 'available' || savingSlug}
+              className="flex items-center gap-2 bg-leader-blue text-white font-medium py-2.5 px-5 rounded-xl hover:bg-leader-blue/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {savingSlug ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                'Save URL'
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Username Section */}
       <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-2xl p-6">
         <h2 className="text-lg font-semibold mb-2">Username</h2>
         <p className="text-gray-500 dark:text-white/60 text-sm mb-4">
-          Your unique Slydes URL: <span className="text-leader-blue font-mono">slydes.io/{usernamePreview}</span>
+          Your creator profile: <span className="text-leader-blue font-mono">slydes.io/{usernamePreview}</span>
         </p>
 
         <div className="space-y-4">

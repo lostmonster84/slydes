@@ -89,6 +89,8 @@ import {
   GripVertical,
   ListTree,
   LayoutList,
+  Link2,
+  Check,
   type LucideIcon,
 } from 'lucide-react'
 import { Toggle } from '@/components/ui/Toggle'
@@ -189,6 +191,31 @@ export function UnifiedStudioEditor() {
   const [showReviews, setShowReviews] = useState(homeSlyde.showReviews ?? true)
   const [socialLinks, setSocialLinks] = useState<SocialLinks>(homeSlyde.socialLinks || {})
   const [lists, setLists] = useState<ListData[]>(homeSlyde.lists ?? [])
+
+  // =============================================
+  // SHARE LINK STATE
+  // =============================================
+  const [linkCopied, setLinkCopied] = useState(false)
+  const shareableLink = organization ? `slydes.io/${organization.slug}` : ''
+
+  const handleCopyLink = async () => {
+    if (!shareableLink) return
+    try {
+      await navigator.clipboard.writeText(`https://${shareableLink}`)
+      setLinkCopied(true)
+      setTimeout(() => setLinkCopied(false), 2000)
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea')
+      textarea.value = `https://${shareableLink}`
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+      setLinkCopied(true)
+      setTimeout(() => setLinkCopied(false), 2000)
+    }
+  }
 
   // =============================================
   // TREE EXPANSION STATE
@@ -822,7 +849,38 @@ export function UnifiedStudioEditor() {
                 {categories.length} categories • {lists.length} lists • {totalItems} items
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {/* Share Link Pill - Always visible */}
+              {shareableLink && (
+                <button
+                  onClick={handleCopyLink}
+                  className={`group inline-flex items-center gap-2 pl-3 pr-4 py-2 rounded-full border transition-all ${
+                    linkCopied
+                      ? 'bg-green-50 border-green-200 dark:bg-green-500/10 dark:border-green-500/30'
+                      : 'bg-gray-50 border-gray-200 hover:bg-gray-100 dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10'
+                  }`}
+                >
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
+                    linkCopied
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white'
+                  }`}>
+                    {linkCopied ? (
+                      <Check className="w-3.5 h-3.5" />
+                    ) : (
+                      <Link2 className="w-3.5 h-3.5" />
+                    )}
+                  </div>
+                  <span className={`text-sm font-medium transition-colors ${
+                    linkCopied
+                      ? 'text-green-600 dark:text-green-400'
+                      : 'text-gray-600 dark:text-white/70 group-hover:text-gray-900 dark:group-hover:text-white'
+                  }`}>
+                    {linkCopied ? 'Copied!' : shareableLink}
+                  </span>
+                </button>
+              )}
+
               <button
                 type="button"
                 className={`inline-flex items-center gap-2 px-5 py-2.5 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity ${HQ_PRIMARY_SHADOW} ${HQ_PRIMARY_GRADIENT}`}

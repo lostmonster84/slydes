@@ -8,7 +8,7 @@ export type DemoBrandProfile = {
 export const DEMO_BRAND_STORAGE_KEY = 'slydes_demo_brand'
 
 export const DEFAULT_DEMO_BRAND: DemoBrandProfile = {
-  businessName: 'WildTrax',
+  businessName: 'Lost Monster',
   tagline: 'Adventure awaits',
   primaryColor: '#2563EB',
   secondaryColor: '#06B6D4',

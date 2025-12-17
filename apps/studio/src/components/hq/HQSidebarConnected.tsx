@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, Smartphone, BarChart3, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List, HelpCircle, Map, Sun, Moon, Monitor } from 'lucide-react'
+import { TrendingUp, Smartphone, BarChart3, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List, HelpCircle, Map, Sun, Moon, Monitor, Link2, Check, Share2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { FeatureSuggestionModal } from './FeatureSuggestionModal'
 import { useOrganization } from '@/hooks/useOrganization'
@@ -37,8 +37,40 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
   const [featureModalOpen, setFeatureModalOpen] = useState(false)
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system')
+  const [linkCopied, setLinkCopied] = useState(false)
+  const [plan, setPlan] = useState<'free' | 'creator'>('creator')
   const accountMenuRef = useRef<HTMLDivElement>(null)
   const accountButtonRef = useRef<HTMLButtonElement>(null)
+
+  // Load plan from localStorage (matches dashboard)
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem('slydes_demo_plan')
+      if (stored === 'free' || stored === 'creator') setPlan(stored)
+    } catch { /* ignore */ }
+  }, [])
+
+  // Get the shareable link - use org slug for now (username feature coming soon)
+  const shareableLink = organization ? `slydes.io/${organization.slug}` : ''
+
+  const handleCopyLink = async () => {
+    if (!shareableLink) return
+    try {
+      await navigator.clipboard.writeText(`https://${shareableLink}`)
+      setLinkCopied(true)
+      setTimeout(() => setLinkCopied(false), 2000)
+    } catch {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea')
+      textarea.value = `https://${shareableLink}`
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+      setLinkCopied(true)
+      setTimeout(() => setLinkCopied(false), 2000)
+    }
+  }
 
   const handleSignOut = async () => {
     const supabase = createClient()
@@ -157,8 +189,8 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   const totalItems = lists.reduce((acc, l) => acc + l.items.length, 0)
   const faqCount = Object.values(homeSlyde.childFAQs ?? {}).reduce((acc, faqs) => acc + faqs.length, 0)
 
-  // Dashboard (standalone at top)
-  const dashboardItem = { id: 'dashboard', label: 'Momentum', href: '/dashboard', icon: TrendingUp }
+  // Dashboard (standalone at top) - Pro users see "Momentum AI"
+  const dashboardItem = { id: 'dashboard', label: plan === 'creator' ? 'Momentum AI' : 'Momentum', href: '/dashboard', icon: TrendingUp }
 
   // Editor group - these are the content creation tools
   const editorItems = [
@@ -347,6 +379,40 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
             <Lightbulb className="w-5 h-5 shrink-0" />
             <span className="font-semibold text-sm">Suggest a feature</span>
           </button>
+        </div>
+
+        {/* Mobile Share Link */}
+        <div className="p-3 border-t border-gray-200 dark:border-white/10 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-500/10 dark:to-cyan-500/10">
+          <div className="text-xs uppercase tracking-wider font-semibold text-blue-600 dark:text-cyan-400 mb-2 flex items-center gap-1.5">
+            <Share2 className="w-3.5 h-3.5" />
+            Share Your Slydes
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex-1 bg-white dark:bg-black/20 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-white/80 truncate border border-gray-200 dark:border-white/10">
+              {shareableLink || 'Loading...'}
+            </div>
+            <button
+              onClick={handleCopyLink}
+              disabled={!shareableLink}
+              className={`shrink-0 px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center gap-1.5 ${
+                linkCopied
+                  ? 'bg-green-500 text-white'
+                  : 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:from-blue-700 hover:to-cyan-600'
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
+            >
+              {linkCopied ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Link2 className="w-4 h-4" />
+                  Copy
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile business switcher */}
@@ -573,6 +639,40 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
                   className="absolute bottom-full mb-2 z-[100] w-72 max-h-[calc(100vh-120px)] rounded-2xl border border-gray-200 bg-white shadow-2xl overflow-y-auto dark:border-white/10 dark:bg-[#2c2c2e] left-0"
                   role="menu"
                 >
+                  {/* Share Link - PROMINENT at top */}
+                  <div className="p-3 border-b border-gray-200 dark:border-white/10 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-500/10 dark:to-cyan-500/10">
+                    <div className="text-xs uppercase tracking-wider font-semibold text-blue-600 dark:text-cyan-400 mb-2 flex items-center gap-1.5">
+                      <Share2 className="w-3.5 h-3.5" />
+                      Share Your Slydes
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-white dark:bg-black/20 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 dark:text-white/80 truncate border border-gray-200 dark:border-white/10">
+                        {shareableLink || 'Loading...'}
+                      </div>
+                      <button
+                        onClick={handleCopyLink}
+                        disabled={!shareableLink}
+                        className={`shrink-0 px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center gap-1.5 ${
+                          linkCopied
+                            ? 'bg-green-500 text-white'
+                            : 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:from-blue-700 hover:to-cyan-600'
+                        } disabled:opacity-50 disabled:cursor-not-allowed`}
+                      >
+                        {linkCopied ? (
+                          <>
+                            <Check className="w-4 h-4" />
+                            Copied!
+                          </>
+                        ) : (
+                          <>
+                            <Link2 className="w-4 h-4" />
+                            Copy
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
                   <div className="p-4 border-b border-gray-200 dark:border-white/10">
                     <div className="text-xs uppercase tracking-wider font-semibold text-gray-500 dark:text-white/60">Account</div>
                     <div className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">{activeBusiness.name}</div>

@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { X, RefreshCw } from 'lucide-react'
+import { X, RefreshCw, Sparkles, BarChart3, PenLine, Target, Zap } from 'lucide-react'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { useSlydes, useOrganization, useMomentum } from '@/hooks'
+import { MomentumAI, MomentumAITrigger } from '@/components/momentum-ai'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -22,6 +23,7 @@ import { useRouter } from 'next/navigation'
 export default function HQDashboardPage() {
   const router = useRouter()
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [showMomentumAI, setShowMomentumAI] = useState(false)
   const { slydes, isLoading: slydesLoading } = useSlydes()
   const { organization } = useOrganization()
   const { data: momentum, isLoading: momentumLoading, refetch, range, setRange } = useMomentum()
@@ -217,7 +219,7 @@ export default function HQDashboardPage() {
               {!isLoading && hasSlydes && hasData && momentum && (
                 <div className="mb-10">
                   <div className="space-y-8">
-                    {/* Hero: THE scoreboard — real numbers from analytics */}
+                    {/* ATTENTION: Hero Metric — THE number that matters */}
                     <div className="relative">
                       <div className="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-blue-500/15 to-cyan-500/15 rounded-full blur-3xl" />
 
@@ -230,7 +232,7 @@ export default function HQDashboardPage() {
                             CTA clicks
                           </span>
                         </div>
-                        <div className="mt-2 flex items-center gap-3 text-base text-gray-600 dark:text-white/60">
+                        <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-white/60">
                           {momentum.hero.clicksDelta !== 0 && (
                             <span className={`font-mono font-semibold ${
                               momentum.hero.clicksDelta > 0
@@ -242,9 +244,9 @@ export default function HQDashboardPage() {
                           )}
                           <span>this {range === '7d' ? 'week' : range === '30d' ? 'month' : 'quarter'}</span>
                           <span className="text-gray-300 dark:text-white/20">•</span>
-                          <span>{momentum.hero.avgCompletion}% avg completion</span>
+                          <span>{momentum.hero.avgCompletion}% completion</span>
                           {momentum.hero.completionDelta !== 0 && (
-                            <span className={`font-mono text-sm ${
+                            <span className={`font-mono text-xs ${
                               momentum.hero.completionDelta > 0
                                 ? 'text-emerald-600 dark:text-emerald-400'
                                 : 'text-red-500 dark:text-red-400'
@@ -268,7 +270,7 @@ export default function HQDashboardPage() {
                       </div>
                     </div>
 
-                    {/* Coaching insight — from real data patterns */}
+                    {/* INTEREST: Coaching insight — immediately after hero */}
                     {momentum.coaching.length > 0 && momentum.coaching[0].type !== 'no_data' && (
                       <div className="flex items-start gap-3 px-1">
                         <div className="shrink-0 mt-0.5">
@@ -283,7 +285,7 @@ export default function HQDashboardPage() {
                       </div>
                     )}
 
-                    {/* Next Action Card */}
+                    {/* DESIRE: Next Action Card — specific, actionable */}
                     {momentum.nextAction && (
                       <div className="relative rounded-2xl bg-white border border-gray-200/80 overflow-hidden dark:bg-[#2c2c2e] dark:border-white/10">
                         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
@@ -318,6 +320,80 @@ export default function HQDashboardPage() {
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                               </svg>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ACTION: Momentum AI — the "what's next" after data story */}
+                    {/* Shows for free users with upsell, hidden for Pro (they have the floating button) */}
+                    {plan === 'free' && (
+                      <div className="relative rounded-2xl bg-gradient-to-br from-blue-50 via-white to-cyan-50 border border-blue-200/60 overflow-hidden dark:from-blue-500/10 dark:via-[#2c2c2e] dark:to-cyan-500/10 dark:border-blue-500/20">
+                        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400/10 rounded-full blur-2xl pointer-events-none" />
+
+                        <div className="relative p-6">
+                          <div className="flex items-start gap-4">
+                            {/* Icon */}
+                            <div className="shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                              <Sparkles className="w-6 h-6 text-white" />
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-lg font-display font-bold text-gray-900 dark:text-white">
+                                Momentum AI
+                              </h3>
+                              <p className="mt-1 text-sm text-gray-600 dark:text-white/60">
+                                Your AI business partner — knows your Slydes, explains your analytics, and helps you write better copy.
+                              </p>
+
+                              {/* Quick action chips */}
+                              <div className="mt-4 flex flex-wrap gap-2">
+                                <button
+                                  onClick={() => setShowMomentumAI(true)}
+                                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 border border-gray-200/80 hover:border-blue-300 hover:bg-white transition-all text-sm text-gray-700 dark:bg-white/5 dark:border-white/10 dark:hover:border-blue-500/30 dark:text-white/80"
+                                >
+                                  <BarChart3 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                  How's my week?
+                                </button>
+                                <button
+                                  onClick={() => setShowMomentumAI(true)}
+                                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 border border-gray-200/80 hover:border-blue-300 hover:bg-white transition-all text-sm text-gray-700 dark:bg-white/5 dark:border-white/10 dark:hover:border-blue-500/30 dark:text-white/80"
+                                >
+                                  <PenLine className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                                  Help me write copy
+                                </button>
+                                <button
+                                  onClick={() => setShowMomentumAI(true)}
+                                  className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 border border-gray-200/80 hover:border-blue-300 hover:bg-white transition-all text-sm text-gray-700 dark:bg-white/5 dark:border-white/10 dark:hover:border-blue-500/30 dark:text-white/80"
+                                >
+                                  <Target className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                                  What should I focus on?
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* CTA */}
+                            <button
+                              onClick={() => setShowMomentumAI(true)}
+                              className="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm hover:shadow-lg hover:shadow-blue-500/20 transition-all"
+                            >
+                              Try it →
+                            </button>
+                          </div>
+
+                          {/* Free tier indicator */}
+                          <div className="mt-4 pt-4 border-t border-gray-200/60 dark:border-white/10 flex items-center justify-between">
+                            <span className="text-xs text-gray-500 dark:text-white/50">
+                              3 free messages per day • Upgrade to Pro for unlimited
+                            </span>
+                            <Link
+                              href="/settings/billing"
+                              className="text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-cyan-400 dark:hover:text-cyan-300"
+                            >
+                              See plans →
                             </Link>
                           </div>
                         </div>
@@ -497,6 +573,14 @@ export default function HQDashboardPage() {
           </div>
         </div>
       )}
+
+      {/* Momentum AI */}
+      <MomentumAITrigger onClick={() => setShowMomentumAI(true)} />
+      <MomentumAI
+        isOpen={showMomentumAI}
+        onClose={() => setShowMomentumAI(false)}
+        isPro={plan === 'creator'}
+      />
     </div>
   )
 }

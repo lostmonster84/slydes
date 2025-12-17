@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 export default function BusinessSlydePage({
   params,
 }: {
-  params: Promise<{ businessSlug: string; slydeSlug: string }>
+  params: Promise<{ slug: string; slydeSlug: string }>
 }) {
   return <BusinessSlydePageContent paramsPromise={params} />
 }
@@ -15,9 +15,9 @@ export default function BusinessSlydePage({
 async function BusinessSlydePageContent({
   paramsPromise,
 }: {
-  paramsPromise: Promise<{ businessSlug: string; slydeSlug: string }>
+  paramsPromise: Promise<{ slug: string; slydeSlug: string }>
 }) {
-  const { businessSlug, slydeSlug } = await paramsPromise
+  const { slug: businessSlug, slydeSlug } = await paramsPromise
   if (!businessSlug || !slydeSlug) return notFound()
 
   const admin = createSupabaseAdmin()

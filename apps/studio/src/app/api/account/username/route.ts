@@ -30,7 +30,7 @@ function isValidUsername(username: string): { valid: boolean; error?: string } {
     'admin', 'api', 'app', 'auth', 'billing', 'blog', 'cdn',
     'dashboard', 'docs', 'help', 'login', 'logout', 'mail',
     'root', 'settings', 'signup', 'slydes', 'static', 'status',
-    'support', 'terms', 'privacy', 'www', 'wildtrax'
+    'support', 'terms', 'privacy', 'www'
   ]
 
   if (reserved.includes(username.toLowerCase())) {

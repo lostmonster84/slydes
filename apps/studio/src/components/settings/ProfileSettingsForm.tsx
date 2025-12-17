@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Loader2, User, Building2, Globe, Check } from 'lucide-react'
+import { useOrganization } from '@/hooks/useOrganization'
 
 interface Profile {
   id: string
@@ -17,6 +18,7 @@ interface Profile {
 export function ProfileSettingsForm() {
   const router = useRouter()
   const supabase = createClient()
+  const { organization, updateOrganization } = useOrganization()
 
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -27,6 +29,9 @@ export function ProfileSettingsForm() {
     company_name: '',
     company_website: '',
   })
+  const [orgName, setOrgName] = useState('')
+  const [savingOrgName, setSavingOrgName] = useState(false)
+  const [orgNameSaved, setOrgNameSaved] = useState(false)
 
   useEffect(() => {
     async function fetchProfile() {
@@ -56,6 +61,27 @@ export function ProfileSettingsForm() {
 
     fetchProfile()
   }, [supabase, router])
+
+  // Sync org name when organization loads
+  useEffect(() => {
+    if (organization) {
+      setOrgName(organization.name)
+    }
+  }, [organization])
+
+  const handleSaveOrgName = async () => {
+    if (!orgName.trim() || orgName === organization?.name) return
+
+    setSavingOrgName(true)
+    try {
+      await updateOrganization({ name: orgName.trim() })
+      setOrgNameSaved(true)
+      setTimeout(() => setOrgNameSaved(false), 3000)
+    } catch (err) {
+      console.error('Failed to update org name:', err)
+    }
+    setSavingOrgName(false)
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -161,13 +187,65 @@ export function ProfileSettingsForm() {
         </div>
       </div>
 
+      {/* Business Name (Organization) */}
+      {organization && (
+        <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-2xl p-6">
+          <h2 className="text-lg font-semibold mb-2">Business Name</h2>
+          <p className="text-gray-500 dark:text-white/60 text-sm mb-4">
+            This is your business name shown throughout Slydes
+          </p>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="org_name" className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
+                Business name
+              </label>
+              <div className="relative">
+                <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-white/40" />
+                <input
+                  id="org_name"
+                  type="text"
+                  value={orgName}
+                  onChange={(e) => {
+                    setOrgName(e.target.value)
+                    setOrgNameSaved(false)
+                  }}
+                  className="w-full bg-gray-50 border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent transition-all"
+                />
+              </div>
+              {orgNameSaved && (
+                <p className="text-green-500 text-sm mt-2 flex items-center gap-1">
+                  <Check className="w-4 h-4" />
+                  Business name saved!
+                </p>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSaveOrgName}
+              disabled={savingOrgName || !orgName.trim() || orgName === organization.name}
+              className="flex items-center gap-2 bg-leader-blue text-white font-medium py-2.5 px-5 rounded-xl hover:bg-leader-blue/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {savingOrgName ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                'Save business name'
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Company Info */}
       <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-2xl p-6">
         <h2 className="text-lg font-semibold mb-4">Company Information</h2>
         <div className="space-y-4">
           <div>
             <label htmlFor="company_name" className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
-              Company name
+              Legal company name
             </label>
             <div className="relative">
               <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-white/40" />
@@ -177,6 +255,7 @@ export function ProfileSettingsForm() {
                 type="text"
                 value={formData.company_name}
                 onChange={handleChange}
+                placeholder="For billing purposes"
                 className="w-full bg-gray-50 border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent transition-all"
               />
             </div>
