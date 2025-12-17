@@ -54,7 +54,7 @@ export default function ExtremeTrailersDemo() {
                   <h3 className="text-3xl font-bold mb-4">Extreme Trailers</h3>
                   <p className="text-gray-600 text-lg mb-6 leading-relaxed">
                     100 years of marine experience. Southampton's finest boat trailers. 
-                    From PWC & Jet Skis to custom bespoke builds—hot-dipped galvanised, 
+                    From PWC & Jet Skis to custom bespoke builds. Hot-dipped galvanised,
                     built to last forever.
                   </p>
 
@@ -368,7 +368,7 @@ export default function ExtremeTrailersDemo() {
             >
               <h2 className="mb-4">Your business could look this good</h2>
               <p className="text-gray-600 mb-8 max-w-xl mx-auto">
-                Whether you're manufacturing, services, or retail—Slydes makes any business mobile-first.
+                Whether you're manufacturing, services, or retail, Slydes makes any business mobile-first.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/founding-member">

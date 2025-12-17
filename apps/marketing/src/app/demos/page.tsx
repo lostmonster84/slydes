@@ -314,7 +314,7 @@ export default function DemosPage() {
             >
               <h2 className="mb-4">What you're looking at</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                This isn't a mockup. This is the real Slydes experience—the same technology your business will use.
+                This isn't a mockup. This is the real Slydes experience. The same technology your business will use.
               </p>
             </motion.div>
 

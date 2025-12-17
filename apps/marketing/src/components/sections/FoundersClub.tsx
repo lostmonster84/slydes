@@ -35,7 +35,7 @@ export function FoundersClub() {
 
             <ul className="space-y-4 mb-8">
               {[
-                { title: '25% commission for life', desc: 'Earn $4.75/month per subscriber you refer — recurring, not one-time' },
+                { title: '25% commission for life', desc: 'Earn £4.75/month per subscriber you refer. Recurring, not one-time.' },
                 { title: 'Lifetime Pro access', desc: 'Full access to Slydes Pro features, free forever' },
                 { title: 'Unique referral link + dashboard', desc: 'Track clicks, signups, conversions, and earnings in real-time' },
                 { title: 'Direct access to the founder', desc: 'Private Slack channel with James in the room every day' },

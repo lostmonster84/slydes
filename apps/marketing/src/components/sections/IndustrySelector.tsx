@@ -11,7 +11,7 @@ const industries = [
     label: 'Restaurant',
     title: 'Maison Lumière',
     variant: 'hospitality' as const,
-    description: 'Your menu comes alive. Video previews of signature dishes, chef\'s recommendations, and instant reservations—a digital experience as refined as your cuisine.',
+    description: 'Your menu comes alive. Video previews of signature dishes, chef\'s recommendations, and instant reservations. A digital experience as refined as your cuisine.',
     features: ['Video menu previews', 'Table reservations', 'Chef\'s specials & pairings'],
   },
   {
@@ -19,7 +19,7 @@ const industries = [
     label: 'Vacation Rentals',
     title: 'Villa Serenità',
     variant: 'rentals' as const,
-    description: 'Let guests experience your property before they book. Immersive video tours, real reviews, and seamless reservation—all in one stunning mobile experience.',
+    description: 'Let guests experience your property before they book. Immersive video tours, real reviews, and seamless reservations. All in one stunning mobile experience.',
     features: ['Virtual property tours', 'Direct booking integration', 'Guest reviews & ratings'],
   },
   {
@@ -35,7 +35,7 @@ const industries = [
     label: 'Car Hire',
     title: 'Apex Motors',
     variant: 'automotive' as const,
-    description: 'Exotic cars deserve exotic presentation. Video walkarounds, engine sounds, and instant reservations—the premium experience your clients expect.',
+    description: 'Exotic cars deserve exotic presentation. Video walkarounds, engine sounds, and instant reservations. The premium experience your clients expect.',
     features: ['Video fleet showcase', 'Instant reservations', 'Concierge service'],
   },
   {
@@ -43,7 +43,7 @@ const industries = [
     label: 'Adventure',
     title: 'WildTrax 4x4',
     variant: 'wildtrax' as const,
-    description: 'Real Land Rover Defenders, real Scottish adventures. This is an actual Slydes project we\'re building—see the future of mobile-first business sites.',
+    description: 'Real Land Rover Defenders, real Scottish adventures. This is an actual Slydes project we\'re building. See the future of mobile-first business sites.',
     features: ['Full-screen video showcase', 'Instant booking', 'Real customer project'],
   },
 ]
