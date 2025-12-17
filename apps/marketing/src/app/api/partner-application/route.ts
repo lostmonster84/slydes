@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { createSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 // Lazy init to avoid build-time errors when env var not set
 const getResend = () => new Resend(process.env.RESEND_API_KEY)
 
 // Email to receive partner applications
-const PARTNER_EMAIL = process.env.PARTNER_EMAIL || 'james@lostmonter.io'
+const PARTNER_EMAIL = process.env.PARTNER_EMAIL || 'james@lostmonster.io'
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,6 +37,37 @@ export async function POST(request: NextRequest) {
         { error: 'Invalid email format' },
         { status: 400 }
       )
+    }
+
+    // Extract Instagram/TikTok handles from website field if provided
+    let instagramHandle: string | null = null
+    let tiktokHandle: string | null = null
+
+    if (website) {
+      const igMatch = website.match(/instagram\.com\/([a-zA-Z0-9_.]+)/i)
+      if (igMatch) instagramHandle = igMatch[1].toLowerCase()
+
+      const tkMatch = website.match(/tiktok\.com\/@?([a-zA-Z0-9_.]+)/i)
+      if (tkMatch) tiktokHandle = tkMatch[1].toLowerCase()
+    }
+
+    // Save to database
+    const supabase = createSupabaseAdmin()
+    const { error: dbError } = await supabase
+      .from('affiliate_applications')
+      .insert({
+        email: email.toLowerCase(),
+        name,
+        instagram_handle: instagramHandle,
+        tiktok_handle: tiktokHandle,
+        website,
+        audience_description: `${audienceSize} followers on ${Array.isArray(platforms) ? platforms.join(', ') : platforms}`,
+        why_partner: whyPartner,
+      })
+
+    if (dbError) {
+      console.error('Database error:', dbError)
+      // Don't fail - still send email even if DB fails
     }
 
     // Format industry label
