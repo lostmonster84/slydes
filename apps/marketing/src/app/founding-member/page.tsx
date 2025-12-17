@@ -271,8 +271,8 @@ export default function FoundingPartnerPage() {
                 </h3>
                 <ul className="space-y-4">
                   {[
-                    { title: '25% commission for life', desc: 'On every paying subscriber you refer — recurring forever' },
-                    { title: 'Unique referral link', desc: 'slydes.io/?ref=yourname — track all conversions' },
+                    { title: '25% commission for life', desc: 'On every paying subscriber you refer. Recurring forever.' },
+                    { title: 'Unique referral link', desc: 'slydes.io/?ref=yourname to track all conversions' },
                     { title: 'Partner dashboard', desc: 'Real-time tracking: clicks, signups, conversions, earnings' },
                     { title: 'Monthly payouts', desc: 'Paid on the 1st via Stripe Connect or PayPal' },
                     { title: 'Lifetime Pro access', desc: 'Full Slydes Pro features, free forever' },
@@ -569,7 +569,7 @@ export default function FoundingPartnerPage() {
             className="mt-12 text-center"
           >
             <blockquote className="text-xl md:text-2xl text-gray-600 italic max-w-2xl mx-auto">
-              &ldquo;Earn 25% on every business you refer to Slydes. For life. Not a one-time bounty — <span className="text-leader-blue font-medium not-italic">recurring income</span> as long as they stay subscribed.&rdquo;
+              &ldquo;Earn 25% on every business you refer to Slydes. For life. Not a one-time bounty. <span className="text-leader-blue font-medium not-italic">Recurring income</span> as long as they stay subscribed.&rdquo;
             </blockquote>
           </motion.div>
         </div>

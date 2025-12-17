@@ -11,15 +11,24 @@ interface FormData {
   email: string
   businessName: string
   website: string
+  // Social toggle states
+  instagramEnabled: boolean
+  tiktokEnabled: boolean
+  youtubeEnabled: boolean
+  twitterEnabled: boolean
+  // Social handle values
+  instagramUrl: string
+  tiktokUrl: string
+  youtubeUrl: string
+  twitterUrl: string
   industry: string
   audienceSize: string
-  platforms: string[]
   whyPartner: string
 }
 
 function EarningsCalculator() {
   const [subscribers, setSubscribers] = useState(50)
-  const monthlyEarnings = subscribers * 4.75
+  const monthlyEarnings = subscribers * 4.75 // £4.75 minimum commission per sub
   const yearlyEarnings = monthlyEarnings * 12
 
   return (
@@ -51,17 +60,17 @@ function EarningsCalculator() {
       <div className="bg-gray-900/50 rounded-lg p-4 text-center">
         <p className="text-gray-300 text-xs mb-1">Your potential earnings</p>
         <div className="flex items-baseline justify-center gap-2">
-          <span className="text-3xl font-bold text-white">${monthlyEarnings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+          <span className="text-3xl font-bold text-white">£{monthlyEarnings.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
           <span className="text-gray-300">/month</span>
         </div>
         <p className="text-cyan-400 text-sm mt-1">
-          ${yearlyEarnings.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/year
+          £{yearlyEarnings.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/year
         </p>
       </div>
 
       {/* Conversion hint */}
       <p className="text-gray-400 text-xs text-center mt-3">
-        100K followers × 0.1% conversion = 100 subscribers
+        Based on £4.75 (~$6 USD) minimum commission per subscriber
       </p>
     </div>
   )
@@ -70,36 +79,41 @@ function EarningsCalculator() {
 export default function AffiliatesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
-  const [formData, setFormData] = useState<Partial<FormData>>({
-    platforms: []
-  })
+  const [formData, setFormData] = useState<Partial<FormData>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
 
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
-    
+
     if (!formData.name?.trim()) newErrors.name = 'Name is required'
     if (!formData.email?.trim()) newErrors.email = 'Email is required'
     else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)) {
       newErrors.email = 'Invalid email address'
     }
-    if (!formData.businessName?.trim()) newErrors.businessName = 'Business name is required'
+    if (!formData.businessName?.trim()) newErrors.businessName = 'Brand or account name is required'
+
+    // Require at least one social enabled WITH a handle
+    const hasValidSocial =
+      (formData.instagramEnabled && formData.instagramUrl?.trim()) ||
+      (formData.tiktokEnabled && formData.tiktokUrl?.trim()) ||
+      (formData.youtubeEnabled && formData.youtubeUrl?.trim()) ||
+      (formData.twitterEnabled && formData.twitterUrl?.trim())
+    if (!hasValidSocial) newErrors.socialProfiles = 'Enable at least one platform and provide your handle'
+
     if (!formData.industry) newErrors.industry = 'Please select your industry'
     if (!formData.audienceSize) newErrors.audienceSize = 'Please select your audience size'
-    if (!formData.platforms || formData.platforms.length === 0) newErrors.platforms = 'Select at least one platform'
     if (!formData.whyPartner?.trim()) newErrors.whyPartner = 'Please tell us why you want to partner'
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  const handlePlatformToggle = (platform: string) => {
+  const toggleSocial = (platform: 'instagram' | 'tiktok' | 'youtube' | 'twitter') => {
+    const enabledKey = `${platform}Enabled` as keyof FormData
     setFormData(prev => ({
       ...prev,
-      platforms: prev.platforms?.includes(platform)
-        ? prev.platforms.filter(p => p !== platform)
-        : [...(prev.platforms || []), platform]
+      [enabledKey]: !prev[enabledKey]
     }))
   }
 
@@ -225,7 +239,7 @@ export default function AffiliatesPage() {
               You promote Slydes. You earn commission on every conversion. Simple.
             </p>
             <p className="text-leader-blue font-semibold text-lg">
-              $4.75 per subscriber per month. Forever.
+              From £4.75 <span className="text-gray-400 font-normal">(~$6 USD)</span> per subscriber per month. Forever.
             </p>
           </motion.div>
 
@@ -268,8 +282,8 @@ export default function AffiliatesPage() {
                 </h3>
                 <ul className="space-y-4">
                   {[
-                    { title: '25% commission for life', desc: 'On every paying subscriber you refer — recurring forever' },
-                    { title: 'Unique referral link', desc: 'slydes.io/?ref=yourname — track all conversions' },
+                    { title: '25% commission for life', desc: 'On every paying subscriber you refer. Recurring forever.' },
+                    { title: 'Unique referral link', desc: 'slydes.io/?ref=yourname to track all conversions' },
                     { title: 'Partner dashboard', desc: 'Real-time tracking: clicks, signups, conversions, earnings' },
                     { title: 'Monthly payouts', desc: 'Paid on the 1st via Stripe Connect or PayPal' },
                     { title: 'Lifetime Pro access', desc: 'Full Slydes Pro features, free forever' },
@@ -366,10 +380,10 @@ export default function AffiliatesPage() {
                     {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                   </div>
 
-                  {/* Business Name */}
+                  {/* Business/Brand Name */}
                   <div>
                     <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Business / Brand name <span className="text-red-500">*</span>
+                      Brand or account name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -377,16 +391,16 @@ export default function AffiliatesPage() {
                       value={formData.businessName || ''}
                       onChange={(e) => setFormData(prev => ({ ...prev, businessName: e.target.value }))}
                       className="w-full px-4 py-3 min-h-[48px] bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
-                      placeholder="Your business or brand"
+                      placeholder="Your brand, business, or creator name"
                       style={{ fontSize: '16px' }}
                     />
                     {errors.businessName && <p className="text-red-500 text-sm mt-1">{errors.businessName}</p>}
                   </div>
 
-                  {/* Website / Social */}
+                  {/* Website */}
                   <div>
                     <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Website or main social profile
+                      Website
                     </label>
                     <input
                       type="text"
@@ -394,9 +408,130 @@ export default function AffiliatesPage() {
                       value={formData.website || ''}
                       onChange={(e) => setFormData(prev => ({ ...prev, website: e.target.value }))}
                       className="w-full px-4 py-3 min-h-[48px] bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent focus:bg-white transition-all text-gray-900 placeholder:text-gray-400"
-                      placeholder="https://instagram.com/yourhandle"
+                      placeholder="https://yourbusiness.com"
                       style={{ fontSize: '16px' }}
                     />
+                  </div>
+
+                  {/* Social Profiles - Toggle to Enable */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Social profiles <span className="text-gray-400 font-normal">(select platforms you&apos;re on)</span>
+                    </label>
+                    <div className="space-y-3">
+                      {/* Instagram */}
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleSocial('instagram')}
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${
+                            formData.instagramEnabled
+                              ? 'bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400'
+                              : 'bg-gray-200 hover:bg-gray-300'
+                          }`}
+                        >
+                          <svg className={`w-5 h-5 ${formData.instagramEnabled ? 'text-white' : 'text-gray-400'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </button>
+                        <input
+                          type="text"
+                          disabled={!formData.instagramEnabled}
+                          value={formData.instagramUrl || ''}
+                          onChange={(e) => setFormData(prev => ({ ...prev, instagramUrl: e.target.value }))}
+                          className={`flex-1 px-4 py-3 min-h-[48px] border rounded-xl transition-all ${
+                            formData.instagramEnabled
+                              ? 'bg-white border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent text-gray-900 placeholder:text-gray-400'
+                              : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                          }`}
+                          placeholder={formData.instagramEnabled ? '@yourhandle' : 'Click icon to enable'}
+                          style={{ fontSize: '16px' }}
+                        />
+                      </div>
+
+                      {/* TikTok */}
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleSocial('tiktok')}
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${
+                            formData.tiktokEnabled
+                              ? 'bg-black'
+                              : 'bg-gray-200 hover:bg-gray-300'
+                          }`}
+                        >
+                          <svg className={`w-5 h-5 ${formData.tiktokEnabled ? 'text-white' : 'text-gray-400'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                        </button>
+                        <input
+                          type="text"
+                          disabled={!formData.tiktokEnabled}
+                          value={formData.tiktokUrl || ''}
+                          onChange={(e) => setFormData(prev => ({ ...prev, tiktokUrl: e.target.value }))}
+                          className={`flex-1 px-4 py-3 min-h-[48px] border rounded-xl transition-all ${
+                            formData.tiktokEnabled
+                              ? 'bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent text-gray-900 placeholder:text-gray-400'
+                              : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                          }`}
+                          placeholder={formData.tiktokEnabled ? '@yourhandle' : 'Click icon to enable'}
+                          style={{ fontSize: '16px' }}
+                        />
+                      </div>
+
+                      {/* YouTube */}
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleSocial('youtube')}
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${
+                            formData.youtubeEnabled
+                              ? 'bg-red-600'
+                              : 'bg-gray-200 hover:bg-gray-300'
+                          }`}
+                        >
+                          <svg className={`w-5 h-5 ${formData.youtubeEnabled ? 'text-white' : 'text-gray-400'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </button>
+                        <input
+                          type="text"
+                          disabled={!formData.youtubeEnabled}
+                          value={formData.youtubeUrl || ''}
+                          onChange={(e) => setFormData(prev => ({ ...prev, youtubeUrl: e.target.value }))}
+                          className={`flex-1 px-4 py-3 min-h-[48px] border rounded-xl transition-all ${
+                            formData.youtubeEnabled
+                              ? 'bg-white border-red-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent text-gray-900 placeholder:text-gray-400'
+                              : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                          }`}
+                          placeholder={formData.youtubeEnabled ? '@yourchannel' : 'Click icon to enable'}
+                          style={{ fontSize: '16px' }}
+                        />
+                      </div>
+
+                      {/* X/Twitter */}
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleSocial('twitter')}
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${
+                            formData.twitterEnabled
+                              ? 'bg-black'
+                              : 'bg-gray-200 hover:bg-gray-300'
+                          }`}
+                        >
+                          <svg className={`w-5 h-5 ${formData.twitterEnabled ? 'text-white' : 'text-gray-400'}`} fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </button>
+                        <input
+                          type="text"
+                          disabled={!formData.twitterEnabled}
+                          value={formData.twitterUrl || ''}
+                          onChange={(e) => setFormData(prev => ({ ...prev, twitterUrl: e.target.value }))}
+                          className={`flex-1 px-4 py-3 min-h-[48px] border rounded-xl transition-all ${
+                            formData.twitterEnabled
+                              ? 'bg-white border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent text-gray-900 placeholder:text-gray-400'
+                              : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                          }`}
+                          placeholder={formData.twitterEnabled ? '@yourhandle' : 'Click icon to enable'}
+                          style={{ fontSize: '16px' }}
+                        />
+                      </div>
+                    </div>
+                    {errors.socialProfiles && <p className="text-red-500 text-sm mt-1">{errors.socialProfiles}</p>}
                   </div>
 
                   {/* Industry */}
@@ -445,12 +580,13 @@ export default function AffiliatesPage() {
                         style={{ fontSize: '16px' }}
                       >
                         <option value="">Select audience size...</option>
+                        <option value="under-1k">Under 1,000</option>
+                        <option value="1k-5k">1,000 - 5,000</option>
+                        <option value="5k-10k">5,000 - 10,000</option>
                         <option value="10k-25k">10,000 - 25,000</option>
                         <option value="25k-50k">25,000 - 50,000</option>
                         <option value="50k-100k">50,000 - 100,000</option>
-                        <option value="100k-250k">100,000 - 250,000</option>
-                        <option value="250k-500k">250,000 - 500,000</option>
-                        <option value="500k+">500,000+</option>
+                        <option value="100k+">100,000+</option>
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                         <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -459,30 +595,6 @@ export default function AffiliatesPage() {
                       </div>
                     </div>
                     {errors.audienceSize && <p className="text-red-500 text-sm mt-1">{errors.audienceSize}</p>}
-                  </div>
-
-                  {/* Platforms */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Main platforms <span className="text-red-500">*</span>
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {['Instagram', 'TikTok', 'YouTube', 'Twitter/X', 'LinkedIn', 'Newsletter'].map((platform) => (
-                        <button
-                          key={platform}
-                          type="button"
-                          onClick={() => handlePlatformToggle(platform)}
-                          className={`px-4 py-2 min-h-[44px] rounded-full text-sm font-medium transition-all touch-manipulation ${
-                            formData.platforms?.includes(platform)
-                              ? 'bg-leader-blue text-white'
-                              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                          }`}
-                        >
-                          {platform}
-                        </button>
-                      ))}
-                    </div>
-                    {errors.platforms && <p className="text-red-500 text-sm mt-1">{errors.platforms}</p>}
                   </div>
 
                   {/* Why Partner */}
@@ -553,7 +665,7 @@ export default function AffiliatesPage() {
                 </div>
               </div>
               <p className="text-gray-500 text-sm mt-4">
-                10K - 500K followers. Engaged audiences matter more than follower count.
+                Engaged audiences matter more than follower count.
               </p>
             </div>
           </motion.div>
@@ -566,7 +678,7 @@ export default function AffiliatesPage() {
             className="mt-12 text-center"
           >
             <blockquote className="text-xl md:text-2xl text-gray-600 italic max-w-2xl mx-auto">
-              &ldquo;Earn 25% on every business you refer to Slydes. For life. Not a one-time bounty — <span className="text-leader-blue font-medium not-italic">recurring income</span> as long as they stay subscribed.&rdquo;
+              &ldquo;Earn 25% on every business you refer to Slydes. For life. Not a one-time bounty. <span className="text-leader-blue font-medium not-italic">Recurring income</span> as long as they stay subscribed.&rdquo;
             </blockquote>
           </motion.div>
         </div>
