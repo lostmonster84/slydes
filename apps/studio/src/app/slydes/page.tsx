@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Eye, Heart, TrendingUp, X, Check, Copy, ExternalLink } from 'lucide-react'
+import { Eye, Heart, TrendingUp, X, Check, Copy, ExternalLink, LayoutGrid, LayoutList } from 'lucide-react'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -21,6 +21,7 @@ export default function HQMockupPage() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [shareModal, setShareModal] = useState<{ open: boolean; slyde: string; name: string }>({ open: false, slyde: '', name: '' })
   const [copied, setCopied] = useState(false)
+  const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
   const demoBusiness = useDemoBusiness()
   const { data: homeSlyde } = useDemoHomeSlyde()
 
@@ -59,6 +60,8 @@ export default function HQMockupPage() {
     try {
       const stored = window.localStorage.getItem('slydes_demo_plan')
       if (stored === 'free' || stored === 'creator') setPlan(stored)
+      const storedViewMode = window.localStorage.getItem('slydes_view_mode')
+      if (storedViewMode === 'card' || storedViewMode === 'list') setViewMode(storedViewMode)
     } catch {
       // ignore
     }
@@ -71,6 +74,14 @@ export default function HQMockupPage() {
       // ignore
     }
   }, [plan])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('slydes_view_mode', viewMode)
+    } catch {
+      // ignore
+    }
+  }, [viewMode])
 
   const isCreator = plan === 'creator'
 
@@ -95,15 +106,43 @@ export default function HQMockupPage() {
                   : 'No Slydes yet • create your first one'}
               </p>
             </div>
-            <button
-              onClick={handleCreateSlyde}
-              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Create Slyde
-            </button>
+            <div className="flex items-center gap-3">
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-0.5 p-1 bg-gray-100 dark:bg-white/5 rounded-lg">
+                <button
+                  onClick={() => setViewMode('card')}
+                  className={`p-2 rounded-md transition-all ${
+                    viewMode === 'card'
+                      ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm'
+                      : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                  }`}
+                  title="Card view"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-md transition-all ${
+                    viewMode === 'list'
+                      ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm'
+                      : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                  }`}
+                  title="List view"
+                >
+                  <LayoutList className="w-4 h-4" />
+                </button>
+              </div>
+
+              <button
+                onClick={handleCreateSlyde}
+                className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Create Slyde
+              </button>
+            </div>
           </header>
 
           {/* Content Area */}
@@ -196,8 +235,9 @@ export default function HQMockupPage() {
               )
             })()}
 
-            {/* Slydes grid - dynamically generated from categories */}
-            <div className="grid grid-cols-12 gap-6">
+            {/* Slydes - Card View */}
+            {viewMode === 'card' && (
+              <div className="grid grid-cols-12 gap-6">
 
               {homeSlyde.categories.map((category, index) => {
                 const frameCount = homeSlyde.childFrames?.[category.id]?.length ?? 0
@@ -401,7 +441,127 @@ export default function HQMockupPage() {
                 </button>
               </div>
 
-            </div>
+              </div>
+            )}
+
+            {/* Slydes - List View */}
+            {viewMode === 'list' && (
+              <div className="space-y-2">
+                {/* List Header */}
+                <div className="grid grid-cols-12 gap-4 px-4 py-2 text-xs font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
+                  <div className="col-span-5">Slyde</div>
+                  <div className="col-span-2">Frames</div>
+                  <div className="col-span-2">Status</div>
+                  <div className="col-span-3 text-right">Actions</div>
+                </div>
+
+                {homeSlyde.categories.map((category, index) => {
+                  const frameCount = homeSlyde.childFrames?.[category.id]?.length ?? 0
+                  const slug = category.name.toLowerCase().replace(/\s+/g, '-')
+                  const firstFrame = homeSlyde.childFrames?.[category.id]?.[0]
+                  const isLive = frameCount > 0
+
+                  // Gradient colors based on index for visual variety
+                  const gradients = [
+                    'from-emerald-900 via-emerald-800 to-emerald-950',
+                    'from-blue-950 via-slate-900 to-cyan-950',
+                    'from-orange-900 via-amber-800 to-orange-950',
+                    'from-purple-900 via-violet-800 to-purple-950',
+                    'from-rose-900 via-pink-800 to-rose-950',
+                  ]
+                  const gradient = gradients[index % gradients.length]
+
+                  return (
+                    <div
+                      key={category.id}
+                      className="grid grid-cols-12 gap-4 items-center px-4 py-3 bg-white dark:bg-[#2c2c2e] border border-gray-200 dark:border-white/10 rounded-xl hover:border-gray-300 dark:hover:border-white/20 transition-all group"
+                    >
+                      {/* Slyde Info */}
+                      <div className="col-span-5 flex items-center gap-3">
+                        {/* Mini Phone Preview */}
+                        <div className="relative shrink-0">
+                          <div className="w-10 h-[72px] bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-0.5 shadow-md">
+                            <div className="w-full h-full rounded-[6px] overflow-hidden relative">
+                              <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
+                              {firstFrame?.background?.src && (
+                                <div
+                                  className="absolute inset-0 bg-cover bg-center opacity-60"
+                                  style={{ backgroundImage: `url(${firstFrame.background.src})` }}
+                                />
+                              )}
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-semibold text-gray-900 dark:text-white truncate">{category.name}</div>
+                          <div className="text-sm text-gray-500 dark:text-white/50 truncate">
+                            slydes.io/wildtrax/{slug}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Frames */}
+                      <div className="col-span-2">
+                        <span className="text-sm font-mono font-semibold text-gray-700 dark:text-white/70">
+                          {frameCount}
+                        </span>
+                        <span className="text-sm text-gray-500 dark:text-white/50 ml-1">
+                          {frameCount === 1 ? 'frame' : 'frames'}
+                        </span>
+                      </div>
+
+                      {/* Status */}
+                      <div className="col-span-2">
+                        <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
+                          isLive
+                            ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
+                            : 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-white/50'
+                        }`}>
+                          {isLive && <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />}
+                          {isLive ? 'Live' : 'Draft'}
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="col-span-3 flex items-center justify-end gap-2">
+                        <Link
+                          href={`/?category=${category.id}`}
+                          className="px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-white bg-gray-100 dark:bg-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-white/15 transition-colors"
+                        >
+                          Edit
+                        </Link>
+                        <Link
+                          href={`/preview?category=${category.id}`}
+                          className="px-3 py-1.5 text-sm font-medium text-gray-500 dark:text-white/60 hover:text-gray-700 dark:hover:text-white transition-colors"
+                        >
+                          Preview
+                        </Link>
+                        <button
+                          onClick={() => setShareModal({ open: true, slyde: slug, name: category.name })}
+                          className="px-3 py-1.5 text-sm font-medium text-gray-500 dark:text-white/60 hover:text-gray-700 dark:hover:text-white transition-colors"
+                        >
+                          Share
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
+
+                {/* Create New Row */}
+                <button
+                  onClick={handleCreateSlyde}
+                  className="w-full grid grid-cols-12 gap-4 items-center px-4 py-4 border-2 border-dashed border-gray-300 dark:border-white/20 rounded-xl hover:border-gray-400 dark:hover:border-white/30 transition-colors group"
+                >
+                  <div className="col-span-12 flex items-center justify-center gap-2 text-gray-500 dark:text-white/50 group-hover:text-gray-700 dark:group-hover:text-white/70">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span className="font-medium">Create New Slyde</span>
+                  </div>
+                </button>
+              </div>
+            )}
               </>
             )}
             </div>

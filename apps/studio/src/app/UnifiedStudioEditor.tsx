@@ -24,6 +24,7 @@
  */
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { DevicePreview } from '@/components/slyde-demo'
 import { HomeSlydeScreen } from '@/components/home-slyde/HomeSlydeScreen'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
@@ -92,7 +93,6 @@ import {
 } from 'lucide-react'
 import { Toggle } from '@/components/ui/Toggle'
 import { BackgroundMediaInput } from '@/components/BackgroundMediaInput'
-import { VideoMediaInput } from '@/components/VideoMediaInput'
 import { type VideoFilterPreset, type VideoSpeedPreset } from '@/lib/videoFilters'
 import type { BackgroundType } from '@/lib/demoHomeSlyde'
 import { InventoryGridView } from '@/components/home-slyde/InventoryGridView'
@@ -150,6 +150,7 @@ function getCategoryIcon(iconId: string): LucideIcon {
 }
 
 export function UnifiedStudioEditor() {
+  const searchParams = useSearchParams()
   const { organization, isLoading: orgLoading } = useOrganization()
   const { data: homeSlyde, hydrated: homeSlydeHydrated } = useDemoHomeSlyde()
 
@@ -500,6 +501,20 @@ export function UnifiedStudioEditor() {
       }
     })
   }, [childFrames])
+
+  // Handle URL params to auto-select category (from Slydes page "Edit" link)
+  useEffect(() => {
+    if (!homeSlydeHydrated) return
+    const categoryId = searchParams.get('category')
+    if (categoryId && categories.find(c => c.id === categoryId)) {
+      // Auto-select the category from URL
+      setSelection({ type: 'category', categoryId })
+      setExpandedCategories(prev => new Set([...prev, categoryId]))
+      setExpandedSections(prev => ({ ...prev, categories: true }))
+      loadCategoryFrames(categoryId)
+      setPreviewFrameIndex(0)
+    }
+  }, [homeSlydeHydrated, searchParams, categories])
 
   // =============================================
   // LIST CRUD
@@ -1983,99 +1998,7 @@ export function UnifiedStudioEditor() {
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Frame Editor</h3>
                   </div>
 
-                  {/* Inventory Section - Prominent at top */}
-                  <div className="rounded-xl border-2 border-dashed border-cyan-300 dark:border-cyan-500/30 bg-cyan-50/50 dark:bg-cyan-500/5 p-4 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <List className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-                        <span className="text-sm font-semibold text-gray-900 dark:text-white">Inventory</span>
-                      </div>
-                      <Toggle
-                        enabled={!!selectedCategoryFrame.listId}
-                        onChange={(enabled) => {
-                          if (enabled && lists.length > 0) {
-                            updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
-                              listId: lists[0].id,
-                              inventoryCtaText: 'View All',
-                              cta: {
-                                text: 'View All',
-                                icon: 'list' as const,
-                                action: 'list',
-                                listId: lists[0].id
-                              }
-                            })
-                          } else {
-                            updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
-                              listId: undefined,
-                              inventoryCtaText: undefined,
-                              cta: undefined
-                            })
-                          }
-                        }}
-                      />
-                    </div>
-                    <p className="text-xs text-gray-500 dark:text-white/50">
-                      Connect a list to show inventory items on this frame
-                    </p>
-
-                    {selectedCategoryFrame.listId && (
-                      <div className="space-y-3 pt-2 border-t border-cyan-200 dark:border-cyan-500/20">
-                        <div>
-                          <label className="block text-[12px] font-medium text-gray-600 dark:text-white/60 mb-1">Connected List</label>
-                          <select
-                            value={selectedCategoryFrame.listId || ''}
-                            onChange={(e) => {
-                              const newListId = e.target.value || undefined
-                              updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
-                                listId: newListId,
-                                cta: newListId ? {
-                                  text: selectedCategoryFrame.inventoryCtaText || 'View All',
-                                  icon: 'list' as const,
-                                  action: 'list',
-                                  listId: newListId
-                                } : undefined
-                              })
-                            }}
-                            className="w-full px-3 py-2 bg-white dark:bg-[#2c2c2e] border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
-                          >
-                            <option value="" className="bg-white dark:bg-[#2c2c2e] text-gray-900 dark:text-white">Select a list...</option>
-                            {lists.map((list) => (
-                              <option key={list.id} value={list.id} className="bg-white dark:bg-[#2c2c2e] text-gray-900 dark:text-white">
-                                {list.name} ({list.items.length} items)
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-[12px] font-medium text-gray-600 dark:text-white/60 mb-1">CTA Button Text</label>
-                          <input
-                            type="text"
-                            value={selectedCategoryFrame.inventoryCtaText ?? ''}
-                            onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
-                              inventoryCtaText: e.target.value || undefined,
-                              cta: selectedCategoryFrame.cta ? {
-                                ...selectedCategoryFrame.cta,
-                                text: e.target.value || 'View All'
-                              } : undefined
-                            })}
-                            placeholder="e.g. View All, Browse Items..."
-                            className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
-                          />
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Button text that opens the inventory list</p>
-                        </div>
-                      </div>
-                    )}
-
-                    {!selectedCategoryFrame.listId && lists.length === 0 && (
-                      <div className="pt-2 border-t border-cyan-200 dark:border-cyan-500/20">
-                        <p className="text-xs text-gray-500 dark:text-white/40">
-                          No lists created yet. <a href="/lists" className="text-cyan-600 dark:text-cyan-400 hover:underline">Create a list</a> first.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Background Section - Gold standard from Home editor */}
+                  {/* Background Section - Visual-first, always at top */}
                   <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
                     <button
                       onClick={() => toggleInspectorSection('video')}
@@ -2153,6 +2076,98 @@ export function UnifiedStudioEditor() {
                           />
                           <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Supporting text below the title</p>
                         </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Inventory Section */}
+                  <div className="rounded-xl border-2 border-dashed border-cyan-300 dark:border-cyan-500/30 bg-cyan-50/50 dark:bg-cyan-500/5 p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <List className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">Inventory</span>
+                      </div>
+                      <Toggle
+                        enabled={!!selectedCategoryFrame.listId}
+                        onChange={(enabled) => {
+                          if (enabled && lists.length > 0) {
+                            updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                              listId: lists[0].id,
+                              inventoryCtaText: 'View All',
+                              cta: {
+                                text: 'View All',
+                                icon: 'list' as const,
+                                action: 'list',
+                                listId: lists[0].id
+                              }
+                            })
+                          } else {
+                            updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                              listId: undefined,
+                              inventoryCtaText: undefined,
+                              cta: undefined
+                            })
+                          }
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-white/50">
+                      Connect a list to show inventory items on this frame
+                    </p>
+
+                    {selectedCategoryFrame.listId && (
+                      <div className="space-y-3 pt-2 border-t border-cyan-200 dark:border-cyan-500/20">
+                        <div>
+                          <label className="block text-[12px] font-medium text-gray-600 dark:text-white/60 mb-1">Connected List</label>
+                          <select
+                            value={selectedCategoryFrame.listId || ''}
+                            onChange={(e) => {
+                              const newListId = e.target.value || undefined
+                              updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                                listId: newListId,
+                                cta: newListId ? {
+                                  text: selectedCategoryFrame.inventoryCtaText || 'View All',
+                                  icon: 'list' as const,
+                                  action: 'list',
+                                  listId: newListId
+                                } : undefined
+                              })
+                            }}
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+                          >
+                            <option value="" className="bg-white dark:bg-white/5 text-gray-900 dark:text-white">Select a list...</option>
+                            {lists.map((list) => (
+                              <option key={list.id} value={list.id} className="bg-white dark:bg-white/5 text-gray-900 dark:text-white">
+                                {list.name} ({list.items.length} items)
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-[12px] font-medium text-gray-600 dark:text-white/60 mb-1">CTA Button Text</label>
+                          <input
+                            type="text"
+                            value={selectedCategoryFrame.inventoryCtaText ?? ''}
+                            onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                              inventoryCtaText: e.target.value || undefined,
+                              cta: selectedCategoryFrame.cta ? {
+                                ...selectedCategoryFrame.cta,
+                                text: e.target.value || 'View All'
+                              } : undefined
+                            })}
+                            placeholder="e.g. View All, Browse Items..."
+                            className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
+                          />
+                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Button text that opens the inventory list</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {!selectedCategoryFrame.listId && lists.length === 0 && (
+                      <div className="pt-2 border-t border-cyan-200 dark:border-cyan-500/20">
+                        <p className="text-xs text-gray-500 dark:text-white/40">
+                          No lists created yet. <a href="/lists" className="text-cyan-600 dark:text-cyan-400 hover:underline">Create a list</a> first.
+                        </p>
                       </div>
                     )}
                   </div>

@@ -3,21 +3,23 @@
 import { Suspense, useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, User, Video, Globe, CreditCard, Loader2 } from 'lucide-react'
+import { ArrowLeft, User, Video, Globe, CreditCard, UserCog, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { ProfileSettingsForm } from '@/components/settings/ProfileSettingsForm'
 import { MediaSettingsForm } from '@/components/settings/MediaSettingsForm'
 import { DomainSettingsForm } from '@/components/settings/DomainSettingsForm'
 import { BillingSettingsPanel } from '@/components/settings/BillingSettingsPanel'
+import { AccountSettingsForm } from '@/components/settings/AccountSettingsForm'
 import { PlanBadge } from '@/components/settings/PlanBadge'
 
-type SettingsTab = 'profile' | 'media' | 'domain' | 'billing'
+type SettingsTab = 'profile' | 'media' | 'domain' | 'billing' | 'account'
 
 const tabs: { id: SettingsTab; label: string; icon: typeof User }[] = [
   { id: 'profile', label: 'Profile', icon: User },
   { id: 'media', label: 'Media', icon: Video },
   { id: 'domain', label: 'Domain', icon: Globe },
   { id: 'billing', label: 'Billing', icon: CreditCard },
+  { id: 'account', label: 'Account', icon: UserCog },
 ]
 
 function SettingsPageContent() {
@@ -211,6 +213,8 @@ function SettingsPageContent() {
           {activeTab === 'billing' && (
             <BillingSettingsPanel success={success} canceled={canceled} />
           )}
+
+          {activeTab === 'account' && <AccountSettingsForm />}
         </div>
       </main>
     </div>

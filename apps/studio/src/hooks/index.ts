@@ -19,3 +19,15 @@ export type { HomeSlyde, HomeSlydeCategory } from './useHomeSlyde'
 
 // Media uploads
 export { useMediaUpload } from './useMediaUpload'
+
+// Analytics / Momentum
+export { useMomentum, useSlydeAnalytics } from './useMomentum'
+export type {
+  MomentumData,
+  MomentumHero,
+  RankedSlyde,
+  CoachingSuggestion,
+  NextAction,
+  LastWin,
+  SlydeAnalytics,
+} from './useMomentum'

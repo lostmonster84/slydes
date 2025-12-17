@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, Smartphone, BarChart3, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List, HelpCircle, Map } from 'lucide-react'
+import { TrendingUp, Smartphone, BarChart3, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List, HelpCircle, Map, Sun, Moon, Monitor } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { FeatureSuggestionModal } from './FeatureSuggestionModal'
 import { useOrganization } from '@/hooks/useOrganization'
@@ -21,7 +21,7 @@ import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 import { DevPanel } from '@/components/dev/DevPanel'
 
 interface HQSidebarConnectedProps {
-  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'lists' | 'faqs' | 'analytics' | 'shop' | 'brand' | 'settings'
+  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'lists' | 'faqs' | 'analytics' | 'shop' | 'brand' | 'settings' | 'inbox'
 }
 
 export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
@@ -36,6 +36,7 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountMenuOpen, setAccountMenuOpen] = useState(false)
   const [featureModalOpen, setFeatureModalOpen] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system')
   const accountMenuRef = useRef<HTMLDivElement>(null)
   const accountButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -69,6 +70,44 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
       // ignore
     }
   }, [collapsed, collapsedHydrated])
+
+  // Theme persistence and application
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem('slydes_theme') as 'light' | 'dark' | 'system' | null
+      if (stored) setTheme(stored)
+    } catch {
+      // ignore
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('slydes_theme', theme)
+    } catch {
+      // ignore
+    }
+
+    // Apply theme to document
+    const root = document.documentElement
+    if (theme === 'system') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      root.classList.toggle('dark', prefersDark)
+    } else {
+      root.classList.toggle('dark', theme === 'dark')
+    }
+  }, [theme])
+
+  // Listen for system theme changes when in 'system' mode
+  useEffect(() => {
+    if (theme !== 'system') return
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = (e: MediaQueryListEvent) => {
+      document.documentElement.classList.toggle('dark', e.matches)
+    }
+    mediaQuery.addEventListener('change', handler)
+    return () => mediaQuery.removeEventListener('change', handler)
+  }, [theme])
 
   // Close account menu on click outside / Escape (avoid full-screen overlay that can block the editor)
   useEffect(() => {
@@ -565,6 +604,46 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
                       ))}
                     </div>
                   )}
+
+                  {/* Theme Toggle */}
+                  <div className="p-2 border-b border-gray-200 dark:border-white/10">
+                    <div className="text-xs uppercase tracking-wider font-semibold text-gray-500 dark:text-white/60 px-3 py-2">Theme</div>
+                    <div className="flex gap-1 p-1 bg-gray-100 dark:bg-white/5 rounded-lg mx-2">
+                      <button
+                        onClick={() => setTheme('light')}
+                        className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium rounded-md transition-all ${
+                          theme === 'light'
+                            ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm'
+                            : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                        }`}
+                      >
+                        <Sun className="w-3.5 h-3.5" />
+                        Light
+                      </button>
+                      <button
+                        onClick={() => setTheme('dark')}
+                        className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium rounded-md transition-all ${
+                          theme === 'dark'
+                            ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm'
+                            : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                        }`}
+                      >
+                        <Moon className="w-3.5 h-3.5" />
+                        Dark
+                      </button>
+                      <button
+                        onClick={() => setTheme('system')}
+                        className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium rounded-md transition-all ${
+                          theme === 'system'
+                            ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm'
+                            : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                        }`}
+                      >
+                        <Monitor className="w-3.5 h-3.5" />
+                        Auto
+                      </button>
+                    </div>
+                  </div>
 
                   <div className="p-2 border-b border-gray-200 dark:border-white/10">
                     <Link
