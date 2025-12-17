@@ -63,12 +63,11 @@ export async function GET(request: NextRequest) {
       .sort(([, a], [, b]) => b - a)
       .map(([industry, count]) => ({ industry, count }))
 
-    // Get recent signups (last 20)
-    const { data: recentSignups } = await supabase
+    // Get all signups
+    const { data: allSignups } = await supabase
       .from('waitlist')
       .select('*')
       .order('created_at', { ascending: false })
-      .limit(20)
 
     // Get signups per day for last 30 days
     const thirtyDaysAgo = new Date()
@@ -92,7 +91,7 @@ export async function GET(request: NextRequest) {
       weekCount: weekCount || 0,
       todayCount: todayCount || 0,
       industryBreakdown: sortedIndustries,
-      recentSignups: recentSignups || [],
+      allSignups: allSignups || [],
       dailySignups,
     })
   } catch (error) {
