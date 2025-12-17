@@ -1,15 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Chrome, Mail, Loader2, ArrowRight } from 'lucide-react'
+import { Chrome, Mail, Loader2, ArrowRight, Terminal } from 'lucide-react'
 
 export default function LoginPage() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const [isLinkedInLoading, setIsLinkedInLoading] = useState(false)
+  const [isDevLoading, setIsDevLoading] = useState(false)
+  const [isLocalhost, setIsLocalhost] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  // Check if we're on localhost
+  useEffect(() => {
+    const host = window.location.host
+    setIsLocalhost(host.includes('localhost') || host.includes('127.0.0.1'))
+  }, [])
 
   const supabase = createClient()
 
@@ -52,6 +62,32 @@ export default function LoginPage() {
     if (error) {
       setMessage({ type: 'error', text: error.message })
       setIsLinkedInLoading(false)
+    }
+  }
+
+  const handleDevLogin = async () => {
+    setIsDevLoading(true)
+    setMessage(null)
+
+    try {
+      const res = await fetch('/api/auth/dev-login', {
+        method: 'POST',
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setMessage({ type: 'error', text: data.error || 'Dev login failed' })
+        setIsDevLoading(false)
+        return
+      }
+
+      // Success - redirect to dashboard
+      router.push('/')
+      router.refresh()
+    } catch {
+      setMessage({ type: 'error', text: 'Dev login failed' })
+      setIsDevLoading(false)
     }
   }
 
@@ -103,6 +139,29 @@ export default function LoginPage() {
           <p className="text-white/60 text-center mb-8">
             Sign in (or create your account) to continue to your studio
           </p>
+
+          {/* Dev Login - localhost only */}
+          {isLocalhost && (
+            <div className="mb-6">
+              <button
+                onClick={handleDevLogin}
+                disabled={isDevLoading}
+                className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium py-3 px-4 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isDevLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    <Terminal className="w-5 h-5" />
+                    Dev Login (james@lostmonster.io)
+                  </>
+                )}
+              </button>
+              <p className="text-center text-white/40 text-xs mt-2">
+                🔧 Developer mode • localhost only
+              </p>
+            </div>
+          )}
 
           {/* OAuth Buttons */}
           <div className="space-y-3">

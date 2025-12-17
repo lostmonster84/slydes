@@ -12,6 +12,7 @@ import { highlandMotorsData, getCategory as getHardcodedCategory, getInventoryIt
 import type { HomeSlydeData, CategoryData, FrameData as ViewerFrameData } from '../data/highlandMotorsData'
 import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 import type { FrameData as EditorFrameData } from '@/components/slyde-demo/frameData'
+import { parseVideoUrl } from '@/lib/videoUtils'
 
 // ============================================
 // STATE MACHINE
@@ -379,15 +380,49 @@ export function HomeSlydeDemo() {
             }}
             transition={{ duration: 0.3 }}
           >
-            <video
-              ref={videoRef}
-              src={videoSrc}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-            />
+            {(() => {
+              const parsed = parseVideoUrl(videoSrc)
+              // YouTube embed
+              if (parsed?.type === 'youtube') {
+                return (
+                  <iframe
+                    src={parsed.embedUrl}
+                    className="absolute inset-0 w-full h-full pointer-events-none scale-[1.5] origin-center"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    title="YouTube Video"
+                    style={{ border: 'none' }}
+                  />
+                )
+              }
+              // Vimeo embed
+              if (parsed?.type === 'vimeo') {
+                return (
+                  <iframe
+                    src={parsed.embedUrl}
+                    className="absolute inset-0 w-full h-full pointer-events-none"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    title="Vimeo Video"
+                    style={{ border: 'none' }}
+                  />
+                )
+              }
+              // Direct video (mp4, webm, etc.)
+              return (
+                <video
+                  ref={videoRef}
+                  src={videoSrc}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              )
+            })()}
             {/* Gradient overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
           </motion.div>

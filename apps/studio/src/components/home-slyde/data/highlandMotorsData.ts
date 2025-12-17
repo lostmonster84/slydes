@@ -82,6 +82,14 @@ export interface HomeSlydeData {
   showShare?: boolean
   showSound?: boolean
   showReviews?: boolean
+  socialLinks?: {
+    instagram?: string
+    tiktok?: string
+    facebook?: string
+    youtube?: string
+    twitter?: string
+    linkedin?: string
+  }
 }
 
 // ============================================

@@ -77,21 +77,21 @@ function BillingPageContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-future-black flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+      <div className="min-h-screen bg-gray-50 dark:bg-[#1c1c1e] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-600 dark:border-white/30 dark:border-t-white rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-future-black">
+    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white">
       {/* Header */}
-      <header className="border-b border-white/10">
+      <header className="border-b border-gray-200 dark:border-white/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 h-16">
             <Link
               href="/settings"
-              className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+              className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-white/60 dark:hover:text-white transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="sr-only">Back to Settings</span>
@@ -134,11 +134,11 @@ function BillingPageContent() {
         {/* Billing Toggle */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold">Choose your plan</h2>
-          <div className="flex items-center gap-3 p-1 bg-white/5 rounded-full">
+          <div className="flex items-center gap-3 p-1 bg-gray-100 dark:bg-white/5 rounded-full">
             <button
               onClick={() => setIsAnnual(false)}
               className={`py-1.5 px-4 rounded-full text-sm font-medium transition-all ${
-                !isAnnual ? 'bg-white text-black' : 'text-white/60 hover:text-white'
+                !isAnnual ? 'bg-white text-black shadow-sm dark:bg-white dark:text-black' : 'text-gray-500 hover:text-gray-900 dark:text-white/60 dark:hover:text-white'
               }`}
             >
               Monthly
@@ -146,7 +146,7 @@ function BillingPageContent() {
             <button
               onClick={() => setIsAnnual(true)}
               className={`py-1.5 px-4 rounded-full text-sm font-medium transition-all ${
-                isAnnual ? 'bg-white text-black' : 'text-white/60 hover:text-white'
+                isAnnual ? 'bg-white text-black shadow-sm dark:bg-white dark:text-black' : 'text-gray-500 hover:text-gray-900 dark:text-white/60 dark:hover:text-white'
               }`}
             >
               Annual
@@ -171,8 +171,8 @@ function BillingPageContent() {
                   highlight
                     ? 'bg-gradient-to-br from-leader-blue/10 to-electric-cyan/10 border-leader-blue/30'
                     : isCurrent || isVIPTier
-                    ? 'bg-white/5 border-white/20'
-                    : 'bg-white/5 border-white/10'
+                    ? 'bg-white border-gray-300 dark:bg-white/5 dark:border-white/20'
+                    : 'bg-white border-gray-200 dark:bg-white/5 dark:border-white/10'
                 }`}
               >
                 {highlight && (
@@ -181,7 +181,7 @@ function BillingPageContent() {
                   </div>
                 )}
                 {(isCurrent || isVIPTier) && (
-                  <div className="absolute -top-3 right-4 px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full">
+                  <div className="absolute -top-3 right-4 px-3 py-1 bg-gray-200 text-gray-700 dark:bg-white/20 dark:text-white text-xs font-semibold rounded-full">
                     {isVIPTier ? 'VIP' : 'Current'}
                   </div>
                 )}
@@ -190,10 +190,10 @@ function BillingPageContent() {
                   <h3 className="text-xl font-bold">{config.label}</h3>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-3xl font-bold">£{price}</span>
-                    <span className="text-white/60">/{isAnnual ? 'year' : 'month'}</span>
+                    <span className="text-gray-500 dark:text-white/60">/{isAnnual ? 'year' : 'month'}</span>
                   </div>
                   {isAnnual && tier !== 'free' && (
-                    <p className="text-green-400 text-xs mt-1">
+                    <p className="text-green-600 dark:text-green-400 text-xs mt-1">
                       Save £{annualSavings(tier as 'creator' | 'pro')}/year
                     </p>
                   )}
@@ -202,14 +202,14 @@ function BillingPageContent() {
                 <ul className="space-y-2 mb-6">
                   {config.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-400 shrink-0 mt-0.5" />
-                      <span className="text-white/80">{feature}</span>
+                      <Check className="w-4 h-4 text-green-500 dark:text-green-400 shrink-0 mt-0.5" />
+                      <span className="text-gray-700 dark:text-white/80">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 {isCurrent || isVIPTier ? (
-                  <div className="w-full py-2.5 px-4 bg-white/10 text-white/60 text-center font-medium rounded-xl">
+                  <div className="w-full py-2.5 px-4 bg-gray-100 text-gray-500 dark:bg-white/10 dark:text-white/60 text-center font-medium rounded-xl">
                     {isVIPTier ? 'Active via VIP' : 'Current plan'}
                   </div>
                 ) : showUpgrade ? (
@@ -221,12 +221,12 @@ function BillingPageContent() {
                         ? 'bg-gradient-to-r from-leader-blue to-electric-cyan text-white hover:opacity-90'
                         : tier === 'pro'
                         ? 'bg-purple-600 text-white hover:bg-purple-500'
-                        : 'bg-white/10 text-white hover:bg-white/20'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-white/10 dark:text-white dark:hover:bg-white/20'
                     }`}
                   >
                     {upgradeLoading === tier ? (
                       <span className="flex items-center justify-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 dark:border-white/30 dark:border-t-white rounded-full animate-spin" />
                         Processing...
                       </span>
                     ) : (
@@ -234,7 +234,7 @@ function BillingPageContent() {
                     )}
                   </button>
                 ) : (
-                  <div className="w-full py-2.5 px-4 bg-white/5 text-white/40 text-center font-medium rounded-xl">
+                  <div className="w-full py-2.5 px-4 bg-gray-50 text-gray-400 dark:bg-white/5 dark:text-white/40 text-center font-medium rounded-xl">
                     {tier === 'free' ? 'Included' : 'Included in your plan'}
                   </div>
                 )}
@@ -245,26 +245,26 @@ function BillingPageContent() {
 
         {/* Manage Subscription */}
         {isPaid && profile?.stripe_customer_id && (
-          <div className="border-t border-white/10 pt-8 mb-8">
+          <div className="border-t border-gray-200 dark:border-white/10 pt-8 mb-8">
             <h2 className="text-lg font-semibold mb-4">Manage Subscription</h2>
-            <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+            <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
-                    <CreditCard className="w-5 h-5 text-white/60" />
+                  <div className="w-10 h-10 bg-gray-100 dark:bg-white/10 rounded-lg flex items-center justify-center">
+                    <CreditCard className="w-5 h-5 text-gray-500 dark:text-white/60" />
                   </div>
                   <div>
                     <p className="font-medium">Billing Portal</p>
-                    <p className="text-sm text-white/60">Update payment method, view invoices, or cancel</p>
+                    <p className="text-sm text-gray-500 dark:text-white/60">Update payment method, view invoices, or cancel</p>
                   </div>
                 </div>
                 <button
                   onClick={handleManageBilling}
                   disabled={portalLoading}
-                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
                 >
                   {portalLoading ? (
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 dark:border-white/30 dark:border-t-white rounded-full animate-spin" />
                   ) : (
                     <>
                       Manage
@@ -279,14 +279,14 @@ function BillingPageContent() {
 
         {/* Promo Code Section */}
         {!isVIP && (
-          <div className="border-t border-white/10 pt-8">
+          <div className="border-t border-gray-200 dark:border-white/10 pt-8">
             <h2 className="text-lg font-semibold mb-4">Have a promo code?</h2>
             <PromoCodeInput />
           </div>
         )}
 
         {/* Platform fees note */}
-        <div className="mt-8 text-center text-white/40 text-sm">
+        <div className="mt-8 text-center text-gray-400 dark:text-white/40 text-sm">
           <p>Slydes takes 0% of your sales. Payments processed by Stripe.</p>
         </div>
       </main>
@@ -298,8 +298,8 @@ export default function BillingPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-future-black flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        <div className="min-h-screen bg-gray-50 dark:bg-[#1c1c1e] flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-600 dark:border-white/30 dark:border-t-white rounded-full animate-spin" />
         </div>
       }
     >

@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Phone, Mail, MessageCircle, ChevronDown } from 'lucide-react'
-import type { FrameInfoContent } from './frameData'
+import { X, Phone, Mail, MessageCircle, ChevronDown, ChevronUp, Search, HelpCircle, Send, CheckCircle } from 'lucide-react'
+import type { FrameInfoContent, FAQItem } from './frameData'
 
 interface BusinessInfo {
   name: string
@@ -19,6 +19,7 @@ interface BusinessInfo {
     website?: string
   }
   image?: string
+  accentColor?: string
 }
 
 interface FrameContext {
@@ -37,21 +38,25 @@ interface InfoSheetProps {
   /** @deprecated Use frameContent instead */
   slideContent?: FrameInfoContent
   frameContent?: FrameInfoContent
+  faqs?: FAQItem[]
+  onAskQuestion?: (question: string) => void
   autoExpandContact?: boolean
+  autoExpandFaqs?: boolean
 }
 
 /**
- * InfoSheet - Frame-focused info sheet with collapsible business section
- * 
+ * InfoSheet - Frame-focused info sheet with FAQs and contact
+ *
  * TERMINOLOGY (per STRUCTURE.md):
  * - Frame = vertical screen inside a Slyde
- * 
+ *
  * Priority order:
  * 1. Frame headline & description (what is this frame about?)
  * 2. Frame items/details (bullet points)
- * 3. Collapsible business card (tappable to expand contact options)
- * 
- * When autoExpandContact is true, the contact section starts expanded.
+ * 3. FAQs accordion (collapsible)
+ * 4. Contact row (collapsible)
+ *
+ * @see UI-PATTERNS.md for full specification
  */
 export function InfoSheet({
   isOpen,
@@ -61,16 +66,48 @@ export function InfoSheet({
   frameContext,
   slideContent,
   frameContent,
-  autoExpandContact = false
+  faqs = [],
+  onAskQuestion,
+  autoExpandContact = false,
+  autoExpandFaqs = false
 }: InfoSheetProps) {
-  const [businessExpanded, setBusinessExpanded] = useState(autoExpandContact)
-  
+  // Section expand states
+  const [faqsExpanded, setFaqsExpanded] = useState(autoExpandFaqs)
+  const [contactExpanded, setContactExpanded] = useState(autoExpandContact)
+
+  // FAQ states
+  const [searchQuery, setSearchQuery] = useState('')
+  const [expandedFaqId, setExpandedFaqId] = useState<string | null>(null)
+  const [askQuestion, setAskQuestion] = useState('')
+  const [questionSubmitted, setQuestionSubmitted] = useState(false)
+
   // Support both old and new prop names during migration
   const context = frameContext || slideContext
   const content = frameContent || slideContent
-  
+
   // Get up to 4 items to display
   const displayItems = content?.items?.slice(0, 4)
+
+  // Filter FAQs based on search
+  const filteredFaqs = faqs.filter(faq =>
+    faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  // Handle question submission
+  const handleSubmitQuestion = () => {
+    if (askQuestion.trim()) {
+      onAskQuestion?.(askQuestion)
+      setQuestionSubmitted(true)
+      setTimeout(() => {
+        setQuestionSubmitted(false)
+        setAskQuestion('')
+      }, 2000)
+    }
+  }
+
+  // Get accent color for send button
+  const accentColor = business.accentColor || 'bg-blue-600'
 
   return (
     <AnimatePresence>
@@ -81,20 +118,20 @@ export function InfoSheet({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/70 z-40"
+            className="absolute inset-0 bg-black/70 z-[55] cursor-none pointer-events-auto"
             onClick={(e) => {
               e.stopPropagation()
               onClose()
             }}
           />
-          
+
           {/* Sheet */}
           <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 350 }}
-            className="absolute bottom-0 left-0 right-0 bg-[#1c1c1e] rounded-t-2xl z-50 max-h-[85%] overflow-hidden"
+            className="absolute bottom-0 left-0 right-0 bg-[#1c1c1e] rounded-t-2xl z-[60] max-h-[85%] overflow-hidden cursor-none pointer-events-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Handle */}
@@ -104,7 +141,7 @@ export function InfoSheet({
 
             {/* Scrollable content area */}
             <div className="overflow-y-auto max-h-[calc(85vh-40px)] px-4 pb-6">
-              
+
               {/* Header row */}
               <div className="flex items-start justify-between mb-3 pt-2">
                 <div className="flex-1 pr-4">
@@ -116,7 +153,7 @@ export function InfoSheet({
                   </h2>
                 </div>
                 {/* Circular close button */}
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation()
                     onClose()
@@ -134,7 +171,7 @@ export function InfoSheet({
                 </p>
               )}
 
-              {/* Items list - the meat of the slide info */}
+              {/* Items list - the meat of the frame info */}
               {displayItems && displayItems.length > 0 && (
                 <div className="space-y-2 mb-4">
                   {displayItems.map((item, idx) => (
@@ -146,39 +183,152 @@ export function InfoSheet({
                 </div>
               )}
 
+              {/* FAQs Section */}
+              {faqs.length > 0 && (
+                <div className="border-t border-white/10 pt-3">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setFaqsExpanded(!faqsExpanded)
+                    }}
+                    className="w-full flex items-center justify-between py-2"
+                  >
+                    <div className="flex items-center gap-2">
+                      <HelpCircle className="w-4 h-4 text-white/60" />
+                      <span className="text-white text-sm font-medium">FAQs</span>
+                      <span className="text-white/40 text-xs">({faqs.length})</span>
+                    </div>
+                    <motion.div
+                      animate={{ rotate: faqsExpanded ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronDown className="w-5 h-5 text-white/40" />
+                    </motion.div>
+                  </button>
 
-              {/* Collapsible Business Section */}
-              <div className="border-t border-white/10 pt-3 mt-auto">
-                {/* Collapsed state - single tappable row */}
+                  <AnimatePresence>
+                    {faqsExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        {/* Search FAQs */}
+                        <div className="relative mb-3">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                          <input
+                            type="text"
+                            placeholder="Search FAQs..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-white/10 rounded-full px-4 py-2 pl-10 text-white text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20"
+                          />
+                        </div>
+
+                        {/* FAQ Accordion */}
+                        <div className="space-y-1 mb-3">
+                          {filteredFaqs.length === 0 ? (
+                            <p className="text-white/50 text-sm py-2">No matching questions found.</p>
+                          ) : (
+                            filteredFaqs.map((faq) => (
+                              <div key={faq.id} className="border-b border-white/5 last:border-0">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    setExpandedFaqId(expandedFaqId === faq.id ? null : faq.id)
+                                  }}
+                                  className="w-full flex items-center justify-between py-3 text-left"
+                                >
+                                  <span className="text-white/90 text-sm pr-4">{faq.question}</span>
+                                  {expandedFaqId === faq.id ? (
+                                    <ChevronUp className="w-4 h-4 text-white/50 flex-shrink-0" />
+                                  ) : (
+                                    <ChevronDown className="w-4 h-4 text-white/50 flex-shrink-0" />
+                                  )}
+                                </button>
+                                <AnimatePresence>
+                                  {expandedFaqId === faq.id && (
+                                    <motion.div
+                                      initial={{ height: 0, opacity: 0 }}
+                                      animate={{ height: 'auto', opacity: 1 }}
+                                      exit={{ height: 0, opacity: 0 }}
+                                      transition={{ duration: 0.2 }}
+                                      className="overflow-hidden"
+                                    >
+                                      <p className="text-white/60 text-sm pb-3">{faq.answer}</p>
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
+                              </div>
+                            ))
+                          )}
+                        </div>
+
+                        {/* Ask a question */}
+                        {onAskQuestion && (
+                          <div className="pt-2">
+                            {questionSubmitted ? (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="flex items-center justify-center gap-2 py-3"
+                              >
+                                <CheckCircle className="w-5 h-5 text-green-500" />
+                                <span className="text-white/80 text-sm">Question sent!</span>
+                              </motion.div>
+                            ) : (
+                              <div className="flex gap-2">
+                                <input
+                                  type="text"
+                                  placeholder="Ask a question..."
+                                  value={askQuestion}
+                                  onChange={(e) => setAskQuestion(e.target.value)}
+                                  onKeyDown={(e) => e.key === 'Enter' && handleSubmitQuestion()}
+                                  className="flex-1 bg-white/10 rounded-full px-4 py-2 text-white text-sm placeholder:text-white/40 outline-none focus:ring-2 focus:ring-white/20"
+                                />
+                                <button
+                                  onClick={handleSubmitQuestion}
+                                  disabled={!askQuestion.trim()}
+                                  className={`w-9 h-9 ${accentColor.startsWith('bg-') ? accentColor : ''} rounded-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0`}
+                                  style={!accentColor.startsWith('bg-') ? { background: accentColor } : undefined}
+                                >
+                                  <Send className="w-4 h-4 text-white" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
+
+              {/* Contact Section */}
+              <div className="border-t border-white/10 pt-3">
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
-                    setBusinessExpanded(!businessExpanded)
+                    setContactExpanded(!contactExpanded)
                   }}
-                  className="w-full flex items-center gap-3 py-2 group"
+                  className="w-full flex items-center justify-between py-2"
                 >
-                  {/* Circular logo */}
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-sm font-bold">{business.name.charAt(0)}</span>
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-white/60" />
+                    <span className="text-white text-sm font-medium">Contact {business.name}</span>
                   </div>
-                  <div className="flex-1 text-left">
-                    <p className="text-white text-sm font-medium">{business.name}</p>
-                    <p className="text-white/40 text-xs">
-                      {businessExpanded ? 'Tap to collapse' : 'Tap for contact options'}
-                    </p>
-                  </div>
-                  {/* Chevron indicator */}
                   <motion.div
-                    animate={{ rotate: businessExpanded ? 180 : 0 }}
+                    animate={{ rotate: contactExpanded ? 180 : 0 }}
                     transition={{ duration: 0.2 }}
                   >
                     <ChevronDown className="w-5 h-5 text-white/40" />
                   </motion.div>
                 </button>
 
-                {/* Expanded state - contact options inline */}
                 <AnimatePresence>
-                  {businessExpanded && (
+                  {contactExpanded && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
@@ -186,10 +336,9 @@ export function InfoSheet({
                       transition={{ duration: 0.2 }}
                       className="overflow-hidden"
                     >
-                      {/* Contact buttons - naturally spaced across full width */}
                       <div className="flex justify-evenly pt-3 pb-2">
                         {business.contact.phone && (
-                          <a 
+                          <a
                             href={`tel:${business.contact.phone}`}
                             onClick={(e) => e.stopPropagation()}
                             className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
@@ -199,7 +348,7 @@ export function InfoSheet({
                           </a>
                         )}
                         {business.contact.email && (
-                          <a 
+                          <a
                             href={`mailto:${business.contact.email}`}
                             onClick={(e) => e.stopPropagation()}
                             className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
@@ -209,7 +358,7 @@ export function InfoSheet({
                           </a>
                         )}
                         {business.contact.phone && (
-                          <a 
+                          <a
                             href={`sms:${business.contact.phone}`}
                             onClick={(e) => e.stopPropagation()}
                             className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"

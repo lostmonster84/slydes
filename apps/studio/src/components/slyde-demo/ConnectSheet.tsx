@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Instagram, Facebook, Linkedin, Youtube } from 'lucide-react'
 import type { SocialLinks } from './frameData'
+import { SheetHandle } from './SheetHandle'
 
 // TikTok icon (not in Lucide)
 const TikTokIcon = ({ className }: { className?: string }) => (
@@ -114,10 +115,7 @@ export function ConnectSheet({
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="absolute bottom-0 left-0 right-0 bg-gray-900 rounded-t-2xl z-[60] cursor-none pointer-events-auto"
           >
-            {/* Handle */}
-            <div className="flex justify-center pt-2 pb-1">
-              <div className="w-8 h-1 bg-white/20 rounded-full" />
-            </div>
+            <SheetHandle />
 
             {/* Header */}
             <div className="flex items-center justify-between px-4 pb-3">
@@ -135,31 +133,6 @@ export function ConnectSheet({
 
             {/* Content */}
             <div className="px-4 pb-6 pointer-events-auto">
-              {/* Business Preview Card */}
-              <div className="mb-4 p-3 bg-white/5 rounded-xl border border-white/10 pointer-events-auto">
-                <div className="flex items-center gap-3">
-                  {business.image ? (
-                    <img
-                      src={business.image}
-                      alt={business.name}
-                      className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white text-sm font-bold">
-                        {business.name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white text-sm font-medium truncate">{business.name}</p>
-                    <p className="text-white/40 text-[10px] truncate">
-                      {business.tagline || 'Connect with us'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
               {/* Social Platforms Grid */}
               {activePlatforms.length > 0 ? (
                 <div className="flex flex-col gap-4 pointer-events-auto">

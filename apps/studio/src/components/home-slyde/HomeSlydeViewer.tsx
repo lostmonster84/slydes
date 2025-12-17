@@ -14,6 +14,8 @@ import { useOrganization } from '@/hooks/useOrganization'
 import { useCart } from '@/lib/useCart'
 import { useDemoCheckout } from '@/lib/useCheckout'
 import type { FrameData as EditorFrameData, ListData } from '@/components/slyde-demo/frameData'
+import { parseVideoUrl } from '@/components/VideoMediaInput'
+import { getFilterStyle, VIGNETTE_STYLE, type VideoFilterPreset } from '@/lib/videoFilters'
 
 // ============================================
 // STATE MACHINE
@@ -125,6 +127,8 @@ interface HomeSlydeViewerProps {
   videoSrc?: string
   /** When true, ignore localStorage and use hardcoded demo data only */
   useHardcodedData?: boolean
+  videoFilter?: VideoFilterPreset
+  videoVignette?: boolean
 }
 
 /**
@@ -135,7 +139,7 @@ interface HomeSlydeViewerProps {
  * - Shopping cart with sticky checkout bar
  * - Commerce callbacks (add to cart, buy now, enquire)
  */
-export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = false }: HomeSlydeViewerProps) {
+export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = false, videoFilter = 'original', videoVignette = false }: HomeSlydeViewerProps) {
   const [state, dispatch] = useReducer(navReducer, initialState)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { data: demoHome, hydrated: demoHydrated } = useDemoHomeSlyde()
@@ -438,20 +442,62 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = f
         className="absolute inset-0"
         animate={{
           opacity: state.level === 'home' ? 1 : 0.15,
-          filter: state.level === 'home' ? 'brightness(1)' : 'brightness(0.3)',
+          filter: state.level === 'home' ? getFilterStyle(videoFilter) : `${getFilterStyle(videoFilter)} brightness(0.3)`,
         }}
         transition={{ duration: 0.3 }}
       >
-        <video
-          src={videoSrc}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        {(() => {
+          const parsed = parseVideoUrl(videoSrc)
+          // YouTube embed
+          if (parsed?.type === 'youtube') {
+            return (
+              <iframe
+                src={parsed.embedUrl}
+                className="absolute inset-0 w-full h-full pointer-events-none scale-[1.5] origin-center"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+                title="YouTube Video"
+                style={{ border: 'none' }}
+              />
+            )
+          }
+          // Vimeo embed
+          if (parsed?.type === 'vimeo') {
+            return (
+              <iframe
+                src={parsed.embedUrl}
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+                title="Vimeo Video"
+                style={{ border: 'none' }}
+              />
+            )
+          }
+          // Direct video (mp4, webm, Cloudflare HLS, etc.)
+          return (
+            <video
+              src={videoSrc}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )
+        })()}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
       </motion.div>
+
+      {/* Vignette overlay */}
+      {videoVignette && (
+        <div
+          className="absolute inset-0 pointer-events-none z-[1]"
+          style={VIGNETTE_STYLE}
+        />
+      )}
 
       {/* HOME UI OVERLAY */}
       <AnimatePresence>

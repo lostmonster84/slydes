@@ -43,8 +43,8 @@ function getNextNumericId(frames: FrameData[]) {
   return String(max + 1)
 }
 
-function buildStarterFrames(opts: { faqCount: number; accentColor: string }): FrameData[] {
-  const { faqCount, accentColor } = opts
+function buildStarterFrames(opts: { accentColor: string }): FrameData[] {
+  const { accentColor } = opts
 
   return [
     {
@@ -57,7 +57,6 @@ function buildStarterFrames(opts: { faqCount: number; accentColor: string }): Fr
       rating: 5.0,
       reviewCount: 209,
       heartCount: 2400,
-      faqCount,
       background: {
         type: 'video',
         src: 'https://videos.pexels.com/video-files/5309351/5309351-hd_1920_1080_25fps.mp4',
@@ -76,7 +75,6 @@ function buildStarterFrames(opts: { faqCount: number; accentColor: string }): Fr
       subtitle: 'Pick • pack • go',
       badge: '⚡ Simple setup',
       heartCount: 1800,
-      faqCount,
       cta: { text: 'See the details', icon: 'view', action: 'info' },
       background: {
         type: 'video',
@@ -96,7 +94,6 @@ function buildStarterFrames(opts: { faqCount: number; accentColor: string }): Fr
       subtitle: 'Everything included',
       badge: '✅ Built for comfort',
       heartCount: 1200,
-      faqCount,
       background: {
         type: 'video',
         src: 'https://videos.pexels.com/video-files/6394054/6394054-uhd_2560_1440_25fps.mp4',
@@ -115,7 +112,6 @@ function buildStarterFrames(opts: { faqCount: number; accentColor: string }): Fr
       subtitle: 'Proven, insured, reviewed',
       badge: '🛡️ Verified',
       heartCount: 950,
-      faqCount,
       cta: { text: "Read what's covered", icon: 'view', action: 'info' },
       background: {
         type: 'video',
@@ -137,7 +133,6 @@ function buildStarterFrames(opts: { faqCount: number; accentColor: string }): Fr
       rating: 5.0,
       reviewCount: 209,
       heartCount: 2100,
-      faqCount,
       cta: { text: 'Read Reviews', icon: 'view', action: 'reviews' },
       background: {
         type: 'video',
@@ -153,7 +148,6 @@ function buildStarterFrames(opts: { faqCount: number; accentColor: string }): Fr
       subtitle: 'Check availability',
       badge: '🔥 Book now',
       heartCount: 3200,
-      faqCount,
       cta: { text: 'Check Availability', icon: 'book', action: 'https://wildtrax.co.uk/book' },
       background: {
         type: 'video',
@@ -211,7 +205,6 @@ const INITIAL_FRAMES_CAMPING: FrameData[] = [
     rating: 5.0,
     reviewCount: 209,
     heartCount: 2400,
-    faqCount: 8,
     background: { 
       type: 'video', 
       src: 'https://videos.pexels.com/video-files/5309351/5309351-hd_1920_1080_25fps.mp4',
@@ -230,7 +223,6 @@ const INITIAL_FRAMES_CAMPING: FrameData[] = [
     subtitle: 'Roof tent • Full kit included',
     badge: '🏕️ Camp Wild',
     heartCount: 1800,
-    faqCount: 8,
     cta: { text: 'See How It Works', icon: 'view', action: 'info' },
     background: { 
       type: 'video', 
@@ -250,7 +242,6 @@ const INITIAL_FRAMES_CAMPING: FrameData[] = [
     subtitle: 'Couples • Families • Friends',
     badge: '⭐ Unforgettable',
     heartCount: 1200,
-    faqCount: 8,
     background: { 
       type: 'video', 
       src: 'https://videos.pexels.com/video-files/6394054/6394054-uhd_2560_1440_25fps.mp4',
@@ -265,7 +256,6 @@ const INITIAL_FRAMES_CAMPING: FrameData[] = [
     subtitle: 'Everything you need',
     badge: '✅ All Inclusive',
     heartCount: 950,
-    faqCount: 8,
     cta: { text: 'View Gear List', icon: 'view', action: 'info' },
     background: { 
       type: 'video', 
@@ -287,7 +277,6 @@ const INITIAL_FRAMES_CAMPING: FrameData[] = [
     rating: 5.0,
     reviewCount: 209,
     heartCount: 2100,
-    faqCount: 8,
     cta: { text: 'Read Reviews', icon: 'view', action: 'reviews' },
     background: { 
       type: 'video', 
@@ -303,7 +292,6 @@ const INITIAL_FRAMES_CAMPING: FrameData[] = [
     subtitle: 'From £165/day • NC500 Ready',
     badge: '🔥 Book Now',
     heartCount: 3200,
-    faqCount: 8,
     cta: { text: 'Check Availability', icon: 'book', action: 'https://wildtrax.co.uk/book' },
     background: { 
       type: 'video', 
@@ -332,7 +320,6 @@ function getInitialFramesForSlyde(slydeId: DemoSlydeId): FrameData[] {
   if (slydeId === 'just-drive') return INITIAL_FRAMES_JUST_DRIVE
   if (slydeId === 'home') return INITIAL_FRAMES_CAMPING
   if (slydeId === 'new') {
-    return buildStarterFrames({ faqCount: INITIAL_FAQS.length, accentColor: INITIAL_BUSINESS.accentColor || 'bg-red-600' })
   }
   return INITIAL_FRAMES_CAMPING
 }
@@ -506,7 +493,6 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
       title: 'New Frame',
       subtitle: 'Add your content',
       heartCount: 0,
-      faqCount: faqs.length,
       background: { 
         type: 'image', 
         src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800',
@@ -542,7 +528,6 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
 
   const createNewSlyde = useCallback(() => {
     const starter = buildStarterFrames({
-      faqCount: faqs.length,
       accentColor: business.accentColor || 'bg-red-600',
     })
 
@@ -551,7 +536,7 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
     setPreviewFrameIndex(0)
     setActiveTab('content')
     setShowCreateModal(false)
-  }, [faqs.length, business.accentColor])
+  }, [business.accentColor])
 
   // Delete frame
   const deleteFrame = useCallback((id: string) => {
@@ -579,7 +564,6 @@ export default function EditorMockupClient({ slyde, name }: EditorMockupClientPr
 
   // Update FAQ count on all frames when FAQs change
   const updateFaqCount = useCallback(() => {
-    setFrames(prev => prev.map(f => ({ ...f, faqCount: faqs.length })))
   }, [faqs.length])
 
   return (

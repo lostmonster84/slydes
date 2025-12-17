@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { Map } from 'lucide-react'
 import { type PlanTier } from '@/lib/plans'
 
 const DEV_OVERRIDE_KEY = 'slydes_dev_plan_override'
@@ -47,6 +49,17 @@ export function DevPanel() {
       <div className="text-[10px] font-bold text-red-500 dark:text-red-400 uppercase tracking-wider mb-2">
         Dev Only
       </div>
+
+      {/* Roadmap Link - Opens HQ Admin */}
+      <a
+        href="http://localhost:3000/admin/roadmap"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-2 px-2 py-1.5 mb-2 rounded bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-500/20 dark:text-amber-400 dark:hover:bg-amber-500/30 transition-colors"
+      >
+        <Map className="w-3.5 h-3.5" />
+        <span className="text-[11px] font-semibold">Roadmap (HQ)</span>
+      </a>
 
       <div className="text-xs text-gray-600 dark:text-white/60 mb-2">
         Plan: <span className="font-semibold text-gray-900 dark:text-white">{override ?? 'Real'}</span>

@@ -19,6 +19,8 @@ import {
   MailIcon,
 } from '../_components/MetricCard'
 import { InfoIcon } from '../_components/InfoTooltip'
+import { PeriodSelector } from '../_components/PeriodSelector'
+import { TrendPeriod, TrendMetric, getPeriodLabel, CustomDateRange } from '@/lib/dateUtils'
 
 type IntegrationStatus = {
   status: 'healthy' | 'warning' | 'error'
@@ -43,27 +45,37 @@ type HealthData = {
 
 type MetricsData = {
   timestamp: string
+  period: TrendPeriod
+  periodLabel: string
   waitlist: {
     total: number
-    thisWeek: number
-    today: number
+    trend: TrendMetric
+    industryBreakdown: { industry: string; count: number }[]
   }
   users: {
     total: number
+    trend: TrendMetric
     byPlan: { plan: string; count: number }[]
   }
   organizations: {
     total: number
+    trend: TrendMetric
+    byType: { type: string; count: number }[]
   }
   content: {
     totalSlydes: number
     publishedSlydes: number
     totalFrames: number
+    slydesTrend: TrendMetric
   }
   revenue: {
     mrr: number
     proUsers: number
     creatorUsers: number
+    totalOrders: number
+    ordersTrend: TrendMetric
+    platformFees: number
+    platformFeesTrend: TrendMetric
   }
 }
 
@@ -86,15 +98,23 @@ export default function AdminOverviewPage() {
   const [orgs, setOrgs] = useState<OrganizationsData | null>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [period, setPeriod] = useState<TrendPeriod>('wow')
+  const [customRange, setCustomRange] = useState<CustomDateRange | undefined>()
 
   const fetchData = useCallback(async () => {
     setIsRefreshing(true)
     setError(null)
 
+    // Build metrics URL with period and optional custom range
+    let metricsUrl = `/api/admin/metrics?period=${period}`
+    if (period === 'custom' && customRange) {
+      metricsUrl += `&startDate=${customRange.startDate}&endDate=${customRange.endDate}`
+    }
+
     try {
       const [healthRes, metricsRes, revenueRes, orgsRes] = await Promise.all([
         fetch('/api/admin/health'),
-        fetch('/api/admin/metrics'),
+        fetch(metricsUrl),
         fetch('/api/admin/revenue'),
         fetch('/api/admin/organizations'),
       ])
@@ -119,7 +139,7 @@ export default function AdminOverviewPage() {
     } finally {
       setIsRefreshing(false)
     }
-  }, [])
+  }, [period, customRange])
 
   useEffect(() => {
     fetchData()
@@ -128,6 +148,15 @@ export default function AdminOverviewPage() {
     const interval = setInterval(fetchData, 30000)
     return () => clearInterval(interval)
   }, [fetchData])
+
+  // Helper to format trend for MetricCard
+  const formatTrend = (trend: TrendMetric | undefined) => {
+    if (!trend) return undefined
+    return {
+      value: trend.changePercent,
+      label: `% ${getPeriodLabel(period)}`
+    }
+  }
 
   if (error && !health) {
     return (
@@ -148,9 +177,20 @@ export default function AdminOverviewPage() {
   return (
     <div className="p-8 max-w-7xl">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-white">Overview</h1>
-        <p className="text-[#98989d]">System health and key metrics at a glance</p>
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-semibold text-white">Overview</h1>
+          <p className="text-[#98989d]">System health and key metrics at a glance</p>
+        </div>
+        <PeriodSelector
+          value={period}
+          onChange={(newPeriod, newCustomRange) => {
+            setPeriod(newPeriod)
+            setCustomRange(newCustomRange)
+          }}
+          periodLabel={metrics?.periodLabel}
+          customRange={customRange}
+        />
       </div>
 
       {/* Health Banner */}
@@ -176,11 +216,7 @@ export default function AdminOverviewPage() {
             label="Waitlist"
             value={metrics?.waitlist.total ?? '-'}
             tooltip="People waiting to try Slydes. Your warmest leads for launch."
-            trend={
-              metrics?.waitlist.thisWeek
-                ? { value: metrics.waitlist.thisWeek, label: 'this week' }
-                : undefined
-            }
+            trend={formatTrend(metrics?.waitlist.trend)}
             icon={<MailIcon />}
             color="blue"
           />
@@ -188,6 +224,7 @@ export default function AdminOverviewPage() {
             label="Users"
             value={metrics?.users.total ?? '-'}
             tooltip="Registered accounts on the platform. Includes all tiers."
+            trend={formatTrend(metrics?.users.trend)}
             subtext={
               metrics?.revenue.proUsers
                 ? `${metrics.revenue.proUsers} Pro, ${metrics.revenue.creatorUsers} Creator`
@@ -199,12 +236,14 @@ export default function AdminOverviewPage() {
             label="Organizations"
             value={metrics?.organizations.total ?? '-'}
             tooltip="Business profiles created. Each can have multiple Slydes."
+            trend={formatTrend(metrics?.organizations.trend)}
             icon={<BuildingIcon />}
           />
           <MetricCard
             label="Slydes"
             value={metrics?.content.totalSlydes ?? '-'}
             tooltip="Total Slydes created. Your core product usage metric."
+            trend={formatTrend(metrics?.content.slydesTrend)}
             subtext={
               metrics?.content.publishedSlydes !== undefined
                 ? `${metrics.content.publishedSlydes} published`

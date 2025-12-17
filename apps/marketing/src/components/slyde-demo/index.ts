@@ -25,7 +25,6 @@ export { ProfilePill } from './ProfilePill'
 export { CTAButton } from './CTAButton'
 
 // Bottom Sheets
-export { FAQSheet } from './FAQSheet'
 export { InfoSheet } from './InfoSheet'
 export { ShareSheet } from './ShareSheet'
 export { AboutSheet } from './AboutSheet'

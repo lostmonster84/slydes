@@ -1,33 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSupabaseAdmin } from '@/lib/supabaseAdmin'
+import { getPeriodRanges, calculateTrend, TrendPeriod, TrendMetric, CustomDateRange } from '@/lib/dateUtils'
 
 interface MetricsResponse {
   timestamp: string
+  period: TrendPeriod
+  periodLabel: string
   waitlist: {
     total: number
-    thisWeek: number
-    today: number
+    trend: TrendMetric
     industryBreakdown: { industry: string; count: number }[]
   }
   users: {
     total: number
+    trend: TrendMetric
     byPlan: { plan: string; count: number }[]
   }
   organizations: {
     total: number
+    trend: TrendMetric
     byType: { type: string; count: number }[]
   }
   content: {
     totalSlydes: number
     publishedSlydes: number
     totalFrames: number
+    slydesTrend: TrendMetric
   }
   revenue: {
     mrr: number
     proUsers: number
     creatorUsers: number
     totalOrders: number
+    ordersTrend: TrendMetric
     platformFees: number
+    platformFeesTrend: TrendMetric
   }
 }
 
@@ -57,46 +64,127 @@ export async function GET(request: NextRequest) {
 
   const supabase = createSupabaseAdmin()
   const now = new Date()
-  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
+
+  // Parse period from query string (default: wow)
+  const periodParam = request.nextUrl.searchParams.get('period')
+  const startDateParam = request.nextUrl.searchParams.get('startDate')
+  const endDateParam = request.nextUrl.searchParams.get('endDate')
+
+  // Determine period type
+  let period: TrendPeriod
+  let customRange: CustomDateRange | undefined
+
+  if (periodParam === 'custom' && startDateParam && endDateParam) {
+    period = 'custom'
+    customRange = { startDate: startDateParam, endDate: endDateParam }
+  } else if (periodParam === 'mom' || periodParam === 'yoy') {
+    period = periodParam
+  } else {
+    period = 'wow'
+  }
+
+  const ranges = getPeriodRanges(period, now, customRange)
 
   try {
-    // Run all queries in parallel
+    // Run all queries in parallel for performance
     const [
+      // Waitlist queries
+      waitlistCurrent,
+      waitlistPrevious,
       waitlistTotal,
-      waitlistWeek,
-      waitlistToday,
       waitlistIndustry,
+
+      // User queries
+      usersCurrent,
+      usersPrevious,
       usersTotal,
       usersByPlan,
+
+      // Organization queries
+      orgsCurrent,
+      orgsPrevious,
       orgsTotal,
       orgsByType,
+
+      // Slyde queries
+      slydesCurrent,
+      slydesPrevious,
       slydesTotal,
       slydesPublished,
       framesTotal,
-      ordersData,
+
+      // Order queries (for revenue trend)
+      ordersCurrent,
+      ordersPrevious,
+      ordersAll,
     ] = await Promise.all([
-      // Waitlist metrics
+      // Waitlist - current period
+      supabase.from('waitlist').select('*', { count: 'exact', head: true })
+        .gte('created_at', ranges.current.start.toISOString())
+        .lte('created_at', ranges.current.end.toISOString()),
+      // Waitlist - previous period
+      supabase.from('waitlist').select('*', { count: 'exact', head: true })
+        .gte('created_at', ranges.previous.start.toISOString())
+        .lte('created_at', ranges.previous.end.toISOString()),
+      // Waitlist - total
       supabase.from('waitlist').select('*', { count: 'exact', head: true }),
-      supabase.from('waitlist').select('*', { count: 'exact', head: true }).gte('created_at', weekAgo),
-      supabase.from('waitlist').select('*', { count: 'exact', head: true }).gte('created_at', todayStart),
+      // Waitlist - industry breakdown
       supabase.from('waitlist').select('industry'),
 
-      // User metrics
+      // Users - current period
+      supabase.from('profiles').select('*', { count: 'exact', head: true })
+        .gte('created_at', ranges.current.start.toISOString())
+        .lte('created_at', ranges.current.end.toISOString()),
+      // Users - previous period
+      supabase.from('profiles').select('*', { count: 'exact', head: true })
+        .gte('created_at', ranges.previous.start.toISOString())
+        .lte('created_at', ranges.previous.end.toISOString()),
+      // Users - total
       supabase.from('profiles').select('*', { count: 'exact', head: true }),
+      // Users - plan breakdown
       supabase.from('profiles').select('plan'),
 
-      // Organization metrics
+      // Organizations - current period
+      supabase.from('organizations').select('*', { count: 'exact', head: true })
+        .gte('created_at', ranges.current.start.toISOString())
+        .lte('created_at', ranges.current.end.toISOString()),
+      // Organizations - previous period
+      supabase.from('organizations').select('*', { count: 'exact', head: true })
+        .gte('created_at', ranges.previous.start.toISOString())
+        .lte('created_at', ranges.previous.end.toISOString()),
+      // Organizations - total
       supabase.from('organizations').select('*', { count: 'exact', head: true }),
+      // Organizations - type breakdown
       supabase.from('organizations').select('business_type'),
 
-      // Content metrics
+      // Slydes - current period
+      supabase.from('slydes').select('*', { count: 'exact', head: true })
+        .gte('created_at', ranges.current.start.toISOString())
+        .lte('created_at', ranges.current.end.toISOString()),
+      // Slydes - previous period
+      supabase.from('slydes').select('*', { count: 'exact', head: true })
+        .gte('created_at', ranges.previous.start.toISOString())
+        .lte('created_at', ranges.previous.end.toISOString()),
+      // Slydes - total
       supabase.from('slydes').select('*', { count: 'exact', head: true }),
+      // Slydes - published
       supabase.from('slydes').select('*', { count: 'exact', head: true }).eq('published', true),
+      // Frames - total
       supabase.from('frames').select('*', { count: 'exact', head: true }),
 
-      // Revenue metrics - get orders
-      supabase.from('orders').select('platform_fee_cents, status'),
+      // Orders - current period
+      supabase.from('orders').select('platform_fee_cents, status')
+        .gte('created_at', ranges.current.start.toISOString())
+        .lte('created_at', ranges.current.end.toISOString())
+        .in('status', ['paid', 'fulfilled']),
+      // Orders - previous period
+      supabase.from('orders').select('platform_fee_cents, status')
+        .gte('created_at', ranges.previous.start.toISOString())
+        .lte('created_at', ranges.previous.end.toISOString())
+        .in('status', ['paid', 'fulfilled']),
+      // Orders - all
+      supabase.from('orders').select('platform_fee_cents, status')
+        .in('status', ['paid', 'fulfilled']),
     ])
 
     // Process industry breakdown
@@ -145,48 +233,54 @@ export async function GET(request: NextRequest) {
     }
 
     // Calculate revenue metrics
-    // MRR = Pro users * £50 + Creator users * £25
     const mrr = proUsers * 50 + creatorUsers * 25
 
-    // Platform fees from paid orders
-    let platformFees = 0
-    let totalOrders = 0
-    if (ordersData.data) {
-      ordersData.data.forEach((order) => {
-        if (order.status === 'paid' || order.status === 'fulfilled') {
-          totalOrders++
-          platformFees += order.platform_fee_cents || 0
-        }
-      })
-    }
+    // Platform fees calculations
+    const currentPlatformFees = (ordersCurrent.data || [])
+      .reduce((sum, o) => sum + (o.platform_fee_cents || 0), 0) / 100
+    const previousPlatformFees = (ordersPrevious.data || [])
+      .reduce((sum, o) => sum + (o.platform_fee_cents || 0), 0) / 100
+    const totalPlatformFees = (ordersAll.data || [])
+      .reduce((sum, o) => sum + (o.platform_fee_cents || 0), 0) / 100
 
     const response: MetricsResponse = {
       timestamp: now.toISOString(),
+      period,
+      periodLabel: ranges.label,
+
       waitlist: {
         total: waitlistTotal.count ?? 0,
-        thisWeek: waitlistWeek.count ?? 0,
-        today: waitlistToday.count ?? 0,
+        trend: calculateTrend(waitlistCurrent.count ?? 0, waitlistPrevious.count ?? 0),
         industryBreakdown,
       },
+
       users: {
         total: usersTotal.count ?? 0,
+        trend: calculateTrend(usersCurrent.count ?? 0, usersPrevious.count ?? 0),
         byPlan,
       },
+
       organizations: {
         total: orgsTotal.count ?? 0,
+        trend: calculateTrend(orgsCurrent.count ?? 0, orgsPrevious.count ?? 0),
         byType,
       },
+
       content: {
         totalSlydes: slydesTotal.count ?? 0,
         publishedSlydes: slydesPublished.count ?? 0,
         totalFrames: framesTotal.count ?? 0,
+        slydesTrend: calculateTrend(slydesCurrent.count ?? 0, slydesPrevious.count ?? 0),
       },
+
       revenue: {
         mrr,
         proUsers,
         creatorUsers,
-        totalOrders,
-        platformFees: platformFees / 100, // Convert cents to dollars/pounds
+        totalOrders: ordersAll.data?.length ?? 0,
+        ordersTrend: calculateTrend(ordersCurrent.data?.length ?? 0, ordersPrevious.data?.length ?? 0),
+        platformFees: totalPlatformFees,
+        platformFeesTrend: calculateTrend(currentPlatformFees, previousPlatformFees),
       },
     }
 

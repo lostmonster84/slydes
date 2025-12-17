@@ -10,34 +10,42 @@ import {
   MailIcon,
 } from '../_components/MetricCard'
 import { InfoIcon } from '../_components/InfoTooltip'
+import { PeriodSelector } from '../_components/PeriodSelector'
+import { TrendPeriod, TrendMetric, getPeriodLabel, CustomDateRange } from '@/lib/dateUtils'
 
 type MetricsData = {
   timestamp: string
+  period: TrendPeriod
+  periodLabel: string
   waitlist: {
     total: number
-    thisWeek: number
-    today: number
+    trend: TrendMetric
     industryBreakdown: { industry: string; count: number }[]
   }
   users: {
     total: number
+    trend: TrendMetric
     byPlan: { plan: string; count: number }[]
   }
   organizations: {
     total: number
+    trend: TrendMetric
     byType: { type: string; count: number }[]
   }
   content: {
     totalSlydes: number
     publishedSlydes: number
     totalFrames: number
+    slydesTrend: TrendMetric
   }
   revenue: {
     mrr: number
     proUsers: number
     creatorUsers: number
     totalOrders: number
+    ordersTrend: TrendMetric
     platformFees: number
+    platformFeesTrend: TrendMetric
   }
 }
 
@@ -66,11 +74,17 @@ function getLabel(key: string, labels: Record<string, string>): string {
 export default function BusinessPage() {
   const [metrics, setMetrics] = useState<MetricsData | null>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [period, setPeriod] = useState<TrendPeriod>('wow')
+  const [customRange, setCustomRange] = useState<CustomDateRange | undefined>()
 
   const fetchMetrics = useCallback(async () => {
     setIsRefreshing(true)
     try {
-      const res = await fetch('/api/admin/metrics')
+      let url = `/api/admin/metrics?period=${period}`
+      if (period === 'custom' && customRange) {
+        url += `&startDate=${customRange.startDate}&endDate=${customRange.endDate}`
+      }
+      const res = await fetch(url)
       if (res.ok) {
         const data = await res.json()
         setMetrics(data)
@@ -78,7 +92,7 @@ export default function BusinessPage() {
     } finally {
       setIsRefreshing(false)
     }
-  }, [])
+  }, [period, customRange])
 
   useEffect(() => {
     fetchMetrics()
@@ -86,37 +100,57 @@ export default function BusinessPage() {
     return () => clearInterval(interval)
   }, [fetchMetrics])
 
+  // Helper to format trend for MetricCard
+  const formatTrend = (trend: TrendMetric | undefined) => {
+    if (!trend) return undefined
+    return {
+      value: trend.changePercent,
+      label: `% ${getPeriodLabel(period)}`
+    }
+  }
+
   const maxIndustryCount = metrics?.waitlist.industryBreakdown[0]?.count || 1
   const maxTypeCount = metrics?.organizations.byType[0]?.count || 1
 
   return (
     <div className="p-8 max-w-7xl">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-start justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-white">Business Metrics</h1>
           <p className="text-[#98989d]">Users, organizations, content, and revenue</p>
         </div>
-        <button
-          onClick={fetchMetrics}
-          disabled={isRefreshing}
-          className="px-4 py-2 text-sm font-medium bg-[#3a3a3c] text-white border border-white/10 rounded-lg hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
-        >
-          <svg
-            className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <div className="flex items-center gap-3">
+          <PeriodSelector
+            value={period}
+            onChange={(newPeriod, newCustomRange) => {
+              setPeriod(newPeriod)
+              setCustomRange(newCustomRange)
+            }}
+            periodLabel={metrics?.periodLabel}
+            customRange={customRange}
+          />
+          <button
+            onClick={fetchMetrics}
+            disabled={isRefreshing}
+            className="px-4 py-2 text-sm font-medium bg-[#3a3a3c] text-white border border-white/10 rounded-lg hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-            />
-          </svg>
-          Refresh
-        </button>
+            <svg
+              className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            Refresh
+          </button>
+        </div>
       </div>
 
       {/* Waitlist Section */}
@@ -133,19 +167,21 @@ export default function BusinessPage() {
             label="Total Signups"
             value={metrics?.waitlist.total ?? '-'}
             tooltip="Total number of people on the waitlist. Each signup is a potential customer."
+            trend={formatTrend(metrics?.waitlist.trend)}
             color="blue"
           />
           <MetricCard
-            label="This Week"
-            value={metrics?.waitlist.thisWeek ?? '-'}
-            tooltip="New signups in the last 7 days. Shows current interest and marketing effectiveness."
-            trend={metrics?.waitlist.thisWeek ? { value: metrics.waitlist.thisWeek, label: 'new' } : undefined}
+            label="This Period"
+            value={metrics?.waitlist.trend?.current ?? '-'}
+            tooltip={`New signups in the current ${period === 'wow' ? 'week' : period === 'mom' ? 'month' : 'year'}. Shows current interest and marketing effectiveness.`}
+            subtext={metrics?.waitlist.trend ? `vs ${metrics.waitlist.trend.previous} previous` : undefined}
             color="green"
           />
           <MetricCard
-            label="Today"
-            value={metrics?.waitlist.today ?? '-'}
-            tooltip="Signups just today. Spikes might indicate a successful social post or feature."
+            label="Change"
+            value={metrics?.waitlist.trend ? `${metrics.waitlist.trend.change >= 0 ? '+' : ''}${metrics.waitlist.trend.change}` : '-'}
+            tooltip="Absolute change in signups compared to the previous period."
+            trend={formatTrend(metrics?.waitlist.trend)}
           />
         </div>
 
@@ -192,6 +228,7 @@ export default function BusinessPage() {
             label="Total Users"
             value={metrics?.users.total ?? '-'}
             tooltip="All registered user accounts. Includes free and paid tiers."
+            trend={formatTrend(metrics?.users.trend)}
             icon={<UsersIcon />}
           />
           <MetricCard
@@ -210,6 +247,7 @@ export default function BusinessPage() {
             label="Organizations"
             value={metrics?.organizations.total ?? '-'}
             tooltip="Business profiles created. Each user can create multiple organizations."
+            trend={formatTrend(metrics?.organizations.trend)}
             icon={<BuildingIcon />}
           />
         </div>
@@ -274,6 +312,7 @@ export default function BusinessPage() {
             label="Total Slydes"
             value={metrics?.content.totalSlydes ?? '-'}
             tooltip="All Slydes created across all organizations. Each Slyde is a vertical scrolling microsite."
+            trend={formatTrend(metrics?.content.slydesTrend)}
             icon={<LayersIcon />}
           />
           <MetricCard
@@ -321,11 +360,13 @@ export default function BusinessPage() {
             label="Total Orders"
             value={metrics?.revenue.totalOrders ?? 0}
             tooltip="Completed marketplace transactions. Each order represents a purchase through a Slyde storefront."
+            trend={formatTrend(metrics?.revenue.ordersTrend)}
           />
           <MetricCard
             label="Platform Fees"
             value={metrics?.revenue.platformFees ? `£${metrics.revenue.platformFees.toFixed(2)}` : '£0'}
             tooltip="Revenue earned from marketplace transaction fees. See Revenue page for fee projections."
+            trend={formatTrend(metrics?.revenue.platformFeesTrend)}
             subtext="from transactions"
           />
         </div>

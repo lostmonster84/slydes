@@ -127,13 +127,13 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
   const imageBusy = imageStatus.kind !== 'idle' && imageStatus.kind !== 'done' && imageStatus.kind !== 'error'
 
   return (
-    <div className="min-h-screen bg-future-black">
-      <header className="border-b border-white/10">
+    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white">
+      <header className="border-b border-gray-200 dark:border-white/10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 h-16">
             <Link
               href="/settings"
-              className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+              className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-white/60 dark:hover:text-white transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="sr-only">Back to Settings</span>
@@ -144,23 +144,23 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
       </header>
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-2xl p-6">
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center">
-              <Video className="w-5 h-5 text-white/60" />
+            <div className="w-10 h-10 bg-gray-100 dark:bg-white/5 rounded-lg flex items-center justify-center">
+              <Video className="w-5 h-5 text-gray-500 dark:text-white/60" />
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-semibold">Videos</h2>
-              <p className="text-white/60 text-sm">
+              <p className="text-gray-500 dark:text-white/60 text-sm">
                 Uploads go to Cloudflare Stream. After upload, you can set one as your Home video for {organizationName}, or attach it to a frame below.
               </p>
             </div>
           </div>
 
           <div className="mt-5 grid gap-4">
-            <div className="bg-black/30 border border-white/10 rounded-xl p-4">
-              <div className="text-xs text-white/50">Home video id (organization)</div>
-              <div className="mt-1 font-mono text-sm text-white break-all">
+            <div className="bg-gray-100 border border-gray-200 dark:bg-black/30 dark:border-white/10 rounded-xl p-4">
+              <div className="text-xs text-gray-500 dark:text-white/50">Home video id (organization)</div>
+              <div className="mt-1 font-mono text-sm break-all">
                 {homeVideoUid ?? '—'}
               </div>
               <div className="mt-3 flex items-center gap-2">
@@ -168,7 +168,7 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
                   type="button"
                   onClick={() => setHomeVideo(null)}
                   disabled={!homeVideoUid || videoBusy}
-                  className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-white/10 text-white/80 text-xs font-medium hover:bg-white/15 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-gray-200 text-gray-700 dark:bg-white/10 dark:text-white/80 text-xs font-medium hover:bg-gray-300 dark:hover:bg-white/15 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Clear Home video
                 </button>
@@ -176,15 +176,15 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm text-white/70">Choose a video file (mp4/mov)</label>
+              <label className="text-sm text-gray-600 dark:text-white/70">Choose a video file (mp4/mov)</label>
               <input
                 type="file"
                 accept="video/mp4,video/quicktime,video/*"
                 disabled={videoBusy}
                 onChange={(e) => setVideoFile(e.target.files?.[0] ?? null)}
-                className="block w-full text-sm text-white/70 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-white/10 file:text-white/80 hover:file:bg-white/15"
+                className="block w-full text-sm text-gray-600 dark:text-white/70 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-200 file:text-gray-700 dark:file:bg-white/10 dark:file:text-white/80 hover:file:bg-gray-300 dark:hover:file:bg-white/15"
               />
-              <p className="text-xs text-white/45">
+              <p className="text-xs text-gray-400 dark:text-white/45">
                 Tip: keep it short (10–30s) and vertical (9:16) like the spec.
               </p>
             </div>
@@ -201,22 +201,22 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
               </button>
 
               {videoStatus.kind === 'requesting-upload' && (
-                <div className="text-sm text-white/60">Getting upload link…</div>
+                <div className="text-sm text-gray-500 dark:text-white/60">Getting upload link…</div>
               )}
               {videoStatus.kind === 'uploading' && (
-                <div className="text-sm text-white/60">Uploading to Cloudflare…</div>
+                <div className="text-sm text-gray-500 dark:text-white/60">Uploading to Cloudflare…</div>
               )}
               {videoStatus.kind === 'done' && (
-                <div className="text-sm text-emerald-300">Uploaded.</div>
+                <div className="text-sm text-emerald-600 dark:text-emerald-300">Uploaded.</div>
               )}
               {videoStatus.kind === 'error' && (
-                <div className="text-sm text-red-300">Error: {videoStatus.message}</div>
+                <div className="text-sm text-red-600 dark:text-red-300">Error: {videoStatus.message}</div>
               )}
             </div>
 
-            <div className="bg-black/20 border border-white/10 rounded-xl p-4">
-              <div className="text-xs text-white/50">Last uploaded video id</div>
-              <div className="mt-1 font-mono text-sm text-white break-all">
+            <div className="bg-gray-50 border border-gray-200 dark:bg-black/20 dark:border-white/10 rounded-xl p-4">
+              <div className="text-xs text-gray-500 dark:text-white/50">Last uploaded video id</div>
+              <div className="mt-1 font-mono text-sm break-all">
                 {lastUploadedVideoUid ?? '—'}
               </div>
               <div className="mt-3 flex items-center gap-2">
@@ -224,11 +224,11 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
                   type="button"
                   onClick={() => (lastUploadedVideoUid ? setHomeVideo(lastUploadedVideoUid) : null)}
                   disabled={!lastUploadedVideoUid || videoBusy}
-                  className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-white/10 text-white/80 text-xs font-medium hover:bg-white/15 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-gray-200 text-gray-700 dark:bg-white/10 dark:text-white/80 text-xs font-medium hover:bg-gray-300 dark:hover:bg-white/15 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Set as Home video
                 </button>
-                <div className="text-xs text-white/45">
+                <div className="text-xs text-gray-400 dark:text-white/45">
                   This writes `home_video_stream_uid` onto your organization.
                 </div>
               </div>
@@ -236,14 +236,14 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
           </div>
         </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-2xl p-6">
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center">
-              <ImageIcon className="w-5 h-5 text-white/60" />
+            <div className="w-10 h-10 bg-gray-100 dark:bg-white/5 rounded-lg flex items-center justify-center">
+              <ImageIcon className="w-5 h-5 text-gray-500 dark:text-white/60" />
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-semibold">Images</h2>
-              <p className="text-white/60 text-sm">
+              <p className="text-gray-500 dark:text-white/60 text-sm">
                 Uploads go to Cloudflare Images (auto-resizing/optimization). After upload, attach the image to a frame below.
               </p>
             </div>
@@ -251,13 +251,13 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
 
           <div className="mt-5 grid gap-4">
             <div className="grid gap-2">
-              <label className="text-sm text-white/70">Choose an image file</label>
+              <label className="text-sm text-gray-600 dark:text-white/70">Choose an image file</label>
               <input
                 type="file"
                 accept="image/*"
                 disabled={imageBusy}
                 onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
-                className="block w-full text-sm text-white/70 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-white/10 file:text-white/80 hover:file:bg-white/15"
+                className="block w-full text-sm text-gray-600 dark:text-white/70 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-200 file:text-gray-700 dark:file:bg-white/10 dark:file:text-white/80 hover:file:bg-gray-300 dark:hover:file:bg-white/15"
               />
             </div>
 
@@ -273,22 +273,22 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
               </button>
 
               {imageStatus.kind === 'requesting-upload' && (
-                <div className="text-sm text-white/60">Getting upload link…</div>
+                <div className="text-sm text-gray-500 dark:text-white/60">Getting upload link…</div>
               )}
               {imageStatus.kind === 'uploading' && (
-                <div className="text-sm text-white/60">Uploading to Cloudflare…</div>
+                <div className="text-sm text-gray-500 dark:text-white/60">Uploading to Cloudflare…</div>
               )}
               {imageStatus.kind === 'done' && (
-                <div className="text-sm text-emerald-300">Uploaded.</div>
+                <div className="text-sm text-emerald-600 dark:text-emerald-300">Uploaded.</div>
               )}
               {imageStatus.kind === 'error' && (
-                <div className="text-sm text-red-300">Error: {imageStatus.message}</div>
+                <div className="text-sm text-red-600 dark:text-red-300">Error: {imageStatus.message}</div>
               )}
             </div>
 
-            <div className="bg-black/20 border border-white/10 rounded-xl p-4">
-              <div className="text-xs text-white/50">Last uploaded image id</div>
-              <div className="mt-1 font-mono text-sm text-white break-all">
+            <div className="bg-gray-50 border border-gray-200 dark:bg-black/20 dark:border-white/10 rounded-xl p-4">
+              <div className="text-xs text-gray-500 dark:text-white/50">Last uploaded image id</div>
+              <div className="mt-1 font-mono text-sm break-all">
                 {lastUploadedImageId ?? '—'}
               </div>
             </div>
@@ -296,7 +296,7 @@ export default function MediaSettingsClient({ organizationId, organizationName, 
         </div>
 
         <div className="space-y-3">
-          <div className="text-sm text-white/70 font-medium">Attach media to a frame</div>
+          <div className="text-sm text-gray-600 dark:text-white/70 font-medium">Attach media to a frame</div>
           <FrameAttachDemoClient />
         </div>
       </main>

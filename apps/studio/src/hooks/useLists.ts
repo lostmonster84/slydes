@@ -134,7 +134,6 @@ export function useLists(): UseListsResult {
       title: 'New Frame',
       templateType: 'custom',
       heartCount: 0,
-      faqCount: 0,
       background: { type: 'image', src: '' },
       accentColor: '#2563EB',
       ...frame,

@@ -128,6 +128,7 @@ Submitted: ${new Date().toISOString()}
   `.trim()
 
   try {
+    // 1. Send email notification
     const resend = getResend()
     const { error } = await resend.emails.send({
       from: 'Slydes Studio <feedback@mail.slydes.io>',
@@ -140,7 +141,32 @@ Submitted: ${new Date().toISOString()}
 
     if (error) {
       console.error('Resend error:', error)
-      return NextResponse.json({ error: 'Failed to send feedback' }, { status: 500 })
+      // Don't fail completely if email fails, still try to add to roadmap
+    }
+
+    // 2. Add to HQ Roadmap as triage item
+    try {
+      const roadmapUrl = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000/api/admin/roadmap'
+        : 'https://slydes.io/api/admin/roadmap'
+
+      await fetch(roadmapUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: body.title,
+          description: body.description,
+          category: body.category,
+          requestType: body.requestType,
+          priority: 'medium',
+          source: 'suggestion',
+          userEmail: userEmail !== 'anonymous' ? userEmail : undefined,
+          orgName: orgName !== 'Unknown' ? orgName : undefined,
+        }),
+      })
+    } catch (roadmapErr) {
+      // Don't fail if roadmap update fails
+      console.error('Failed to add to roadmap:', roadmapErr)
     }
 
     return NextResponse.json({ success: true })

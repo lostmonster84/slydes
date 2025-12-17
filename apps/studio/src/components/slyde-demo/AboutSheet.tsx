@@ -6,6 +6,7 @@ import {
   X, Phone, Mail, MessageCircle, MapPin, ChevronDown
 } from 'lucide-react'
 import type { BusinessInfo } from './frameData'
+import { SheetHandle } from './SheetHandle'
 
 interface AboutSheetProps {
   isOpen: boolean
@@ -67,6 +68,8 @@ export function AboutSheet({
             className="absolute bottom-0 left-0 right-0 bg-gray-900 rounded-t-2xl z-[60] flex flex-col cursor-none pointer-events-auto"
             style={{ maxHeight: '70vh' }}
           >
+            <SheetHandle />
+
             {/* Drag Handle - only this area triggers drag-to-close */}
             <motion.div
               drag="y"
@@ -77,7 +80,7 @@ export function AboutSheet({
                   onClose()
                 }
               }}
-              className="flex items-center justify-between px-4 py-4 border-b border-white/10 cursor-grab active:cursor-grabbing">
+              className="flex items-center justify-between px-4 py-3 border-b border-white/10 cursor-grab active:cursor-grabbing">
               <div className="flex items-center gap-3">
                 {/* Business Logo */}
                 <div

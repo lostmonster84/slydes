@@ -25,6 +25,7 @@ import {
   Utensils,
   type LucideIcon,
 } from 'lucide-react'
+import { SheetHandle } from '@/components/slyde-demo/SheetHandle'
 
 // Same icon map as the editor (CONSTX consistency)
 const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
@@ -110,7 +111,7 @@ export function CategoryDrawer({
             className="absolute bottom-0 left-0 right-0 bg-[#1c1c1e] rounded-t-[20px] z-[60] flex flex-col cursor-none pointer-events-auto"
             style={{ maxHeight: '70vh' }}
           >
-            {/* iOS Handle */}
+            {/* Handle */}
             <motion.div
               drag="y"
               dragConstraints={{ top: 0, bottom: 0 }}
@@ -122,10 +123,7 @@ export function CategoryDrawer({
               }}
               className="cursor-grab active:cursor-grabbing"
             >
-              {/* Handle bar */}
-              <div className="flex justify-center pt-2 pb-3">
-                <div className="w-9 h-[5px] rounded-full bg-white/30" />
-              </div>
+              <SheetHandle />
 
               {/* Header */}
               <div className="flex items-center justify-between px-4 pb-3">

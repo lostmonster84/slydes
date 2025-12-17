@@ -10,11 +10,18 @@ import { CategoryDrawer } from './CategoryDrawer'
 import { ShareSheet } from '@/components/slyde-demo/ShareSheet'
 import { AboutSheet } from '@/components/slyde-demo/AboutSheet'
 import type { HomeSlydeData } from '../data/highlandMotorsData'
-import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
+import { useDemoHomeSlyde, type BackgroundType } from '@/lib/demoHomeSlyde'
+import { parseVideoUrl } from '@/lib/videoUtils'
+import { getFilterStyle, getSpeedRate, VIGNETTE_STYLE, type VideoFilterPreset, type VideoSpeedPreset } from '@/lib/videoFilters'
 
 interface HomeSlydeScreenProps {
   data: HomeSlydeData
   onCategoryTap: (categoryId: string) => void
+  backgroundType?: BackgroundType
+  imageSrc?: string
+  videoFilter?: VideoFilterPreset
+  videoVignette?: boolean
+  videoSpeed?: VideoSpeedPreset
 }
 
 /**
@@ -27,7 +34,7 @@ interface HomeSlydeScreenProps {
  *
  * @see docs/UI-PATTERNS.md for full specification
  */
-export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
+export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video', imageSrc, videoFilter = 'original', videoVignette = false, videoSpeed = 'normal' }: HomeSlydeScreenProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
@@ -113,26 +120,81 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
 
   return (
     <div className="relative w-full h-full overflow-hidden">
-      {/* Video Background */}
+      {/* Background (Video or Image) */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
-        animate={{ filter: drawerOpen ? 'brightness(0.4)' : 'brightness(1)' }}
+        animate={{ filter: drawerOpen ? `${getFilterStyle(videoFilter)} brightness(0.4)` : getFilterStyle(videoFilter) }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          onEnded={() => void emit('videoLoop', {})}
-        />
+        {backgroundType === 'image' && imageSrc ? (
+          // Image background
+          <img
+            src={imageSrc}
+            alt="Background"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          // Video background
+          (() => {
+            const parsed = parseVideoUrl(videoSrc)
+            // YouTube embed
+            if (parsed?.type === 'youtube') {
+              return (
+                <iframe
+                  src={parsed.embedUrl}
+                  className="absolute inset-0 w-full h-full pointer-events-none scale-[1.5] origin-center"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  title="YouTube Video"
+                  style={{ border: 'none' }}
+                />
+              )
+            }
+            // Vimeo embed
+            if (parsed?.type === 'vimeo') {
+              return (
+                <iframe
+                  src={parsed.embedUrl}
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  title="Vimeo Video"
+                  style={{ border: 'none' }}
+                />
+              )
+            }
+            // Direct video (mp4, webm, Cloudflare HLS, etc.)
+            return (
+              <video
+                ref={(el) => {
+                  (videoRef as React.MutableRefObject<HTMLVideoElement | null>).current = el
+                  if (el) el.playbackRate = getSpeedRate(videoSpeed)
+                }}
+                src={videoSrc}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                onEnded={() => void emit('videoLoop', {})}
+              />
+            )
+          })()
+        )}
       </motion.div>
 
       {/* Gradient overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
+
+      {/* Vignette overlay */}
+      {videoVignette && (
+        <div
+          className="absolute inset-0 pointer-events-none z-[1]"
+          style={VIGNETTE_STYLE}
+        />
+      )}
 
       {/* Sound Toggle - Top Left (conditionally shown) */}
       {(data.showSound ?? true) && (
@@ -157,7 +219,6 @@ export function HomeSlydeScreen({ data, onCategoryTap }: HomeSlydeScreenProps) {
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
         onInfoTap={() => setAboutOpen(true)}
-        hideFAQ
         hideHeart={!(data.showHearts ?? true)}
         hideShare={!(data.showShare ?? true)}
         className="absolute right-3 bottom-36 z-40"

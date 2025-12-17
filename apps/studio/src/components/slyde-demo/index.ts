@@ -25,10 +25,11 @@ export { ProfilePill } from './ProfilePill'
 export { CTAButton } from './CTAButton'
 
 // Bottom Sheets
-export { FAQSheet } from './FAQSheet'
 export { InfoSheet } from './InfoSheet'
 export { ShareSheet } from './ShareSheet'
 export { AboutSheet } from './AboutSheet'
+export { ConnectSheet } from './ConnectSheet'
+export { SheetHandle } from './SheetHandle'
 
 // Special Frames
 export { SlydesPromoSlide } from './SlydesPromoSlide'
@@ -51,6 +52,7 @@ export {
   type FrameData,
   type FrameInfoContent,
   type FAQItem,
+  type FAQInboxItem,
   type Review,
   type BusinessInfo,
   type CTAIconType,

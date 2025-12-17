@@ -14,6 +14,9 @@ type NavItem = {
   href: string
   label: string
   icon: string
+  badge?: number
+  badgeColor?: 'purple' | 'blue' | 'red' | 'green'
+  healthDot?: 'healthy' | 'degraded' | 'unhealthy'
 }
 
 type NavSection = {
@@ -21,29 +24,49 @@ type NavSection = {
   items: NavItem[]
 }
 
-const NAV_SECTIONS: NavSection[] = [
-  {
-    items: [
-      { href: '/admin/hq', label: 'Overview', icon: 'home' },
-      { href: '/admin/integrations', label: 'Integrations', icon: 'plug' },
-    ],
-  },
-  {
-    label: 'Business',
-    items: [
-      { href: '/admin/business', label: 'Metrics', icon: 'chart' },
-      { href: '/admin/revenue', label: 'Revenue', icon: 'currency' },
-    ],
-  },
-  {
-    label: 'CRM',
-    items: [
-      { href: '/admin/customers', label: 'Customers', icon: 'customers' },
-      { href: '/admin/organizations', label: 'Organizations', icon: 'building' },
-      { href: '/admin/waitlist', label: 'Waitlist', icon: 'users' },
-    ],
-  },
-]
+type NavBadges = {
+  triageCount: number
+  waitlistTodayCount: number
+  healthStatus: 'healthy' | 'degraded' | 'unhealthy' | null
+}
+
+// Nav sections are generated dynamically to include badge counts
+function getNavSections(badges: NavBadges): NavSection[] {
+  return [
+    {
+      items: [
+        {
+          href: '/admin/hq',
+          label: 'Overview',
+          icon: 'home',
+          healthDot: badges.healthStatus && badges.healthStatus !== 'healthy' ? badges.healthStatus : undefined,
+        },
+        { href: '/admin/integrations', label: 'Integrations', icon: 'plug' },
+      ],
+    },
+    {
+      label: 'Product',
+      items: [
+        { href: '/admin/roadmap', label: 'Roadmap', icon: 'roadmap', badge: badges.triageCount > 0 ? badges.triageCount : undefined, badgeColor: 'purple' },
+      ],
+    },
+    {
+      label: 'Business',
+      items: [
+        { href: '/admin/business', label: 'Metrics', icon: 'chart' },
+        { href: '/admin/revenue', label: 'Revenue', icon: 'currency' },
+      ],
+    },
+    {
+      label: 'CRM',
+      items: [
+        { href: '/admin/customers', label: 'Customers', icon: 'customers' },
+        { href: '/admin/organizations', label: 'Organizations', icon: 'building' },
+        { href: '/admin/waitlist', label: 'Waitlist', icon: 'users', badge: badges.waitlistTodayCount > 0 ? badges.waitlistTodayCount : undefined, badgeColor: 'blue' },
+      ],
+    },
+  ]
+}
 
 function NavIcon({ name }: { name: string }) {
   switch (name) {
@@ -89,16 +112,27 @@ function NavIcon({ name }: { name: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
         </svg>
       )
+    case 'roadmap':
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+        </svg>
+      )
     default:
       return null
   }
 }
+
+const ROADMAP_STORAGE_KEY = 'slydes_hq_roadmap'
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isNavCollapsed, setIsNavCollapsed] = useState(false)
+  const [triageCount, setTriageCount] = useState(0)
+  const [waitlistTodayCount, setWaitlistTodayCount] = useState(0)
+  const [healthStatus, setHealthStatus] = useState<'healthy' | 'degraded' | 'unhealthy' | null>(null)
   const pathname = usePathname()
   const router = useRouter()
 
@@ -121,6 +155,76 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   useEffect(() => {
     checkAuth()
   }, [])
+
+  // Load triage count from localStorage
+  useEffect(() => {
+    const loadTriageCount = () => {
+      try {
+        const stored = localStorage.getItem(ROADMAP_STORAGE_KEY)
+        if (stored) {
+          const items = JSON.parse(stored)
+          const count = items.filter((item: { status: string }) => item.status === 'triage').length
+          setTriageCount(count)
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    loadTriageCount()
+
+    // Listen for storage changes (when roadmap page updates)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === ROADMAP_STORAGE_KEY) {
+        loadTriageCount()
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+
+    // Also poll periodically in case changes happen in the same tab
+    const interval = setInterval(loadTriageCount, 2000)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      clearInterval(interval)
+    }
+  }, [])
+
+  // Fetch waitlist today count and health status
+  useEffect(() => {
+    const fetchNavBadgeData = async () => {
+      try {
+        // Fetch waitlist data for today's count
+        const waitlistRes = await fetch('/api/admin/waitlist')
+        if (waitlistRes.ok) {
+          const waitlistData = await waitlistRes.json()
+          setWaitlistTodayCount(waitlistData.todayCount || 0)
+        }
+      } catch {
+        // Ignore errors, badge just won't show
+      }
+
+      try {
+        // Fetch health status
+        const healthRes = await fetch('/api/admin/health')
+        if (healthRes.ok) {
+          const healthData = await healthRes.json()
+          setHealthStatus(healthData.overall || 'healthy')
+        }
+      } catch {
+        // Ignore errors
+      }
+    }
+
+    // Only fetch if authenticated
+    if (isAuthenticated) {
+      fetchNavBadgeData()
+      // Refresh every 60 seconds
+      const interval = setInterval(fetchNavBadgeData, 60000)
+      return () => clearInterval(interval)
+    }
+  }, [isAuthenticated])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -225,7 +329,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Navigation */}
         <nav className="flex-1 p-2 overflow-y-auto">
           <div className="space-y-4">
-            {NAV_SECTIONS.map((section, sectionIdx) => (
+            {getNavSections({ triageCount, waitlistTodayCount, healthStatus }).map((section, sectionIdx) => (
               <div key={sectionIdx}>
                 {section.label && !isNavCollapsed && (
                   <p className="px-3 py-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -238,8 +342,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 <ul className="space-y-1">
                   {section.items.map((item) => {
                     const isActive = pathname === item.href
+                    const badgeColorClass = item.badgeColor === 'blue' ? 'bg-blue-500' :
+                                            item.badgeColor === 'red' ? 'bg-red-500' :
+                                            item.badgeColor === 'green' ? 'bg-green-500' :
+                                            'bg-purple-500'
+                    const healthDotClass = item.healthDot === 'unhealthy' ? 'bg-red-500' :
+                                           item.healthDot === 'degraded' ? 'bg-amber-500' :
+                                           null
                     return (
-                      <li key={item.href}>
+                      <li key={item.href} className="relative">
                         <Link
                           href={item.href}
                           title={isNavCollapsed ? item.label : undefined}
@@ -249,8 +360,28 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                               : 'text-gray-300 hover:bg-white/10 hover:text-white'
                           } ${isNavCollapsed ? 'justify-center' : ''}`}
                         >
-                          <NavIcon name={item.icon} />
-                          {!isNavCollapsed && <span className="font-medium text-sm">{item.label}</span>}
+                          <span className="relative">
+                            <NavIcon name={item.icon} />
+                            {/* Health dot indicator */}
+                            {healthDotClass && (
+                              <span className={`absolute -top-0.5 -right-0.5 w-2 h-2 ${healthDotClass} rounded-full ring-2 ring-[#2c2c2e]`} />
+                            )}
+                          </span>
+                          {!isNavCollapsed && (
+                            <>
+                              <span className="font-medium text-sm">{item.label}</span>
+                              {item.badge && (
+                                <span className={`ml-auto px-1.5 py-0.5 text-[10px] font-bold ${badgeColorClass} text-white rounded-full min-w-[18px] text-center`}>
+                                  {item.badge}
+                                </span>
+                              )}
+                            </>
+                          )}
+                          {isNavCollapsed && item.badge && (
+                            <span className={`absolute -top-1 -right-1 px-1 py-0.5 text-[9px] font-bold ${badgeColorClass} text-white rounded-full min-w-[14px] text-center`}>
+                              {item.badge}
+                            </span>
+                          )}
                         </Link>
                       </li>
                     )

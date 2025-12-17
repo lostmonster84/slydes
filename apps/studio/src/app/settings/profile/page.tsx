@@ -92,21 +92,21 @@ export default function ProfileSettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-future-black flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-[#1c1c1e] flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-leader-blue" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-future-black">
+    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white">
       {/* Header */}
-      <header className="border-b border-white/10">
+      <header className="border-b border-gray-200 dark:border-white/10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 h-16">
             <Link
               href="/settings"
-              className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+              className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-white/60 dark:hover:text-white transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="sr-only">Back to Settings</span>
@@ -120,7 +120,7 @@ export default function ProfileSettingsPage() {
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Avatar Section */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+          <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Profile Picture</h2>
             <div className="flex items-center gap-4">
               {profile?.avatar_url ? (
@@ -135,7 +135,7 @@ export default function ProfileSettingsPage() {
                 </div>
               )}
               <div>
-                <p className="text-white/60 text-sm">
+                <p className="text-gray-500 dark:text-white/60 text-sm">
                   Your profile picture is synced from your sign-in provider
                 </p>
               </div>
@@ -143,28 +143,28 @@ export default function ProfileSettingsPage() {
           </div>
 
           {/* Personal Info */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+          <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Personal Information</h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="full_name" className="block text-sm font-medium text-white/80 mb-2">
+                <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
                   Full name
                 </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-white/40" />
                   <input
                     id="full_name"
                     name="full_name"
                     type="text"
                     value={formData.full_name}
                     onChange={handleChange}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent transition-all"
+                    className="w-full bg-gray-50 border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-white/80 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
                   Email
                 </label>
                 <input
@@ -172,9 +172,9 @@ export default function ProfileSettingsPage() {
                   type="email"
                   value={profile?.email || ''}
                   disabled
-                  className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white/60 cursor-not-allowed"
+                  className="w-full bg-gray-100 border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-xl py-3 px-4 text-gray-500 dark:text-white/60 cursor-not-allowed"
                 />
-                <p className="text-xs text-white/40 mt-1">
+                <p className="text-xs text-gray-400 dark:text-white/40 mt-1">
                   Email cannot be changed
                 </p>
               </div>
@@ -182,32 +182,32 @@ export default function ProfileSettingsPage() {
           </div>
 
           {/* Company Info */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+          <div className="bg-white border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Company Information</h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="company_name" className="block text-sm font-medium text-white/80 mb-2">
+                <label htmlFor="company_name" className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
                   Company name
                 </label>
                 <div className="relative">
-                  <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                  <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-white/40" />
                   <input
                     id="company_name"
                     name="company_name"
                     type="text"
                     value={formData.company_name}
                     onChange={handleChange}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent transition-all"
+                    className="w-full bg-gray-50 border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="company_website" className="block text-sm font-medium text-white/80 mb-2">
+                <label htmlFor="company_website" className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
                   Website
                 </label>
                 <div className="relative">
-                  <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                  <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-white/40" />
                   <input
                     id="company_website"
                     name="company_website"
@@ -215,7 +215,7 @@ export default function ProfileSettingsPage() {
                     value={formData.company_website}
                     onChange={handleChange}
                     placeholder="example.com"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent transition-all"
+                    className="w-full bg-gray-50 border border-gray-200 dark:bg-white/5 dark:border-white/10 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue focus:border-transparent transition-all"
                   />
                 </div>
               </div>
@@ -225,7 +225,7 @@ export default function ProfileSettingsPage() {
           {/* Submit Button */}
           <div className="flex items-center justify-end gap-4">
             {saved && (
-              <span className="flex items-center gap-2 text-green-400 text-sm">
+              <span className="flex items-center gap-2 text-green-500 dark:text-green-400 text-sm">
                 <Check className="w-4 h-4" />
                 Changes saved
               </span>

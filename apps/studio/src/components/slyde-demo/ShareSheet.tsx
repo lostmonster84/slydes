@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Copy, Check, MessageCircle, Send, Twitter, Facebook, Instagram, Linkedin, Mail, Ghost } from 'lucide-react'
 import { useState, useCallback } from 'react'
+import { SheetHandle } from './SheetHandle'
 
 interface ShareSheetProps {
   isOpen: boolean
@@ -165,10 +166,7 @@ export function ShareSheet({
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="absolute bottom-0 left-0 right-0 bg-gray-900 rounded-t-2xl z-[60] cursor-none pointer-events-auto"
           >
-            {/* Handle */}
-            <div className="flex justify-center pt-2 pb-1">
-              <div className="w-8 h-1 bg-white/20 rounded-full" />
-            </div>
+            <SheetHandle />
 
             {/* Header */}
             <div className="flex items-center justify-between px-4 pb-3">

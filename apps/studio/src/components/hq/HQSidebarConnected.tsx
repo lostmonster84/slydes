@@ -11,16 +11,17 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, Smartphone, BarChart3, Inbox, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List } from 'lucide-react'
+import { TrendingUp, Smartphone, BarChart3, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List, HelpCircle, Map } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { FeatureSuggestionModal } from './FeatureSuggestionModal'
 import { useOrganization } from '@/hooks/useOrganization'
 import { useSlydes } from '@/hooks/useSlydes'
 import { useLists } from '@/hooks/useLists'
+import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 import { DevPanel } from '@/components/dev/DevPanel'
 
 interface HQSidebarConnectedProps {
-  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'lists' | 'analytics' | 'shop' | 'inbox' | 'brand' | 'settings'
+  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'lists' | 'faqs' | 'analytics' | 'shop' | 'brand' | 'settings'
 }
 
 export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
@@ -28,6 +29,7 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   const { organization, organizations, isLoading: orgLoading, switchOrganization } = useOrganization()
   const { slydes, isLoading: slydesLoading } = useSlydes()
   const { lists } = useLists()
+  const { data: homeSlyde } = useDemoHomeSlyde()
 
   const [collapsed, setCollapsed] = useState(false)
   const [collapsedHydrated, setCollapsedHydrated] = useState(false)
@@ -114,6 +116,7 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   const slydeCount = slydes.length
   const listCount = lists.length
   const totalItems = lists.reduce((acc, l) => acc + l.items.length, 0)
+  const faqCount = Object.values(homeSlyde.childFAQs ?? {}).reduce((acc, faqs) => acc + faqs.length, 0)
 
   // Dashboard (standalone at top)
   const dashboardItem = { id: 'dashboard', label: 'Momentum', href: '/dashboard', icon: TrendingUp }
@@ -123,13 +126,13 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
     { id: 'home-slyde', label: 'Studio', href: '/', icon: Smartphone },
     { id: 'slydes', label: 'Slydes', href: '/slydes', icon: Layers, badge: slydeCount > 0 ? slydeCount : undefined },
     { id: 'lists', label: 'Lists', href: '/lists', icon: List, badge: listCount > 0 ? listCount : undefined },
+    { id: 'faqs', label: 'FAQs', href: '/faqs', icon: HelpCircle, badge: faqCount > 0 ? faqCount : undefined },
   ]
 
   // Business tools
   const navItems: Array<{ id: string; label: string; href: string; icon: typeof BarChart3; badge?: number; comingSoon?: boolean }> = [
     { id: 'analytics', label: 'Analytics', href: '/analytics', icon: BarChart3 },
     { id: 'shop', label: 'Shop', href: '/shop', icon: ShoppingBag },
-    { id: 'inbox', label: 'Inbox', href: '/inbox', icon: Inbox, comingSoon: true },
   ]
 
   // Brand and Settings are in the account dropdown menu only

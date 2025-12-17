@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { FrameData, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
+import type { FAQItem, FAQInboxItem, FrameData, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
+import type { VideoFilterPreset, VideoSpeedPreset } from '@/lib/videoFilters'
 
 export type DemoHomeSlydeCategory = {
   id: string
@@ -30,8 +31,15 @@ export type DemoHomeSlydeCategory = {
   listId?: string
 }
 
+export type BackgroundType = 'video' | 'image'
+
 export type DemoHomeSlyde = {
+  backgroundType?: BackgroundType
   videoSrc: string
+  imageSrc?: string
+  videoFilter?: VideoFilterPreset
+  videoVignette?: boolean
+  videoSpeed?: VideoSpeedPreset
   posterSrc?: string
   categories: DemoHomeSlydeCategory[]
   primaryCta?: {
@@ -48,6 +56,10 @@ export type DemoHomeSlyde = {
   socialLinks?: SocialLinks
   // Child Slyde frames keyed by category ID
   childFrames?: Record<string, FrameData[]>
+  // Child Slyde FAQs keyed by category ID
+  childFAQs?: Record<string, FAQItem[]>
+  // FAQ Inbox - unanswered questions from customers
+  faqInbox?: FAQInboxItem[]
   // Lists - independent entities that can be connected via CTA action 'list'
   lists?: ListData[]
 }
@@ -70,6 +82,10 @@ export const DEFAULT_DEMO_HOME_SLYDE: DemoHomeSlyde = {
   socialLinks: undefined,
   // Empty child frames by default - editor populates these
   childFrames: {},
+  // Empty child FAQs by default - editor populates these
+  childFAQs: {},
+  // Empty FAQ inbox by default
+  faqInbox: [],
   // Empty lists by default - user creates these
   lists: [],
 }
@@ -90,8 +106,23 @@ export function readDemoHomeSlyde(): DemoHomeSlyde {
 
   const categories = Array.isArray(parsed.categories) ? parsed.categories : DEFAULT_DEMO_HOME_SLYDE.categories
 
+  const validFilters: VideoFilterPreset[] = ['original', 'cinematic', 'vintage', 'moody', 'warm', 'cool']
+  const parsedFilter = parsed.videoFilter as VideoFilterPreset | undefined
+  const videoFilter = parsedFilter && validFilters.includes(parsedFilter) ? parsedFilter : 'original'
+
+  const validSpeeds: VideoSpeedPreset[] = ['normal', 'slow', 'slower', 'cinematic']
+  const parsedSpeed = parsed.videoSpeed as VideoSpeedPreset | undefined
+  const videoSpeed = parsedSpeed && validSpeeds.includes(parsedSpeed) ? parsedSpeed : 'normal'
+
+  const backgroundType: BackgroundType = parsed.backgroundType === 'image' ? 'image' : 'video'
+
   return {
+    backgroundType,
     videoSrc: typeof parsed.videoSrc === 'string' && parsed.videoSrc.trim() ? parsed.videoSrc : DEFAULT_DEMO_HOME_SLYDE.videoSrc,
+    imageSrc: typeof parsed.imageSrc === 'string' && parsed.imageSrc.trim() ? parsed.imageSrc : undefined,
+    videoFilter,
+    videoVignette: typeof parsed.videoVignette === 'boolean' ? parsed.videoVignette : false,
+    videoSpeed,
     posterSrc: typeof parsed.posterSrc === 'string' && parsed.posterSrc.trim() ? parsed.posterSrc : undefined,
     categories: categories
       .filter(Boolean)
@@ -125,6 +156,12 @@ export function readDemoHomeSlyde(): DemoHomeSlyde {
     childFrames: parsed.childFrames && typeof parsed.childFrames === 'object'
       ? (parsed.childFrames as Record<string, FrameData[]>)
       : {},
+    // Parse childFAQs - stored as Record<string, FAQItem[]>
+    childFAQs: parsed.childFAQs && typeof parsed.childFAQs === 'object'
+      ? (parsed.childFAQs as Record<string, FAQItem[]>)
+      : {},
+    // Parse faqInbox - stored as FAQInboxItem[]
+    faqInbox: Array.isArray(parsed.faqInbox) ? parsed.faqInbox : [],
     // Parse lists - stored as ListData[]
     lists: Array.isArray(parsed.lists) ? parsed.lists : [],
   }
@@ -266,5 +303,172 @@ export function deleteList(listId: string) {
   writeDemoHomeSlyde({
     ...current,
     lists: (current.lists ?? []).filter(l => l.id !== listId),
+  })
+}
+
+// ============================================
+// Child FAQs Helpers
+// ============================================
+
+/**
+ * Read FAQs for a specific category from localStorage
+ */
+export function readChildFAQs(categoryId: string): FAQItem[] {
+  const current = readDemoHomeSlyde()
+  return current.childFAQs?.[categoryId] ?? []
+}
+
+/**
+ * Write FAQs for a specific category to localStorage
+ */
+export function writeChildFAQs(categoryId: string, faqs: FAQItem[]) {
+  const current = readDemoHomeSlyde()
+  writeDemoHomeSlyde({
+    ...current,
+    childFAQs: {
+      ...current.childFAQs,
+      [categoryId]: faqs,
+    },
+  })
+}
+
+/**
+ * Delete FAQs for a specific category (e.g., when category is deleted)
+ */
+export function deleteChildFAQs(categoryId: string) {
+  const current = readDemoHomeSlyde()
+  if (!current.childFAQs?.[categoryId]) return
+  const { [categoryId]: _, ...rest } = current.childFAQs
+  writeDemoHomeSlyde({
+    ...current,
+    childFAQs: rest,
+  })
+}
+
+// ============================================
+// FAQ Inbox Helpers
+// ============================================
+
+/**
+ * Read all inbox items
+ */
+export function readFAQInbox(): FAQInboxItem[] {
+  const current = readDemoHomeSlyde()
+  return current.faqInbox ?? []
+}
+
+/**
+ * Add a question to the inbox (when customer asks via InfoSheet)
+ */
+export function addToFAQInbox(question: string, categoryId: string, metadata?: { searchQuery?: string; frameId?: string }) {
+  const current = readDemoHomeSlyde()
+  const newItem: FAQInboxItem = {
+    id: `inbox-${Date.now()}`,
+    question,
+    categoryId,
+    askedAt: new Date().toISOString(),
+    ...metadata,
+  }
+  writeDemoHomeSlyde({
+    ...current,
+    faqInbox: [...(current.faqInbox ?? []), newItem],
+  })
+  return newItem.id
+}
+
+/**
+ * Answer an inbox question and optionally add it to FAQs
+ * Returns the new FAQ ID if addToFAQs is true
+ */
+export function answerInboxQuestion(
+  inboxItemId: string,
+  answer: string,
+  addToFAQs: boolean = true
+): string | null {
+  const current = readDemoHomeSlyde()
+  const inboxItem = current.faqInbox?.find(item => item.id === inboxItemId)
+  if (!inboxItem) return null
+
+  let newFaqId: string | null = null
+
+  // Remove from inbox
+  const updatedInbox = (current.faqInbox ?? []).filter(item => item.id !== inboxItemId)
+
+  if (addToFAQs) {
+    // Add to FAQs for this category
+    const categoryFaqs = current.childFAQs?.[inboxItem.categoryId] ?? []
+    const newFaq: FAQItem = {
+      id: `faq-${Date.now()}`,
+      question: inboxItem.question,
+      answer,
+      createdAt: new Date().toISOString(),
+      views: 0,
+      clicks: 0,
+      published: true,
+    }
+    newFaqId = newFaq.id
+
+    writeDemoHomeSlyde({
+      ...current,
+      faqInbox: updatedInbox,
+      childFAQs: {
+        ...current.childFAQs,
+        [inboxItem.categoryId]: [...categoryFaqs, newFaq],
+      },
+    })
+  } else {
+    writeDemoHomeSlyde({
+      ...current,
+      faqInbox: updatedInbox,
+    })
+  }
+
+  return newFaqId
+}
+
+/**
+ * Dismiss/ignore an inbox question without answering
+ */
+export function dismissInboxQuestion(inboxItemId: string) {
+  const current = readDemoHomeSlyde()
+  writeDemoHomeSlyde({
+    ...current,
+    faqInbox: (current.faqInbox ?? []).filter(item => item.id !== inboxItemId),
+  })
+}
+
+/**
+ * Increment FAQ view count
+ */
+export function incrementFAQViews(categoryId: string, faqId: string) {
+  const current = readDemoHomeSlyde()
+  const faqs = current.childFAQs?.[categoryId] ?? []
+  const updatedFaqs = faqs.map(faq =>
+    faq.id === faqId ? { ...faq, views: (faq.views ?? 0) + 1 } : faq
+  )
+  writeDemoHomeSlyde({
+    ...current,
+    childFAQs: {
+      ...current.childFAQs,
+      [categoryId]: updatedFaqs,
+    },
+  })
+}
+
+/**
+ * Increment FAQ click count (when expanded)
+ */
+export function incrementFAQClicks(categoryId: string, faqId: string) {
+  const current = readDemoHomeSlyde()
+  const faqs = current.childFAQs?.[categoryId] ?? []
+  const updatedFaqs = faqs.map(faq =>
+    faq.id === faqId ? { ...faq, clicks: (faq.clicks ?? 0) + 1 } : faq
+  )
+  writeDemoHomeSlyde({
+    ...current,
+    childFAQs: {
+      ...current.childFAQs,
+      [categoryId]: updatedFaqs,
+    },
   })
 }

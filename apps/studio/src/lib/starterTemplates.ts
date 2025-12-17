@@ -34,7 +34,6 @@ function createPlaceholderFrame(id: string, title: string, subtitle: string, ord
     title,
     subtitle,
     heartCount: 0,
-    faqCount: 0,
     cta: { text: 'Learn more', icon: 'view' },
     background: {
       type: 'image',

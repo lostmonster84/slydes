@@ -116,9 +116,7 @@ export function CategorySlydeView({
       <SocialActionStack
         heartCount={heartCount}
         isHearted={isHearted}
-        faqCount={12}
         onHeartTap={handleHeartTap}
-        onFAQTap={() => {}}
         onShareTap={() => {}}
         onInfoTap={() => {}}
         slideIndicator={`${frameIndex + 1}/${totalFrames}`}

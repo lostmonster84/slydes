@@ -69,7 +69,6 @@ export interface FrameData {
   rating?: number
   reviewCount?: number
   heartCount: number
-  faqCount: number
   cta?: {
     text: string
     icon: CTAIconType
@@ -229,7 +228,6 @@ export const campingFrames: FrameData[] = [
     rating: 5.0,
     reviewCount: 209,
     heartCount: 2400,
-    faqCount: 12,
     cta: { text: 'Book Now', icon: 'book', action: 'https://wildtrax.co.uk/book' },
     background: { 
       type: 'video', 
@@ -255,7 +253,6 @@ export const campingFrames: FrameData[] = [
     subtitle: 'Pop up in 60 seconds',
     badge: '🏕️ Easy Setup',
     heartCount: 1800,
-    faqCount: 8,
     cta: { text: 'See How It Works', icon: 'view', action: 'info' },
     background: { 
       type: 'video', 
@@ -287,7 +284,6 @@ export const campingFrames: FrameData[] = [
     subtitle: 'Couples • Families • Friends • Solo',
     badge: '🚗 4 Adventures',
     heartCount: 3100,
-    faqCount: 15,
     cta: { text: 'Find Your Trip', icon: 'view', action: 'https://wildtrax.co.uk/experiences' },
     background: { 
       type: 'video', 
@@ -314,7 +310,6 @@ export const campingFrames: FrameData[] = [
     subtitle: 'Everything included',
     badge: '✅ Everything Included',
     heartCount: 2900,
-    faqCount: 22,
     cta: { text: 'View Gear List', icon: 'view', action: 'info' },
     background: { 
       type: 'video', 
@@ -352,7 +347,6 @@ export const campingFrames: FrameData[] = [
     rating: 5.0,
     reviewCount: 209,
     heartCount: 4200,
-    faqCount: 6,
     cta: { text: 'Read Reviews', icon: 'view', action: 'reviews' },
     background: { 
       type: 'video', 
@@ -385,7 +379,6 @@ export const campingFrames: FrameData[] = [
     rating: 5.0,
     reviewCount: 209,
     heartCount: 5100,
-    faqCount: 18,
     cta: { text: 'View Fleet', icon: 'view', action: 'info' },
     background: { 
       type: 'video', 
@@ -414,7 +407,6 @@ export const campingFrames: FrameData[] = [
     title: '',
     subtitle: '',
     heartCount: 6300,
-    faqCount: 4,
     background: { 
       type: 'video', 
       src: '/videos/hero-defender.mp4',
@@ -434,7 +426,6 @@ export const campingFrames: FrameData[] = [
     subtitle: 'Top questions answered',
     badge: '❓ FAQs',
     heartCount: 1200,
-    faqCount: 31,
     cta: { text: 'View All FAQs', icon: 'view', action: 'faq' },
     background: { 
       type: 'video', 
@@ -464,7 +455,6 @@ export const campingFrames: FrameData[] = [
     rating: 5.0,
     reviewCount: 209,
     heartCount: 2800,
-    faqCount: 9,
     cta: { text: 'Check Availability', icon: 'book', action: 'https://wildtrax.co.uk/book' },
     background: { 
       type: 'video', 
@@ -497,7 +487,6 @@ export const campingFrames: FrameData[] = [
     subtitle: 'Your Business?',
     badge: '✨ Powered by Slydes',
     heartCount: 0,
-    faqCount: 0,
     cta: { text: 'Try Slydes', icon: 'arrow', action: 'https://slydes.io' },
     background: { 
       type: 'video', 
@@ -579,7 +568,6 @@ export const justDriveFrames: FrameData[] = [
     rating: 5.0,
     reviewCount: 156,
     heartCount: 1800,
-    faqCount: 10,
     cta: { text: 'Book Now', icon: 'book', action: 'https://wildtrax.co.uk/book' },
     background: { 
       type: 'video', 
@@ -605,7 +593,6 @@ export const justDriveFrames: FrameData[] = [
     subtitle: 'Drive. Return.',
     badge: '🚗 Simple Process',
     heartCount: 1200,
-    faqCount: 6,
     cta: { text: 'See How It Works', icon: 'view', action: 'info' },
     background: { 
       type: 'video', 
@@ -637,7 +624,6 @@ export const justDriveFrames: FrameData[] = [
     subtitle: 'NC500 • Glencoe • Isle of Skye',
     badge: '🗺️ Explore',
     heartCount: 2200,
-    faqCount: 12,
     cta: { text: 'Plan Your Route', icon: 'view', action: 'https://wildtrax.co.uk/routes' },
     background: { 
       type: 'video', 
@@ -664,7 +650,6 @@ export const justDriveFrames: FrameData[] = [
     subtitle: 'Ready to go',
     badge: '✅ Fully Equipped',
     heartCount: 1900,
-    faqCount: 15,
     cta: { text: 'View Specs', icon: 'view', action: 'info' },
     background: { 
       type: 'video', 
@@ -702,7 +687,6 @@ export const justDriveFrames: FrameData[] = [
     rating: 5.0,
     reviewCount: 156,
     heartCount: 2800,
-    faqCount: 4,
     cta: { text: 'Read Reviews', icon: 'view', action: 'reviews' },
     background: { 
       type: 'video', 
@@ -735,7 +719,6 @@ export const justDriveFrames: FrameData[] = [
     rating: 5.0,
     reviewCount: 156,
     heartCount: 3200,
-    faqCount: 14,
     cta: { text: 'View Fleet', icon: 'view', action: 'info' },
     background: { 
       type: 'video', 
@@ -764,7 +747,6 @@ export const justDriveFrames: FrameData[] = [
     title: '',
     subtitle: '',
     heartCount: 4100,
-    faqCount: 3,
     background: { 
       type: 'video', 
       src: '/videos/hero-defender.mp4',
@@ -784,7 +766,6 @@ export const justDriveFrames: FrameData[] = [
     subtitle: 'Common questions',
     badge: '❓ FAQs',
     heartCount: 900,
-    faqCount: 22,
     cta: { text: 'View All FAQs', icon: 'view', action: 'faq' },
     background: { 
       type: 'video', 
@@ -814,7 +795,6 @@ export const justDriveFrames: FrameData[] = [
     rating: 5.0,
     reviewCount: 156,
     heartCount: 2100,
-    faqCount: 7,
     cta: { text: 'Check Availability', icon: 'book', action: 'https://wildtrax.co.uk/book' },
     background: { 
       type: 'video', 
@@ -847,7 +827,6 @@ export const justDriveFrames: FrameData[] = [
     subtitle: 'Your Business?',
     badge: '✨ Powered by Slydes',
     heartCount: 0,
-    faqCount: 0,
     cta: { text: 'Try Slydes', icon: 'arrow', action: 'https://slydes.io' },
     background: { 
       type: 'video', 

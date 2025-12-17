@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { MetricCard, CurrencyIcon, UsersIcon } from '../_components/MetricCard'
 import { InfoIcon } from '../_components/InfoTooltip'
+import { PeriodSelector } from '../_components/PeriodSelector'
+import { TrendPeriod, TrendMetric, getPeriodLabel, CustomDateRange } from '@/lib/dateUtils'
 
 type RevenueData = {
   timestamp: string
@@ -42,6 +44,18 @@ type RevenueData = {
   }[]
 }
 
+type MetricsData = {
+  period: TrendPeriod
+  periodLabel: string
+  users: {
+    trend: TrendMetric
+  }
+  revenue: {
+    ordersTrend: TrendMetric
+    platformFeesTrend: TrendMetric
+  }
+}
+
 function formatCurrency(amount: number, currency: string = 'GBP'): string {
   return new Intl.NumberFormat('en-GB', {
     style: 'currency',
@@ -76,23 +90,39 @@ export default function RevenuePage() {
   }
 
   const [data, setData] = useState<RevenueData>(defaultData)
+  const [metrics, setMetrics] = useState<MetricsData | null>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [hasLoaded, setHasLoaded] = useState(false)
   const [userFilter, setUserFilter] = useState<'all' | 'pro' | 'creator' | 'free'>('all')
+  const [period, setPeriod] = useState<TrendPeriod>('wow')
+  const [customRange, setCustomRange] = useState<CustomDateRange | undefined>()
 
   const fetchData = useCallback(async () => {
     setIsRefreshing(true)
     setError(null)
     try {
-      const res = await fetch('/api/admin/revenue')
-      const json = await res.json()
-      if (!res.ok) {
-        // Combine error and message for more context
-        const errorMsg = json.message ? `${json.error}: ${json.message}` : json.error
+      let metricsUrl = `/api/admin/metrics?period=${period}`
+      if (period === 'custom' && customRange) {
+        metricsUrl += `&startDate=${customRange.startDate}&endDate=${customRange.endDate}`
+      }
+      const [revenueRes, metricsRes] = await Promise.all([
+        fetch('/api/admin/revenue'),
+        fetch(metricsUrl)
+      ])
+
+      const revenueJson = await revenueRes.json()
+      if (!revenueRes.ok) {
+        const errorMsg = revenueJson.message ? `${revenueJson.error}: ${revenueJson.message}` : revenueJson.error
         throw new Error(errorMsg || 'Failed to fetch revenue data')
       }
-      setData(json)
+      setData(revenueJson)
+
+      if (metricsRes.ok) {
+        const metricsJson = await metricsRes.json()
+        setMetrics(metricsJson)
+      }
+
       setHasLoaded(true)
     } catch (e) {
       console.error('Revenue fetch error:', e)
@@ -101,7 +131,7 @@ export default function RevenuePage() {
     } finally {
       setIsRefreshing(false)
     }
-  }, [])
+  }, [period, customRange])
 
   useEffect(() => {
     fetchData()
@@ -109,34 +139,54 @@ export default function RevenuePage() {
     return () => clearInterval(interval)
   }, [fetchData])
 
+  // Helper to format trend for MetricCard
+  const formatTrend = (trend: TrendMetric | undefined) => {
+    if (!trend) return undefined
+    return {
+      value: trend.changePercent,
+      label: `% ${getPeriodLabel(period)}`
+    }
+  }
+
   return (
     <div className="p-8 max-w-7xl">
       {/* Header - Apple HIG */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-start justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-white">Revenue</h1>
           <p className="text-[#98989d]">Subscriptions, MRR, and platform fees</p>
         </div>
-        <button
-          onClick={fetchData}
-          disabled={isRefreshing}
-          className="px-4 py-2 text-sm font-medium bg-[#3a3a3c] text-white border border-white/10 rounded-lg hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
-        >
-          <svg
-            className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <div className="flex items-center gap-3">
+          <PeriodSelector
+            value={period}
+            onChange={(newPeriod, newCustomRange) => {
+              setPeriod(newPeriod)
+              setCustomRange(newCustomRange)
+            }}
+            periodLabel={metrics?.periodLabel}
+            customRange={customRange}
+          />
+          <button
+            onClick={fetchData}
+            disabled={isRefreshing}
+            className="px-4 py-2 text-sm font-medium bg-[#3a3a3c] text-white border border-white/10 rounded-lg hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-            />
-          </svg>
-          Refresh
-        </button>
+            <svg
+              className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            Refresh
+          </button>
+        </div>
       </div>
 
       {error && (
@@ -172,6 +222,7 @@ export default function RevenuePage() {
           value={formatCurrency(data.orders.platformFees)}
           subtext={`${data.orders.total} total orders`}
           tooltip="Revenue earned from transaction fees on marketplace orders. Currently 0% - see fee projections below for potential revenue at different rates."
+          trend={formatTrend(metrics?.revenue.platformFeesTrend)}
           icon={<CurrencyIcon />}
         />
 
@@ -180,6 +231,7 @@ export default function RevenuePage() {
           value={data.subscribers.total}
           subtext={`${data.subscribers.pro} Pro · ${data.subscribers.creator} Creator`}
           tooltip="Total users with accounts. Includes Free tier (£0), Creator (£25/mo), and Pro (£50/mo). Only Pro and Creator contribute to MRR."
+          trend={formatTrend(metrics?.users.trend)}
           icon={<UsersIcon />}
           color="blue"
         />
@@ -329,6 +381,11 @@ export default function RevenuePage() {
               <InfoIcon tooltip="All completed orders across all Slydes storefronts. Each order represents a successful purchase." light />
             </div>
             <p className="text-2xl font-bold text-white">{data.orders.total}</p>
+            {metrics?.revenue.ordersTrend && (
+              <p className={`text-sm ${metrics.revenue.ordersTrend.changePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {metrics.revenue.ordersTrend.changePercent >= 0 ? '+' : ''}{metrics.revenue.ordersTrend.changePercent}% {getPeriodLabel(period)}
+              </p>
+            )}
           </div>
           <div>
             <div className="flex items-center gap-1 mb-1">

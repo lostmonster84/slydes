@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { FrameData, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
+import type { VideoFilterPreset, VideoSpeedPreset } from '@/lib/videoFilters'
 
 export type DemoHomeSlydeCategory = {
   id: string
@@ -22,8 +23,15 @@ export type DemoHomeSlydeCategory = {
   inventoryCtaText?: string
 }
 
+export type BackgroundType = 'video' | 'image'
+
 export type DemoHomeSlyde = {
+  backgroundType?: BackgroundType
   videoSrc: string
+  imageSrc?: string
+  videoFilter?: VideoFilterPreset
+  videoVignette?: boolean
+  videoSpeed?: VideoSpeedPreset
   posterSrc?: string
   categories: DemoHomeSlydeCategory[]
   primaryCta?: {
@@ -83,8 +91,23 @@ export function readDemoHomeSlyde(): DemoHomeSlyde {
 
   const categories = Array.isArray(parsed.categories) ? parsed.categories : DEFAULT_DEMO_HOME_SLYDE.categories
 
+  const validFilters: VideoFilterPreset[] = ['original', 'cinematic', 'vintage', 'moody', 'warm', 'cool']
+  const parsedFilter = parsed.videoFilter as VideoFilterPreset | undefined
+  const videoFilter = parsedFilter && validFilters.includes(parsedFilter) ? parsedFilter : 'original'
+
+  const validSpeeds: VideoSpeedPreset[] = ['normal', 'slow', 'slower', 'cinematic']
+  const parsedSpeed = parsed.videoSpeed as VideoSpeedPreset | undefined
+  const videoSpeed = parsedSpeed && validSpeeds.includes(parsedSpeed) ? parsedSpeed : 'normal'
+
+  const backgroundType: BackgroundType = parsed.backgroundType === 'image' ? 'image' : 'video'
+
   return {
+    backgroundType,
     videoSrc: typeof parsed.videoSrc === 'string' && parsed.videoSrc.trim() ? parsed.videoSrc : DEFAULT_DEMO_HOME_SLYDE.videoSrc,
+    imageSrc: typeof parsed.imageSrc === 'string' && parsed.imageSrc.trim() ? parsed.imageSrc : undefined,
+    videoFilter,
+    videoVignette: typeof parsed.videoVignette === 'boolean' ? parsed.videoVignette : false,
+    videoSpeed,
     posterSrc: typeof parsed.posterSrc === 'string' && parsed.posterSrc.trim() ? parsed.posterSrc : undefined,
     categories: categories
       .filter(Boolean)

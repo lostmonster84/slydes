@@ -152,9 +152,9 @@ Home Slyde (video + drawer)
 │           FRAME CONTENT                 │
 │                                         │
 │                                   [♥]   │  ← Heart (frame-level)
-│                                   [?]   │  ← FAQ → FAQSheet
 │                                   [↗]   │  ← Share → ShareSheet
-│                                   [ⓘ]   │  ← Info → InfoSheet
+│                                   [@]   │  ← Connect → ConnectSheet
+│                                   [ⓘ]   │  ← Info → InfoSheet (incl. FAQs)
 │                                   1/3   │  ← Frame indicator
 │                                         │
 │ Frame Title                             │
@@ -173,8 +173,8 @@ Home Slyde (video + drawer)
 | Back button | N/A | Shows in top-left |
 | Badge | N/A | Shows next to back button |
 | ProfilePill | Visible | **Hidden** |
-| FAQ button | Hidden | Visible |
-| Info button | Opens AboutSheet | Opens InfoSheet |
+| Connect button | Hidden | Visible (if social links exist) |
+| Info button | Opens AboutSheet | Opens InfoSheet (with FAQs) |
 | Heart | Brand-level | Frame-level |
 
 ### Navigation
@@ -506,10 +506,10 @@ No shortcuts to inventory. The grid is earned through immersion.
 
 | Button | Home Slyde | Child Slyde (Category) |
 |--------|------------|------------------------|
-| **Info (ⓘ)** | Opens **AboutSheet** (org info) | Opens **InfoSheet** (frame info) |
+| **Info (ⓘ)** | Opens **AboutSheet** (org info) | Opens **InfoSheet** (frame info + FAQs + contact) |
 | **Share** | Opens ShareSheet (home link) | Opens ShareSheet (slyde link) |
 | **Heart** | Brand-level like | Frame-level like |
-| **FAQ** | **Hidden** | Opens FAQSheet |
+| **Connect (@)** | **Hidden** | Opens ConnectSheet (social links) |
 | **Back (<)** | N/A | Returns to Home Slyde |
 | **ProfilePill** | Opens category drawer | **Hidden** |
 
@@ -523,13 +523,14 @@ No shortcuts to inventory. The grid is earned through immersion.
 
 **Why?** The Home Slyde represents the entire business.
 
-**Child Slyde**: Shows frame-specific information
+**Child Slyde**: Shows frame-specific information + FAQs + contact
 - Frame headline (e.g., "Hook Frame")
 - Frame description
 - Frame items (bullet points)
-- Collapsible business contact at bottom
+- FAQs accordion (collapsible, searchable, with "Ask a question")
+- Contact row (collapsible, phone/email/message)
 
-**Why?** Inside a Child Slyde, each frame has its own story.
+**Why?** Consolidates frame info, FAQs, and contact in one sheet. Reduces button count in SocialActionStack from 5 to 4.
 
 ### ProfilePill Logic
 
@@ -564,9 +565,38 @@ No shortcuts to inventory. The grid is earned through immersion.
 1. Header: "Frame X of Y" + frame title
 2. Frame headline & description
 3. Frame items (bullet points)
-4. Collapsible business contact (bottom) with iOS 17+ contact pills
+4. FAQs section (collapsible accordion):
+   - Search FAQs input
+   - FAQ accordion (expand/collapse each)
+   - "Ask a question" input with send button
+5. Contact row (collapsible):
+   - Call, Email, Message buttons (circular icons)
 
-**Use case**: "Tell me more about what I'm looking at"
+**Layout**:
+```
+┌─────────────────────────────────────────┐
+│              ═══                        │
+│ Frame 5 of 9                        [X] │
+│ What's Included                         │
+├─────────────────────────────────────────┤
+│ Description text...                     │
+│ • Bullet point 1                        │
+│ • Bullet point 2                        │
+├─────────────────────────────────────────┤
+│ ❓ FAQs (3)                          ▼  │  ← Collapsible
+│ ┌─────────────────────────────────────┐ │
+│ │ [Search FAQs...]                    │ │
+│ │ Do you allow dogs?               ▼  │ │
+│ │ What's included?                 ▼  │ │
+│ │ [Ask a question...]          [Send] │ │
+│ └─────────────────────────────────────┘ │
+├─────────────────────────────────────────┤
+│ 📞 Contact Business                  ▼  │  ← Collapsible
+│   [📞] [✉️] [💬]                        │
+└─────────────────────────────────────────┘
+```
+
+**Use case**: "Tell me more about what I'm looking at" + "Have a question?" + "Need to contact?"
 
 ### Contact Buttons (iOS 17+ Style)
 
@@ -605,16 +635,15 @@ Modern contact actions use horizontal pill buttons with iOS system colors:
   - Home Slyde: `slydes.io/{business-slug}`
   - Child Slyde: `slydes.io/{business-slug}/{slyde-slug}`
 
-### FAQSheet
+### ConnectSheet
 
-**Triggered by**: FAQ button on Child Slyde frames
+**Triggered by**: Connect (@) button on Child Slyde frames (only visible if social links exist)
 
 **Contents**:
-- Existing FAQs for this frame
-- "Ask a question" input
-- Business contact quick-access
+- Social links grid: Instagram, TikTok, Facebook, YouTube, Twitter/X, LinkedIn
+- Each link opens in new tab
 
-**Note**: Not available on Home Slyde (FAQ is frame-specific).
+**Note**: Hidden if no social links configured. This sheet provides quick access to all brand social media.
 
 ### CategoryDrawer
 
@@ -651,8 +680,8 @@ Child Slyde (Frame N)
     ├── Back button ──────→ Home Slyde
     ├── Tap left ─────────→ Previous Frame
     ├── Tap right ────────→ Next Frame
-    ├── Info button ──────→ InfoSheet (frame info)
-    ├── FAQ button ───────→ FAQSheet
+    ├── Info button ──────→ InfoSheet (frame info + FAQs + contact)
+    ├── Connect button ───→ ConnectSheet (social links)
     ├── Share button ─────→ ShareSheet
     └── Heart button ─────→ Toggle frame like
 ```
@@ -730,7 +759,7 @@ Click "Home Slyde" to return to Home level editing.
 
 ### CategorySlydeView.tsx
 - [x] Back button in top-left
-- [x] SocialActionStack with FAQ visible
+- [x] SocialActionStack (Heart, Share, Connect, Info - 4 buttons)
 - [x] Frame navigation (tap left/right)
 
 ### Editor (HomeSlydeEditorClient.tsx)
@@ -961,5 +990,5 @@ For deep dives into specific topics:
 ---
 
 *Document Status: CANONICAL*
-*Last Updated: December 16, 2025 - iOS HIG compliance + Commerce patterns + iOS 17+ contact buttons + Inventory grid thumbnails*
+*Last Updated: December 17, 2025 - Consolidated FAQ into InfoSheet, removed FAQSheet, SocialActionStack now 4 buttons (Heart, Share, Connect, Info)*
 *This is the master reference for Slydes platform behavior.*

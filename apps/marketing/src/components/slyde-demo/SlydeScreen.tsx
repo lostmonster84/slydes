@@ -8,14 +8,15 @@ import { RatingDisplay } from './RatingDisplay'
 import { SocialActionStack } from './SocialActionStack'
 import { ProfilePill } from './ProfilePill'
 import { CTAButton } from './CTAButton'
-import { FAQSheet } from './FAQSheet'
 import { InfoSheet } from './InfoSheet'
 import { ShareSheet } from './ShareSheet'
 import { AboutSheet } from './AboutSheet'
 import { SlydesPromoSlide } from './SlydesPromoSlide'
-import { 
-  FrameData, 
-  FAQItem, 
+import { parseVideoUrl } from '@/lib/videoUtils'
+import { getFilterStyle, VIGNETTE_STYLE, type VideoFilterPreset } from '@/lib/videoFilters'
+import {
+  FrameData,
+  FAQItem,
   BusinessInfo,
   campingFrames,
   campingFAQs,
@@ -55,6 +56,10 @@ interface SlydeScreenProps {
   context?: 'standalone' | 'category'
   /** Callback when back button is pressed (only used in category context) */
   onBack?: () => void
+  /** Video filter preset to apply */
+  videoFilter?: VideoFilterPreset
+  /** Whether to show vignette overlay */
+  videoVignette?: boolean
 }
 
 /**
@@ -90,7 +95,9 @@ export function SlydeScreen({
   analyticsSlydePublicId,
   analyticsSource,
   context = 'standalone',
-  onBack
+  onBack,
+  videoFilter = 'original',
+  videoVignette = false
 }: SlydeScreenProps) {
   const [currentFrame, setCurrentFrame] = useState(initialFrameIndex)
   const syncingFromPropRef = useRef(false)
@@ -102,8 +109,8 @@ export function SlydeScreen({
     })
     return counts
   })
-  const [showFAQ, setShowFAQ] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
+  const [showInfoWithFaqs, setShowInfoWithFaqs] = useState(false)
   const [showShare, setShowShare] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
   const [touchCursor, setTouchCursor] = useState({ x: 0, y: 0, visible: false })
@@ -263,20 +270,20 @@ export function SlydeScreen({
 
   // Auto-advance frames
   useEffect(() => {
-    if (!autoAdvance || showFAQ || showInfo || showShare || showAbout) return
-    
+    if (!autoAdvance || showInfo || showInfoWithFaqs || showShare || showAbout) return
+
     const interval = setInterval(() => {
       setCurrentFrame((prev) => (prev + 1) % frames.length)
     }, autoAdvanceInterval)
-    
+
     return () => clearInterval(interval)
-  }, [autoAdvance, autoAdvanceInterval, frames.length, showFAQ, showInfo, showShare, showAbout])
+  }, [autoAdvance, autoAdvanceInterval, frames.length, showInfo, showInfoWithFaqs, showShare, showAbout])
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (showFAQ || showInfo || showShare || showAbout) return
-      
+      if (showInfo || showInfoWithFaqs || showShare || showAbout) return
+
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
         e.preventDefault()
         setCurrentFrame((prev) => (prev + 1) % frames.length)
@@ -285,10 +292,10 @@ export function SlydeScreen({
         setCurrentFrame((prev) => (prev - 1 + frames.length) % frames.length)
       }
     }
-    
+
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [frames.length, showFAQ, showInfo, showShare, showAbout])
+  }, [frames.length, showInfo, showInfoWithFaqs, showShare, showAbout])
 
   // Handle heart tap
   const handleHeartTap = useCallback(() => {
@@ -432,7 +439,7 @@ export function SlydeScreen({
             <motion.div
               key={currentFrame}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: 1, filter: getFilterStyle(videoFilter) }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
               className="absolute inset-0 pointer-events-none"
@@ -446,31 +453,67 @@ export function SlydeScreen({
                   <div className="absolute inset-0 w-full h-full bg-black flex items-center justify-center">
                     <div className="text-white/60 text-sm">Loading video…</div>
                   </div>
-                ) : currentFrameData.background.src.includes('iframe.videodelivery.net') ? (
-                  <iframe
-                    src={currentFrameData.background.src}
-                    className="absolute inset-0 w-full h-full pointer-events-none"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    title="Video"
-                  />
-                ) : (
-                  <video
-                    src={currentFrameData.background.src}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                    ref={(el) => {
-                      // Set video start time if specified
-                      if (el && currentFrameData.background.startTime !== undefined) {
-                        el.currentTime = currentFrameData.background.startTime
-                      }
-                    }}
-                  />
-                )
+                ) : (() => {
+                  const parsed = parseVideoUrl(currentFrameData.background.src)
+                  // YouTube embed
+                  if (parsed?.type === 'youtube') {
+                    return (
+                      <iframe
+                        src={parsed.embedUrl}
+                        className="absolute inset-0 w-full h-full pointer-events-none scale-[1.5] origin-center"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        title="YouTube Video"
+                        style={{ border: 'none' }}
+                      />
+                    )
+                  }
+                  // Vimeo embed
+                  if (parsed?.type === 'vimeo') {
+                    return (
+                      <iframe
+                        src={parsed.embedUrl}
+                        className="absolute inset-0 w-full h-full pointer-events-none"
+                        allow="autoplay; fullscreen; picture-in-picture"
+                        allowFullScreen
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        title="Vimeo Video"
+                        style={{ border: 'none' }}
+                      />
+                    )
+                  }
+                  // Cloudflare Stream iframe
+                  if (currentFrameData.background.src.includes('iframe.videodelivery.net')) {
+                    return (
+                      <iframe
+                        src={currentFrameData.background.src}
+                        className="absolute inset-0 w-full h-full pointer-events-none"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        title="Video"
+                      />
+                    )
+                  }
+                  // Direct video (mp4, webm, etc.)
+                  return (
+                    <video
+                      src={currentFrameData.background.src}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                      ref={(el) => {
+                        // Set video start time if specified
+                        if (el && currentFrameData.background.startTime !== undefined) {
+                          el.currentTime = currentFrameData.background.startTime
+                        }
+                      }}
+                    />
+                  )
+                })()
               ) : (
                 <img
                   src={currentFrameData.background.src}
@@ -486,6 +529,14 @@ export function SlydeScreen({
           
           {/* Gradient overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
+
+          {/* Vignette overlay */}
+          {videoVignette && (
+            <div
+              className="absolute inset-0 pointer-events-none z-[1]"
+              style={VIGNETTE_STYLE}
+            />
+          )}
         </>
       )}
 
@@ -542,22 +593,7 @@ export function SlydeScreen({
         <SocialActionStack
           heartCount={heartCounts[currentFrameData.id] || currentFrameData.heartCount}
           isHearted={isHearted[currentFrameData.id] || false}
-          faqCount={currentFrameData.faqCount}
           onHeartTap={handleHeartTap}
-          onFAQTap={() => {
-            setShowFAQ(true)
-            if (canTrack) {
-              enqueueEvent({
-                eventType: 'faqOpen',
-                slydePublicId: analyticsSlydePublicId as string,
-                framePublicId: currentFrameData.id,
-                source: analyticsSource,
-                referrer: typeof document !== 'undefined' ? document.referrer : undefined,
-                meta: {},
-              })
-              flushAnalytics()
-            }
-          }}
           onShareTap={handleShare}
           onInfoTap={() => setShowInfo(true)}
           slideIndicator={frameIndicator}
@@ -671,26 +707,23 @@ export function SlydeScreen({
       )}
 
       {/* Bottom Sheets */}
-      <FAQSheet
-        isOpen={showFAQ}
-        onClose={() => setShowFAQ(false)}
-        faqs={faqs}
-        businessName={business.name}
-        accentColor={business.accentColor}
-        onAskQuestion={handleAskQuestion}
-      />
-
       <InfoSheet
-        isOpen={showInfo}
-        onClose={() => setShowInfo(false)}
+        isOpen={showInfo || showInfoWithFaqs}
+        onClose={() => {
+          setShowInfo(false)
+          setShowInfoWithFaqs(false)
+        }}
         business={business}
-        slideContext={{
+        frameContext={{
           current: currentFrame + 1,
           total: frames.length,
           title: currentFrameData.title || ''
         }}
-        slideContent={currentFrameData.infoContent}
-        autoExpandContact={true}
+        frameContent={currentFrameData.infoContent}
+        faqs={faqs}
+        onAskQuestion={handleAskQuestion}
+        autoExpandFaqs={showInfoWithFaqs}
+        autoExpandContact={!showInfoWithFaqs}
       />
 
       <ShareSheet

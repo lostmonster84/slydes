@@ -1,20 +1,17 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Heart, HelpCircle, Share2, Info, AtSign } from 'lucide-react'
+import { Heart, Share2, Info, AtSign } from 'lucide-react'
 import type { SocialLinks } from './frameData'
 
 interface SocialActionStackProps {
   heartCount: number
   isHearted: boolean
-  faqCount?: number
   onHeartTap: () => void
-  onFAQTap?: () => void
   onShareTap: () => void
   onConnectTap?: () => void
   onInfoTap: () => void
   slideIndicator?: string // e.g., "3/9"
-  hideFAQ?: boolean // Hide FAQ button (e.g., for Home Slyde)
   hideInfo?: boolean // Hide Info button (e.g., for Home Slyde)
   hideHeart?: boolean // Hide Heart button
   hideShare?: boolean // Hide Share button
@@ -33,21 +30,22 @@ function formatCount(count: number): string {
 
 /**
  * SocialActionStack - TikTok-style vertical action buttons
- * 
+ *
  * Buttons (top to bottom):
  * 1. Heart - Like/save with count
- * 2. FAQ - Question mark with FAQ count
- * 3. Share - Share button with label
- * 4. Connect - Social links (only if links exist)
- * 5. Info - Business info (no label)
- * 
+ * 2. Share - Share button with label
+ * 3. Connect - Social links (only if links exist)
+ * 4. Info - Business info with slide indicator
+ *
+ * Note: FAQ functionality is now integrated into InfoSheet
+ *
  * Specs:
  * - Container: absolute right-3, vertical flex, gap-5
  * - Button: 40x40px, bg-white/20 backdrop-blur-sm rounded-full
  * - Icon: 20x20px, white
  * - Label: 10px, white, medium weight
- * 
- * @see SLYDESBUILD.md for full specification
+ *
+ * @see UI-PATTERNS.md for full specification
  */
 // Check if any social links are configured
 function hasSocialLinks(links?: SocialLinks): boolean {
@@ -58,14 +56,11 @@ function hasSocialLinks(links?: SocialLinks): boolean {
 export function SocialActionStack({
   heartCount,
   isHearted,
-  faqCount,
   onHeartTap,
-  onFAQTap,
   onShareTap,
   onConnectTap,
   onInfoTap,
   slideIndicator,
-  hideFAQ = false,
   hideInfo = false,
   hideHeart = false,
   hideShare = false,
@@ -107,24 +102,6 @@ export function SocialActionStack({
         </motion.button>
       )}
 
-      {/* FAQ Button (only shown when not hidden) */}
-      {!hideFAQ && onFAQTap && (
-        <motion.button
-          className="flex flex-col items-center gap-1"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={(e) => {
-            e.stopPropagation()
-            onFAQTap()
-          }}
-        >
-          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-            <HelpCircle className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-white text-[10px] font-medium">{faqCount} FAQs</span>
-        </motion.button>
-      )}
-
       {/* Share Button */}
       {!hideShare && (
         <motion.button
@@ -163,7 +140,7 @@ export function SocialActionStack({
 
       {/* Info Button with Slide Indicator */}
       {!hideInfo && (
-        <motion.button 
+        <motion.button
           className="flex flex-col items-center gap-1"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -183,4 +160,3 @@ export function SocialActionStack({
     </div>
   )
 }
-
