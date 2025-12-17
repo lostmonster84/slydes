@@ -32,10 +32,10 @@ export default function PricingPage() {
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-future-black mb-6">
-                Pricing
+                Simple pricing. <span className="gradient-text">No surprises.</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-900 font-medium mb-4">
-                Simple pricing. No surprises.
+                Start free. Upgrade when you&apos;re ready.
               </p>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Slydes is currently in development. Pricing is set now so you know exactly what to expect when early access opens.
@@ -49,28 +49,28 @@ export default function PricingPage() {
 
         {/* Pricing Cards */}
         <section className="py-16 md:py-20 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20">
-          <div className="max-w-5xl mx-auto px-6">
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
               {/* Free Tier */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl p-8 md:p-10 border border-gray-200 shadow-sm"
+                className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 shadow-sm"
               >
-                <div className="inline-block px-3 py-1 text-xs font-semibold text-leader-blue bg-blue-50 rounded-full mb-4">
-                  Launching with
+                <div className="inline-block px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-100 rounded-full mb-4">
+                  Try the format
                 </div>
                 <h2 className="text-2xl font-bold text-future-black mb-2">Free</h2>
-                <p className="text-gray-600 mb-6">Try the format</p>
+                <p className="text-gray-600 mb-6">See how mobile attention behaves</p>
 
                 <div className="flex items-baseline gap-2 mb-6">
                   <span className="text-5xl font-bold text-future-black">£0</span>
                 </div>
 
-                <p className="text-gray-600 mb-8">
-                  The free plan lets you publish a real Slyde and experience how mobile attention behaves.
+                <p className="text-gray-600 mb-8 text-sm">
+                  Publish a real Slyde and experience the format firsthand.
                 </p>
 
                 <div className="space-y-4 mb-8">
@@ -94,7 +94,11 @@ export default function PricingPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckIcon />
-                      <span className="text-gray-700">Slydes watermark</span>
+                      <span className="text-gray-700">3 Momentum AI messages/day</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CheckIcon />
+                      <span className="text-gray-700 text-sm">Slydes watermark</span>
                     </div>
                   </div>
                 </div>
@@ -112,7 +116,7 @@ export default function PricingPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <CrossIcon />
-                      <span className="text-gray-500">Advanced media limits</span>
+                      <span className="text-gray-500">Brand customization</span>
                     </div>
                   </div>
                 </div>
@@ -124,10 +128,13 @@ export default function PricingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-2xl p-8 md:p-10 border-2 border-leader-blue shadow-lg relative"
+                className="bg-white rounded-2xl p-6 md:p-8 border-2 border-leader-blue shadow-lg relative"
               >
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-leader-blue text-white text-xs font-semibold rounded-full">
+                  Most Popular
+                </div>
                 <div className="inline-block px-3 py-1 text-xs font-semibold text-leader-blue bg-blue-50 rounded-full mb-4">
-                  Launching with
+                  For lead generation
                 </div>
                 <h2 className="text-2xl font-bold text-future-black mb-2">Creator</h2>
                 <p className="text-gray-600 mb-6">For people who care about results</p>
@@ -138,12 +145,12 @@ export default function PricingPage() {
                 </div>
                 <p className="text-sm text-gray-500 mb-6">or £250/year (save 17%)</p>
 
-                <p className="text-gray-600 mb-8">
+                <p className="text-gray-600 mb-8 text-sm">
                   When Slydes becomes more than an experiment.
                 </p>
 
                 <div className="space-y-4">
-                  <p className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Includes</p>
+                  <p className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Everything in Free, plus</p>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
                       <CheckIcon />
@@ -155,22 +162,105 @@ export default function PricingPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckIcon />
-                      <span className="text-gray-700">Increased video and media limits</span>
+                      <span className="text-gray-700">Brand customization</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CheckIcon />
+                      <span className="text-gray-700">Lists & inventory</span>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckIcon />
                       <div>
-                        <span className="text-gray-700">Basic analytics:</span>
+                        <span className="text-gray-700">Analytics:</span>
                         <ul className="text-gray-600 text-sm mt-1 ml-1 space-y-1">
-                          <li>• views</li>
-                          <li>• swipe depth</li>
-                          <li>• completion rate</li>
+                          <li>• Views & swipe depth</li>
+                          <li>• Completion rate</li>
+                          <li>• CTA clicks</li>
                         </ul>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckIcon />
-                      <span className="text-gray-700">Faster publishing workflows</span>
+                      <span className="text-gray-700">Enquire & Book CTAs</span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Pro Tier */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="bg-gradient-to-br from-future-black to-gray-900 rounded-2xl p-6 md:p-8 border border-gray-700 shadow-xl relative overflow-hidden"
+              >
+                {/* Glow effect */}
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-electric-cyan/20 rounded-full blur-3xl" />
+
+                <div className="relative z-10">
+                  <div className="inline-block px-3 py-1 text-xs font-semibold text-electric-cyan bg-electric-cyan/10 rounded-full mb-4">
+                    For sellers
+                  </div>
+                  <h2 className="text-2xl font-bold text-white mb-2">Pro</h2>
+                  <p className="text-white/70 mb-6">Sell directly from your Slydes</p>
+
+                  <div className="flex items-baseline gap-2 mb-2">
+                    <span className="text-5xl font-bold text-electric-cyan">£50</span>
+                    <span className="text-white/60">/ month</span>
+                  </div>
+                  <p className="text-sm text-white/50 mb-6">or £500/year (save 17%)</p>
+
+                  <p className="text-white/70 mb-8 text-sm">
+                    Full commerce with Stripe checkout built in.
+                  </p>
+
+                  <div className="space-y-4">
+                    <p className="text-sm font-semibold text-white/80 uppercase tracking-wide">Everything in Creator, plus</p>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <svg className="w-5 h-5 text-electric-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-white">Unlimited Slydes</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <svg className="w-5 h-5 text-electric-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-white">Shop & Commerce</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <svg className="w-5 h-5 text-electric-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-white">Stripe checkout</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <svg className="w-5 h-5 text-electric-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-white">Order management</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <svg className="w-5 h-5 text-electric-cyan flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <div>
+                          <span className="text-white">Advanced analytics:</span>
+                          <ul className="text-white/60 text-sm mt-1 ml-1 space-y-1">
+                            <li>• Frame-by-frame drop-off</li>
+                            <li>• Traffic sources</li>
+                            <li>• Revenue tracking</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <svg className="w-5 h-5 text-electric-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-white">Unlimited Momentum AI</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -251,8 +341,11 @@ export default function PricingPage() {
               <p className="text-lg text-gray-600 mb-2">
                 If you&apos;re curious, start with early access.
               </p>
-              <p className="text-lg text-gray-600 mb-8">
+              <p className="text-lg text-gray-600 mb-2">
                 If attention matters, Creator will be the right plan.
+              </p>
+              <p className="text-lg text-gray-600 mb-8">
+                If you sell products, Pro unlocks commerce.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

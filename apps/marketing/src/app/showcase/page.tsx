@@ -318,20 +318,19 @@ export default function ShowcasePage() {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <h2 className="mb-4">Ready to transform your mobile presence?</h2>
+              <h2 className="mb-4">Ready to build yours?</h2>
               <p className="text-gray-600 mb-8 max-w-xl mx-auto">
-                Join our Founding Partners and earn 25% commission for life 
-                on every subscriber you refer.
+                Start free. No credit card. Live in minutes.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/founding-member">
+                <Link href="/#waitlist">
                   <Button size="lg">
-                    Become a Partner
+                    Get early access
                   </Button>
                 </Link>
                 <Link href="/how-it-works">
                   <Button variant="secondary" size="lg">
-                    See How It Works
+                    See how it works
                   </Button>
                 </Link>
               </div>

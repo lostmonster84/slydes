@@ -3,10 +3,12 @@ import { Footer } from '@/components/layout/Footer'
 import { Hero } from '@/components/sections/Hero'
 import { IndustrySelector } from '@/components/sections/IndustrySelector'
 import { DashboardPreview } from '@/components/sections/DashboardPreview'
-import { HowItWorks } from '@/components/sections/HowItWorks'
 import { Features } from '@/components/sections/Features'
 import { SocialProof } from '@/components/sections/SocialProof'
 import { WaitlistSignup } from '@/components/sections/WaitlistSignup'
+import { MomentumAI } from '@/components/sections/MomentumAI'
+import { ShopPreview } from '@/components/sections/ShopPreview'
+import { AnalyticsPreview } from '@/components/sections/AnalyticsPreview'
 
 export default function HomePage() {
   return (
@@ -15,9 +17,11 @@ export default function HomePage() {
       <main>
         <Hero />
         <IndustrySelector />
-        <Features />
-        <HowItWorks />
         <DashboardPreview />
+        <ShopPreview />
+        <MomentumAI />
+        <Features />
+        <AnalyticsPreview />
         <SocialProof />
         <WaitlistSignup />
       </main>

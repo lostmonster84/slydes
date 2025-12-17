@@ -18,16 +18,16 @@ export function SocialProof() {
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
         >
           <div className="text-center">
-            <div className="text-4xl font-bold gradient-text mb-2">Minutes</div>
-            <p className="text-gray-600">to publish</p>
+            <div className="text-4xl font-bold gradient-text mb-2">&lt;5 min</div>
+            <p className="text-gray-600">from idea to live</p>
           </div>
           <div className="text-center">
-            <div className="text-4xl font-bold gradient-text mb-2">Deeper</div>
-            <p className="text-gray-600">engagement than mobile pages</p>
+            <div className="text-4xl font-bold gradient-text mb-2">68%</div>
+            <p className="text-gray-600">average completion rate</p>
           </div>
           <div className="text-center">
-            <div className="text-4xl font-bold gradient-text mb-2">Measured</div>
-            <p className="text-gray-600">by swipe depth and actions taken</p>
+            <div className="text-4xl font-bold gradient-text mb-2">Frame-level</div>
+            <p className="text-gray-600">drop-off analytics</p>
           </div>
         </motion.div>
 

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export function Features() {
   return (
-    <section className="py-12 md:py-24 relative overflow-hidden bg-[#0A0E27]">
+    <section className="py-12 md:py-24 relative overflow-hidden bg-gray-50">
       <div className="max-w-5xl mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -13,10 +13,10 @@ export function Features() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="mb-4 text-white">
+          <h2 className="mb-4 text-future-black">
             Websites are <span className="gradient-text">broken on mobile</span>.
           </h2>
-          <p className="text-white/70 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Mobile behaviour has changed. The web hasn&apos;t.<br />
             People swipe, glance, and decide. Pages make them scroll, search, and leave.
           </p>
@@ -27,7 +27,7 @@ export function Features() {
           
           {/* Hero Card - Mobile Native (spans full width on mobile, left column on desktop) */}
           <motion.div
-            className="md:row-span-2 bg-gradient-to-br from-leader-blue/20 to-purple-500/10 rounded-3xl p-6 md:p-8 border border-white/10 relative overflow-hidden group"
+            className="md:row-span-2 bg-[#0A0E27] rounded-3xl p-6 md:p-8 border border-white/10 relative overflow-hidden group"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -100,7 +100,7 @@ export function Features() {
 
           {/* Card 2 - Visual Editor */}
           <motion.div
-            className="bg-gradient-to-br from-emerald-500/10 to-transparent rounded-3xl p-6 border border-white/10 hover:border-emerald-500/30 transition-all duration-300 group relative overflow-hidden"
+            className="bg-[#0A0E27] rounded-3xl p-6 border border-white/10 hover:border-emerald-500/30 transition-all duration-300 group relative overflow-hidden"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -170,7 +170,7 @@ export function Features() {
 
           {/* Card 3 - One Click Publish */}
           <motion.div
-            className="bg-gradient-to-br from-cyan-500/10 to-transparent rounded-3xl p-6 border border-white/10 hover:border-cyan-500/30 transition-all duration-300 group relative overflow-hidden"
+            className="bg-[#0A0E27] rounded-3xl p-6 border border-white/10 hover:border-cyan-500/30 transition-all duration-300 group relative overflow-hidden"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
