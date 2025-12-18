@@ -23,7 +23,7 @@
  * CONSTX Pattern: Navigator (left) + Preview (center) + Inspector (right)
  */
 
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { useState, useCallback, useEffect, useRef, useMemo, memo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import {
   DndContext,
@@ -177,6 +177,12 @@ function getCategoryIcon(iconId: string): LucideIcon {
   return CATEGORY_ICONS.find((i) => i.id === iconId)?.Icon || Smartphone
 }
 
+// Render category icon as JSX to avoid "creating components during render" lint error
+function CategoryIcon({ iconId, className }: { iconId: string; className?: string }) {
+  const Icon = CATEGORY_ICONS.find((i) => i.id === iconId)?.Icon || Smartphone
+  return <Icon className={className} />
+}
+
 // Size classes type
 type SizeClasses = {
   text: string
@@ -247,8 +253,6 @@ function SortableSectionRow({
     opacity: isDragging ? 0.5 : 1,
   }
 
-  const IconComponent = getCategoryIcon(cat.icon)
-
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {/* Section Row - click to expand/select, hold+drag to reorder, double click name to rename */}
@@ -270,7 +274,7 @@ function SortableSectionRow({
         </div>
 
         {showCategoryIcons && (
-          <IconComponent className={`${sizes.icon} ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
+          <CategoryIcon iconId={cat.icon} className={`${sizes.icon} ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
         )}
 
         {isEditing ? (
@@ -482,6 +486,78 @@ function SortableFrameRow({
     </div>
   )
 }
+
+// List View Item component (memoized to avoid icon component creation during render)
+const ListViewItem = memo(function ListViewItem({
+  item,
+  isSelected,
+  onClick,
+}: {
+  item: {
+    id: string
+    type: 'home' | 'category' | 'categoryFrame' | 'list' | 'item' | 'itemFrame'
+    name: string
+    depth: number
+    icon: string | null
+    meta?: string
+    image?: string
+    frameIndex?: number
+  }
+  isSelected: boolean
+  onClick: () => void
+}) {
+  const paddingLeft = item.depth * 12
+  const iconClass = `w-3.5 h-3.5 shrink-0 ${
+    isSelected && item.type === 'home' ? 'text-white' : isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400 dark:text-white/40'
+  }`
+
+  return (
+    <div
+      onClick={onClick}
+      style={{ paddingLeft: `${paddingLeft + 8}px` }}
+      className={`group flex items-center gap-2 pr-2 py-1 rounded-lg text-left transition-all cursor-pointer ${
+        isSelected
+          ? item.type === 'home'
+            ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm'
+            : 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
+          : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
+      }`}
+    >
+      {/* Icon or frame number */}
+      {item.type === 'categoryFrame' || item.type === 'itemFrame' ? (
+        <div className={`w-4 h-4 rounded flex items-center justify-center text-[9px] font-bold shrink-0 ${
+          isSelected ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-white/10 text-gray-500'
+        }`}>
+          {(item.frameIndex ?? 0) + 1}
+        </div>
+      ) : item.type === 'item' && item.image ? (
+        <img src={item.image} alt="" className="w-4 h-4 rounded object-cover shrink-0" />
+      ) : item.icon === 'home' ? (
+        <HomeIcon className={iconClass} />
+      ) : item.icon ? (
+        <CategoryIcon iconId={item.icon} className={iconClass} />
+      ) : (
+        <Package className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400 dark:text-white/40'}`} />
+      )}
+
+      {/* Name */}
+      <span className="text-[11px] font-medium truncate flex-1">
+        {item.name}
+      </span>
+
+      {/* Meta badge */}
+      {item.meta && (
+        <span className={`text-[9px] shrink-0 ${
+          item.meta.includes('📦')
+            ? 'px-1 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300'
+            : 'text-gray-400 dark:text-white/40'
+        }`}>
+          {item.meta}
+        </span>
+      )}
+    </div>
+  )
+})
 
 export function UnifiedStudioEditor() {
   const searchParams = useSearchParams()
@@ -708,26 +784,31 @@ export function UnifiedStudioEditor() {
   })
 
   // =============================================
-  // ONBOARDING FLOW - Progressive pulse hints guide user through complete Slyde creation
+  // ONBOARDING FLOW - GPS-style guidance through first Slyde creation
   // =============================================
-  // Flow: Business Info → Background → Add Section → (select section) → Add Frame → (select frame) → Content → Background
+  // Principle: Always pulse the next action. If user wanders off, recalculate and guide them back.
+  // This teaches them the pattern once - after that, they're on their own.
 
   // Compute which element should pulse based on current state
   const getOnboardingPulseTarget = (): string | null => {
-    // PHASE 1: Home screen setup
+    // PHASE 1: Home screen setup (only when viewing home)
     if (selection.type === 'home') {
       // Step 1: Business Info - need brand name
       if (!brandName || brandName.trim() === '') {
-        return 'home-brand'
+        // If section is open, pulse the input; otherwise pulse the section header
+        return inspectorSections.brand ? 'home-brand-name-input' : 'home-brand-section'
       }
+
       // Step 2: Background - need video or image
       if (!videoSrc && !imageSrc) {
-        return 'home-background'
+        return inspectorSections.video ? 'home-background-input' : 'home-background-section'
       }
+
       // Step 3: Add Section - need at least one section
       if (categories.length === 0) {
         return 'add-section'
       }
+
       // Step 4: If sections exist but none have frames, pulse Add Section to hint they should click a section
       const hasAnyFrames = categories.some(cat => (childFrames[cat.id]?.length || 0) > 0)
       if (!hasAnyFrames) {
@@ -743,24 +824,25 @@ export function UnifiedStudioEditor() {
       }
     }
 
-    // PHASE 3: Frame editing - guide through content
+    // PHASE 3: Frame editing - guide through content then background
     if (selection.type === 'categoryFrame' && selection.categoryId && selection.categoryFrameId) {
       const catFramesForSelection = childFrames[selection.categoryId] || []
       const selectedFrame = catFramesForSelection.find(f => f.id === selection.categoryFrameId)
       if (selectedFrame) {
         // Step 5: Content - need title
         if (!selectedFrame.title || selectedFrame.title.trim() === '') {
-          return 'frame-content'
+          return inspectorSections.content ? 'frame-content-title-input' : 'frame-content-section'
         }
+
         // Step 6: Background - need video or image on frame
         const frameBg = selectedFrame.background
         if (!frameBg?.src || frameBg.src.trim() === '') {
-          return 'frame-background'
+          return inspectorSections.video ? 'frame-background-input' : 'frame-background-section'
         }
       }
     }
 
-    // All done! No pulse needed
+    // All done! No pulse needed - they've learned the pattern
     return null
   }
 
@@ -1783,13 +1865,6 @@ export function UnifiedStudioEditor() {
                         (item.type === 'item' && selection.type === 'item' && selection.itemId === item.itemId) ||
                         (item.type === 'itemFrame' && selection.type === 'itemFrame' && selection.itemFrameId === item.itemFrameId)
 
-                      // Get icon component
-                      const IconComponent = item.icon === 'home'
-                        ? HomeIcon
-                        : item.icon
-                          ? getCategoryIcon(item.icon)
-                          : null
-
                       // Handle click - sections stay on Home preview, frames/items switch preview
                       const handleClick = () => {
                         if (item.type === 'home') {
@@ -1816,55 +1891,13 @@ export function UnifiedStudioEditor() {
                         }
                       }
 
-                      // Indent padding based on depth
-                      const paddingLeft = item.depth * 12
-
                       return (
-                        <div
+                        <ListViewItem
                           key={item.id}
+                          item={item}
+                          isSelected={isSelected}
                           onClick={handleClick}
-                          style={{ paddingLeft: `${paddingLeft + 8}px` }}
-                          className={`group flex items-center gap-2 pr-2 py-1 rounded-lg text-left transition-all cursor-pointer ${
-                            isSelected
-                              ? item.type === 'home'
-                                ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm'
-                                : 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
-                              : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
-                          }`}
-                        >
-                          {/* Icon or frame number */}
-                          {item.type === 'categoryFrame' || item.type === 'itemFrame' ? (
-                            <div className={`w-4 h-4 rounded flex items-center justify-center text-[9px] font-bold shrink-0 ${
-                              isSelected ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-white/10 text-gray-500'
-                            }`}>
-                              {(item.frameIndex ?? 0) + 1}
-                            </div>
-                          ) : item.type === 'item' && item.image ? (
-                            <img src={item.image} alt="" className="w-4 h-4 rounded object-cover shrink-0" />
-                          ) : IconComponent ? (
-                            <IconComponent className={`w-3.5 h-3.5 shrink-0 ${
-                              isSelected && item.type === 'home' ? 'text-white' : isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400 dark:text-white/40'
-                            }`} />
-                          ) : (
-                            <Package className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400 dark:text-white/40'}`} />
-                          )}
-
-                          {/* Name */}
-                          <span className="text-[11px] font-medium truncate flex-1">
-                            {item.name}
-                          </span>
-
-                          {/* Meta badge */}
-                          {item.meta && (
-                            <span className={`text-[9px] shrink-0 ${
-                              item.meta.includes('📦')
-                                ? 'px-1 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300'
-                                : 'text-gray-400 dark:text-white/40'
-                            }`}>
-                              {item.meta}
-                            </span>
-                          )}
-                        </div>
+                        />
                       )
                     })}
                   </div>
@@ -2037,7 +2070,7 @@ export function UnifiedStudioEditor() {
                   <h3 className={`${sizes.inspectorTitle} font-semibold text-gray-900 dark:text-white`}>Home Settings</h3>
 
                   {/* Business Info Section - Identity first */}
-                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'home-brand' ? 'animate-pulse-hint' : ''}`}>
+                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'home-brand-section' ? 'animate-pulse-hint' : ''}`}>
                     <button
                       onClick={() => toggleInspectorSection('brand')}
                       className={`w-full flex items-center justify-between ${sizes.inspectorSectionPadding} bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}
@@ -2056,7 +2089,7 @@ export function UnifiedStudioEditor() {
                             type="text"
                             value={brandName}
                             onChange={(e) => setBrandName(e.target.value)}
-                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${onboardingPulseTarget === 'home-brand-name-input' ? 'animate-pulse-hint' : ''}`}
                           />
                           <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Shown on home screen and profile pill</p>
                         </div>
@@ -2119,7 +2152,7 @@ export function UnifiedStudioEditor() {
                   </div>
 
                   {/* Background Section - Visual layer */}
-                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'home-background' ? 'animate-pulse-hint' : ''}`}>
+                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'home-background-section' ? 'animate-pulse-hint' : ''}`}>
                     <button
                       onClick={() => toggleInspectorSection('video')}
                       className={`w-full flex items-center justify-between ${sizes.inspectorSectionPadding} bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}
@@ -2147,6 +2180,7 @@ export function UnifiedStudioEditor() {
                           onSpeedChange={setVideoSpeed}
                           startTime={videoStartTime}
                           onStartTimeChange={setVideoStartTime}
+                          shouldPulseInput={onboardingPulseTarget === 'home-background-input'}
                         />
                       </div>
                     )}
@@ -2693,7 +2727,7 @@ export function UnifiedStudioEditor() {
                   </div>
 
                   {/* Content Section - What does this frame say? */}
-                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'frame-content' ? 'animate-pulse-hint' : ''}`}>
+                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'frame-content-section' ? 'animate-pulse-hint' : ''}`}>
                     <button
                       onClick={() => toggleInspectorSection('content')}
                       className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
@@ -2712,7 +2746,7 @@ export function UnifiedStudioEditor() {
                             type="text"
                             value={selectedCategoryFrame.title || ''}
                             onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { title: e.target.value })}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                            className={`w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${onboardingPulseTarget === 'frame-content-title-input' ? 'animate-pulse-hint' : ''}`}
                           />
                           <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Main heading shown on this frame</p>
                         </div>
@@ -2731,7 +2765,7 @@ export function UnifiedStudioEditor() {
                   </div>
 
                   {/* Background Section - Visual layer */}
-                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'frame-background' ? 'animate-pulse-hint' : ''}`}>
+                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'frame-background-section' ? 'animate-pulse-hint' : ''}`}>
                     <button
                       onClick={() => toggleInspectorSection('video')}
                       className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
@@ -2774,6 +2808,7 @@ export function UnifiedStudioEditor() {
                           onStartTimeChange={(startTime) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
                             background: { ...selectedCategoryFrame.background, startTime }
                           })}
+                          shouldPulseInput={onboardingPulseTarget === 'frame-background-input'}
                         />
                       </div>
                     )}

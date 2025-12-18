@@ -287,20 +287,36 @@ export function useMediaUpload(): UseMediaUploadReturn {
 
       const { key, uploadURL } = await createResponse.json()
 
-      // 2. Upload file directly to R2 using presigned URL
+      // 2. Upload file directly to R2 with progress tracking
       setAudioStatus('uploading')
 
-      const uploadResponse = await fetch(uploadURL, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': file.type || 'audio/mpeg',
-        },
-        body: file,
-      })
+      // Use XMLHttpRequest to track upload progress
+      await new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
 
-      if (!uploadResponse.ok) {
-        throw new Error('Failed to upload audio to R2')
-      }
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 100)
+            setAudioProgress(percent)
+          }
+        })
+
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve()
+          } else {
+            reject(new Error('Failed to upload audio to R2'))
+          }
+        })
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Upload failed - network error'))
+        })
+
+        xhr.open('PUT', uploadURL)
+        xhr.setRequestHeader('Content-Type', file.type || 'audio/mpeg')
+        xhr.send(file)
+      })
 
       setAudioProgress(100)
       setAudioStatus('ready')

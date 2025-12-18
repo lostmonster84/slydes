@@ -52,17 +52,16 @@ const ICON_MAP: Record<string, LucideIcon> = {
   link: Link,
 }
 
-// Get Lucide icon by name
-function getIcon(name: string): LucideIcon {
-  return ICON_MAP[name] || Star
+// Render icon as JSX to avoid "creating components during render" lint error
+function SectionIcon({ name, className }: { name: string; className?: string }) {
+  const Icon = ICON_MAP[name] || Star
+  return <Icon className={className} />
 }
 
 export function SectionRow({ section, onToggle, onRename, onRemove }: SectionRowProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(section.name)
   const inputRef = useRef<HTMLInputElement>(null)
-
-  const Icon = getIcon(section.icon)
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -126,7 +125,7 @@ export function SectionRow({ section, onToggle, onRename, onRemove }: SectionRow
           : 'bg-gray-100 text-gray-400 dark:bg-white/10 dark:text-white/40'
         }
       `}>
-        <Icon className="h-4 w-4" />
+        <SectionIcon name={section.icon} className="h-4 w-4" />
       </div>
 
       {/* Name */}
