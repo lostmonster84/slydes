@@ -24,6 +24,7 @@
  */
 
 import { useState, useCallback, useEffect, useRef, useMemo, memo } from 'react'
+import confetti from 'canvas-confetti'
 import { useSearchParams } from 'next/navigation'
 import {
   DndContext,
@@ -42,7 +43,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { DevicePreview } from '@/components/slyde-demo'
+import { DevicePreview, DemoModeOverlay } from '@/components/slyde-demo'
 import { HomeSlydeScreen } from '@/components/home-slyde/HomeSlydeScreen'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
 import type { FrameData, FAQItem, BusinessInfo, CTAIconType, CTAType, ListItem, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
@@ -112,6 +113,7 @@ import {
   ArrowRight,
   Music,
   Clapperboard,
+  Play,
   type LucideIcon,
 } from 'lucide-react'
 import { Toggle } from '@/components/ui/Toggle'
@@ -217,6 +219,7 @@ function SortableSectionRow({
   setPreviewFrameIndex,
   sizes,
   children,
+  shouldPulse,
 }: {
   cat: DemoHomeSlydeCategory
   isSelected: boolean
@@ -237,6 +240,7 @@ function SortableSectionRow({
   setPreviewFrameIndex: (i: number) => void
   sizes: SizeClasses
   children?: React.ReactNode
+  shouldPulse?: boolean
 }) {
   const {
     attributes,
@@ -267,7 +271,7 @@ function SortableSectionRow({
           isSelected
             ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
             : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
-        } ${isDragging ? 'cursor-grabbing' : ''}`}
+        } ${isDragging ? 'cursor-grabbing' : ''} ${shouldPulse ? 'animate-pulse-hint' : ''}`}
       >
         <div className={`p-0.5 transition-transform ${isExpanded ? 'rotate-90' : ''}`}>
           <ChevronRight className={`${sizes.icon} ${isSelected ? 'text-blue-600 dark:text-cyan-400' : 'text-gray-400'}`} />
@@ -623,6 +627,11 @@ export function UnifiedStudioEditor() {
   const [linkCopied, setLinkCopied] = useState(false)
   const shareableLink = organization ? `slydes.io/${organization.slug}` : ''
 
+  // =============================================
+  // DEMO MODE STATE
+  // =============================================
+  const [showDemoMode, setShowDemoMode] = useState(false)
+
   const handleCopyLink = async () => {
     if (!shareableLink) return
     try {
@@ -783,6 +792,12 @@ export function UnifiedStudioEditor() {
     demoVideo: false,
   })
 
+  // Track which onboarding sections have been visited (opened at least once)
+  const [onboardingVisited, setOnboardingVisited] = useState<Record<string, boolean>>({
+    music: false,
+    demoPreview: false,
+  })
+
   // =============================================
   // ONBOARDING FLOW - GPS-style guidance through first Slyde creation
   // =============================================
@@ -795,7 +810,6 @@ export function UnifiedStudioEditor() {
     if (selection.type === 'home') {
       // Step 1: Business Info - need brand name
       if (!brandName || brandName.trim() === '') {
-        // If section is open, pulse the input; otherwise pulse the section header
         return inspectorSections.brand ? 'home-brand-name-input' : 'home-brand-section'
       }
 
@@ -804,20 +818,38 @@ export function UnifiedStudioEditor() {
         return inspectorSections.video ? 'home-background-input' : 'home-background-section'
       }
 
-      // Step 3: Add Section - need at least one section
+      // Step 3: Music - show them music section (select Slydes Demo)
+      if (!onboardingVisited.music) {
+        return inspectorSections.music ? 'home-music-selector' : 'home-music-section'
+      }
+
+      // Step 4: Add Slyde - need at least one section
       if (categories.length === 0) {
         return 'add-section'
       }
 
-      // Step 4: If sections exist but none have frames, pulse Add Section to hint they should click a section
-      const hasAnyFrames = categories.some(cat => (childFrames[cat.id]?.length || 0) > 0)
-      if (!hasAnyFrames) {
-        return 'add-section'
+      // Step 4b: Section exists but has no frames - pulse the first incomplete section to hint "click me"
+      const firstIncompleteSection = categories.find(cat => (childFrames[cat.id]?.length || 0) === 0)
+      if (firstIncompleteSection) {
+        return `section-${firstIncompleteSection.id}`
       }
     }
 
-    // PHASE 2: Category selected - need to add frames
+    // PHASE 2: Category selected - name it, subtitle, then add frames
     if (selection.type === 'category' && selection.categoryId) {
+      const cat = categories.find(c => c.id === selection.categoryId)
+
+      // Step 6: Name the section (if still default name)
+      if (cat && cat.name.startsWith('New Slyde')) {
+        return 'category-name-input'
+      }
+
+      // Step 7: Add subtitle (if empty)
+      if (cat && !cat.description?.trim()) {
+        return 'category-subtitle-input'
+      }
+
+      // Step 8: Add frame
       const selectedCatFrames = childFrames[selection.categoryId] || []
       if (selectedCatFrames.length === 0) {
         return 'add-frame'
@@ -842,6 +874,16 @@ export function UnifiedStudioEditor() {
       }
     }
 
+    // PHASE 4: Demo preview - after completing a frame
+    const hasCompleteFrame = categories.some(cat => {
+      const frames = childFrames[cat.id] || []
+      return frames.some(f => f.title?.trim() && f.background?.src?.trim())
+    })
+
+    if (hasCompleteFrame && selection.type === 'home' && !onboardingVisited.demoPreview) {
+      return 'demo-preview'
+    }
+
     // All done! No pulse needed - they've learned the pattern
     return null
   }
@@ -851,6 +893,20 @@ export function UnifiedStudioEditor() {
   const toggleInspectorSection = (section: string) => {
     setInspectorSections(prev => ({ ...prev, [section]: !prev[section] }))
   }
+
+  // Mark music as visited when they select a track (not just when they open the section)
+  useEffect(() => {
+    if (musicCustomUrl && !onboardingVisited.music) {
+      setOnboardingVisited(v => ({ ...v, music: true }))
+    }
+  }, [musicCustomUrl, onboardingVisited.music])
+
+  // Auto-expand section when onboarding needs to show add-frame button
+  useEffect(() => {
+    if (onboardingPulseTarget === 'add-frame' && selection.type === 'category' && selection.categoryId) {
+      setExpandedCategories(prev => new Set([...prev, selection.categoryId!]))
+    }
+  }, [onboardingPulseTarget, selection])
 
   // Reset inspector sections when selection type changes
   useEffect(() => {
@@ -1474,6 +1530,19 @@ export function UnifiedStudioEditor() {
               </p>
             </div>
             <div className="flex items-center gap-3">
+              {/* Demo Mode Button */}
+              <button
+                onClick={() => setShowDemoMode(true)}
+                className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all bg-gray-50 border-gray-200 hover:bg-gray-100 dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10"
+              >
+                <div className="w-6 h-6 rounded-full flex items-center justify-center bg-gradient-to-r from-purple-600 to-pink-500 text-white">
+                  <Play className="w-3 h-3 ml-0.5" />
+                </div>
+                <span className="text-sm font-medium text-gray-600 dark:text-white/70 group-hover:text-gray-900 dark:group-hover:text-white">
+                  Demo
+                </span>
+              </button>
+
               {/* Share Link Pill - Always visible */}
               {shareableLink && (
                 <button
@@ -1635,6 +1704,7 @@ export function UnifiedStudioEditor() {
                                 loadCategoryFrames={loadCategoryFrames}
                                 setPreviewFrameIndex={setPreviewFrameIndex}
                                 sizes={sizes}
+                                shouldPulse={onboardingPulseTarget === `section-${cat.id}`}
                               >
                                 {/* Category Frames (nested) */}
                                 <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleFrameDragEnd(cat.id)}>
@@ -1909,7 +1979,21 @@ export function UnifiedStudioEditor() {
             {/* PREVIEW - Phone */}
             <div className="flex-1 flex items-center justify-center bg-gray-100/50 dark:bg-[#1c1c1e]/50 relative overflow-hidden">
               <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(37,99,235,0.03),transparent_50%)]" />
-              <div className="relative z-50 isolate pointer-events-auto">
+              <div
+                className={`relative z-50 isolate pointer-events-auto ${onboardingPulseTarget === 'demo-preview' ? 'animate-pulse-hint rounded-[3rem]' : ''}`}
+                onClick={() => {
+                  // Fire confetti when user clicks the demo preview (onboarding complete!)
+                  if (onboardingPulseTarget === 'demo-preview') {
+                    confetti({
+                      particleCount: 100,
+                      spread: 70,
+                      origin: { y: 0.6 },
+                      colors: ['#2563eb', '#06b6d4', '#8b5cf6', '#ec4899'],
+                    })
+                  }
+                  setOnboardingVisited(v => ({ ...v, demoPreview: true }))
+                }}
+              >
                 <DevicePreview enableTilt={false}>
                   {/* Home Preview - shown when previewMode is 'home' OR when editing a section (sections are metadata, view in Home context) */}
                   {(previewMode === 'home' || selection.type === 'category') && (
@@ -2187,7 +2271,7 @@ export function UnifiedStudioEditor() {
                   </div>
 
                   {/* Music Section */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'home-music-section' ? 'animate-pulse-hint' : ''}`}>
                     <button
                       onClick={() => toggleInspectorSection('music')}
                       className={`w-full flex items-center justify-between ${sizes.inspectorSectionPadding} bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}
@@ -2205,6 +2289,7 @@ export function UnifiedStudioEditor() {
                           onEnabledChange={setMusicEnabled}
                           customUrl={musicCustomUrl}
                           onCustomUrlChange={setMusicCustomUrl}
+                          shouldPulse={onboardingPulseTarget === 'home-music-selector'}
                         />
                       </div>
                     )}
@@ -2545,7 +2630,7 @@ export function UnifiedStudioEditor() {
                         type="text"
                         value={selectedCategory.name}
                         onChange={(e) => updateCategory(selectedCategory.id, { name: e.target.value })}
-                        className="w-full px-3 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        className={`w-full px-3 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${onboardingPulseTarget === 'category-name-input' ? 'animate-pulse-hint' : ''}`}
                       />
                       <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">The main title shown in the sections drawer</p>
                     </div>
@@ -2557,7 +2642,7 @@ export function UnifiedStudioEditor() {
                         value={selectedCategory.description || ''}
                         onChange={(e) => updateCategory(selectedCategory.id, { description: e.target.value })}
                         placeholder="e.g. Browse our latest offers"
-                        className="w-full px-3 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        className={`w-full px-3 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${onboardingPulseTarget === 'category-subtitle-input' ? 'animate-pulse-hint' : ''}`}
                       />
                       <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Appears below the name in the drawer</p>
                     </div>
@@ -3879,6 +3964,23 @@ export function UnifiedStudioEditor() {
       {/* Ambient glow */}
       <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[180px] pointer-events-none" />
       <div className="fixed bottom-0 right-1/4 w-[520px] h-[520px] bg-cyan-500/10 rounded-full blur-[180px] pointer-events-none" />
+
+      {/* Demo Mode Overlay */}
+      <DemoModeOverlay
+        isOpen={showDemoMode}
+        onClose={() => setShowDemoMode(false)}
+        homeData={previewData}
+        categoryFrames={childFrames}
+        musicEnabled={musicEnabled}
+        musicUrl={musicCustomUrl}
+        backgroundType={backgroundType}
+        imageSrc={imageSrc}
+        videoFilter={videoFilter}
+        videoVignette={videoVignette}
+        videoSpeed={videoSpeed}
+        businessInfo={businessInfo}
+        socialLinks={socialLinks}
+      />
     </div>
   )
 }

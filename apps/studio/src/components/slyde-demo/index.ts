@@ -32,6 +32,7 @@ export { SheetHandle } from './SheetHandle'
 
 // Overlays
 export { VideoPlayerOverlay } from './VideoPlayerOverlay'
+export { DemoModeOverlay } from './DemoModeOverlay'
 
 // Special Frames
 export { SlydesPromoSlide } from './SlydesPromoSlide'

@@ -23,6 +23,8 @@ interface MusicSelectorProps {
   onCustomUrlChange: (url: string | null) => void
   /** Optional class name */
   className?: string
+  /** Whether to pulse the demo track selector for onboarding */
+  shouldPulse?: boolean
 }
 
 /**
@@ -39,6 +41,7 @@ export function MusicSelector({
   customUrl,
   onCustomUrlChange,
   className = '',
+  shouldPulse = false,
 }: MusicSelectorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const previewAudioRef = useRef<HTMLAudioElement | null>(null)
@@ -194,6 +197,8 @@ export function MusicSelector({
 
           {/* Demo track selection card - always visible */}
           <div className={`p-3 rounded-xl transition-all ${
+            shouldPulse && !isDemoTrack ? 'animate-pulse-hint' : ''
+          } ${
             isDemoTrack
               ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 dark:from-blue-500/30 dark:to-cyan-500/30 border-2 border-blue-400 dark:border-blue-500'
               : 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 border border-blue-200 dark:border-blue-500/30'
