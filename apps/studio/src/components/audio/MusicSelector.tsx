@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
-import { Music, Upload, X, Loader2, ExternalLink } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { Music, Upload, X, Loader2, ExternalLink, Send } from 'lucide-react'
 import { useMediaUpload } from '@/hooks/useMediaUpload'
 
 interface MusicSelectorProps {
@@ -31,8 +31,38 @@ export function MusicSelector({
   className = '',
 }: MusicSelectorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [showHelpModal, setShowHelpModal] = useState(false)
+  const [helpMessage, setHelpMessage] = useState('')
+  const [helpStatus, setHelpStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
 
   const { uploadAudio, audioStatus, audioProgress, audioError } = useMediaUpload()
+
+  // Send help request
+  const sendHelpRequest = async () => {
+    if (!helpMessage.trim()) return
+    setHelpStatus('sending')
+
+    try {
+      await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          category: 'editor',
+          requestType: 'feature',
+          title: 'Music help request',
+          description: helpMessage,
+        }),
+      })
+      setHelpStatus('sent')
+      setTimeout(() => {
+        setShowHelpModal(false)
+        setHelpMessage('')
+        setHelpStatus('idle')
+      }, 1500)
+    } catch {
+      setHelpStatus('idle')
+    }
+  }
 
   const isUploading = audioStatus === 'creating' || audioStatus === 'uploading'
 
@@ -139,19 +169,98 @@ export function MusicSelector({
             <p className="text-xs text-red-500 text-center">{audioError}</p>
           )}
 
-          {/* Suno tip */}
-          <a
-            href="https://suno.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 py-2 px-3 bg-gradient-to-r from-purple-500/10 to-pink-500/10 dark:from-purple-500/20 dark:to-pink-500/20 border border-purple-200 dark:border-purple-800/50 rounded-lg hover:from-purple-500/20 hover:to-pink-500/20 dark:hover:from-purple-500/30 dark:hover:to-pink-500/30 transition-colors group"
-          >
-            <span className="text-xs text-purple-700 dark:text-purple-300">
-              Create custom tracks with AI
-            </span>
-            <ExternalLink className="w-3 h-3 text-purple-500 dark:text-purple-400 group-hover:translate-x-0.5 transition-transform" />
-          </a>
+          {/* Suno recommendation */}
+          <div className="p-3 bg-gradient-to-r from-purple-500/10 to-pink-500/10 dark:from-purple-500/20 dark:to-pink-500/20 border border-purple-200 dark:border-purple-800/50 rounded-lg">
+            <p className="text-xs text-purple-700 dark:text-purple-300 mb-2">
+              Next-gen AI music. Create the perfect vibe for your Slyde.
+            </p>
+            <a
+              href="https://suno.com/invite/@slydes"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 py-2 px-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-md hover:from-purple-700 hover:to-pink-700 transition-colors group"
+            >
+              <span className="text-xs font-medium text-white">
+                Create with Suno
+              </span>
+              <ExternalLink className="w-3 h-3 text-white/80 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+            <p className="text-[10px] text-purple-600/70 dark:text-purple-400/60 text-center mt-2">
+              Need help finding your vibe?{' '}
+              <button
+                onClick={() => setShowHelpModal(true)}
+                className="underline hover:text-purple-700 dark:hover:text-purple-300"
+              >
+                Reach out
+              </button>
+            </p>
+          </div>
         </div>
+      )}
+
+      {/* Help modal */}
+      {showHelpModal && (
+        <>
+          <div
+            className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowHelpModal(false)}
+          />
+          <div className="fixed inset-0 z-[101] flex items-center justify-center p-4">
+            <div
+              className="w-full max-w-sm bg-white dark:bg-[#2c2c2e] rounded-2xl shadow-2xl overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {helpStatus === 'sent' ? (
+                <div className="p-6 text-center">
+                  <div className="w-12 h-12 mx-auto rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-3">
+                    <Send className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">Sent!</p>
+                  <p className="text-xs text-gray-500 dark:text-white/50 mt-1">We'll get back to you soon</p>
+                </div>
+              ) : (
+                <>
+                  <div className="p-4 border-b border-gray-200 dark:border-white/10">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Help me find my vibe</h3>
+                      <button
+                        onClick={() => setShowHelpModal(false)}
+                        className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10"
+                      >
+                        <X className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <textarea
+                      value={helpMessage}
+                      onChange={(e) => setHelpMessage(e.target.value)}
+                      placeholder="Describe the vibe you're going for..."
+                      rows={3}
+                      autoFocus
+                      className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500/40 resize-none"
+                      style={{ fontSize: '16px' }}
+                    />
+                    <button
+                      onClick={sendHelpRequest}
+                      disabled={!helpMessage.trim() || helpStatus === 'sending'}
+                      className="mt-3 w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-medium hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                      {helpStatus === 'sending' ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          Send
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </>
       )}
     </div>
   )

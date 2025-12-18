@@ -115,10 +115,14 @@ export function PreviewLaunchStep() {
         socialLinks.facebook = `https://facebook.com/${page}`
       }
 
+      // Use uploadedUrl (Cloudflare URL) if available, fallback to previewUrl (blob URL)
+      const heroVideoUrl = state.heroContent.uploadedUrl || state.heroContent.previewUrl || ''
+      const heroImageUrl = state.heroContent.uploadedUrl || state.heroContent.previewUrl || undefined
+
       const demoData: DemoHomeSlyde = {
         backgroundType: state.heroContent.type || 'image',
-        videoSrc: state.heroContent.type === 'video' ? (state.heroContent.previewUrl || '') : '',
-        imageSrc: state.heroContent.type === 'image' ? (state.heroContent.previewUrl || undefined) : undefined,
+        videoSrc: state.heroContent.type === 'video' ? heroVideoUrl : '',
+        imageSrc: state.heroContent.type === 'image' ? heroImageUrl : undefined,
         posterSrc: undefined,
         categories,
         primaryCta,
@@ -251,11 +255,29 @@ export function PreviewLaunchStep() {
         </div>
       )}
 
+      {/* Upload in progress warning */}
+      {state.heroContent.isUploading && (
+        <div className="rounded-xl bg-blue-50 border border-blue-200 p-4 dark:bg-blue-500/10 dark:border-blue-500/30">
+          <p className="text-sm text-blue-700 dark:text-blue-300">
+            Your hero content is still uploading. Please wait for it to finish before launching.
+          </p>
+        </div>
+      )}
+
+      {/* No sections warning */}
+      {enabledSections.length === 0 && (
+        <div className="rounded-xl bg-amber-50 border border-amber-200 p-4 dark:bg-amber-500/10 dark:border-amber-500/30">
+          <p className="text-sm text-amber-700 dark:text-amber-300">
+            Please go back and select at least one section before launching.
+          </p>
+        </div>
+      )}
+
       {/* Launch Buttons */}
       <div className="space-y-3">
         <button
           onClick={() => handleLaunch(true)}
-          disabled={isLaunching || enabledSections.length === 0}
+          disabled={isLaunching || enabledSections.length === 0 || state.heroContent.isUploading}
           className="
             flex w-full items-center justify-center gap-2 rounded-xl py-4
             text-lg font-semibold transition-all
@@ -279,7 +301,7 @@ export function PreviewLaunchStep() {
 
         <button
           onClick={() => handleLaunch(false)}
-          disabled={isLaunching || enabledSections.length === 0}
+          disabled={isLaunching || enabledSections.length === 0 || state.heroContent.isUploading}
           className="
             w-full rounded-xl border border-gray-200 bg-white py-4
             text-lg font-medium text-gray-700 transition-colors

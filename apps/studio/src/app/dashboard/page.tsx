@@ -5,7 +5,7 @@ import { X, RefreshCw, Sparkles, BarChart3, PenLine, Target, Zap } from 'lucide-
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { useSlydes, useOrganization, useMomentum } from '@/hooks'
 import { usePlan } from '@/hooks/usePlan'
-import { MomentumAI, MomentumAITrigger } from '@/components/momentum-ai'
+import { useMomentumAI } from '@/components/momentum-ai'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -24,11 +24,11 @@ import { useRouter } from 'next/navigation'
 export default function HQDashboardPage() {
   const router = useRouter()
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
-  const [showMomentumAI, setShowMomentumAI] = useState(false)
   const { slydes, isLoading: slydesLoading } = useSlydes()
   const { organization } = useOrganization()
   const { data: momentum, isLoading: momentumLoading, refetch, range, setRange } = useMomentum()
   const { plan, isFree, isPro } = usePlan()
+  const { open: openMomentumAI } = useMomentumAI()
 
   const hasSlydes = slydes.length > 0
   const hasData = momentum?.hasData ?? false
@@ -345,21 +345,21 @@ export default function HQDashboardPage() {
                               {/* Quick action chips */}
                               <div className="mt-4 flex flex-wrap gap-2">
                                 <button
-                                  onClick={() => setShowMomentumAI(true)}
+                                  onClick={openMomentumAI}
                                   className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 border border-gray-200/80 hover:border-blue-300 hover:bg-white transition-all text-sm text-gray-700 dark:bg-white/5 dark:border-white/10 dark:hover:border-blue-500/30 dark:text-white/80"
                                 >
                                   <BarChart3 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                                   How's my week?
                                 </button>
                                 <button
-                                  onClick={() => setShowMomentumAI(true)}
+                                  onClick={openMomentumAI}
                                   className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 border border-gray-200/80 hover:border-blue-300 hover:bg-white transition-all text-sm text-gray-700 dark:bg-white/5 dark:border-white/10 dark:hover:border-blue-500/30 dark:text-white/80"
                                 >
                                   <PenLine className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                                   Help me write copy
                                 </button>
                                 <button
-                                  onClick={() => setShowMomentumAI(true)}
+                                  onClick={openMomentumAI}
                                   className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 border border-gray-200/80 hover:border-blue-300 hover:bg-white transition-all text-sm text-gray-700 dark:bg-white/5 dark:border-white/10 dark:hover:border-blue-500/30 dark:text-white/80"
                                 >
                                   <Target className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -370,7 +370,7 @@ export default function HQDashboardPage() {
 
                             {/* CTA */}
                             <button
-                              onClick={() => setShowMomentumAI(true)}
+                              onClick={openMomentumAI}
                               className="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-sm hover:shadow-lg hover:shadow-blue-500/20 transition-all"
                             >
                               Try it →
@@ -567,13 +567,7 @@ export default function HQDashboardPage() {
         </div>
       )}
 
-      {/* Momentum AI */}
-      <MomentumAITrigger onClick={() => setShowMomentumAI(true)} />
-      <MomentumAI
-        isOpen={showMomentumAI}
-        onClose={() => setShowMomentumAI(false)}
-        isPro={isPro}
-      />
+      {/* Momentum AI is now provided globally via MomentumAIProvider */}
     </div>
   )
 }

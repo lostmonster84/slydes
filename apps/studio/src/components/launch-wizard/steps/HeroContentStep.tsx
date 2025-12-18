@@ -1,12 +1,84 @@
 'use client'
 
+import { useEffect, useCallback } from 'react'
 import { ArrowLeft, ImageIcon } from 'lucide-react'
 import { useWizard } from '../WizardContext'
 import { MediaUploader } from '../components/MediaUploader'
+import { useMediaUpload } from '@/hooks/useMediaUpload'
 
 export function HeroContentStep() {
   const { state, actions, canProceed } = useWizard()
   const { heroContent, template } = state
+
+  const {
+    uploadVideo,
+    videoStatus,
+    videoProgress,
+    videoError,
+    uploadImage,
+    imageStatus,
+    imageProgress,
+    imageError,
+    reset: resetUpload,
+  } = useMediaUpload()
+
+  // Determine upload state for display
+  const isUploading = videoStatus === 'uploading' || videoStatus === 'creating' || videoStatus === 'processing' ||
+                      imageStatus === 'uploading' || imageStatus === 'creating'
+  const uploadProgress = heroContent.type === 'video' ? videoProgress : imageProgress
+  const uploadError = heroContent.type === 'video' ? videoError : imageError
+
+  // Handle file selection - creates preview and starts upload
+  const handleFileSelect = useCallback(async (file: File) => {
+    // First, set the local preview immediately
+    actions.setHeroFile(file)
+
+    // Then start the upload
+    const isVideo = file.type.startsWith('video/')
+
+    try {
+      actions.setHeroContent({ isUploading: true, uploadProgress: 0, uploadError: null })
+
+      if (isVideo) {
+        // Upload video to Cloudflare Stream
+        const result = await uploadVideo(file, { maxDurationSeconds: 60 })
+
+        // Store the HLS playback URL
+        if (result.playback?.hls) {
+          actions.setHeroContent({
+            uploadedUrl: result.playback.hls,
+            isUploading: false,
+            uploadProgress: 100,
+          })
+        }
+      } else {
+        // Upload image to Cloudflare Images
+        const result = await uploadImage(file)
+
+        // Store the image URL
+        if (result.url) {
+          actions.setHeroContent({
+            uploadedUrl: result.url,
+            isUploading: false,
+            uploadProgress: 100,
+          })
+        }
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Upload failed'
+      actions.setHeroContent({
+        isUploading: false,
+        uploadError: errorMessage,
+      })
+    }
+  }, [actions, uploadVideo, uploadImage])
+
+  // Sync progress from hook to wizard state
+  useEffect(() => {
+    if (isUploading) {
+      actions.setHeroContent({ uploadProgress })
+    }
+  }, [uploadProgress, isUploading, actions])
 
   // Check if we had a file but lost the preview (session restore)
   const lostPreview = heroContent.type && !heroContent.previewUrl && !heroContent.file
@@ -37,13 +109,16 @@ export function HeroContentStep() {
 
       {/* Media Uploader */}
       <MediaUploader
-        onFileSelect={actions.setHeroFile}
+        onFileSelect={handleFileSelect}
         previewUrl={heroContent.previewUrl}
         mediaType={heroContent.type}
-        onClear={actions.clearHeroContent}
-        isUploading={heroContent.isUploading}
-        uploadProgress={heroContent.uploadProgress}
-        error={heroContent.uploadError}
+        onClear={() => {
+          actions.clearHeroContent()
+          resetUpload()
+        }}
+        isUploading={isUploading}
+        uploadProgress={uploadProgress}
+        error={uploadError || heroContent.uploadError}
       />
 
       {/* Tip */}

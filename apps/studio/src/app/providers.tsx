@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react'
 import { PlanProvider } from '@/hooks/usePlan'
+import { MomentumAIProvider } from '@/components/momentum-ai'
 
 /**
  * Client-side providers wrapper
@@ -12,7 +13,9 @@ import { PlanProvider } from '@/hooks/usePlan'
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <PlanProvider>
-      {children}
+      <MomentumAIProvider>
+        {children}
+      </MomentumAIProvider>
     </PlanProvider>
   )
 }
