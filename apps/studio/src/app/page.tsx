@@ -19,7 +19,7 @@ export default async function DashboardPage() {
       .select('id')
       .limit(1)
 
-    hasOrganization = (orgs && orgs.length > 0)
+    hasOrganization = !!(orgs && orgs.length > 0)
   }
 
   return <StudioClient hasOrganization={hasOrganization} />

@@ -1,11 +1,17 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { useDemoHomeSlyde } from './demoHomeSlyde'
 
-export type DemoBusinessId = 'wildtrax' | 'northshore' | 'cafeluna'
+/**
+ * Business State Hook
+ *
+ * Returns derived state based on actual user data (from localStorage/demoHomeSlyde).
+ * No hardcoded demo data - reflects the real state of the user's Slyde.
+ */
 
 export type DemoBusinessState = {
-  id: DemoBusinessId
+  id: string
   name: string
   domain: string
   hasSlydes: boolean
@@ -16,80 +22,31 @@ export type DemoBusinessState = {
   hasAnalyticsData: boolean
 }
 
-const STORAGE_KEY = 'slydes_demo_business'
+export function useDemoBusiness(): DemoBusinessState {
+  const { data: homeSlyde, hydrated } = useDemoHomeSlyde()
 
-const DEMO_BUSINESS_STATE: Record<DemoBusinessId, DemoBusinessState> = {
-  wildtrax: {
-    id: 'wildtrax',
-    name: 'WildTrax',
-    domain: 'wildtrax.slydes.io',
-    hasSlydes: true,
-    slydesCount: 2,
-    framesTotal: 12,
-    hasEnquiries: true,
-    enquiriesCount: 3,
-    hasAnalyticsData: true,
-  },
-  // “New signup” business: empty across the board
-  northshore: {
-    id: 'northshore',
-    name: 'Northshore Realty',
-    domain: 'northshore.slydes.io',
-    hasSlydes: false,
-    slydesCount: 0,
-    framesTotal: 0,
-    hasEnquiries: false,
-    enquiriesCount: 0,
-    hasAnalyticsData: false,
-  },
-  // Has a Slyde but no volume yet (shows “no data yet” analytics)
-  cafeluna: {
-    id: 'cafeluna',
-    name: 'Cafe Luna',
-    domain: 'cafeluna.slydes.io',
-    hasSlydes: true,
-    slydesCount: 1,
-    framesTotal: 6,
-    hasEnquiries: false,
-    enquiriesCount: 0,
-    hasAnalyticsData: false,
-  },
-}
+  return useMemo(() => {
+    // Count categories (sections) and frames
+    const slydesCount = homeSlyde.categories.length
+    const framesTotal = Object.values(homeSlyde.childFrames || {}).reduce(
+      (sum, frames) => sum + (frames?.length ?? 0),
+      0
+    )
 
-function coerceDemoBusinessId(input: string | null): DemoBusinessId {
-  if (input === 'wildtrax' || input === 'northshore' || input === 'cafeluna') return input
-  return 'wildtrax'
-}
+    // Derive state from actual data
+    const hasSlydes = slydesCount > 0
+    const hasAnalyticsData = hasSlydes && framesTotal > 0 // Only show analytics when there's content
 
-export function useDemoBusiness() {
-  const [businessId, setBusinessId] = useState<DemoBusinessId>('wildtrax')
-
-  useEffect(() => {
-    const syncFromStorage = () => {
-      try {
-        const stored = window.localStorage.getItem(STORAGE_KEY)
-        setBusinessId(coerceDemoBusinessId(stored))
-      } catch {
-        // ignore
-      }
+    return {
+      id: 'user-business', // Generic ID for API calls
+      name: 'Your Business', // Will be replaced by org name from Supabase
+      domain: 'yourbusiness.slydes.io',
+      hasSlydes,
+      slydesCount,
+      framesTotal,
+      hasEnquiries: false, // No demo enquiries - real ones come from DB
+      enquiriesCount: 0,
+      hasAnalyticsData,
     }
-
-    syncFromStorage()
-
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === STORAGE_KEY) syncFromStorage()
-    }
-
-    window.addEventListener('storage', onStorage)
-    window.addEventListener('slydes_demo_business_change', syncFromStorage as EventListener)
-    return () => {
-      window.removeEventListener('storage', onStorage)
-      window.removeEventListener('slydes_demo_business_change', syncFromStorage as EventListener)
-    }
-  }, [])
-
-  const state = useMemo(() => DEMO_BUSINESS_STATE[businessId], [businessId])
-  return state
+  }, [homeSlyde.categories, homeSlyde.childFrames])
 }
-
-

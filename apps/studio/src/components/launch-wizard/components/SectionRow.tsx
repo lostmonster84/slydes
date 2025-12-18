@@ -1,8 +1,13 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Check, X, Pencil, GripVertical } from 'lucide-react'
-import * as LucideIcons from 'lucide-react'
+import {
+  Check, X, Pencil, GripVertical, Star,
+  Flower, Heart, Truck, Info, Utensils, Calendar, Image, Phone,
+  Scissors, Users, Package, User, Mail, Bed, Coffee, MapPin,
+  Dumbbell, CreditCard, ShoppingBag, Home, Sparkles, Briefcase,
+  type LucideIcon,
+} from 'lucide-react'
 import { type TemplateSection } from '@/lib/templates'
 
 interface SectionRowProps {
@@ -12,11 +17,36 @@ interface SectionRowProps {
   onRemove: () => void
 }
 
+// Map icon names to Lucide components
+const ICON_MAP: Record<string, LucideIcon> = {
+  flower: Flower,
+  heart: Heart,
+  truck: Truck,
+  info: Info,
+  utensils: Utensils,
+  calendar: Calendar,
+  image: Image,
+  phone: Phone,
+  scissors: Scissors,
+  users: Users,
+  package: Package,
+  user: User,
+  mail: Mail,
+  bed: Bed,
+  coffee: Coffee,
+  'map-pin': MapPin,
+  dumbbell: Dumbbell,
+  'credit-card': CreditCard,
+  'shopping-bag': ShoppingBag,
+  home: Home,
+  sparkles: Sparkles,
+  briefcase: Briefcase,
+  star: Star,
+}
+
 // Get Lucide icon by name
-function getIcon(name: string) {
-  const iconName = name.charAt(0).toUpperCase() + name.slice(1).replace(/-([a-z])/g, g => g[1].toUpperCase())
-  const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName]
-  return Icon || LucideIcons.Star
+function getIcon(name: string): LucideIcon {
+  return ICON_MAP[name] || Star
 }
 
 export function SectionRow({ section, onToggle, onRename, onRemove }: SectionRowProps) {

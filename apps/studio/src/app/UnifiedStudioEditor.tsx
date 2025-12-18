@@ -57,7 +57,7 @@ import {
   type DemoHomeSlyde,
   type DemoHomeSlydeCategory,
 } from '@/lib/demoHomeSlyde'
-import { highlandMotorsData, type HomeSlydeData } from '@/components/home-slyde/data/highlandMotorsData'
+import type { HomeSlydeData } from '@/components/home-slyde/data/highlandMotorsData'
 import {
   UploadCloud,
   Video,
@@ -522,11 +522,11 @@ export function UnifiedStudioEditor() {
   const [posterSrc, setPosterSrc] = useState(homeSlyde.posterSrc || '')
   const [brandName, setBrandName] = useState(brandProfile.businessName)
   const [tagline, setTagline] = useState(brandProfile.tagline)
-  const [rating, setRating] = useState(highlandMotorsData.rating || 4.9)
-  const [reviewCount, setReviewCount] = useState(highlandMotorsData.reviewCount || 847)
-  const [about, setAbout] = useState(highlandMotorsData.about || '')
-  const [address, setAddress] = useState(highlandMotorsData.address || '')
-  const [phone, setPhone] = useState(highlandMotorsData.phone || '')
+  const [rating, setRating] = useState(0)
+  const [reviewCount, setReviewCount] = useState(0)
+  const [about, setAbout] = useState('')
+  const [address, setAddress] = useState('')
+  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [categories, setCategories] = useState<DemoHomeSlydeCategory[]>(homeSlyde.categories)
   const [showCategoryIcons, setShowCategoryIcons] = useState(homeSlyde.showCategoryIcons ?? false)
