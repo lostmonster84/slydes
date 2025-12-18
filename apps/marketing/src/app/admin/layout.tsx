@@ -70,6 +70,12 @@ function getNavSections(badges: NavBadges): NavSection[] {
         { href: '/admin/waitlist', label: 'Waitlist', icon: 'users', badge: badges.waitlistTodayCount > 0 ? badges.waitlistTodayCount : undefined, badgeColor: 'blue' },
       ],
     },
+    {
+      label: 'Assets',
+      items: [
+        { href: '/admin/sounds', label: 'Sounds', icon: 'music' },
+      ],
+    },
   ]
 }
 
@@ -139,6 +145,12 @@ function NavIcon({ name }: { name: string }) {
       return (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+      )
+    case 'music':
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
         </svg>
       )
     default:

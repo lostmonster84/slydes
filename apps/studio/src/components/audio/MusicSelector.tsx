@@ -1,8 +1,18 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { Music, Upload, X, Loader2, ExternalLink, Send } from 'lucide-react'
+import { useRef, useState, useEffect } from 'react'
+import { Music, Upload, X, Loader2, ExternalLink, Send, Sparkles, Play, Pause, Check } from 'lucide-react'
 import { useMediaUpload } from '@/hooks/useMediaUpload'
+
+// Slydes anthem demo track - epic cinematic music that works for any business
+export const SLYDES_DEMO_TRACK_URL = 'https://pub-98abdd0a909a4a78b03fe6de579904ae.r2.dev/demo/slydesanthem.mp3'
+
+// Demo track metadata
+const DEMO_TRACK = {
+  name: 'Slydes Anthem',
+  description: 'Epic cinematic - works for any business',
+  url: SLYDES_DEMO_TRACK_URL,
+}
 
 interface MusicSelectorProps {
   /** Whether music is enabled */
@@ -31,11 +41,50 @@ export function MusicSelector({
   className = '',
 }: MusicSelectorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const previewAudioRef = useRef<HTMLAudioElement | null>(null)
   const [showHelpModal, setShowHelpModal] = useState(false)
   const [helpMessage, setHelpMessage] = useState('')
   const [helpStatus, setHelpStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
+  const [isPreviewPlaying, setIsPreviewPlaying] = useState(false)
 
   const { uploadAudio, audioStatus, audioProgress, audioError } = useMediaUpload()
+
+  // Check if current track is the demo
+  const isDemoTrack = customUrl === SLYDES_DEMO_TRACK_URL
+
+  // Clean up preview audio on unmount
+  useEffect(() => {
+    return () => {
+      if (previewAudioRef.current) {
+        previewAudioRef.current.pause()
+        previewAudioRef.current = null
+      }
+    }
+  }, [])
+
+  // Stop preview when track is selected
+  useEffect(() => {
+    if (isDemoTrack && previewAudioRef.current) {
+      previewAudioRef.current.pause()
+      previewAudioRef.current = null
+      setIsPreviewPlaying(false)
+    }
+  }, [isDemoTrack])
+
+  // Toggle preview playback
+  const togglePreview = () => {
+    if (isPreviewPlaying) {
+      previewAudioRef.current?.pause()
+      setIsPreviewPlaying(false)
+    } else {
+      if (!previewAudioRef.current) {
+        previewAudioRef.current = new Audio(DEMO_TRACK.url)
+        previewAudioRef.current.onended = () => setIsPreviewPlaying(false)
+      }
+      previewAudioRef.current.play()
+      setIsPreviewPlaying(true)
+    }
+  }
 
   // Send help request to HQ Messages
   const sendHelpRequest = async () => {
@@ -68,6 +117,12 @@ export function MusicSelector({
   }
 
   const isUploading = audioStatus === 'creating' || audioStatus === 'uploading'
+
+  // One-click handler - enables music AND loads demo
+  const useSlydesDemo = () => {
+    if (!enabled) onEnabledChange(true)
+    onCustomUrlChange(SLYDES_DEMO_TRACK_URL)
+  }
 
   // Clear selection
   const clearSelection = () => {
@@ -121,21 +176,75 @@ export function MusicSelector({
 
       {enabled && (
         <div className="space-y-3">
-          {/* Current selection */}
-          {customUrl && (
-            <div className="p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-2">
+          {/* Current selection - only show for custom (non-demo) uploads */}
+          {customUrl && !isDemoTrack && (
+            <div className="p-2 rounded-lg flex items-center gap-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
               <Music className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
-              <span className="text-sm text-green-700 dark:text-green-300 flex-1 truncate">
+              <span className="text-sm flex-1 truncate text-green-700 dark:text-green-300">
                 Custom audio
               </span>
               <button
                 onClick={clearSelection}
-                className="p-1 hover:bg-green-200 dark:hover:bg-green-800 rounded transition-colors"
+                className="p-1 rounded transition-colors hover:bg-green-200 dark:hover:bg-green-800"
               >
                 <X className="w-4 h-4 text-green-600 dark:text-green-400" />
               </button>
             </div>
           )}
+
+          {/* Demo track selection card - always visible */}
+          <div className={`p-3 rounded-xl transition-all ${
+            isDemoTrack
+              ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 dark:from-blue-500/30 dark:to-cyan-500/30 border-2 border-blue-400 dark:border-blue-500'
+              : 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 border border-blue-200 dark:border-blue-500/30'
+          }`}>
+            <div className="flex items-center gap-3">
+              {/* Play/Pause preview button */}
+              <button
+                onClick={togglePreview}
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all flex-shrink-0 ${
+                  isPreviewPlaying
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
+                    : 'bg-white dark:bg-white/10 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-white/20'
+                }`}
+              >
+                {isPreviewPlaying ? (
+                  <Pause className="w-4 h-4" />
+                ) : (
+                  <Play className="w-4 h-4 ml-0.5" />
+                )}
+              </button>
+
+              {/* Track info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                  <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                    {DEMO_TRACK.name}
+                  </span>
+                </div>
+                <p className="text-[11px] text-blue-600/70 dark:text-blue-400/60 truncate">
+                  {DEMO_TRACK.description}
+                </p>
+              </div>
+
+              {/* Selected indicator or Use button */}
+              {isDemoTrack ? (
+                <div className="px-3 py-1.5 bg-blue-600 rounded-lg text-white text-xs font-medium flex items-center gap-1.5 flex-shrink-0">
+                  <Check className="w-3.5 h-3.5" />
+                  Selected
+                </div>
+              ) : (
+                <button
+                  onClick={useSlydesDemo}
+                  className="px-3 py-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg text-white text-xs font-medium hover:from-blue-700 hover:to-cyan-600 transition-all flex items-center gap-1.5 shadow-md hover:shadow-lg flex-shrink-0"
+                >
+                  <Check className="w-3.5 h-3.5" />
+                  Use
+                </button>
+              )}
+            </div>
+          </div>
 
           {/* Upload area */}
           <button
