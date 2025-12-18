@@ -28,9 +28,7 @@ interface RoadmapItem {
   createdAt: string
 }
 
-const STORAGE_KEY = 'slydes_hq_roadmap'
-
-// API endpoint for syncing with Studio suggestions
+// API endpoint - all data persisted to Supabase
 const ROADMAP_API = '/api/admin/roadmap'
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -60,41 +58,17 @@ export default function RoadmapPage() {
   const [dropTarget, setDropTarget] = useState<RoadmapItem['status'] | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Load from localStorage + API on mount
+  // Load from API on mount
   useEffect(() => {
     const loadItems = async () => {
       try {
-        // 1. Load from localStorage first (fast)
-        const stored = localStorage.getItem(STORAGE_KEY)
-        const localItems: RoadmapItem[] = stored ? JSON.parse(stored) : []
-
-        // 2. Fetch from API (to get Studio suggestions)
-        try {
-          const res = await fetch(ROADMAP_API)
-          if (res.ok) {
-            const data = await res.json()
-            const apiItems: RoadmapItem[] = data.items || []
-
-            // 3. Merge: API items that aren't in localStorage
-            const localIds = new Set(localItems.map(i => i.id))
-            const newFromApi = apiItems.filter(i => !localIds.has(i.id))
-
-            if (newFromApi.length > 0) {
-              const merged = [...newFromApi, ...localItems]
-              setItems(merged)
-              localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
-            } else {
-              setItems(localItems)
-            }
-          } else {
-            setItems(localItems)
-          }
-        } catch {
-          // API failed, use localStorage only
-          setItems(localItems)
+        const res = await fetch(ROADMAP_API)
+        if (res.ok) {
+          const data = await res.json()
+          setItems(data.items || [])
         }
-      } catch {
-        // ignore localStorage errors
+      } catch (err) {
+        console.error('Failed to load roadmap items:', err)
       }
       setIsLoading(false)
     }
@@ -102,43 +76,71 @@ export default function RoadmapPage() {
     loadItems()
   }, [])
 
-  // Save to localStorage on change
-  useEffect(() => {
-    if (isLoading) return
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
-    } catch {
-      // ignore
-    }
-  }, [items, isLoading])
-
-  const addItem = () => {
+  const addItem = async () => {
     if (!newTitle.trim()) return
-    const newItem: RoadmapItem = {
-      id: crypto.randomUUID(),
+
+    const payload = {
       title: newTitle.trim(),
       description: newDescription.trim() || undefined,
-      status: 'planned',
       priority: newPriority,
       category: newCategory || undefined,
       requestType: newRequestType,
       source: 'manual',
-      createdAt: new Date().toISOString(),
     }
-    setItems([newItem, ...items])
+
+    // Optimistically clear form
     setNewTitle('')
     setNewDescription('')
     setNewPriority('medium')
     setNewCategory('')
     setNewRequestType('feature')
+
+    try {
+      const res = await fetch(ROADMAP_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        setItems([data.item, ...items])
+      } else {
+        console.error('Failed to add item')
+      }
+    } catch (err) {
+      console.error('Failed to add item:', err)
+    }
   }
 
-  const updateStatus = (id: string, status: RoadmapItem['status']) => {
+  const updateStatus = async (id: string, status: RoadmapItem['status']) => {
+    // Optimistic update
     setItems(items.map(item => item.id === id ? { ...item, status } : item))
+
+    try {
+      await fetch(ROADMAP_API, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status }),
+      })
+    } catch (err) {
+      console.error('Failed to update status:', err)
+      // Could revert here if needed
+    }
   }
 
-  const deleteItem = (id: string) => {
+  const deleteItem = async (id: string) => {
+    // Optimistic update
     setItems(items.filter(item => item.id !== id))
+
+    try {
+      await fetch(`${ROADMAP_API}?id=${id}`, {
+        method: 'DELETE',
+      })
+    } catch (err) {
+      console.error('Failed to delete item:', err)
+      // Could revert here if needed
+    }
   }
 
   const handleDragStart = (item: RoadmapItem) => {

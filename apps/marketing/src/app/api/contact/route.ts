@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { createSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 // Lazy init to avoid build-time errors when env var not set
 const getResend = () => new Resend(process.env.RESEND_API_KEY)
@@ -111,6 +112,22 @@ This message was sent from the Slydes contact form.
         { error: 'Failed to send message. Please try again.' },
         { status: 500 }
       )
+    }
+
+    // Also save to HQ Messages for tracking
+    try {
+      const supabase = createSupabaseAdmin()
+      await supabase.from('messages').insert({
+        type: 'contact',
+        subject: subjectLabels[subject] || subject || 'Contact Form',
+        message: message,
+        user_email: email,
+        user_name: name || null,
+        status: 'new',
+      })
+    } catch (msgErr) {
+      // Don't fail the request if message save fails
+      console.error('Failed to save to messages:', msgErr)
     }
 
     console.log('Contact form submission:', { name, email, subject })

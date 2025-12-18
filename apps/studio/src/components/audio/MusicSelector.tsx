@@ -37,20 +37,23 @@ export function MusicSelector({
 
   const { uploadAudio, audioStatus, audioProgress, audioError } = useMediaUpload()
 
-  // Send help request
+  // Send help request to HQ Messages
   const sendHelpRequest = async () => {
     if (!helpMessage.trim()) return
     setHelpStatus('sending')
 
     try {
-      await fetch('/api/feedback', {
+      const messagesUrl = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000/api/admin/messages'
+        : 'https://slydes.io/api/admin/messages'
+
+      await fetch(messagesUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          category: 'editor',
-          requestType: 'ux',
-          title: '🎵 Music vibe help request',
-          description: helpMessage,
+          type: 'music_help',
+          subject: '🎵 Music vibe help request',
+          message: helpMessage,
         }),
       })
       setHelpStatus('sent')

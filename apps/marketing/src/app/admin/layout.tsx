@@ -27,6 +27,7 @@ type NavSection = {
 type NavBadges = {
   triageCount: number
   waitlistTodayCount: number
+  messagesUnreadCount: number
   healthStatus: 'healthy' | 'degraded' | 'unhealthy' | null
 }
 
@@ -47,6 +48,7 @@ function getNavSections(badges: NavBadges): NavSection[] {
     {
       label: 'Product',
       items: [
+        { href: '/admin/messages', label: 'Messages', icon: 'messages', badge: badges.messagesUnreadCount > 0 ? badges.messagesUnreadCount : undefined, badgeColor: 'green' },
         { href: '/admin/roadmap', label: 'Roadmap', icon: 'roadmap', badge: badges.triageCount > 0 ? badges.triageCount : undefined, badgeColor: 'purple' },
       ],
     },
@@ -132,6 +134,12 @@ function NavIcon({ name }: { name: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
       )
+    case 'messages':
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+      )
     default:
       return null
   }
@@ -146,6 +154,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false)
   const [triageCount, setTriageCount] = useState(0)
   const [waitlistTodayCount, setWaitlistTodayCount] = useState(0)
+  const [messagesUnreadCount, setMessagesUnreadCount] = useState(0)
   const [healthStatus, setHealthStatus] = useState<'healthy' | 'degraded' | 'unhealthy' | null>(null)
   const pathname = usePathname()
   const router = useRouter()
@@ -217,6 +226,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         }
       } catch {
         // Ignore errors, badge just won't show
+      }
+
+      try {
+        // Fetch messages unread count
+        const messagesRes = await fetch('/api/admin/messages?status=new')
+        if (messagesRes.ok) {
+          const messagesData = await messagesRes.json()
+          setMessagesUnreadCount(messagesData.unreadCount || 0)
+        }
+      } catch {
+        // Ignore errors
       }
 
       try {
@@ -343,7 +363,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Navigation */}
         <nav className="flex-1 p-2 overflow-y-auto">
           <div className="space-y-4">
-            {getNavSections({ triageCount, waitlistTodayCount, healthStatus }).map((section, sectionIdx) => (
+            {getNavSections({ triageCount, waitlistTodayCount, messagesUnreadCount, healthStatus }).map((section, sectionIdx) => (
               <div key={sectionIdx}>
                 {section.label && !isNavCollapsed && (
                   <p className="px-3 py-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
