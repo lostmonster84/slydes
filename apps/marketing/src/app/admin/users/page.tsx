@@ -73,6 +73,10 @@ export default function UsersPage() {
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.message || 'Action failed')
+      // Show success message
+      if (json.message) {
+        alert(json.message)
+      }
       // Refresh user list
       fetchUsers()
     } catch (e) {

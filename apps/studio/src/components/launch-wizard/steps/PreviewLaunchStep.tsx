@@ -13,9 +13,13 @@ export function PreviewLaunchStep() {
   const [launchError, setLaunchError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
 
-  const slydeUrl = `https://${state.businessSetup.slug}.slydes.io`
+  // Use org slug if available (for existing orgs), otherwise use wizard state
+  const slug = organization?.slug || state.businessSetup.slug
+  const businessName = organization?.name || state.businessSetup.name
+  const slydeUrl = slug ? `https://${slug}.slydes.io` : ''
 
   const handleCopyUrl = async () => {
+    if (!slydeUrl) return
     try {
       await navigator.clipboard.writeText(slydeUrl)
       setCopied(true)
@@ -33,11 +37,29 @@ export function PreviewLaunchStep() {
       // Step 1: Create organization if it doesn't exist
       let org = organization
       if (!org) {
-        org = await createOrganization({
-          name: state.businessSetup.name,
-          slug: state.businessSetup.slug,
-          business_type: state.businessType || undefined,
-        })
+        // Validate we have required data
+        if (!state.businessSetup.name?.trim()) {
+          throw new Error('Business name is required')
+        }
+        if (!state.businessSetup.slug?.trim()) {
+          throw new Error('Business URL is required')
+        }
+
+        try {
+          org = await createOrganization({
+            name: state.businessSetup.name.trim(),
+            slug: state.businessSetup.slug.trim().toLowerCase(),
+            business_type: state.businessType || undefined,
+          })
+        } catch (createError) {
+          // Handle specific errors
+          const errorMsg = createError instanceof Error ? createError.message : 'Unknown error'
+          if (errorMsg.includes('duplicate') || errorMsg.includes('unique')) {
+            throw new Error('This URL is already taken. Please go back and choose a different one.')
+          }
+          throw new Error(`Failed to create organization: ${errorMsg}`)
+        }
+
         if (!org) {
           throw new Error('Failed to create organization')
         }
@@ -52,7 +74,12 @@ export function PreviewLaunchStep() {
         updates.tiktok_handle = state.contactInfo.tiktok.replace('@', '')
       }
       if (Object.keys(updates).length > 0) {
-        await updateOrganization(updates)
+        try {
+          await updateOrganization(updates)
+        } catch {
+          // Non-fatal: continue even if social update fails
+          console.warn('Failed to update social handles')
+        }
       }
 
       // Step 3: Build the demo data and sync to localStorage
@@ -171,7 +198,7 @@ export function PreviewLaunchStep() {
           {/* Overlay with business name */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-4 left-4 right-4">
-            <h2 className="text-xl font-bold text-white">{state.businessSetup.name}</h2>
+            <h2 className="text-xl font-bold text-white">{businessName || 'Your Business'}</h2>
             <p className="text-sm text-white/70">
               {enabledSections.length} section{enabledSections.length !== 1 ? 's' : ''}
             </p>
@@ -183,7 +210,7 @@ export function PreviewLaunchStep() {
           <div className="flex items-center gap-2 text-sm">
             <ExternalLink className="h-4 w-4 text-gray-400" />
             <span className="font-medium text-gray-900 dark:text-white">
-              {state.businessSetup.slug}.slydes.io
+              {slug ? `${slug}.slydes.io` : 'your-business.slydes.io'}
             </span>
           </div>
           <button
@@ -209,9 +236,9 @@ export function PreviewLaunchStep() {
       <div className="rounded-xl bg-gray-50 p-4 dark:bg-white/5">
         <h3 className="mb-2 text-sm font-medium text-gray-700 dark:text-white/70">Summary</h3>
         <ul className="space-y-1 text-sm text-gray-500 dark:text-white/50">
-          <li>Business: {state.businessSetup.name}</li>
-          <li>Type: {state.template?.name || 'General'}</li>
-          <li>Sections: {enabledSections.map(s => s.name).join(', ')}</li>
+          <li>Business: {businessName || 'Not set'}</li>
+          <li>Type: {state.template?.name || organization?.business_type || 'General'}</li>
+          <li>Sections: {enabledSections.length > 0 ? enabledSections.map(s => s.name).join(', ') : 'None selected'}</li>
           {state.contactInfo.phone && <li>Phone: {state.contactInfo.phone}</li>}
           {state.contactInfo.email && <li>Email: {state.contactInfo.email}</li>}
         </ul>
@@ -228,7 +255,7 @@ export function PreviewLaunchStep() {
       <div className="space-y-3">
         <button
           onClick={() => handleLaunch(true)}
-          disabled={isLaunching}
+          disabled={isLaunching || enabledSections.length === 0}
           className="
             flex w-full items-center justify-center gap-2 rounded-xl py-4
             text-lg font-semibold transition-all
@@ -252,7 +279,7 @@ export function PreviewLaunchStep() {
 
         <button
           onClick={() => handleLaunch(false)}
-          disabled={isLaunching}
+          disabled={isLaunching || enabledSections.length === 0}
           className="
             w-full rounded-xl border border-gray-200 bg-white py-4
             text-lg font-medium text-gray-700 transition-colors

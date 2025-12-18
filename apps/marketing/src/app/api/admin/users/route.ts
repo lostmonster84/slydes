@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
 
       // Send password reset email
       const { error } = await supabase.auth.resetPasswordForEmail(userData.user.email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_STUDIO_URL || 'https://studio.slydes.io'}/auth/callback?next=/settings/account`,
+        redirectTo: `${process.env.NEXT_PUBLIC_STUDIO_URL || 'https://studio.slydes.io'}/auth/callback`,
       })
 
       if (error) throw error

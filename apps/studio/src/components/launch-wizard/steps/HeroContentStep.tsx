@@ -8,6 +8,9 @@ export function HeroContentStep() {
   const { state, actions, canProceed } = useWizard()
   const { heroContent, template } = state
 
+  // Check if we had a file but lost the preview (session restore)
+  const lostPreview = heroContent.type && !heroContent.previewUrl && !heroContent.file
+
   return (
     <div className="mx-auto max-w-md space-y-8 px-4 py-8">
       {/* Header */}
@@ -22,6 +25,15 @@ export function HeroContentStep() {
           This is what people see first
         </p>
       </div>
+
+      {/* Session restore warning */}
+      {lostPreview && (
+        <div className="rounded-xl bg-amber-50 border border-amber-200 p-4 dark:bg-amber-500/10 dark:border-amber-500/30">
+          <p className="text-sm text-amber-700 dark:text-amber-300">
+            Your previously selected {heroContent.type} was not saved. Please upload it again.
+          </p>
+        </div>
+      )}
 
       {/* Media Uploader */}
       <MediaUploader
