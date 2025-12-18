@@ -18,6 +18,7 @@ export type BusinessType =
   | 'events'
   | 'car-hire'
   | 'tours'
+  | 'creator'
   | 'generic'
 
 export interface TemplateSection {
@@ -337,6 +338,34 @@ export const toursTemplate: WizardTemplate = {
   },
 }
 
+export const creatorTemplate: WizardTemplate = {
+  id: 'creator',
+  name: 'Creator / Influencer',
+  icon: '🎬',
+  description: 'Content creators, influencers, personal brands',
+
+  sections: [
+    { id: 'content', name: 'Content', icon: 'image', enabled: true },
+    { id: 'links', name: 'Links', icon: 'link', enabled: true },
+    { id: 'about', name: 'About Me', icon: 'user', enabled: true },
+    { id: 'collab', name: 'Collaborate', icon: 'mail', enabled: true },
+  ],
+
+  homeDefaults: {
+    primaryCtaText: 'Follow Me',
+    primaryCtaType: 'link', // Will use Instagram/TikTok link
+    showCategoryIcons: false,
+    showHearts: true,
+    showShare: true,
+    showSound: true,
+    showReviews: false,
+  },
+
+  placeholders: {
+    tagline: 'Creating content that inspires',
+  },
+}
+
 export const genericTemplate: WizardTemplate = {
   id: 'generic',
   name: 'Other',
@@ -380,6 +409,7 @@ export const TEMPLATES: Record<BusinessType, WizardTemplate> = {
   events: eventsTemplate,
   'car-hire': carHireTemplate,
   tours: toursTemplate,
+  creator: creatorTemplate,
   generic: genericTemplate,
 }
 
@@ -394,6 +424,7 @@ export const TEMPLATE_LIST: WizardTemplate[] = [
   eventsTemplate,
   carHireTemplate,
   toursTemplate,
+  creatorTemplate,
   genericTemplate,
 ]
 

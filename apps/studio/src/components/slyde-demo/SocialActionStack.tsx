@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Heart, Share2, Info, AtSign } from 'lucide-react'
+import { Heart, Share2, AtSign, Clapperboard } from 'lucide-react'
 import type { SocialLinks } from './frameData'
 
 interface SocialActionStackProps {
@@ -10,12 +10,11 @@ interface SocialActionStackProps {
   onHeartTap: () => void
   onShareTap: () => void
   onConnectTap?: () => void
-  onInfoTap: () => void
-  slideIndicator?: string // e.g., "3/9"
-  hideInfo?: boolean // Hide Info button (e.g., for Home Slyde)
+  onVideoTap?: () => void
   hideHeart?: boolean // Hide Heart button
   hideShare?: boolean // Hide Share button
   socialLinks?: SocialLinks // Social links - Connect button hidden if empty
+  demoVideoUrl?: string // Demo video URL - Video button hidden if empty
   className?: string
 }
 
@@ -31,13 +30,13 @@ function formatCount(count: number): string {
 /**
  * SocialActionStack - TikTok-style vertical action buttons
  *
- * Buttons (top to bottom):
+ * Pure engagement actions only (top to bottom):
  * 1. Heart - Like/save with count
  * 2. Share - Share button with label
  * 3. Connect - Social links (only if links exist)
- * 4. Info - Business info with slide indicator
+ * 4. Video - Demo video (only if demoVideoUrl exists)
  *
- * Note: FAQ functionality is now integrated into InfoSheet
+ * Note: Info button moved to top-right corner, slide indicator to bottom-right
  *
  * Specs:
  * - Container: absolute right-3, vertical flex, gap-5
@@ -59,16 +58,17 @@ export function SocialActionStack({
   onHeartTap,
   onShareTap,
   onConnectTap,
-  onInfoTap,
-  slideIndicator,
-  hideInfo = false,
+  onVideoTap,
   hideHeart = false,
   hideShare = false,
   socialLinks,
+  demoVideoUrl,
   className = ''
 }: SocialActionStackProps) {
   // Only show Connect button if social links exist
   const showConnect = hasSocialLinks(socialLinks) && onConnectTap
+  // Only show Video button if demo video URL exists
+  const showVideo = !!demoVideoUrl && onVideoTap
   return (
     <div
       className={`flex flex-col items-center gap-5 pointer-events-auto ${className}`}
@@ -138,23 +138,21 @@ export function SocialActionStack({
         </motion.button>
       )}
 
-      {/* Info Button with Slide Indicator */}
-      {!hideInfo && (
+      {/* Video/Demo Button (only if demo video URL exists) */}
+      {showVideo && (
         <motion.button
           className="flex flex-col items-center gap-1"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={(e) => {
             e.stopPropagation()
-            onInfoTap()
+            onVideoTap()
           }}
         >
           <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-            <Info className="w-5 h-5 text-white" />
+            <Clapperboard className="w-5 h-5 text-white" />
           </div>
-          {slideIndicator && (
-            <span className="text-white/50 text-[9px] font-medium">{slideIndicator}</span>
-          )}
+          <span className="text-white text-[10px] font-medium">Video</span>
         </motion.button>
       )}
     </div>

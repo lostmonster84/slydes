@@ -92,11 +92,13 @@ export function PreviewLaunchStep() {
         hasInventory: false,
       }))
 
-      // Determine primary CTA using template-first approach
+      // Determine primary CTA using template-first approach with social fallback
       const ctaType = state.template?.homeDefaults.primaryCtaType || 'call'
-      const ctaText = state.template?.homeDefaults.primaryCtaText || 'Contact Us'
+      let ctaText = state.template?.homeDefaults.primaryCtaText || 'Contact Us'
       const phone = state.contactInfo.phone?.replace(/\s/g, '')
       const email = state.contactInfo.email
+      const instagram = state.contactInfo.instagram?.replace('@', '')
+      const tiktok = state.contactInfo.tiktok?.replace('@', '')
 
       let ctaAction = '#'
       if (ctaType === 'call' && phone) {
@@ -106,11 +108,19 @@ export function PreviewLaunchStep() {
       } else if (ctaType === 'link') {
         ctaAction = '#booking' // placeholder - user sets real URL in editor
       } else if (phone) {
-        ctaAction = `tel:${phone}` // fallback to phone if available
+        ctaAction = `tel:${phone}` // fallback to phone
       } else if (email) {
         ctaAction = `mailto:${email}` // fallback to email
+      } else if (instagram) {
+        // Social-only fallback: link to Instagram
+        ctaAction = `https://instagram.com/${instagram}`
+        ctaText = 'Follow Us'
+      } else if (tiktok) {
+        // Social-only fallback: link to TikTok
+        ctaAction = `https://tiktok.com/@${tiktok}`
+        ctaText = 'Follow Us'
       }
-      // If still '#', that's okay - user can set it in editor
+      // If still '#', user can set it in editor
 
       const primaryCta = { text: ctaText, action: ctaAction }
 
@@ -259,6 +269,12 @@ export function PreviewLaunchStep() {
           <li>Sections: {enabledSections.length > 0 ? enabledSections.map(s => s.name).join(', ') : 'None selected'}</li>
           {state.contactInfo.phone && <li>Phone: {state.contactInfo.phone}</li>}
           {state.contactInfo.email && <li>Email: {state.contactInfo.email}</li>}
+          {(state.contactInfo.instagram || state.contactInfo.tiktok) && (
+            <li>Social: {[
+              state.contactInfo.instagram && `@${state.contactInfo.instagram.replace('@', '')}`,
+              state.contactInfo.tiktok && `@${state.contactInfo.tiktok.replace('@', '')}`
+            ].filter(Boolean).join(', ')}</li>
+          )}
         </ul>
       </div>
 

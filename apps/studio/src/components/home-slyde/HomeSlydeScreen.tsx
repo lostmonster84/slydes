@@ -265,7 +265,6 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
         onConnectTap={() => setConnectOpen(true)}
-        onInfoTap={() => setAboutOpen(true)}
         socialLinks={data.socialLinks}
         hideHeart={!(data.showHearts ?? true)}
         hideShare={!(data.showShare ?? true)}

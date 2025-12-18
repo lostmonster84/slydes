@@ -126,8 +126,6 @@ export function ItemSlydeView({
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => {}}
-        onInfoTap={() => {}}
-        slideIndicator={`${frameIndex + 1}/${totalFrames}`}
         className="absolute right-3 top-1/2 -translate-y-1/2 z-40"
       />
 

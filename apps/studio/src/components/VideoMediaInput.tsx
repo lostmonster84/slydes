@@ -141,6 +141,9 @@ export function VideoMediaInput({
     setShowTrimEditor(true)
   }
 
+  // Max duration for frame videos (20 seconds)
+  const MAX_FRAME_VIDEO_DURATION = 20
+
   // After trimming, upload the trimmed file
   const handleTrimComplete = async (trimmedFile: File) => {
     setShowTrimEditor(false)
@@ -148,7 +151,7 @@ export function VideoMediaInput({
     setIsUploading(true)
 
     try {
-      const result = await uploadVideo(trimmedFile)
+      const result = await uploadVideo(trimmedFile, { maxDurationSeconds: MAX_FRAME_VIDEO_DURATION })
       if (result?.playback?.hls) {
         // Use the HLS URL for Cloudflare Stream videos
         onChange(result.playback.hls)
@@ -174,7 +177,7 @@ export function VideoMediaInput({
     setIsUploading(true)
 
     try {
-      const result = await uploadVideo(pendingFile)
+      const result = await uploadVideo(pendingFile, { maxDurationSeconds: MAX_FRAME_VIDEO_DURATION })
       if (result?.playback?.hls) {
         onChange(result.playback.hls)
       }
@@ -298,6 +301,13 @@ export function VideoMediaInput({
             </div>
           </div>
         )}
+
+        {/* Helper text */}
+        {!isProcessing && (
+          <p className="mt-2 text-[11px] text-gray-500 dark:text-white/50">
+            Max {MAX_FRAME_VIDEO_DURATION} seconds. You can trim after selecting.
+          </p>
+        )}
       </div>
 
       {/* Filter Presets */}
@@ -375,7 +385,7 @@ export function VideoMediaInput({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="w-full max-w-md">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2 text-white">
                 <Scissors className="w-5 h-5" />
                 <span className="font-medium">Trim Video</span>
@@ -387,12 +397,16 @@ export function VideoMediaInput({
                 Skip trimming →
               </button>
             </div>
+            <p className="text-white/50 text-sm mb-4">
+              Select up to {MAX_FRAME_VIDEO_DURATION} seconds for your frame
+            </p>
 
             {/* Trim Editor */}
             <VideoTrimEditor
               videoFile={pendingFile}
               onTrimComplete={handleTrimComplete}
               onCancel={handleTrimCancel}
+              maxDuration={MAX_FRAME_VIDEO_DURATION}
             />
           </div>
         </div>

@@ -41,6 +41,9 @@ interface BackgroundMediaInputProps {
   // UI options
   showFilters?: boolean
   className?: string
+
+  // Context: 'home' for Home Slyde (5 min), 'frame' for frames (20 sec)
+  context?: 'home' | 'frame'
 }
 
 /**
@@ -71,6 +74,7 @@ export function BackgroundMediaInput({
   onStartTimeChange,
   showFilters = true,
   className = '',
+  context = 'home',
 }: BackgroundMediaInputProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [pendingVideoFile, setPendingVideoFile] = useState<File | null>(null)
@@ -80,6 +84,9 @@ export function BackgroundMediaInput({
   const { uploadVideo, uploadImage, videoStatus, videoProgress, imageStatus } = useMediaUpload()
 
   const isVideo = backgroundType === 'video'
+
+  // Max duration based on context: home = 5 minutes, frame = 20 seconds
+  const maxDuration = context === 'home' ? 300 : 20
 
   // Handle video file selection - show trim editor first
   const handleVideoFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +108,7 @@ export function BackgroundMediaInput({
     setIsUploading(true)
 
     try {
-      const result = await uploadVideo(trimmedFile)
+      const result = await uploadVideo(trimmedFile, { maxDurationSeconds: maxDuration })
       if (result?.playback?.hls) {
         onVideoSrcChange(result.playback.hls)
       }
@@ -126,7 +133,7 @@ export function BackgroundMediaInput({
     setIsUploading(true)
 
     try {
-      const result = await uploadVideo(pendingVideoFile)
+      const result = await uploadVideo(pendingVideoFile, { maxDurationSeconds: maxDuration })
       if (result?.playback?.hls) {
         onVideoSrcChange(result.playback.hls)
       }
@@ -254,6 +261,11 @@ export function BackgroundMediaInput({
       {/* Video Input */}
       {isVideo && (
         <div className="space-y-3">
+          <p className="text-[11px] text-gray-500 dark:text-white/50">
+            {context === 'home'
+              ? 'Make it impactful. Max 5 minutes. Pair it with epic music.'
+              : 'Max 20 seconds. You can trim after selecting.'}
+          </p>
           <div className="flex gap-2">
             <div className="flex-1 relative">
               <input
@@ -477,7 +489,7 @@ export function BackgroundMediaInput({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="w-full max-w-md">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2 text-white">
                 <Scissors className="w-5 h-5" />
                 <span className="font-medium">Trim Video</span>
@@ -489,12 +501,18 @@ export function BackgroundMediaInput({
                 Skip trimming →
               </button>
             </div>
+            <p className="text-white/50 text-sm mb-4">
+              {context === 'home'
+                ? `Select up to ${Math.floor(maxDuration / 60)} minutes for your hero video`
+                : `Select up to ${maxDuration} seconds for your frame`}
+            </p>
 
             {/* Trim Editor */}
             <VideoTrimEditor
               videoFile={pendingVideoFile}
               onTrimComplete={handleTrimComplete}
               onCancel={handleTrimCancel}
+              maxDuration={maxDuration}
             />
           </div>
         </div>

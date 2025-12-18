@@ -111,6 +111,7 @@ import {
   Mail,
   ArrowRight,
   Music,
+  Clapperboard,
   type LucideIcon,
 } from 'lucide-react'
 import { Toggle } from '@/components/ui/Toggle'
@@ -693,44 +694,104 @@ export function UnifiedStudioEditor() {
   // INSPECTOR SECTIONS STATE
   // =============================================
   const [inspectorSections, setInspectorSections] = useState<Record<string, boolean>>({
-    brand: true,
+    brand: false,
     video: false,
     music: false,
     settings: false,
     socialMedia: false,
-    content: true,
+    content: false,
     style: false,
     info: false,
     faqs: false,
     homeFaqs: false,
+    demoVideo: false,
   })
+
+  // =============================================
+  // ONBOARDING FLOW - Progressive pulse hints guide user through complete Slyde creation
+  // =============================================
+  // Flow: Business Info → Background → Add Section → (select section) → Add Frame → (select frame) → Content → Background
+
+  // Compute which element should pulse based on current state
+  const getOnboardingPulseTarget = (): string | null => {
+    // PHASE 1: Home screen setup
+    if (selection.type === 'home') {
+      // Step 1: Business Info - need brand name
+      if (!brandName || brandName.trim() === '') {
+        return 'home-brand'
+      }
+      // Step 2: Background - need video or image
+      if (!videoSrc && !imageSrc) {
+        return 'home-background'
+      }
+      // Step 3: Add Section - need at least one section
+      if (categories.length === 0) {
+        return 'add-section'
+      }
+      // Step 4: If sections exist but none have frames, pulse Add Section to hint they should click a section
+      const hasAnyFrames = categories.some(cat => (cat.frames?.length || 0) > 0)
+      if (!hasAnyFrames) {
+        return 'add-section'
+      }
+    }
+
+    // PHASE 2: Category selected - need to add frames
+    if (selection.type === 'category' && selection.categoryId) {
+      const selectedCat = categories.find(c => c.id === selection.categoryId)
+      if (selectedCat && (!selectedCat.frames || selectedCat.frames.length === 0)) {
+        return 'add-frame'
+      }
+    }
+
+    // PHASE 3: Frame editing - guide through content
+    if (selection.type === 'categoryFrame' && selection.categoryId && selection.frameId) {
+      const selectedCat = categories.find(c => c.id === selection.categoryId)
+      const selectedFrame = selectedCat?.frames?.find(f => f.id === selection.frameId)
+      if (selectedFrame) {
+        // Step 5: Content - need title
+        if (!selectedFrame.title || selectedFrame.title.trim() === '') {
+          return 'frame-content'
+        }
+        // Step 6: Background - need video or image on frame
+        const frameBg = selectedFrame.background
+        if (!frameBg?.src || frameBg.src.trim() === '') {
+          return 'frame-background'
+        }
+      }
+    }
+
+    // All done! No pulse needed
+    return null
+  }
+
+  const onboardingPulseTarget = getOnboardingPulseTarget()
 
   const toggleInspectorSection = (section: string) => {
     setInspectorSections(prev => ({ ...prev, [section]: !prev[section] }))
   }
 
-  // Reset inspector sections when selection type changes (first section open, rest closed)
+  // Reset inspector sections when selection type changes
   useEffect(() => {
     const getDefaultSections = (type: Selection['type']) => {
       switch (type) {
         case 'home':
-          // Business Info open first (identity-first), Background closed
-          return { brand: true, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          // All sections closed by default - onboarding pulse guides user
+          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false, demoVideo: false }
         case 'category':
           // Slyde name/subtitle are always visible (not in collapsible), FAQ section closed
-          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false, demoVideo: false }
         case 'categoryFrame':
         case 'itemFrame':
-          // Content open first (what does this frame say?), Background closed, Inventory collapsed (advanced feature)
-          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: true, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          // All closed - onboarding pulse guides user through Content then Background
+          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false, demoVideo: false }
         case 'list':
           // List name is always visible (not in collapsible)
-          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false, demoVideo: false }
         case 'item':
           // Item fields are always visible (not in collapsible)
-          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false, demoVideo: false }
         default:
-          return { brand: false, video: true, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          return { brand: false, video: true, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false, demoVideo: false }
       }
     }
     setInspectorSections(getDefaultSections(selection.type))
@@ -1696,7 +1757,7 @@ export function UnifiedStudioEditor() {
                           {categories.length < 6 && (
                             <button
                               onClick={addCategory}
-                              className={`w-full flex items-center justify-center gap-1.5 ${sizes.padding} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors`}
+                              className={`w-full flex items-center justify-center gap-1.5 ${sizes.padding} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors ${onboardingPulseTarget === 'add-section' ? 'animate-pulse-hint' : ''}`}
                             >
                               <Plus className={sizes.icon} />
                               <span className={`${sizes.textSmall} font-medium`}>Add section</span>
@@ -1976,7 +2037,7 @@ export function UnifiedStudioEditor() {
                   <h3 className={`${sizes.inspectorTitle} font-semibold text-gray-900 dark:text-white`}>Home Settings</h3>
 
                   {/* Business Info Section - Identity first */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'home-brand' ? 'animate-pulse-hint' : ''}`}>
                     <button
                       onClick={() => toggleInspectorSection('brand')}
                       className={`w-full flex items-center justify-between ${sizes.inspectorSectionPadding} bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}
@@ -2058,7 +2119,7 @@ export function UnifiedStudioEditor() {
                   </div>
 
                   {/* Background Section - Visual layer */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'home-background' ? 'animate-pulse-hint' : ''}`}>
                     <button
                       onClick={() => toggleInspectorSection('video')}
                       className={`w-full flex items-center justify-between ${sizes.inspectorSectionPadding} bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}
@@ -2684,6 +2745,7 @@ export function UnifiedStudioEditor() {
                     {inspectorSections.video && (
                       <div className="p-4 border-t border-gray-200 dark:border-white/10">
                         <BackgroundMediaInput
+                          context="frame"
                           backgroundType={selectedCategoryFrame.background?.type || 'video'}
                           onBackgroundTypeChange={(type) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
                             background: { ...selectedCategoryFrame.background, type }
@@ -2906,6 +2968,55 @@ export function UnifiedStudioEditor() {
                             className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none font-mono"
                           />
                         </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Demo Video Section */}
+                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                    <button
+                      onClick={() => toggleInspectorSection('demoVideo')}
+                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                    >
+                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <Clapperboard className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                        Demo Video
+                      </span>
+                      <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${inspectorSections.demoVideo ? '' : '-rotate-90'}`} />
+                    </button>
+                    {inspectorSections.demoVideo && (
+                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                        <p className="text-[12px] text-gray-500 dark:text-white/50">
+                          Add a full-length demo video. Users tap the 🎬 button to watch.
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600 dark:text-white/60">Enable demo video</span>
+                          <Toggle
+                            enabled={!!selectedCategoryFrame.demoVideoUrl}
+                            onChange={(enabled) => {
+                              if (enabled) {
+                                updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { demoVideoUrl: '' })
+                              } else {
+                                updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { demoVideoUrl: undefined })
+                              }
+                            }}
+                          />
+                        </div>
+                        {selectedCategoryFrame.demoVideoUrl !== undefined && (
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Video URL</label>
+                            <input
+                              type="url"
+                              value={selectedCategoryFrame.demoVideoUrl || ''}
+                              onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { demoVideoUrl: e.target.value })}
+                              placeholder="https://youtube.com/watch?v=... or Vimeo URL"
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                            />
+                            <p className="mt-1.5 text-[11px] text-gray-400 dark:text-white/40">
+                              YouTube, Vimeo, or direct video URL (mp4, webm)
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -3359,6 +3470,7 @@ export function UnifiedStudioEditor() {
                     {inspectorSections.video && (
                       <div className="p-4 border-t border-gray-200 dark:border-white/10">
                         <BackgroundMediaInput
+                          context="frame"
                           backgroundType={selectedItemFrame.background?.type || 'video'}
                           onBackgroundTypeChange={(type) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, {
                             background: { ...selectedItemFrame.background, type }
@@ -3619,6 +3731,55 @@ export function UnifiedStudioEditor() {
                             className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none font-mono"
                           />
                         </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Demo Video Section */}
+                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                    <button
+                      onClick={() => toggleInspectorSection('demoVideo')}
+                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                    >
+                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <Clapperboard className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                        Demo Video
+                      </span>
+                      <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${inspectorSections.demoVideo ? '' : '-rotate-90'}`} />
+                    </button>
+                    {inspectorSections.demoVideo && (
+                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                        <p className="text-[12px] text-gray-500 dark:text-white/50">
+                          Add a full-length demo video. Users tap the 🎬 button to watch.
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600 dark:text-white/60">Enable demo video</span>
+                          <Toggle
+                            enabled={!!selectedItemFrame.demoVideoUrl}
+                            onChange={(enabled) => {
+                              if (enabled) {
+                                updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { demoVideoUrl: '' })
+                              } else {
+                                updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { demoVideoUrl: undefined })
+                              }
+                            }}
+                          />
+                        </div>
+                        {selectedItemFrame.demoVideoUrl !== undefined && (
+                          <div>
+                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Video URL</label>
+                            <input
+                              type="url"
+                              value={selectedItemFrame.demoVideoUrl || ''}
+                              onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { demoVideoUrl: e.target.value })}
+                              placeholder="https://youtube.com/watch?v=... or Vimeo URL"
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                            />
+                            <p className="mt-1.5 text-[11px] text-gray-400 dark:text-white/40">
+                              YouTube, Vimeo, or direct video URL (mp4, webm)
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

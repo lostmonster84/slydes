@@ -30,6 +30,9 @@ export { AboutSheet } from './AboutSheet'
 export { ConnectSheet } from './ConnectSheet'
 export { SheetHandle } from './SheetHandle'
 
+// Overlays
+export { VideoPlayerOverlay } from './VideoPlayerOverlay'
+
 // Special Frames
 export { SlydesPromoSlide } from './SlydesPromoSlide'
 

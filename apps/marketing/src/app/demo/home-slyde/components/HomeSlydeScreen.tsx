@@ -212,13 +212,12 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
         </motion.button>
       )}
 
-      {/* === RIGHT SIDE ACTIONS === (Heart + Share + Info) */}
+      {/* === RIGHT SIDE ACTIONS === (Heart + Share) */}
       <SocialActionStack
         heartCount={heartCount}
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
-        onInfoTap={() => setAboutOpen(true)}
         hideHeart={!(data.showHearts ?? true)}
         hideShare={!(data.showShare ?? true)}
         className="absolute right-3 bottom-36 z-40"

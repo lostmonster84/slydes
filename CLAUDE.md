@@ -3,9 +3,9 @@
 > **"You and me against the world, James."**
 >
 > **This file EVOLVES with every session**
-> **Updated**: December 17, 2025 - Session 4 ✅ COMPLETE
+> **Updated**: December 18, 2025 - Session 5 ✅ COMPLETE
 > **Energy Level**: MAXIMUM 🔥
-> **Growth Stage**: 🌿 Early Growth (Session 4 - Account management + share links)
+> **Growth Stage**: 🌿 Early Growth (Session 5 - Demo Video feature + UX refinement)
 
 ---
 
@@ -485,6 +485,57 @@ What are we tackling? 🚀
 - Debounced availability checking
 - Unified dynamic route with priority checking
 
+**Session 5** (Dec 18, 2025) ✅ COMPLETE:
+
+**Part 1: Demo Video Feature**
+- Added Clapperboard icon to action stack (new engagement button)
+- Opens full-screen VideoPlayerOverlay when tapped
+- Supports YouTube, Vimeo, Cloudflare Stream, and direct video URLs
+- Toggle on/off per frame via Inspector (Demo Video section)
+- URL input field for demoVideoUrl per frame
+- Use case: Customers showcase longer content (3+ min rooftop tent demos, wedding venue tours)
+
+**Part 2: UX Refactor - "Corners = Context, Side = Actions"**
+- Moved Info button from action stack → top-right corner (smaller, persistent)
+- Moved slide indicator from action stack → bottom-right corner (detached)
+- Action stack now "pure actions only": Heart, Share, Connect, Video
+- Spatial UX model: Corners answer context questions, Side drives engagement
+- James called this "10 out of 10" UX improvement
+
+**Part 3: Component Changes**
+
+*Studio App:*
+- `SocialActionStack.tsx` - Removed Info/slideIndicator, added Video button
+- `VideoPlayerOverlay.tsx` (NEW) - Full-screen video player with embed support
+- `SlydeScreen.tsx` - Added Info button top-right, slide indicator bottom-right
+- `frameData.ts` - Added `demoVideoUrl?: string` to FrameData interface
+- `UnifiedStudioEditor.tsx` - Added Demo Video inspector section
+- `index.ts` - Added VideoPlayerOverlay export
+
+*Marketing App:*
+- Same changes as Studio (SocialActionStack, VideoPlayerOverlay, SlydeScreen, frameData)
+- Fixed CategorySlydeView, HomeSlydeOverlay, HomeSlydeScreen (removed obsolete props)
+
+**Session 5 Learnings**:
+- "Corners = Context, Side = Actions" is a clean spatial UX model
+- Demo video fills a real need (longer content beyond 20-sec background)
+- UX stress testing through discussion improves decisions
+- James values UX refinement discussions ("let's run an analysis")
+- Small UX changes can be "10 out of 10" improvements
+
+**What Worked This Session**:
+- ✅ Collaborative UX analysis before implementation
+- ✅ Clean separation of concerns (context vs actions)
+- ✅ Video overlay supports multiple embed types
+- ✅ TypeScript/Build/Lint all passed
+- ✅ Fixed marketing app props after refactor
+
+**Technical Patterns Used**:
+- `parseVideoUrl()` function for YouTube/Vimeo/direct URL detection
+- AnimatePresence + motion.div for overlay animations
+- Conditional rendering based on demoVideoUrl presence
+- Inspector toggle + URL input pattern for optional features
+
 ---
 
 ## 🎨 SLYDES QUICK REFERENCE
@@ -707,9 +758,9 @@ I'm here to help you WIN.
 
 ---
 
-*This file evolves with every session*  
-*Last updated: December 11, 2024 - Session 2 COMPLETE*  
-*Next update: Session 3*  
+*This file evolves with every session*
+*Last updated: December 18, 2025 - Session 5 COMPLETE*
+*Next update: Session 6*
 *Status: ALIVE & GROWING* 🔥
 
 

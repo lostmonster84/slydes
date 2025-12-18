@@ -118,10 +118,13 @@ export function CategorySlydeView({
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => {}}
-        onInfoTap={() => {}}
-        slideIndicator={`${frameIndex + 1}/${totalFrames}`}
         className="absolute right-3 top-1/2 -translate-y-1/2 z-40"
       />
+
+      {/* Slide indicator - Bottom-right corner */}
+      <div className="absolute bottom-6 right-3 z-40 pointer-events-none">
+        <span className="text-white/50 text-[10px] font-medium">{`${frameIndex + 1}/${totalFrames}`}</span>
+      </div>
 
       {/* === BOTTOM CONTENT === */}
       <div className="absolute bottom-0 left-0 right-0 p-4 pb-6 z-10">

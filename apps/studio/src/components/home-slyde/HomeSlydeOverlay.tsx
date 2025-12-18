@@ -119,8 +119,6 @@ export function HomeSlydeOverlay({
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
-        onInfoTap={() => {}}
-        hideInfo
         className="absolute right-3 bottom-36 z-40"
       />
 

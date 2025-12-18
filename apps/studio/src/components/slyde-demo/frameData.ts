@@ -90,6 +90,8 @@ export interface FrameData {
   // Direct inventory connection (shows grid overlay on frame)
   listId?: string              // Reference to a ListData.id
   inventoryCtaText?: string    // CTA text for inventory (e.g., "View All 12 Vehicles")
+  // Demo video - full-screen video overlay for in-depth content
+  demoVideoUrl?: string        // YouTube, Vimeo, or direct video URL
 }
 
 export interface FAQItem {

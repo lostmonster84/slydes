@@ -85,6 +85,8 @@ export interface FrameData {
   infoContent?: FrameInfoContent
   // URL-safe slug for deep-linking
   slug?: string
+  // Demo video - full-screen video overlay for in-depth content
+  demoVideoUrl?: string        // YouTube, Vimeo, or direct video URL
 }
 
 export interface FAQItem {

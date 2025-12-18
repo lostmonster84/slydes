@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronUp, ChevronLeft } from 'lucide-react'
+import { ChevronUp, ChevronLeft, Info } from 'lucide-react'
 import { Badge } from './Badge'
 import { RatingDisplay } from './RatingDisplay'
 import { SocialActionStack } from './SocialActionStack'
@@ -11,6 +11,7 @@ import { CTAButton } from './CTAButton'
 import { InfoSheet } from './InfoSheet'
 import { ShareSheet } from './ShareSheet'
 import { AboutSheet } from './AboutSheet'
+import { VideoPlayerOverlay } from './VideoPlayerOverlay'
 import { SlydesPromoSlide } from './SlydesPromoSlide'
 import { parseVideoUrl } from '@/lib/videoUtils'
 import { getFilterStyle, VIGNETTE_STYLE, type VideoFilterPreset } from '@/lib/videoFilters'
@@ -113,6 +114,7 @@ export function SlydeScreen({
   const [showInfoWithFaqs, setShowInfoWithFaqs] = useState(false)
   const [showShare, setShowShare] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
+  const [showVideo, setShowVideo] = useState(false)
   const [touchCursor, setTouchCursor] = useState({ x: 0, y: 0, visible: false })
 
   const currentFrameData = frames[currentFrame]
@@ -270,19 +272,19 @@ export function SlydeScreen({
 
   // Auto-advance frames
   useEffect(() => {
-    if (!autoAdvance || showInfo || showInfoWithFaqs || showShare || showAbout) return
+    if (!autoAdvance || showInfo || showInfoWithFaqs || showShare || showAbout || showVideo) return
 
     const interval = setInterval(() => {
       setCurrentFrame((prev) => (prev + 1) % frames.length)
     }, autoAdvanceInterval)
 
     return () => clearInterval(interval)
-  }, [autoAdvance, autoAdvanceInterval, frames.length, showInfo, showInfoWithFaqs, showShare, showAbout])
+  }, [autoAdvance, autoAdvanceInterval, frames.length, showInfo, showInfoWithFaqs, showShare, showAbout, showVideo])
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (showInfo || showInfoWithFaqs || showShare || showAbout) return
+      if (showInfo || showInfoWithFaqs || showShare || showAbout || showVideo) return
 
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
         e.preventDefault()
@@ -295,7 +297,7 @@ export function SlydeScreen({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [frames.length, showInfo, showInfoWithFaqs, showShare, showAbout])
+  }, [frames.length, showInfo, showInfoWithFaqs, showShare, showAbout, showVideo])
 
   // Handle heart tap
   const handleHeartTap = useCallback(() => {
@@ -557,19 +559,35 @@ export function SlydeScreen({
         }}
       />
 
-      {/* === TOP SECTION === (hidden on Slydes promo) */}
-      {!isSlydesPromo && (
-        <div className="absolute top-10 left-0 right-0 px-4 z-30">
-          {/* Back button - only in category context */}
-          {context === 'category' && onBack && (
-            <button
-              onClick={onBack}
-              className="absolute left-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center"
-            >
-              <ChevronLeft className="w-5 h-5 text-white" />
-            </button>
-          )}
+      {/* Back button - only in category context */}
+      {!isSlydesPromo && context === 'category' && onBack && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onBack()
+          }}
+          className="absolute top-10 left-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center z-[70] pointer-events-auto"
+        >
+          <ChevronLeft className="w-5 h-5 text-white" />
+        </button>
+      )}
 
+      {/* Info button - Top-right corner (context: "Who is this?") */}
+      {!isSlydesPromo && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            setShowInfo(true)
+          }}
+          className="absolute top-10 right-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center z-[70] pointer-events-auto"
+        >
+          <Info className="w-4 h-4 text-white" />
+        </button>
+      )}
+
+      {/* === TOP SECTION === (Badge - hidden on Slydes promo) */}
+      {!isSlydesPromo && (
+        <div className="absolute top-10 left-0 right-0 px-4 z-30 pointer-events-none">
           <AnimatePresence mode="wait">
             {currentFrameData.badge && (
               <motion.div
@@ -595,10 +613,18 @@ export function SlydeScreen({
           isHearted={isHearted[currentFrameData.id] || false}
           onHeartTap={handleHeartTap}
           onShareTap={handleShare}
-          onInfoTap={() => setShowInfo(true)}
-          slideIndicator={frameIndicator}
+          onVideoTap={currentFrameData.demoVideoUrl ? () => setShowVideo(true) : undefined}
+          socialLinks={business.social}
+          demoVideoUrl={currentFrameData.demoVideoUrl}
           className="absolute right-3 top-1/2 -translate-y-1/2 z-40"
         />
+      )}
+
+      {/* Slide indicator - Bottom-right corner (context: "Where am I?") */}
+      {!isSlydesPromo && currentFrameData.id !== 'slydes' && (
+        <div className="absolute bottom-6 right-3 z-40 pointer-events-none">
+          <span className="text-white/50 text-[10px] font-medium">{frameIndicator}</span>
+        </div>
       )}
 
       {/* === BOTTOM CONTENT === (hidden on Slydes promo) */}
@@ -739,6 +765,15 @@ export function SlydeScreen({
         onClose={() => setShowAbout(false)}
         business={business}
       />
+
+      {/* Video Player Overlay */}
+      {currentFrameData.demoVideoUrl && (
+        <VideoPlayerOverlay
+          isOpen={showVideo}
+          onClose={() => setShowVideo(false)}
+          videoUrl={currentFrameData.demoVideoUrl}
+        />
+      )}
     </div>
   )
 }

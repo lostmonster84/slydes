@@ -12,6 +12,8 @@ interface VideoTrimEditorProps {
   onTrimComplete: (trimmedFile: File) => void
   /** Called when user cancels trimming */
   onCancel: () => void
+  /** Maximum duration allowed in seconds (e.g., 20 for frames, 300 for home) */
+  maxDuration?: number
   /** Optional className */
   className?: string
 }
@@ -37,6 +39,7 @@ export function VideoTrimEditor({
   videoFile,
   onTrimComplete,
   onCancel,
+  maxDuration,
   className = '',
 }: VideoTrimEditorProps) {
   // Core state
@@ -169,10 +172,12 @@ export function VideoTrimEditor({
     if (videoRef.current) {
       const dur = videoRef.current.duration
       setDuration(dur)
-      setTrimEnd(dur)
+      // If maxDuration is set and video is longer, limit initial selection
+      const initialEnd = maxDuration && dur > maxDuration ? maxDuration : dur
+      setTrimEnd(initialEnd)
       generateThumbnails(videoRef.current, dur)
     }
-  }, [generateThumbnails])
+  }, [generateThumbnails, maxDuration])
 
   // Handle timeline click/drag
   const getTimeFromPosition = useCallback((clientX: number): number => {
@@ -193,20 +198,25 @@ export function VideoTrimEditor({
     if (!isDragging) return
 
     const time = getTimeFromPosition(e.clientX)
+    const effectiveMaxDuration = maxDuration || duration
 
     if (isDragging === 'start') {
       // Don't let start go past end - 0.5s minimum
-      setTrimStart(Math.min(time, trimEnd - 0.5))
+      // Also ensure selection doesn't exceed maxDuration
+      const minStart = maxDuration ? Math.max(0, trimEnd - effectiveMaxDuration) : 0
+      setTrimStart(Math.max(minStart, Math.min(time, trimEnd - 0.5)))
     } else if (isDragging === 'end') {
       // Don't let end go before start + 0.5s minimum
-      setTrimEnd(Math.max(time, trimStart + 0.5))
+      // Also ensure selection doesn't exceed maxDuration
+      const maxEnd = maxDuration ? Math.min(duration, trimStart + effectiveMaxDuration) : duration
+      setTrimEnd(Math.min(maxEnd, Math.max(time, trimStart + 0.5)))
     } else if (isDragging === 'playhead') {
       setCurrentTime(time)
       if (videoRef.current) {
         videoRef.current.currentTime = time
       }
     }
-  }, [isDragging, getTimeFromPosition, trimStart, trimEnd])
+  }, [isDragging, getTimeFromPosition, trimStart, trimEnd, maxDuration, duration])
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(null)
@@ -260,18 +270,22 @@ export function VideoTrimEditor({
 
   // Fine-tune controls
   const adjustTrim = useCallback((handle: 'start' | 'end', delta: number) => {
+    const effectiveMaxDuration = maxDuration || duration
     if (handle === 'start') {
-      setTrimStart(prev => Math.max(0, Math.min(prev + delta, trimEnd - 0.5)))
+      const minStart = maxDuration ? Math.max(0, trimEnd - effectiveMaxDuration) : 0
+      setTrimStart(prev => Math.max(minStart, Math.min(prev + delta, trimEnd - 0.5)))
     } else {
-      setTrimEnd(prev => Math.min(duration, Math.max(prev + delta, trimStart + 0.5)))
+      const maxEnd = maxDuration ? Math.min(duration, trimStart + effectiveMaxDuration) : duration
+      setTrimEnd(prev => Math.min(maxEnd, Math.max(prev + delta, trimStart + 0.5)))
     }
-  }, [trimStart, trimEnd, duration])
+  }, [trimStart, trimEnd, duration, maxDuration])
 
   // Reset trim
   const resetTrim = useCallback(() => {
     setTrimStart(0)
-    setTrimEnd(duration)
-  }, [duration])
+    // Respect maxDuration when resetting
+    setTrimEnd(maxDuration && duration > maxDuration ? maxDuration : duration)
+  }, [duration, maxDuration])
 
   // Perform the trim
   const handleTrim = useCallback(async () => {
@@ -360,8 +374,15 @@ export function VideoTrimEditor({
         </button>
 
         {/* Trim duration badge */}
-        <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur-sm rounded-full text-white text-xs font-medium">
-          {formatTimeShort(trimDuration)}
+        <div className="absolute top-3 left-3 flex items-center gap-2">
+          <div className="px-2 py-1 bg-black/60 backdrop-blur-sm rounded-full text-white text-xs font-medium">
+            {formatTimeShort(trimDuration)}
+          </div>
+          {maxDuration && duration > maxDuration && (
+            <div className="px-2 py-1 bg-blue-500/80 backdrop-blur-sm rounded-full text-white text-xs font-medium">
+              Max {formatTimeShort(maxDuration)}
+            </div>
+          )}
         </div>
 
         {/* Loading/Progress overlay */}

@@ -20,6 +20,8 @@ const config: Config = {
     // Icon sizes
     'w-3.5', 'w-4', 'w-5', 'w-6', 'w-7',
     'h-3.5', 'h-4', 'h-5', 'h-6', 'h-7',
+    // Animation classes
+    'animate-pulse-hint',
   ],
   theme: {
     extend: {
@@ -32,6 +34,17 @@ const config: Config = {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         display: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-jetbrains-mono)', 'monospace'],
+      },
+      keyframes: {
+        'pulse-hint': {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(37, 99, 235, 0)' },
+          '25%': { boxShadow: '0 0 0 4px rgba(37, 99, 235, 0.3)' },
+          '50%': { boxShadow: '0 0 0 0 rgba(37, 99, 235, 0)' },
+          '75%': { boxShadow: '0 0 0 4px rgba(37, 99, 235, 0.3)' },
+        },
+      },
+      animation: {
+        'pulse-hint': 'pulse-hint 1.5s ease-in-out infinite',
       },
     },
   },

@@ -29,6 +29,9 @@ export { InfoSheet } from './InfoSheet'
 export { ShareSheet } from './ShareSheet'
 export { AboutSheet } from './AboutSheet'
 
+// Overlays
+export { VideoPlayerOverlay } from './VideoPlayerOverlay'
+
 // Special Frames
 export { SlydesPromoSlide } from './SlydesPromoSlide'
 
