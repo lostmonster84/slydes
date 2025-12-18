@@ -3,7 +3,7 @@
 import { Check } from 'lucide-react'
 import { useWizard } from './WizardContext'
 
-const STEPS = [
+const ALL_STEPS = [
   { num: 1, label: 'Setup' },
   { num: 2, label: 'Type' },
   { num: 3, label: 'Hero' },
@@ -20,14 +20,20 @@ export function WizardProgress({ skipStep1 = false }: WizardProgressProps) {
   const { state, actions } = useWizard()
   const { currentStep, completedSteps } = state
 
-  const steps = skipStep1 ? STEPS.slice(1) : STEPS
+  // If skipping step 1, show steps 2-6 but renumber them visually as 1-5
+  const steps = skipStep1 ? ALL_STEPS.slice(1) : ALL_STEPS
+  const minStep = skipStep1 ? 2 : 1
 
   return (
     <div className="flex items-center justify-center gap-2 py-4">
       {steps.map((step, index) => {
         const isCompleted = completedSteps.includes(step.num)
         const isCurrent = currentStep === step.num
-        const isClickable = isCompleted || step.num < currentStep
+        // Can click if completed OR if it's a previous step (but not before minStep)
+        const isClickable = (isCompleted || step.num < currentStep) && step.num >= minStep
+
+        // Display number (renumber if skipping step 1)
+        const displayNum = skipStep1 ? index + 1 : step.num
 
         return (
           <div key={step.num} className="flex items-center">
@@ -50,7 +56,7 @@ export function WizardProgress({ skipStep1 = false }: WizardProgressProps) {
               {isCompleted && !isCurrent ? (
                 <Check className="h-4 w-4" />
               ) : (
-                step.num
+                displayNum
               )}
             </button>
 

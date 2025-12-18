@@ -16,12 +16,10 @@ import { SlydesPromoSlide } from './SlydesPromoSlide'
 import { parseVideoUrl } from '@/components/VideoMediaInput'
 import { getFilterStyle, VIGNETTE_STYLE, type VideoFilterPreset } from '@/lib/videoFilters'
 import {
-  FrameData,
-  FAQItem,
-  BusinessInfo,
-  campingFrames,
-  campingFAQs,
-  wildtraxBusiness
+  type FrameData,
+  type FAQItem,
+  type BusinessInfo,
+  emptyBusinessInfo,
 } from './frameData'
 
 interface SlydeScreenProps {
@@ -83,9 +81,9 @@ interface SlydeScreenProps {
  * @see STRUCTURE.md for hierarchy
  */
 export function SlydeScreen({
-  frames = campingFrames,
-  faqs = campingFAQs,
-  business = wildtraxBusiness,
+  frames = [],
+  faqs = [],
+  business = emptyBusinessInfo,
   autoAdvance = true,
   autoAdvanceInterval = 4000,
   className = '',

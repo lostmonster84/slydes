@@ -7,8 +7,7 @@ import { CategorySlydeView } from './CategorySlydeView'
 import { InventoryGridView } from './InventoryGridView'
 import { ItemSlydeView } from './ItemSlydeView'
 import { FloatingCartButton } from './FloatingCartButton'
-import { highlandMotorsData } from './data/highlandMotorsData'
-import type { HomeSlydeData, CategoryData, FrameData as ViewerFrameData, InventoryItem } from './data/highlandMotorsData'
+import { emptyHomeSlydeData, type HomeSlydeData, type CategoryData, type FrameData as ViewerFrameData, type InventoryItem } from './data/highlandMotorsData'
 import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 import { useOrganization } from '@/hooks/useOrganization'
 import { useBackgroundMusic } from '@/hooks/useBackgroundMusic'
@@ -127,8 +126,6 @@ const transition = { type: 'spring', stiffness: 300, damping: 30 }
 
 interface HomeSlydeViewerProps {
   videoSrc?: string
-  /** When true, ignore localStorage and use hardcoded demo data only */
-  useHardcodedData?: boolean
   videoFilter?: VideoFilterPreset
   videoVignette?: boolean
 }
@@ -141,7 +138,7 @@ interface HomeSlydeViewerProps {
  * - Shopping cart with sticky checkout bar
  * - Commerce callbacks (add to cart, buy now, enquire)
  */
-export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = false, videoFilter = 'original', videoVignette = false }: HomeSlydeViewerProps) {
+export function HomeSlydeViewer({ videoSrc: customVideoSrc, videoFilter = 'original', videoVignette = false }: HomeSlydeViewerProps) {
   const [state, dispatch] = useReducer(navReducer, initialState)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { data: demoHome, hydrated: demoHydrated } = useDemoHomeSlyde()
@@ -164,16 +161,11 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = f
   })
 
   // Show loading state while data is hydrating
-  const isLoading = !useHardcodedData && (orgLoading || !demoHydrated)
+  const isLoading = orgLoading || !demoHydrated
 
   // Build viewer data from organization + localStorage editor state
   const viewerData: HomeSlydeData = useMemo(() => {
-    // If useHardcodedData is true, use demo data (for marketing/showcase)
-    if (useHardcodedData) {
-      return highlandMotorsData
-    }
-
-    // Production mode: Use real organization data
+    // Use real organization data
     const businessName = organization?.name || 'Your Business'
     const accentColor = organization?.primary_color || '#2563EB'
 

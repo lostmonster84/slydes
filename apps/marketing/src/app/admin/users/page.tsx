@@ -369,6 +369,17 @@ export default function UsersPage() {
             )}
             <button
               onClick={() => {
+                const userId = openDropdown
+                setOpenDropdown(null)
+                setDropdownPos(null)
+                handleAction(userId, 'send_password_reset')
+              }}
+              className="w-full px-4 py-2.5 text-left text-sm text-blue-400 hover:bg-[#48484a] transition-colors"
+            >
+              Send Password Reset
+            </button>
+            <button
+              onClick={() => {
                 const user = users.find(u => u.id === openDropdown)
                 if (user) {
                   setOpenDropdown(null)

@@ -1,14 +1,13 @@
 /**
  * Slyde Demo Components
- * 
+ *
  * Portable components for building Slyde experiences.
- * Built in WildTrax as proof of concept, ported to Slydes.io
- * 
+ *
  * TERMINOLOGY (per STRUCTURE.md):
  * - Profile → Slyde → Frame
  * - Slyde = shareable experience
  * - Frame = vertical screen inside a Slyde
- * 
+ *
  * @see docs/SLYDESBUILD.md for full documentation
  * @see docs/STRUCTURE.md for hierarchy
  */
@@ -34,21 +33,8 @@ export { SheetHandle } from './SheetHandle'
 // Special Frames
 export { SlydesPromoSlide } from './SlydesPromoSlide'
 
-// Data & Types (new terminology)
+// Types - no demo data
 export {
-  // Frame data (what was "slide" data)
-  campingFrames,
-  campingFAQs,
-  justDriveFrames,
-  justDriveFAQs,
-  wildtraxReviews,
-  wildtraxFeaturedReviews,
-  wildtraxBusiness,
-  // Slyde configs (what was "world" data)
-  wildtraxSlydes,
-  campingSlydeConfig,
-  justDriveSlydeConfig,
-  // Types
   type FrameData,
   type FrameInfoContent,
   type FAQItem,
@@ -56,10 +42,15 @@ export {
   type Review,
   type BusinessInfo,
   type CTAIconType,
+  type CTAType,
   type SlydeConfig,
+  type ListItem,
+  type ListData,
+  type SocialLinks,
+  // Helpers
+  emptyBusinessInfo,
+  createEmptyFrame,
   // Backwards compatibility (deprecated)
   type SlideData,
   type SlideInfoContent,
-  campingSlides,
-  justDriveSlides,
 } from './frameData'

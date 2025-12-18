@@ -166,6 +166,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, message: 'Onboarding marked complete' })
     }
 
+    if (action === 'send_password_reset') {
+      // Get user email first
+      const { data: userData, error: userError } = await supabase.auth.admin.getUserById(userId)
+      if (userError || !userData.user?.email) {
+        throw new Error('Could not find user email')
+      }
+
+      // Send password reset email
+      const { error } = await supabase.auth.resetPasswordForEmail(userData.user.email, {
+        redirectTo: `${process.env.NEXT_PUBLIC_STUDIO_URL || 'https://studio.slydes.io'}/auth/callback?next=/settings/account`,
+      })
+
+      if (error) throw error
+      return NextResponse.json({ success: true, message: `Password reset email sent to ${userData.user.email}` })
+    }
+
     return NextResponse.json({ error: 'Unknown action' }, { status: 400 })
   } catch (error) {
     console.error('[Users API] Action error:', error)

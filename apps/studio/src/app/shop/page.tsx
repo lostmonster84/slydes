@@ -137,7 +137,7 @@ function ShopTeaser({ onUpgrade }: { onUpgrade: () => void }) {
                 {/* Right: Phone Preview */}
                 <div className="hidden md:flex justify-center lg:justify-start lg:pl-8">
                   <DevicePreview enableTilt={false}>
-                    <HomeSlydeViewer useHardcodedData />
+                    <HomeSlydeViewer />
                   </DevicePreview>
                 </div>
               </div>
@@ -346,7 +346,7 @@ function ShopDashboard() {
                 {/* Right: Phone Preview */}
                 <div className="hidden lg:flex justify-center">
                   <DevicePreview enableTilt={false}>
-                    <HomeSlydeViewer useHardcodedData />
+                    <HomeSlydeViewer />
                   </DevicePreview>
                 </div>
               </div>
