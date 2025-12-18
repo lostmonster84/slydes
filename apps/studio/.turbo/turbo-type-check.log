@@ -2,5 +2,3 @@
 > @slydes/studio@0.1.0 type-check /Users/james/Projects/slydes/apps/studio
 > tsc --noEmit
 
-src/app/brand/page.tsx(483,119): error TS2304: Cannot find name 'secondaryColor'.
- ELIFECYCLE  Command failed with exit code 2.

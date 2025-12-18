@@ -48,8 +48,8 @@ export function MusicSelector({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           category: 'editor',
-          requestType: 'feature',
-          title: 'Music help request',
+          requestType: 'ux',
+          title: '🎵 Music vibe help request',
           description: helpMessage,
         }),
       })
@@ -235,6 +235,10 @@ export function MusicSelector({
                     <textarea
                       value={helpMessage}
                       onChange={(e) => setHelpMessage(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') setShowHelpModal(false)
+                        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) sendHelpRequest()
+                      }}
                       placeholder="Describe the vibe you're going for..."
                       rows={3}
                       autoFocus
