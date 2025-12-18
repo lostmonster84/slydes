@@ -729,7 +729,7 @@ export function UnifiedStudioEditor() {
         return 'add-section'
       }
       // Step 4: If sections exist but none have frames, pulse Add Section to hint they should click a section
-      const hasAnyFrames = categories.some(cat => (cat.frames?.length || 0) > 0)
+      const hasAnyFrames = categories.some(cat => (childFrames[cat.id]?.length || 0) > 0)
       if (!hasAnyFrames) {
         return 'add-section'
       }
@@ -737,16 +737,16 @@ export function UnifiedStudioEditor() {
 
     // PHASE 2: Category selected - need to add frames
     if (selection.type === 'category' && selection.categoryId) {
-      const selectedCat = categories.find(c => c.id === selection.categoryId)
-      if (selectedCat && (!selectedCat.frames || selectedCat.frames.length === 0)) {
+      const selectedCatFrames = childFrames[selection.categoryId] || []
+      if (selectedCatFrames.length === 0) {
         return 'add-frame'
       }
     }
 
     // PHASE 3: Frame editing - guide through content
-    if (selection.type === 'categoryFrame' && selection.categoryId && selection.frameId) {
-      const selectedCat = categories.find(c => c.id === selection.categoryId)
-      const selectedFrame = selectedCat?.frames?.find(f => f.id === selection.frameId)
+    if (selection.type === 'categoryFrame' && selection.categoryId && selection.categoryFrameId) {
+      const catFramesForSelection = childFrames[selection.categoryId] || []
+      const selectedFrame = catFramesForSelection.find(f => f.id === selection.categoryFrameId)
       if (selectedFrame) {
         // Step 5: Content - need title
         if (!selectedFrame.title || selectedFrame.title.trim() === '') {
@@ -931,7 +931,7 @@ export function UnifiedStudioEditor() {
     if (categories.length >= 6) return
     const newId = `cat-${Date.now()}`
     const slydeNumber = categories.length + 1
-    const newName = `New Section ${slydeNumber}`
+    const newName = `New Slyde ${slydeNumber}`
     setCategories(prev => [
       ...prev,
       { id: newId, icon: 'sparkles', name: newName, description: '', childSlydeId: 'default', hasInventory: false },
@@ -1517,7 +1517,7 @@ export function UnifiedStudioEditor() {
                     className="w-full flex items-center justify-between px-2 py-1 mb-1"
                   >
                     <span className="text-[11px] font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
-                      Sections ({categories.length}/6)
+                      Slydes ({categories.length}/6)
                     </span>
                     <ChevronRight className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.categories ? 'rotate-90' : ''}`} />
                   </button>
@@ -1741,7 +1741,7 @@ export function UnifiedStudioEditor() {
                                       {/* Add Frame */}
                                       <button
                                         onClick={() => addCategoryFrame(cat.id)}
-                                        className={`w-full flex items-center justify-center gap-1.5 ${sizes.paddingSmall} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors`}
+                                        className={`w-full flex items-center justify-center gap-1.5 ${sizes.paddingSmall} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors ${onboardingPulseTarget === 'add-frame' && isSelected && catFrames.length === 0 ? 'animate-pulse-hint' : ''}`}
                                       >
                                         <Plus className={sizes.iconSmall} />
                                         <span className={`${sizes.textXSmall} font-medium`}>Add frame</span>
@@ -1760,7 +1760,7 @@ export function UnifiedStudioEditor() {
                               className={`w-full flex items-center justify-center gap-1.5 ${sizes.padding} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors ${onboardingPulseTarget === 'add-section' ? 'animate-pulse-hint' : ''}`}
                             >
                               <Plus className={sizes.icon} />
-                              <span className={`${sizes.textSmall} font-medium`}>Add section</span>
+                              <span className={`${sizes.textSmall} font-medium`}>Add Slyde</span>
                             </button>
                           )}
                         </div>
@@ -2693,7 +2693,7 @@ export function UnifiedStudioEditor() {
                   </div>
 
                   {/* Content Section - What does this frame say? */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'frame-content' ? 'animate-pulse-hint' : ''}`}>
                     <button
                       onClick={() => toggleInspectorSection('content')}
                       className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
@@ -2731,7 +2731,7 @@ export function UnifiedStudioEditor() {
                   </div>
 
                   {/* Background Section - Visual layer */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                  <div className={`rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden ${onboardingPulseTarget === 'frame-background' ? 'animate-pulse-hint' : ''}`}>
                     <button
                       onClick={() => toggleInspectorSection('video')}
                       className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"

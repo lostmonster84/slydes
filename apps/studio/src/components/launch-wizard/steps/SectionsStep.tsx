@@ -38,7 +38,7 @@ export function SectionsStep() {
           What do you want to show?
         </h1>
         <p className="mt-2 text-gray-500 dark:text-white/60">
-          These become sections in your Slyde
+          These become your Slydes
         </p>
       </div>
 
@@ -69,7 +69,7 @@ export function SectionsStep() {
               value={newSectionName}
               onChange={(e) => setNewSectionName(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Section name"
+              placeholder="Slyde name"
               className="
                 flex-1 rounded-md border border-gray-200 bg-white px-3 py-2
                 text-sm text-gray-900 placeholder:text-gray-400
@@ -110,20 +110,20 @@ export function SectionsStep() {
             "
           >
             <Plus className="h-4 w-4" />
-            Add another section
+            Add another Slyde
           </button>
         )}
       </div>
 
       {/* Help text */}
       <p className="text-center text-xs text-gray-400 dark:text-white/40">
-        You can always add, remove, and reorder sections later in the editor
+        You can always add, remove, and reorder Slydes later in the editor
       </p>
 
       {/* Enabled count */}
       {!canProceed && (
         <p className="text-center text-sm text-amber-600 dark:text-amber-400">
-          Select at least one section to continue
+          Select at least one Slyde to continue
         </p>
       )}
 
