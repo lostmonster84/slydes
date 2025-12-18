@@ -287,6 +287,7 @@ export default function RoadmapPage() {
                   <RoadmapCard
                     item={item}
                     onDelete={deleteItem}
+                    onMarkDone={(id) => updateStatus(id, 'done')}
                     priorityColors={priorityColors}
                   />
                 </motion.div>
@@ -322,10 +323,12 @@ export default function RoadmapPage() {
 function RoadmapCard({
   item,
   onDelete,
+  onMarkDone,
   priorityColors,
 }: {
   item: RoadmapItem
   onDelete: (id: string) => void
+  onMarkDone: (id: string) => void
   priorityColors: Record<string, string>
 }) {
   const requestTypeInfo = REQUEST_TYPE_LABELS[item.requestType || 'feature'] || REQUEST_TYPE_LABELS.feature
@@ -335,7 +338,23 @@ function RoadmapCard({
     <div className="p-4 rounded-xl bg-[#2c2c2e] border border-white/10 group hover:border-white/20 transition-colors">
       {/* Header Row */}
       <div className="flex items-start justify-between gap-2 mb-2">
-        <h4 className="font-medium text-white text-sm leading-tight">{item.title}</h4>
+        <div className="flex items-start gap-2">
+          {item.status !== 'done' ? (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onMarkDone(item.id)
+              }}
+              className="mt-0.5 w-4 h-4 rounded-full border-2 border-white/30 hover:border-green-400 hover:bg-green-500/10 transition-all shrink-0"
+              title="Mark as done"
+            />
+          ) : (
+            <div className="mt-0.5 w-4 h-4 rounded-full bg-green-500 flex items-center justify-center shrink-0">
+              <Check className="w-2.5 h-2.5 text-white" />
+            </div>
+          )}
+          <h4 className="font-medium text-white text-sm leading-tight">{item.title}</h4>
+        </div>
         <button
           onClick={(e) => {
             e.stopPropagation()
