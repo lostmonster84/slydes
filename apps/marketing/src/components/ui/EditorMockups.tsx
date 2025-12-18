@@ -183,22 +183,94 @@ export function EditorBeforeAfter() {
 }
 
 /**
- * Slyde stack: Multiple slydes visible in layers
+ * MiniDevicePreview - Smaller phone for How It Works mockups
+ */
+function MiniDevice({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative w-[140px] h-[280px] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[1.75rem] p-1.5 shadow-xl">
+      {/* Mini notch */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-14 h-4 bg-gray-900 rounded-b-xl z-20" />
+      {/* Screen */}
+      <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-black">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Slyde stack: Multiple slydes visible in layers with animated backgrounds
  */
 export function EditorFrameStack() {
   return (
     <div className="relative w-[200px] h-[350px]">
-      <div className="absolute top-0 left-0 w-[140px] h-[280px] bg-gray-200 rounded-2xl opacity-30 transform -rotate-6" />
-      <div className="absolute top-4 left-4 w-[140px] h-[280px] bg-gray-300 rounded-2xl opacity-50 transform -rotate-3" />
-      <div className="absolute top-8 left-8 w-[140px] h-[280px] bg-gray-900 rounded-2xl p-1.5 shadow-xl">
-        <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl flex flex-col justify-end p-3 text-white">
-          <div className="text-[7px] text-white/60">Available Now</div>
-          <div className="text-[10px] font-bold mb-1">Land Rover Defender</div>
-          <div className="text-[6px] text-white/70 mb-2">Highland adventures await</div>
-          <div className="w-full bg-white text-gray-900 rounded-full py-1 text-[7px] font-semibold text-center">Book Now</div>
-        </div>
+      {/* Back slyde - amber/orange */}
+      <div className="absolute top-0 left-0 w-[140px] h-[280px] bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl opacity-40 transform -rotate-6" />
+      {/* Middle slyde - blue/cyan */}
+      <div className="absolute top-4 left-4 w-[140px] h-[280px] bg-gradient-to-br from-leader-blue to-electric-cyan rounded-2xl opacity-60 transform -rotate-3" />
+      {/* Front slyde - animated phone */}
+      <div className="absolute top-8 left-8">
+        <MiniDevice>
+          {/* Animated gradient background */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-br from-rose-500 via-pink-500 to-rose-600"
+            animate={{
+              backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+            style={{ backgroundSize: '200% 200%' }}
+          />
+
+          {/* Floating orbs animation */}
+          <motion.div
+            className="absolute top-1/4 left-1/4 w-16 h-16 bg-white/20 rounded-full blur-xl"
+            animate={{
+              x: [0, 15, 0],
+              y: [0, -10, 0],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          <motion.div
+            className="absolute bottom-1/3 right-1/4 w-12 h-12 bg-pink-300/30 rounded-full blur-lg"
+            animate={{
+              x: [0, -10, 0],
+              y: [0, 15, 0],
+              scale: [1, 0.8, 1],
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: 1,
+            }}
+          />
+
+          {/* Content */}
+          <div className="relative w-full h-full flex flex-col justify-end p-3 text-white z-10">
+            <div className="text-[7px] text-white/80 mb-0.5">Florist</div>
+            <div className="text-[11px] font-bold mb-0.5">Bloom Studio</div>
+            <div className="text-[7px] text-white/70 mb-2">Shop artisan flowers</div>
+            <div className="w-full bg-white text-gray-900 rounded-full py-1.5 text-[8px] font-semibold text-center">
+              Book Now
+            </div>
+          </div>
+
+          {/* Home indicator */}
+          <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-white/30 rounded-full" />
+        </MiniDevice>
       </div>
-      <div className="absolute bottom-0 right-0 bg-leader-blue text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+
+      {/* Badge */}
+      <div className="absolute bottom-0 right-0 bg-leader-blue text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-20">
         6 slydes
       </div>
     </div>

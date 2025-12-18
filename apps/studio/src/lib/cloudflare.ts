@@ -97,3 +97,25 @@ export function extractImageId(url: string): string | null {
   const match = url.match(/imagedelivery\.net\/[^/]+\/([^/]+)/)
   return match ? match[1] : null
 }
+
+// R2 bucket name for audio files
+const R2_BUCKET_NAME = process.env.CLOUDFLARE_R2_BUCKET_NAME || 'slydes-audio'
+const R2_PUBLIC_URL = process.env.CLOUDFLARE_R2_PUBLIC_URL || `https://${R2_BUCKET_NAME}.${CF_ACCOUNT_HASH}.r2.cloudflarestorage.com`
+
+/**
+ * Get public URL for an R2 audio file
+ * R2 public access must be enabled on the bucket
+ */
+export function getAudioUrl(r2Key: string): string {
+  // If it's already a full URL, return as-is
+  if (r2Key.startsWith('http')) return r2Key
+  // Otherwise construct R2 public URL
+  return `${R2_PUBLIC_URL}/${r2Key}`
+}
+
+/**
+ * Type guard to check if a URL is an R2 audio URL
+ */
+export function isR2AudioUrl(url: string): boolean {
+  return url.includes('r2.cloudflarestorage.com') || url.includes(R2_BUCKET_NAME)
+}

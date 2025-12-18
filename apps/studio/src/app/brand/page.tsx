@@ -31,6 +31,18 @@ const VOICE_PRESETS = [
   { id: 'minimal', name: 'Minimal', desc: 'Short, punchy, no fluff' },
 ]
 
+// Curated color swatches with smart pairings
+const COLOR_SWATCHES = [
+  { hex: '#2563EB', name: 'Blue', pairings: ['#06B6D4', '#F59E0B', '#EC4899'] },
+  { hex: '#06B6D4', name: 'Cyan', pairings: ['#2563EB', '#8B5CF6', '#10B981'] },
+  { hex: '#8B5CF6', name: 'Purple', pairings: ['#EC4899', '#06B6D4', '#F59E0B'] },
+  { hex: '#EC4899', name: 'Pink', pairings: ['#8B5CF6', '#F59E0B', '#2563EB'] },
+  { hex: '#EF4444', name: 'Red', pairings: ['#F59E0B', '#1F2937', '#06B6D4'] },
+  { hex: '#F59E0B', name: 'Amber', pairings: ['#1F2937', '#EF4444', '#2563EB'] },
+  { hex: '#10B981', name: 'Emerald', pairings: ['#06B6D4', '#1F2937', '#8B5CF6'] },
+  { hex: '#1F2937', name: 'Slate', pairings: ['#F59E0B', '#06B6D4', '#10B981'] },
+]
+
 export default function HQBrandPage() {
   const { isPaid } = usePlan()
   const [primaryColor, setPrimaryColor] = useState('#2563EB')
@@ -196,7 +208,7 @@ export default function HQBrandPage() {
                         <div>
                           <label className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">Primary color</label>
                           <div className="flex items-center gap-3">
-                            <div 
+                            <div
                               className="w-12 h-12 rounded-xl border-2 border-gray-200 cursor-pointer hover:scale-105 transition-transform dark:border-white/20"
                               style={{ backgroundColor: primaryColor }}
                             />
@@ -206,6 +218,22 @@ export default function HQBrandPage() {
                               onChange={(e) => setPrimaryColor(e.target.value)}
                               className="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-inner text-gray-900 font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-colors dark:bg-white/5 dark:border-white/10 dark:text-white dark:shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)] dark:focus-visible:ring-cyan-400/30 dark:focus-visible:ring-offset-[#2c2c2e]"
                             />
+                          </div>
+                          {/* Primary Color Swatches */}
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {COLOR_SWATCHES.map((swatch) => (
+                              <button
+                                key={swatch.hex}
+                                onClick={() => setPrimaryColor(swatch.hex)}
+                                className={`w-8 h-8 rounded-lg transition-all hover:scale-110 ${
+                                  primaryColor.toUpperCase() === swatch.hex.toUpperCase()
+                                    ? 'ring-2 ring-offset-2 ring-blue-500 dark:ring-cyan-400 dark:ring-offset-[#2c2c2e]'
+                                    : 'ring-1 ring-gray-200 dark:ring-white/20'
+                                }`}
+                                style={{ backgroundColor: swatch.hex }}
+                                title={swatch.name}
+                              />
+                            ))}
                           </div>
                           <p className="mt-2 text-xs text-gray-500 dark:text-white/50">Used for buttons and accents</p>
                         </div>
@@ -217,7 +245,7 @@ export default function HQBrandPage() {
                             {!isCreator && <Lock className="w-3.5 h-3.5 text-gray-400" />}
                           </label>
                           <div className="flex items-center gap-3">
-                            <div 
+                            <div
                               className={`w-12 h-12 rounded-xl border-2 border-gray-200 dark:border-white/20 ${isCreator ? 'cursor-pointer hover:scale-105 transition-transform' : 'cursor-not-allowed'}`}
                               style={{ backgroundColor: secondaryColor }}
                             />
@@ -229,6 +257,31 @@ export default function HQBrandPage() {
                               className="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-inner text-gray-900 font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed dark:bg-white/5 dark:border-white/10 dark:text-white dark:shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)] dark:focus-visible:ring-cyan-400/30 dark:focus-visible:ring-offset-[#2c2c2e] dark:disabled:bg-white/5"
                             />
                           </div>
+                          {/* Smart Pairings based on Primary */}
+                          {isCreator && (() => {
+                            const activeSwatch = COLOR_SWATCHES.find(s => s.hex.toUpperCase() === primaryColor.toUpperCase())
+                            const pairings = activeSwatch?.pairings || COLOR_SWATCHES[0].pairings
+                            return (
+                              <div className="mt-3">
+                                <p className="text-xs text-gray-500 dark:text-white/50 mb-2">Pairs well with:</p>
+                                <div className="flex gap-2">
+                                  {pairings.map((hex) => (
+                                    <button
+                                      key={hex}
+                                      onClick={() => setSecondaryColor(hex)}
+                                      className={`w-8 h-8 rounded-lg transition-all hover:scale-110 ${
+                                        secondaryColor.toUpperCase() === hex.toUpperCase()
+                                          ? 'ring-2 ring-offset-2 ring-blue-500 dark:ring-cyan-400 dark:ring-offset-[#2c2c2e]'
+                                          : 'ring-1 ring-gray-200 dark:ring-white/20'
+                                      }`}
+                                      style={{ backgroundColor: hex }}
+                                      title={COLOR_SWATCHES.find(s => s.hex === hex)?.name || hex}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                            )
+                          })()}
                           {!isCreator && (
                             <p className="mt-2 text-xs text-blue-600 dark:text-cyan-400">
                               Available on Creator plan

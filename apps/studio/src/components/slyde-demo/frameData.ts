@@ -18,6 +18,9 @@
 
 export type CTAIconType = 'book' | 'call' | 'view' | 'arrow' | 'menu' | 'list'
 
+// New 1:1 mapped CTA types (icon + action bundled)
+export type CTAType = 'call' | 'link' | 'email' | 'directions' | 'info' | 'faq' | 'reviews' | 'frame' | 'list'
+
 /**
  * ListItem - An item in a List View
  * Used when CTA action is 'list' to display a browseable list of items
@@ -71,7 +74,11 @@ export interface FrameData {
   heartCount: number
   cta?: {
     text: string
-    icon: CTAIconType
+    // New unified type (1:1 icon-to-action mapping)
+    type?: CTAType
+    value?: string // Phone number, URL, email, or frame index depending on type
+    // Legacy fields (kept for backward compatibility)
+    icon?: CTAIconType
     action?: string // URL or action identifier (e.g., 'book', 'faq', 'reviews', 'list')
     listId?: string // Reference to a ListData.id when action is 'list'
   }

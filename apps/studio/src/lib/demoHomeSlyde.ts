@@ -64,6 +64,10 @@ export type DemoHomeSlyde = {
   faqInbox?: FAQInboxItem[]
   // Lists - independent entities that can be connected via CTA action 'list'
   lists?: ListData[]
+  // Background music
+  musicEnabled?: boolean
+  musicLibraryId?: string | null
+  musicCustomUrl?: string | null
 }
 
 export const DEMO_HOME_SLYDE_STORAGE_KEY = 'slydes_demo_home_slyde'
@@ -92,6 +96,10 @@ export const DEFAULT_DEMO_HOME_SLYDE: DemoHomeSlyde = {
   faqInbox: [],
   // Empty lists by default - user creates these
   lists: [],
+  // Background music - enabled by default, no track selected
+  musicEnabled: true,
+  musicLibraryId: null,
+  musicCustomUrl: null,
 }
 
 function safeParse(raw: string | null): Partial<DemoHomeSlyde> | null {
@@ -170,6 +178,10 @@ export function readDemoHomeSlyde(): DemoHomeSlyde {
     faqInbox: Array.isArray(parsed.faqInbox) ? parsed.faqInbox : [],
     // Parse lists - stored as ListData[]
     lists: Array.isArray(parsed.lists) ? parsed.lists : [],
+    // Parse music settings
+    musicEnabled: typeof parsed.musicEnabled === 'boolean' ? parsed.musicEnabled : true,
+    musicLibraryId: typeof parsed.musicLibraryId === 'string' ? parsed.musicLibraryId : null,
+    musicCustomUrl: typeof parsed.musicCustomUrl === 'string' ? parsed.musicCustomUrl : null,
   }
 }
 

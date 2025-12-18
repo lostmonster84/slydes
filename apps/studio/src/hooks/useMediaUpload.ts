@@ -20,6 +20,11 @@ interface ImageUploadResult {
   variants: string[]
 }
 
+interface AudioUploadResult {
+  key: string
+  url: string
+}
+
 interface UseMediaUploadReturn {
   // Video upload
   uploadVideo: (file: File, options?: { maxDurationSeconds?: number }) => Promise<VideoUploadResult>
@@ -33,9 +38,16 @@ interface UseMediaUploadReturn {
   imageProgress: number
   imageError: string | null
 
+  // Audio upload
+  uploadAudio: (file: File) => Promise<AudioUploadResult>
+  audioStatus: UploadStatus
+  audioProgress: number
+  audioError: string | null
+
   // Utilities
   pollVideoStatus: (uid: string) => Promise<VideoUploadResult>
   attachToFrame: (frameId: string, media: { videoStreamUid?: string; imageId?: string }) => Promise<void>
+  attachAudio: (type: 'upload' | 'library' | 'none', options?: { r2Key?: string; libraryId?: string; enabled?: boolean }) => Promise<void>
   reset: () => void
 }
 
@@ -58,6 +70,10 @@ export function useMediaUpload(): UseMediaUploadReturn {
   const [imageProgress, setImageProgress] = useState(0)
   const [imageError, setImageError] = useState<string | null>(null)
 
+  const [audioStatus, setAudioStatus] = useState<UploadStatus>('idle')
+  const [audioProgress, setAudioProgress] = useState(0)
+  const [audioError, setAudioError] = useState<string | null>(null)
+
   // Reset all state
   const reset = useCallback(() => {
     setVideoStatus('idle')
@@ -66,6 +82,9 @@ export function useMediaUpload(): UseMediaUploadReturn {
     setImageStatus('idle')
     setImageProgress(0)
     setImageError(null)
+    setAudioStatus('idle')
+    setAudioProgress(0)
+    setAudioError(null)
   }, [])
 
   // Poll video status until ready or error
@@ -209,6 +228,65 @@ export function useMediaUpload(): UseMediaUploadReturn {
     }
   }, [])
 
+  // Upload audio to Cloudflare R2
+  const uploadAudio = useCallback(async (file: File): Promise<AudioUploadResult> => {
+    try {
+      setAudioStatus('creating')
+      setAudioProgress(0)
+      setAudioError(null)
+
+      // 1. Get presigned upload URL from our API
+      const createResponse = await fetch('/api/media/create-audio-upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filename: file.name,
+          contentType: file.type || 'audio/mpeg',
+        }),
+      })
+
+      if (!createResponse.ok) {
+        const error = await createResponse.json()
+        throw new Error(error.error || 'Failed to create upload URL')
+      }
+
+      const { key, uploadURL } = await createResponse.json()
+
+      // 2. Upload file directly to R2 using presigned URL
+      setAudioStatus('uploading')
+
+      const uploadResponse = await fetch(uploadURL, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type || 'audio/mpeg',
+        },
+        body: file,
+      })
+
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to upload audio to R2')
+      }
+
+      setAudioProgress(100)
+      setAudioStatus('ready')
+
+      // Return the R2 key and construct the public URL
+      const publicUrl = process.env.NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL
+        ? `${process.env.NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_URL}/${key}`
+        : key
+
+      return {
+        key,
+        url: publicUrl,
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Upload failed'
+      setAudioError(message)
+      setAudioStatus('error')
+      throw err
+    }
+  }, [])
+
   // Attach uploaded media to a frame
   const attachToFrame = useCallback(async (
     frameId: string,
@@ -229,6 +307,28 @@ export function useMediaUpload(): UseMediaUploadReturn {
     }
   }, [])
 
+  // Attach audio to organization
+  const attachAudio = useCallback(async (
+    type: 'upload' | 'library' | 'none',
+    options?: { r2Key?: string; libraryId?: string; enabled?: boolean }
+  ) => {
+    const response = await fetch('/api/media/attach-audio', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type,
+        r2Key: options?.r2Key,
+        libraryId: options?.libraryId,
+        enabled: options?.enabled ?? true,
+      }),
+    })
+
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.error || 'Failed to attach audio')
+    }
+  }, [])
+
   return {
     uploadVideo,
     videoStatus,
@@ -238,8 +338,13 @@ export function useMediaUpload(): UseMediaUploadReturn {
     imageStatus,
     imageProgress,
     imageError,
+    uploadAudio,
+    audioStatus,
+    audioProgress,
+    audioError,
     pollVideoStatus,
     attachToFrame,
+    attachAudio,
     reset,
   }
 }

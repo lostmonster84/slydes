@@ -45,7 +45,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { DevicePreview } from '@/components/slyde-demo'
 import { HomeSlydeScreen } from '@/components/home-slyde/HomeSlydeScreen'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
-import type { FrameData, FAQItem, BusinessInfo, CTAIconType, ListItem, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
+import type { FrameData, FAQItem, BusinessInfo, CTAIconType, CTAType, ListItem, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { useOrganization, useSocialFollowers } from '@/hooks'
 import {
@@ -108,10 +108,13 @@ import {
   LayoutList,
   Link2,
   Check,
+  Mail,
+  ArrowRight,
   type LucideIcon,
 } from 'lucide-react'
 import { Toggle } from '@/components/ui/Toggle'
 import { BackgroundMediaInput } from '@/components/BackgroundMediaInput'
+import { MusicSelector } from '@/components/audio/MusicSelector'
 import { type VideoFilterPreset, type VideoSpeedPreset } from '@/lib/videoFilters'
 import type { BackgroundType } from '@/lib/demoHomeSlyde'
 import { InventoryGridView } from '@/components/home-slyde/InventoryGridView'
@@ -155,14 +158,17 @@ const CATEGORY_ICONS: { id: string; label: string; Icon: LucideIcon }[] = [
   { id: 'utensils', label: 'Dining', Icon: Utensils },
 ]
 
-// CTA button icons
-const CTA_ICONS: { value: CTAIconType; label: string; Icon: LucideIcon }[] = [
-  { value: 'book', label: 'Book', Icon: Book },
-  { value: 'call', label: 'Call', Icon: Phone },
-  { value: 'view', label: 'View', Icon: ExternalLink },
-  { value: 'arrow', label: 'Arrow', Icon: ChevronRight },
-  { value: 'menu', label: 'Menu', Icon: Layers },
-  { value: 'list', label: 'List', Icon: List },
+// CTA types - 1:1 mapping of icon to action (list handled by Inventory section)
+// defaultText auto-populates button text when user selects a type
+const CTA_TYPES: { value: CTAType; label: string; Icon: LucideIcon; inputType: 'tel' | 'url' | 'email' | 'frame-select' | null; placeholder?: string; defaultText: string }[] = [
+  { value: 'call', label: 'Call', Icon: Phone, inputType: 'tel', placeholder: '+44 123 456 7890', defaultText: 'Call Now' },
+  { value: 'link', label: 'Link', Icon: ExternalLink, inputType: 'url', placeholder: 'https://...', defaultText: 'Learn More' },
+  { value: 'email', label: 'Email', Icon: Mail, inputType: 'email', placeholder: 'hello@example.com', defaultText: 'Email Us' },
+  { value: 'directions', label: 'Directions', Icon: MapPin, inputType: 'url', placeholder: 'Google Maps link or address', defaultText: 'Get Directions' },
+  { value: 'info', label: 'Info', Icon: Info, inputType: null, defaultText: 'More Info' },
+  { value: 'faq', label: 'FAQ', Icon: HelpCircle, inputType: null, defaultText: 'FAQs' },
+  { value: 'reviews', label: 'Reviews', Icon: Star, inputType: null, defaultText: 'See Reviews' },
+  { value: 'frame', label: 'Go to Frame', Icon: ArrowRight, inputType: 'frame-select', defaultText: 'Continue' },
 ]
 
 function getCategoryIcon(iconId: string): LucideIcon {
@@ -528,6 +534,10 @@ export function UnifiedStudioEditor() {
   const [showReviews, setShowReviews] = useState(homeSlyde.showReviews ?? true)
   const [socialLinks, setSocialLinks] = useState<SocialLinks>(homeSlyde.socialLinks || {})
   const [lists, setLists] = useState<ListData[]>(homeSlyde.lists ?? [])
+  // Music state
+  const [musicEnabled, setMusicEnabled] = useState(homeSlyde.musicEnabled ?? true)
+  const [musicLibraryId, setMusicLibraryId] = useState<string | null>(homeSlyde.musicLibraryId ?? null)
+  const [musicCustomUrl, setMusicCustomUrl] = useState<string | null>(homeSlyde.musicCustomUrl ?? null)
 
   // =============================================
   // SHARE LINK STATE
@@ -684,6 +694,7 @@ export function UnifiedStudioEditor() {
   const [inspectorSections, setInspectorSections] = useState<Record<string, boolean>>({
     brand: true,
     video: false,
+    music: false,
     settings: false,
     socialMedia: false,
     content: true,
@@ -703,22 +714,22 @@ export function UnifiedStudioEditor() {
       switch (type) {
         case 'home':
           // Business Info open first (identity-first), Background closed
-          return { brand: true, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
+          return { brand: true, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
         case 'category':
           // Slyde name/subtitle are always visible (not in collapsible), FAQ section closed
-          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
+          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
         case 'categoryFrame':
         case 'itemFrame':
-          // Content open first (what does this frame say?), Background closed
-          return { brand: false, video: false, socialMedia: false, settings: false, content: true, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
+          // Content open first (what does this frame say?), Background closed, Inventory collapsed (advanced feature)
+          return { brand: false, video: false, socialMedia: false, settings: false, content: true, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
         case 'list':
           // List name is always visible (not in collapsible)
-          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
+          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
         case 'item':
           // Item fields are always visible (not in collapsible)
-          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
+          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
         default:
-          return { brand: false, video: true, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false }
+          return { brand: false, video: true, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
       }
     }
     setInspectorSections(getDefaultSections(selection.type))
@@ -746,6 +757,10 @@ export function UnifiedStudioEditor() {
     setShowSound(homeSlyde.showSound ?? true)
     setShowReviews(homeSlyde.showReviews ?? true)
     setSocialLinks(homeSlyde.socialLinks || {})
+    // Music
+    setMusicEnabled(homeSlyde.musicEnabled ?? true)
+    setMusicLibraryId(homeSlyde.musicLibraryId ?? null)
+    setMusicCustomUrl(homeSlyde.musicCustomUrl ?? null)
   }, [homeSlyde, homeSlydeHydrated])
 
   useEffect(() => {
@@ -777,9 +792,13 @@ export function UnifiedStudioEditor() {
       homeFAQs: homeSlyde.homeFAQs,
       faqInbox: homeSlyde.faqInbox,
       lists,
+      // Music
+      musicEnabled,
+      musicLibraryId,
+      musicCustomUrl,
     }
     writeDemoHomeSlyde(next)
-  }, [backgroundType, videoSrc, imageSrc, videoFilter, videoVignette, videoSpeed, posterSrc, categories, showCategoryIcons, showHearts, showShare, showSound, showReviews, socialLinks, lists, homeSlyde.childFrames, homeSlyde.childFAQs, homeSlyde.homeFAQs, homeSlyde.faqInbox])
+  }, [backgroundType, videoSrc, imageSrc, videoFilter, videoVignette, videoSpeed, posterSrc, categories, showCategoryIcons, showHearts, showShare, showSound, showReviews, socialLinks, lists, homeSlyde.childFrames, homeSlyde.childFAQs, homeSlyde.homeFAQs, homeSlyde.faqInbox, musicEnabled, musicLibraryId, musicCustomUrl])
 
   useEffect(() => {
     const timeout = setTimeout(persistHomeSlyde, 300)
@@ -1860,31 +1879,34 @@ export function UnifiedStudioEditor() {
                     )
                   )}
 
-                  {/* List Preview - Shows InventoryGridView */}
+                  {/* List Preview - Shows InventoryGridView as a sheet overlay */}
                   {previewMode === 'list' && selectedList && (
-                    <InventoryGridView
-                      categoryName={selectedList.name}
-                      items={selectedList.items.map(item => ({
-                        id: item.id,
-                        title: item.title,
-                        subtitle: item.subtitle || '',
-                        price: item.price || '',
-                        image: item.image || '',
-                        frames: (item.frames || []) as any,
-                      }))}
-                      onItemTap={(itemId) => {
-                        // Expand the item in navigator and select it
-                        setExpandedItems(prev => new Set([...prev, itemId]))
-                        setPreviewMode('item')
-                        setSelection({ type: 'item', listId: selectedList.id, itemId, categoryId: selection.categoryId })
-                      }}
-                      onBack={() => {
-                        // Go back to home
-                        setPreviewMode('home')
-                        setSelection({ type: 'home' })
-                      }}
-                      accentColor={brandProfile.primaryColor}
-                    />
+                    <div className="relative w-full h-full bg-gray-900">
+                      <InventoryGridView
+                        isOpen={true}
+                        categoryName={selectedList.name}
+                        items={selectedList.items.map(item => ({
+                          id: item.id,
+                          title: item.title,
+                          subtitle: item.subtitle || '',
+                          price: item.price || '',
+                          image: item.image || '',
+                          frames: (item.frames || []) as any,
+                        }))}
+                        onItemTap={(itemId) => {
+                          // Expand the item in navigator and select it
+                          setExpandedItems(prev => new Set([...prev, itemId]))
+                          setPreviewMode('item')
+                          setSelection({ type: 'item', listId: selectedList.id, itemId, categoryId: selection.categoryId })
+                        }}
+                        onClose={() => {
+                          // Go back to home
+                          setPreviewMode('home')
+                          setSelection({ type: 'home' })
+                        }}
+                        accentColor={brandProfile.primaryColor}
+                      />
+                    </div>
                   )}
 
                   {/* Item Preview - Shows SlydeScreen if item has frames */}
@@ -2664,98 +2686,6 @@ export function UnifiedStudioEditor() {
                     )}
                   </div>
 
-                  {/* Inventory Section */}
-                  <div className="rounded-xl border-2 border-dashed border-cyan-300 dark:border-cyan-500/30 bg-cyan-50/50 dark:bg-cyan-500/5 p-4 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <List className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-                        <span className="text-sm font-semibold text-gray-900 dark:text-white">Inventory</span>
-                      </div>
-                      <Toggle
-                        enabled={!!selectedCategoryFrame.listId}
-                        onChange={(enabled) => {
-                          if (enabled && lists.length > 0) {
-                            updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
-                              listId: lists[0].id,
-                              inventoryCtaText: 'View All',
-                              cta: {
-                                text: 'View All',
-                                icon: 'list' as const,
-                                action: 'list',
-                                listId: lists[0].id
-                              }
-                            })
-                          } else {
-                            updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
-                              listId: undefined,
-                              inventoryCtaText: undefined,
-                              cta: undefined
-                            })
-                          }
-                        }}
-                      />
-                    </div>
-                    <p className="text-xs text-gray-500 dark:text-white/50">
-                      Connect a list to show inventory items on this frame
-                    </p>
-
-                    {selectedCategoryFrame.listId && (
-                      <div className="space-y-3 pt-2 border-t border-cyan-200 dark:border-cyan-500/20">
-                        <div>
-                          <label className="block text-[12px] font-medium text-gray-600 dark:text-white/60 mb-1">Connected List</label>
-                          <select
-                            value={selectedCategoryFrame.listId || ''}
-                            onChange={(e) => {
-                              const newListId = e.target.value || undefined
-                              updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
-                                listId: newListId,
-                                cta: newListId ? {
-                                  text: selectedCategoryFrame.inventoryCtaText || 'View All',
-                                  icon: 'list' as const,
-                                  action: 'list',
-                                  listId: newListId
-                                } : undefined
-                              })
-                            }}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
-                          >
-                            <option value="" className="bg-white dark:bg-white/5 text-gray-900 dark:text-white">Select a list...</option>
-                            {lists.map((list) => (
-                              <option key={list.id} value={list.id} className="bg-white dark:bg-white/5 text-gray-900 dark:text-white">
-                                {list.name} ({list.items.length} items)
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-[12px] font-medium text-gray-600 dark:text-white/60 mb-1">CTA Button Text</label>
-                          <input
-                            type="text"
-                            value={selectedCategoryFrame.inventoryCtaText ?? ''}
-                            onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
-                              inventoryCtaText: e.target.value || undefined,
-                              cta: selectedCategoryFrame.cta ? {
-                                ...selectedCategoryFrame.cta,
-                                text: e.target.value || 'View All'
-                              } : undefined
-                            })}
-                            placeholder="e.g. View All, Browse Items..."
-                            className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20"
-                          />
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Button text that opens the inventory list</p>
-                        </div>
-                      </div>
-                    )}
-
-                    {!selectedCategoryFrame.listId && lists.length === 0 && (
-                      <div className="pt-2 border-t border-cyan-200 dark:border-cyan-500/20">
-                        <p className="text-xs text-gray-500 dark:text-white/40">
-                          No lists created yet. <a href="/lists" className="text-cyan-600 dark:text-cyan-400 hover:underline">Create a list</a> first.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
                   {/* CTA Section */}
                   <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
                     <button
@@ -2776,14 +2706,24 @@ export function UnifiedStudioEditor() {
                             enabled={!!selectedCategoryFrame.cta}
                             onChange={(enabled) => {
                               if (enabled) {
-                                updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { text: 'Book Now', icon: 'book', action: '' } })
+                                updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { text: 'Learn More', type: 'link', value: '' } })
                               } else {
                                 updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: undefined })
                               }
                             }}
                           />
                         </div>
-                        {selectedCategoryFrame.cta && (
+                        {selectedCategoryFrame.cta && (() => {
+                          // Determine current type from new type field or legacy action field
+                          const currentType = selectedCategoryFrame.cta.type ||
+                            (selectedCategoryFrame.cta.action?.startsWith('http') ? 'link' :
+                             selectedCategoryFrame.cta.action === 'info' ? 'info' :
+                             selectedCategoryFrame.cta.action === 'faq' ? 'faq' :
+                             selectedCategoryFrame.cta.action === 'reviews' ? 'reviews' :
+                             selectedCategoryFrame.cta.action === 'list' ? 'list' : 'link') as CTAType
+                          const selectedCtaType = CTA_TYPES.find(t => t.value === currentType) || CTA_TYPES[1] // default to 'link'
+
+                          return (
                           <>
                             <div>
                               <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Button text</label>
@@ -2795,93 +2735,85 @@ export function UnifiedStudioEditor() {
                               />
                             </div>
                             <div>
-                              <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Icon</label>
-                              <div className="grid grid-cols-6 gap-2">
-                                {CTA_ICONS.map(({ value, label, Icon }) => (
+                              <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Type</label>
+                              <div className="grid grid-cols-4 gap-2">
+                                {CTA_TYPES.map(({ value, label, Icon, defaultText }) => (
                                   <button
                                     key={value}
-                                    onClick={() => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, icon: value } })}
-                                    className={`py-2.5 rounded-lg border text-center transition-all ${
-                                      selectedCategoryFrame.cta?.icon === value
+                                    onClick={() => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                                      cta: { ...selectedCategoryFrame.cta!, type: value, icon: value as CTAIconType, value: '', text: defaultText }
+                                    })}
+                                    className={`py-2 px-2 rounded-lg border text-center transition-all flex flex-col items-center gap-1 ${
+                                      currentType === value
                                         ? 'border-blue-500 bg-blue-500/10 dark:border-blue-400 dark:bg-blue-500/15 ring-1 ring-blue-500/20'
                                         : 'border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20'
                                     }`}
                                     title={label}
                                   >
-                                    <Icon className={`w-4 h-4 mx-auto ${selectedCategoryFrame.cta?.icon === value ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-white/70'}`} />
+                                    <Icon className={`w-4 h-4 ${currentType === value ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-white/70'}`} />
+                                    <span className={`text-[10px] ${currentType === value ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/50'}`}>{label}</span>
                                   </button>
                                 ))}
                               </div>
                             </div>
-                            <div>
-                              <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Action</label>
-                              <select
-                                value={selectedCategoryFrame.cta.action?.startsWith('http') ? 'url' : selectedCategoryFrame.cta.action || 'url'}
-                                onChange={(e) => {
-                                  const val = e.target.value
-                                  if (val === 'url') {
-                                    updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, action: '' } })
-                                  } else {
-                                    updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, action: val } })
-                                  }
-                                }}
-                                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                              >
-                                <option value="url">External URL</option>
-                                <option value="info">Open Info Sheet</option>
-                                <option value="faq">Open FAQ Sheet</option>
-                                <option value="reviews">Go to Reviews</option>
-                                <option value="list">Open List View</option>
-                              </select>
-                              {(selectedCategoryFrame.cta.action === '' || selectedCategoryFrame.cta.action?.startsWith('http')) && (
+                            {/* Dynamic input based on type */}
+                            {selectedCtaType.inputType === 'tel' && (
+                              <div>
+                                <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Phone Number</label>
+                                <input
+                                  type="tel"
+                                  value={selectedCategoryFrame.cta.value || ''}
+                                  onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, value: e.target.value } })}
+                                  placeholder={selectedCtaType.placeholder}
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                />
+                              </div>
+                            )}
+                            {selectedCtaType.inputType === 'url' && (
+                              <div>
+                                <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                                  {currentType === 'directions' ? 'Maps Link or Address' : 'URL'}
+                                </label>
                                 <input
                                   type="url"
-                                  value={selectedCategoryFrame.cta.action || ''}
-                                  onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, action: e.target.value } })}
-                                  placeholder="https://..."
-                                  className="w-full mt-2 px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  value={selectedCategoryFrame.cta.value || selectedCategoryFrame.cta.action || ''}
+                                  onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, value: e.target.value, action: e.target.value } })}
+                                  placeholder={selectedCtaType.placeholder}
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                 />
-                              )}
-                              {/* Connect to List */}
-                              {selectedCategoryFrame.cta.action === 'list' && (
-                                <div className="mt-3">
-                                  <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Connect to List</label>
-                                  {lists.length === 0 ? (
-                                    <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-dashed border-gray-200 dark:border-white/15 text-center">
-                                      <p className="text-[12px] text-gray-500 dark:text-white/40 mb-2">No lists created yet</p>
-                                      <button
-                                        onClick={() => {
-                                          addNewList()
-                                          setExpandedSections(prev => ({ ...prev, lists: true }))
-                                        }}
-                                        className="text-[12px] font-medium text-blue-600 dark:text-cyan-400 hover:underline"
-                                      >
-                                        + Create a list first
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    <select
-                                      value={selectedCategoryFrame.cta.listId || ''}
-                                      onChange={(e) => {
-                                        updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
-                                          cta: { ...selectedCategoryFrame.cta!, listId: e.target.value || undefined }
-                                        })
-                                      }}
-                                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                                    >
-                                      <option value="">Select a list...</option>
-                                      {lists.map((list) => (
-                                        <option key={list.id} value={list.id}>
-                                          {list.name} ({list.items.length} items)
-                                        </option>
-                                      ))}
-                                    </select>
-                                  )}
-                                </div>
-                              )}
-                            </div>
+                              </div>
+                            )}
+                            {selectedCtaType.inputType === 'email' && (
+                              <div>
+                                <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Email Address</label>
+                                <input
+                                  type="email"
+                                  value={selectedCategoryFrame.cta.value || ''}
+                                  onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, value: e.target.value } })}
+                                  placeholder={selectedCtaType.placeholder}
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                />
+                              </div>
+                            )}
+                            {selectedCtaType.inputType === 'frame-select' && (
+                              <div>
+                                <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Target Frame</label>
+                                <select
+                                  value={selectedCategoryFrame.cta.value || ''}
+                                  onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, value: e.target.value } })}
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                >
+                                  <option value="">Select a frame...</option>
+                                  {selectedCategoryFrames.map((frame, idx) => (
+                                    <option key={frame.id} value={idx.toString()}>
+                                      Frame {idx + 1}: {frame.title || 'Untitled'}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            )}
                           </>
-                        )}
+                        )})()}
                       </div>
                     )}
                   </div>
@@ -2986,6 +2918,198 @@ export function UnifiedStudioEditor() {
                             Delete This Frame
                           </button>
                         </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Inventory Section - Advanced feature, collapsed by default */}
+                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                    <button
+                      onClick={() => toggleInspectorSection('inventory')}
+                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                    >
+                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <List className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                        Inventory
+                      </span>
+                      <div className="flex items-center gap-2">
+                        {selectedCategoryFrame.listId && (
+                          <span className="text-[11px] bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 px-1.5 py-0.5 rounded">Connected</span>
+                        )}
+                        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${inspectorSections.inventory ? '' : '-rotate-90'}`} />
+                      </div>
+                    </button>
+                    {inspectorSections.inventory && (
+                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                        {lists.length === 0 ? (
+                          <div className="text-center py-2">
+                            <p className="text-[12px] text-gray-500 dark:text-white/50 mb-2">
+                              Create a List to connect inventory to this frame
+                            </p>
+                            <button
+                              onClick={() => {
+                                // Create a new list and auto-connect it
+                                const newList = {
+                                  id: crypto.randomUUID(),
+                                  name: 'New List',
+                                  items: []
+                                }
+                                setLists(prev => [...prev, newList])
+                                updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                                  listId: newList.id,
+                                  inventoryCtaText: 'View All',
+                                  cta: {
+                                    text: 'View All',
+                                    icon: 'list' as const,
+                                    action: 'list',
+                                    listId: newList.id
+                                  }
+                                })
+                                setExpandedSections(prev => ({ ...prev, lists: true }))
+                              }}
+                              className="text-[12px] font-medium text-blue-600 dark:text-cyan-400 hover:underline"
+                            >
+                              + Create a list
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-gray-600 dark:text-white/60">Connect inventory list</span>
+                              <Toggle
+                                enabled={!!selectedCategoryFrame.listId}
+                                onChange={(enabled) => {
+                                  if (enabled && lists.length > 0) {
+                                    updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                                      listId: lists[0].id,
+                                      inventoryCtaText: 'View All',
+                                      cta: {
+                                        text: 'View All',
+                                        icon: 'list' as const,
+                                        action: 'list',
+                                        listId: lists[0].id
+                                      }
+                                    })
+                                  } else {
+                                    updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                                      listId: undefined,
+                                      inventoryCtaText: undefined,
+                                      cta: undefined
+                                    })
+                                  }
+                                }}
+                              />
+                            </div>
+                            {selectedCategoryFrame.listId && (
+                              <div className="space-y-3 pt-3 border-t border-gray-200 dark:border-white/10">
+                                <div>
+                                  <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Connected List</label>
+                                  <select
+                                    value={selectedCategoryFrame.listId || ''}
+                                    onChange={(e) => {
+                                      const val = e.target.value
+                                      if (val === '__create_new__') {
+                                        // Create a new list and connect it
+                                        const newList = {
+                                          id: crypto.randomUUID(),
+                                          name: 'New List',
+                                          items: []
+                                        }
+                                        setLists(prev => [...prev, newList])
+                                        updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                                          listId: newList.id,
+                                          cta: {
+                                            text: selectedCategoryFrame.inventoryCtaText || 'View All',
+                                            icon: 'list' as const,
+                                            action: 'list',
+                                            listId: newList.id
+                                          }
+                                        })
+                                        // Expand lists section and select the new list
+                                        setExpandedSections(prev => ({ ...prev, lists: true }))
+                                      } else {
+                                        const newListId = val || undefined
+                                        updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                                          listId: newListId,
+                                          cta: newListId ? {
+                                            text: selectedCategoryFrame.inventoryCtaText || 'View All',
+                                            icon: 'list' as const,
+                                            action: 'list',
+                                            listId: newListId
+                                          } : undefined
+                                        })
+                                      }
+                                    }}
+                                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  >
+                                    <option value="">Select a list...</option>
+                                    {lists.map((list) => (
+                                      <option key={list.id} value={list.id}>
+                                        {list.name} ({list.items.length} items)
+                                      </option>
+                                    ))}
+                                    <option value="__create_new__" className="text-blue-600 dark:text-cyan-400">+ Create new list</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">List Name</label>
+                                  <input
+                                    type="text"
+                                    value={lists.find(l => l.id === selectedCategoryFrame.listId)?.name || ''}
+                                    onChange={(e) => {
+                                      const listId = selectedCategoryFrame.listId
+                                      if (listId) {
+                                        setLists(prev => prev.map(l =>
+                                          l.id === listId ? { ...l, name: e.target.value } : l
+                                        ))
+                                      }
+                                    }}
+                                    placeholder="e.g. Our Vehicles, Menu Items..."
+                                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  />
+                                  <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Name your inventory list</p>
+                                </div>
+                                <div>
+                                  <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">CTA Button Text</label>
+                                  <input
+                                    type="text"
+                                    value={selectedCategoryFrame.inventoryCtaText ?? ''}
+                                    onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                                      inventoryCtaText: e.target.value || undefined,
+                                      cta: selectedCategoryFrame.cta ? {
+                                        ...selectedCategoryFrame.cta,
+                                        text: e.target.value || 'View All'
+                                      } : undefined
+                                    })}
+                                    placeholder="e.g. View All, Browse Items..."
+                                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  />
+                                  <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Button text that opens the inventory list</p>
+                                </div>
+                                <div className="pt-3 border-t border-gray-200 dark:border-white/10">
+                                  <button
+                                    onClick={() => {
+                                      const listId = selectedCategoryFrame.listId
+                                      if (listId && confirm('Delete this list? This will also disconnect it from this frame.')) {
+                                        // Disconnect from frame first
+                                        updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                                          listId: undefined,
+                                          inventoryCtaText: undefined,
+                                          cta: undefined
+                                        })
+                                        // Then delete the list
+                                        setLists(prev => prev.filter(l => l.id !== listId))
+                                      }
+                                    }}
+                                    className="w-full py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+                                  >
+                                    Delete List
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
@@ -3291,14 +3415,24 @@ export function UnifiedStudioEditor() {
                             enabled={!!selectedItemFrame.cta}
                             onChange={(enabled) => {
                               if (enabled) {
-                                updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { text: 'Book Now', icon: 'book', action: '' } })
+                                updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { text: 'Learn More', type: 'link', value: '' } })
                               } else {
                                 updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: undefined })
                               }
                             }}
                           />
                         </div>
-                        {selectedItemFrame.cta && (
+                        {selectedItemFrame.cta && (() => {
+                          // Determine current type from new type field or legacy action field
+                          const currentType = selectedItemFrame.cta.type ||
+                            (selectedItemFrame.cta.action?.startsWith('http') ? 'link' :
+                             selectedItemFrame.cta.action === 'info' ? 'info' :
+                             selectedItemFrame.cta.action === 'faq' ? 'faq' :
+                             selectedItemFrame.cta.action === 'reviews' ? 'reviews' :
+                             selectedItemFrame.cta.action === 'list' ? 'list' : 'link') as CTAType
+                          const selectedCtaType = CTA_TYPES.find(t => t.value === currentType) || CTA_TYPES[1] // default to 'link'
+
+                          return (
                           <>
                             <div>
                               <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Button text</label>
@@ -3310,55 +3444,85 @@ export function UnifiedStudioEditor() {
                               />
                             </div>
                             <div>
-                              <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Icon</label>
-                              <div className="grid grid-cols-6 gap-2">
-                                {CTA_ICONS.map(({ value, label, Icon }) => (
+                              <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Type</label>
+                              <div className="grid grid-cols-4 gap-2">
+                                {CTA_TYPES.map(({ value, label, Icon, defaultText }) => (
                                   <button
                                     key={value}
-                                    onClick={() => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, icon: value } })}
-                                    className={`py-2.5 rounded-lg border text-center transition-all ${
-                                      selectedItemFrame.cta?.icon === value
+                                    onClick={() => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, {
+                                      cta: { ...selectedItemFrame.cta!, type: value, icon: value as CTAIconType, value: '', text: defaultText }
+                                    })}
+                                    className={`py-2 px-2 rounded-lg border text-center transition-all flex flex-col items-center gap-1 ${
+                                      currentType === value
                                         ? 'border-blue-500 bg-blue-500/10 dark:border-blue-400 dark:bg-blue-500/15 ring-1 ring-blue-500/20'
                                         : 'border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20'
                                     }`}
                                     title={label}
                                   >
-                                    <Icon className={`w-4 h-4 mx-auto ${selectedItemFrame.cta?.icon === value ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-white/70'}`} />
+                                    <Icon className={`w-4 h-4 ${currentType === value ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-white/70'}`} />
+                                    <span className={`text-[10px] ${currentType === value ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-white/50'}`}>{label}</span>
                                   </button>
                                 ))}
                               </div>
                             </div>
-                            <div>
-                              <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Action</label>
-                              <select
-                                value={selectedItemFrame.cta.action?.startsWith('http') ? 'url' : selectedItemFrame.cta.action || 'url'}
-                                onChange={(e) => {
-                                  const val = e.target.value
-                                  if (val === 'url') {
-                                    updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, action: '' } })
-                                  } else {
-                                    updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, action: val } })
-                                  }
-                                }}
-                                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                              >
-                                <option value="url">External URL</option>
-                                <option value="info">Open Info Sheet</option>
-                                <option value="faq">Open FAQ Sheet</option>
-                                <option value="reviews">Go to Reviews</option>
-                              </select>
-                              {(selectedItemFrame.cta.action === '' || selectedItemFrame.cta.action?.startsWith('http')) && (
+                            {/* Dynamic input based on type */}
+                            {selectedCtaType.inputType === 'tel' && (
+                              <div>
+                                <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Phone Number</label>
+                                <input
+                                  type="tel"
+                                  value={selectedItemFrame.cta.value || ''}
+                                  onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, value: e.target.value } })}
+                                  placeholder={selectedCtaType.placeholder}
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                />
+                              </div>
+                            )}
+                            {selectedCtaType.inputType === 'url' && (
+                              <div>
+                                <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">
+                                  {currentType === 'directions' ? 'Maps Link or Address' : 'URL'}
+                                </label>
                                 <input
                                   type="url"
-                                  value={selectedItemFrame.cta.action || ''}
-                                  onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, action: e.target.value } })}
-                                  placeholder="https://..."
-                                  className="w-full mt-2 px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  value={selectedItemFrame.cta.value || selectedItemFrame.cta.action || ''}
+                                  onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, value: e.target.value, action: e.target.value } })}
+                                  placeholder={selectedCtaType.placeholder}
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                 />
-                              )}
-                            </div>
+                              </div>
+                            )}
+                            {selectedCtaType.inputType === 'email' && (
+                              <div>
+                                <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Email Address</label>
+                                <input
+                                  type="email"
+                                  value={selectedItemFrame.cta.value || ''}
+                                  onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, value: e.target.value } })}
+                                  placeholder={selectedCtaType.placeholder}
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                />
+                              </div>
+                            )}
+                            {selectedCtaType.inputType === 'frame-select' && (
+                              <div>
+                                <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Target Frame</label>
+                                <select
+                                  value={selectedItemFrame.cta.value || ''}
+                                  onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, value: e.target.value } })}
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                >
+                                  <option value="">Select a frame...</option>
+                                  {(selectedItem.frames || []).map((frame, idx) => (
+                                    <option key={frame.id} value={idx.toString()}>
+                                      Frame {idx + 1}: {frame.title || 'Untitled'}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            )}
                           </>
-                        )}
+                        )})()}
                       </div>
                     )}
                   </div>

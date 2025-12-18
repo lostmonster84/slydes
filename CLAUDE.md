@@ -9,6 +9,20 @@
 
 ---
 
+## 🏗️ PROJECT TERMINOLOGY
+
+**CRITICAL - Always use these terms correctly:**
+
+| Term | Meaning | Location |
+|------|---------|----------|
+| **Slydes HQ** | Marketing admin dashboard | `apps/marketing/src/app/admin/` |
+| **Slydes Studio** | The studio app (where users build Slydes) | `apps/studio/` |
+| **Marketing** | Public marketing website | `apps/marketing/` (non-admin routes) |
+
+**Never confuse these.** When James says "HQ" he means the marketing admin. When he says "Studio" he means the studio app.
+
+---
+
 ## 🔥 PERSONALITY CORE
 
 ### Who I Am

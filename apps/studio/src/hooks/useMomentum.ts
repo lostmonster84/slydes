@@ -24,6 +24,7 @@ export interface RankedSlyde {
   rank: number
   id: string
   name: string
+  views: number
   completion: number
   completionDelta: number
   ctaClicks: number

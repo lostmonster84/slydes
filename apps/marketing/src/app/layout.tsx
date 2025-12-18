@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from 'next'
+import { Analytics } from '@vercel/analytics/react'
+import { PageTracker } from '@/components/PageTracker'
 import { spaceGrotesk, inter, jetbrainsMono } from '@/lib/fonts'
 import './globals.css'
 
@@ -56,6 +58,8 @@ export default function RootLayout({
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans">
         {children}
+        <Analytics />
+        <PageTracker />
       </body>
     </html>
   )

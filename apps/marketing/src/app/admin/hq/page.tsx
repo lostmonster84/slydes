@@ -91,11 +91,25 @@ type OrganizationsData = {
   stats: { total: number; thisMonth: number }
 }
 
+type SiteVisitsData = {
+  uniqueVisitors: {
+    total: number
+    today: number
+    yesterday: number
+    thisWeek: number
+    last30Days: number
+  }
+  totalPageViews: number
+  topPages: { page: string; views: number }[]
+  topCountries: { country: string; visits: number }[]
+}
+
 export default function AdminOverviewPage() {
   const [health, setHealth] = useState<HealthData | null>(null)
   const [metrics, setMetrics] = useState<MetricsData | null>(null)
   const [revenue, setRevenue] = useState<RevenueData | null>(null)
   const [orgs, setOrgs] = useState<OrganizationsData | null>(null)
+  const [siteVisits, setSiteVisits] = useState<SiteVisitsData | null>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [period, setPeriod] = useState<TrendPeriod>('wow')
@@ -112,28 +126,31 @@ export default function AdminOverviewPage() {
     }
 
     try {
-      const [healthRes, metricsRes, revenueRes, orgsRes] = await Promise.all([
+      const [healthRes, metricsRes, revenueRes, orgsRes, siteVisitsRes] = await Promise.all([
         fetch('/api/admin/health'),
         fetch(metricsUrl),
         fetch('/api/admin/revenue'),
         fetch('/api/admin/organizations'),
+        fetch('/api/admin/site-visits'),
       ])
 
       if (!healthRes.ok || !metricsRes.ok) {
         throw new Error('Failed to fetch data')
       }
 
-      const [healthData, metricsData, revenueData, orgsData] = await Promise.all([
+      const [healthData, metricsData, revenueData, orgsData, siteVisitsData] = await Promise.all([
         healthRes.json(),
         metricsRes.json(),
         revenueRes.ok ? revenueRes.json() : null,
         orgsRes.ok ? orgsRes.json() : null,
+        siteVisitsRes.ok ? siteVisitsRes.json() : null,
       ])
 
       setHealth(healthData)
       setMetrics(metricsData)
       setRevenue(revenueData)
       setOrgs(orgsData)
+      setSiteVisits(siteVisitsData)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Something went wrong')
     } finally {
@@ -204,6 +221,38 @@ export default function AdminOverviewPage() {
           />
         </div>
       )}
+
+      {/* Site Visitors */}
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <h2 className="text-lg font-semibold text-white">Site Visitors</h2>
+          <InfoIcon tooltip="Unique visitors to slydes.io. Based on anonymized fingerprints - no personal data stored." light />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <MetricCard
+            label="Today"
+            value={siteVisits?.uniqueVisitors.today ?? '-'}
+            tooltip="Unique visitors today so far."
+            subtext={siteVisits?.uniqueVisitors.yesterday !== undefined ? `${siteVisits.uniqueVisitors.yesterday} yesterday` : undefined}
+          />
+          <MetricCard
+            label="This Week"
+            value={siteVisits?.uniqueVisitors.thisWeek ?? '-'}
+            tooltip="Unique visitors in the last 7 days."
+          />
+          <MetricCard
+            label="Last 30 Days"
+            value={siteVisits?.uniqueVisitors.last30Days ?? '-'}
+            tooltip="Unique visitors in the last 30 days."
+          />
+          <MetricCard
+            label="All Time"
+            value={siteVisits?.uniqueVisitors.total ?? '-'}
+            tooltip="Total unique visitors since tracking started."
+            subtext={siteVisits?.totalPageViews ? `${siteVisits.totalPageViews} page views` : undefined}
+          />
+        </div>
+      </div>
 
       {/* Key Metrics */}
       <div className="mb-8">

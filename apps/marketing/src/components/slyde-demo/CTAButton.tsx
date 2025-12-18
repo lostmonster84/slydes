@@ -1,13 +1,17 @@
 'use client'
 
 import * as React from 'react'
-import { ArrowRight, BookOpen, Calendar, Eye, Phone, List } from 'lucide-react'
+import { ArrowRight, BookOpen, Calendar, Eye, Phone, List, Mail, MapPin, Info, HelpCircle, Star, ExternalLink } from 'lucide-react'
 
+// Legacy icon types (kept for backward compatibility)
 export type CTAIconType = 'book' | 'call' | 'view' | 'arrow' | 'menu' | 'list'
+
+// New CTA types (1:1 icon-to-action mapping)
+export type CTAType = 'call' | 'link' | 'email' | 'directions' | 'info' | 'faq' | 'reviews' | 'frame' | 'list'
 
 export type CTAButtonProps = {
   text: string
-  icon?: CTAIconType
+  icon?: CTAIconType | CTAType
   /**
    * Either a Tailwind background class (e.g. "bg-red-600")
    * or a CSS color/gradient string (e.g. "linear-gradient(...)").
@@ -17,13 +21,23 @@ export type CTAButtonProps = {
   className?: string
 }
 
-const ICONS: Record<CTAIconType, React.ComponentType<{ className?: string }>> = {
+// Combined icon mapping (supports both legacy and new types)
+const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  // Legacy icons
   book: Calendar,
   call: Phone,
   view: Eye,
   arrow: ArrowRight,
   menu: BookOpen,
   list: List,
+  // New CTA type icons
+  link: ExternalLink,
+  email: Mail,
+  directions: MapPin,
+  info: Info,
+  faq: HelpCircle,
+  reviews: Star,
+  frame: ArrowRight,
 }
 
 export const CTAButton: React.FC<CTAButtonProps> = ({ text, icon = 'arrow', accentColor = 'bg-red-600', onClick, className }) => {

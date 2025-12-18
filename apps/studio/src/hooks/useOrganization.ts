@@ -13,6 +13,7 @@ export interface Organization {
   business_type: string | null
   logo_url: string | null
   primary_color: string
+  secondary_color: string
   home_video_stream_uid: string | null
   home_video_poster_url: string | null
   instagram_handle: string | null
@@ -21,6 +22,10 @@ export interface Organization {
   tiktok_handle: string | null
   tiktok_followers: number | null
   tiktok_updated_at: string | null
+  // Background music
+  home_audio_r2_key: string | null
+  home_audio_library_id: string | null
+  home_audio_enabled: boolean
   created_at: string
   updated_at: string
 }
@@ -134,6 +139,7 @@ export function useOrganization(): UseOrganizationReturn {
         slug: data.slug.toLowerCase(),
         business_type: data.business_type || null,
         primary_color: '#2563EB',
+        secondary_color: '#06B6D4',
       })
       .select()
       .single()

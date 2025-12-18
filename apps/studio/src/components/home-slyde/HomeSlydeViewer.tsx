@@ -351,31 +351,44 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = f
         )
 
       case 'inventory':
-        if (!category?.inventory) {
+        // Inventory is now a sheet overlay, so we show CategorySlydeView underneath
+        if (!category) {
           return (
             <motion.div
-              key="no-inventory"
+              key="no-category-for-inventory"
               className="absolute inset-0 bg-slate-900 flex items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <p className="text-white/60">No inventory available</p>
+              <p className="text-white/60">Category not found</p>
             </motion.div>
           )
         }
         return (
           <motion.div
-            key={`inventory-${state.categoryId}`}
+            key={`inventory-base-${state.categoryId}`}
             className="absolute inset-0"
-            {...fadeScale}
-            transition={transition}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
-            <InventoryGridView
-              categoryName={category.label}
-              items={category.inventory}
-              onItemTap={handleItemTap}
+            <CategorySlydeView
+              category={category}
+              frameIndex={state.frameIndex}
+              onFrameChange={handleFrameChange}
+              onViewAll={handleViewAll}
               onBack={handleBack}
+              accentColor={viewerData.accentColor}
+            />
+            {/* Inventory sheet overlay */}
+            <InventoryGridView
+              isOpen={true}
+              categoryName={category.label}
+              items={category.inventory || []}
+              onItemTap={handleItemTap}
+              onClose={handleBack}
               accentColor={viewerData.accentColor}
               onAddToCart={handleAddToCart}
               onBuyNow={handleBuyNow}

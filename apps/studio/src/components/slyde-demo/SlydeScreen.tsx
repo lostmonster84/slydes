@@ -745,21 +745,59 @@ export function SlydeScreen({
                       })
                       flushAnalytics()
                     }
-                    const action = currentFrameData.cta?.action
-                    if (action?.startsWith('http')) {
-                      window.open(action, '_blank', 'noopener,noreferrer')
-                    } else if (action === 'list' && onListView) {
+                    // Support both new type field and legacy action field
+                    const ctaType = currentFrameData.cta?.type
+                    const ctaValue = currentFrameData.cta?.value
+                    const legacyAction = currentFrameData.cta?.action
+
+                    // Handle new CTA types first
+                    if (ctaType) {
+                      switch (ctaType) {
+                        case 'call':
+                          if (ctaValue) window.location.href = `tel:${ctaValue}`
+                          break
+                        case 'email':
+                          if (ctaValue) window.location.href = `mailto:${ctaValue}`
+                          break
+                        case 'link':
+                        case 'directions':
+                          if (ctaValue) window.open(ctaValue, '_blank', 'noopener,noreferrer')
+                          break
+                        case 'info':
+                          setShowInfo(true)
+                          break
+                        case 'faq':
+                          setShowInfoWithFaqs(true)
+                          setShowInfo(true)
+                          break
+                        case 'reviews':
+                          const reviewsIdx = frames.findIndex(f => f.templateType === 'proof')
+                          if (reviewsIdx !== -1) setCurrentFrame(reviewsIdx)
+                          break
+                        case 'frame':
+                          const targetFrame = parseInt(ctaValue || '')
+                          if (!isNaN(targetFrame) && targetFrame >= 0 && targetFrame < frames.length) {
+                            setCurrentFrame(targetFrame)
+                          }
+                          break
+                        case 'list':
+                          if (onListView) onListView(currentFrameData)
+                          break
+                        default:
+                          setShowInfo(true)
+                      }
+                    }
+                    // Fallback to legacy action handling
+                    else if (legacyAction?.startsWith('http')) {
+                      window.open(legacyAction, '_blank', 'noopener,noreferrer')
+                    } else if (legacyAction === 'list' && onListView) {
                       onListView(currentFrameData)
-                    } else if (action === 'faq') {
-                      // Open InfoSheet with FAQs auto-expanded
+                    } else if (legacyAction === 'faq') {
                       setShowInfoWithFaqs(true)
                       setShowInfo(true)
-                    } else if (action === 'reviews') {
-                      // Navigate to proof frame
+                    } else if (legacyAction === 'reviews') {
                       const reviewsIndex = frames.findIndex(f => f.templateType === 'proof')
-                      if (reviewsIndex !== -1) {
-                        setCurrentFrame(reviewsIndex)
-                      }
+                      if (reviewsIndex !== -1) setCurrentFrame(reviewsIndex)
                     } else {
                       setShowInfo(true)
                     }

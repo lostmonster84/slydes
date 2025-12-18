@@ -395,6 +395,7 @@ export async function GET(req: Request) {
       rank: idx + 1,
       id: s.publicId,
       name: s.name,
+      views: s.views,
       completion: s.completion,
       completionDelta: s.completionDelta,
       ctaClicks: s.ctaClicks,

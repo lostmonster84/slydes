@@ -1,7 +1,8 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { DevicePreview } from './DevicePreview'
 
 interface SlideContent {
   title: string
@@ -467,16 +468,10 @@ function CTAIcon({ type }: { type: string }) {
   }
 }
 
-export function PhoneMockup({ 
+export function PhoneMockup({
   className = '',
   variant = 'hospitality',
 }: PhoneMockupProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  })
-
   const content = variantContent[variant]
   const [currentSlide, setCurrentSlide] = useState(0)
 
@@ -490,42 +485,10 @@ export function PhoneMockup({
 
   const currentContent = content.slides[currentSlide]
 
-  // 3D tilt effect
-  const rotateY = useTransform(scrollYProgress, [0, 0.5, 1], [8, 0, -8])
-  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [-3, 0, 3])
-
   return (
-    <motion.div 
-      ref={ref}
-      className={`relative ${className}`}
-      style={{
-        rotateY,
-        rotateX,
-        transformPerspective: 1200,
-        transformStyle: 'preserve-3d',
-      }}
-    >
-      {/* Glow effect behind phone */}
-      <div className="absolute inset-0 -z-10 blur-3xl opacity-40 bg-gradient-to-br from-leader-blue/30 via-purple-500/20 to-cyan-500/30 rounded-full scale-75" />
-      
-      {/* iPhone Frame */}
-      <div className="relative w-[280px] h-[580px] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[3rem] p-3 shadow-[0_0_60px_-15px_rgba(37,99,235,0.3),0_25px_50px_-12px_rgba(0,0,0,0.4),0_10px_20px_-5px_rgba(0,0,0,0.2)]">
-        {/* Side buttons */}
-        <div className="absolute -left-1 top-24 w-1 h-8 bg-gray-700 rounded-l-full" />
-        <div className="absolute -left-1 top-36 w-1 h-12 bg-gray-700 rounded-l-full" />
-        <div className="absolute -left-1 top-52 w-1 h-12 bg-gray-700 rounded-l-full" />
-        <div className="absolute -right-1 top-32 w-1 h-16 bg-gray-700 rounded-r-full" />
-        
-        {/* Notch */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-gray-900 rounded-b-2xl z-20 flex items-center justify-center">
-          <div className="w-16 h-4 bg-gray-800 rounded-full flex items-center justify-center gap-2">
-            <div className="w-2 h-2 bg-gray-700 rounded-full" />
-            <div className="w-1 h-1 bg-gray-600 rounded-full" />
-          </div>
-        </div>
-        
-        {/* Screen */}
-        <div className={`relative w-full h-full bg-gradient-to-b ${content.gradient} rounded-[2.25rem] overflow-hidden`}>
+    <DevicePreview className={className}>
+      {/* Screen content */}
+      <div className={`relative w-full h-full bg-gradient-to-b ${content.gradient}`}>
           {/* Video Background - CHANGES WITH EACH SLIDE */}
           <AnimatePresence mode="wait">
             <motion.video
@@ -694,10 +657,9 @@ export function PhoneMockup({
             </motion.div>
           </div>
           
-          {/* Home indicator - inside screen only */}
+          {/* Home indicator - inside screen */}
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-28 h-1 bg-white/30 rounded-full z-10" />
         </div>
-      </div>
-    </motion.div>
+    </DevicePreview>
   )
 }

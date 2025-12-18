@@ -206,10 +206,7 @@ export function Hero() {
           className="mb-6"
         >
           <div className="animate-phone-float">
-            <PhoneMockup 
-              variant="hospitality"
-              className="scale-[0.85] md:scale-95"
-            />
+            <PhoneMockup variant="rentals" />
           </div>
         </motion.div>
         

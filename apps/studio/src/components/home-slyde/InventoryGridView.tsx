@@ -2,14 +2,15 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Plus, MessageCircle, Zap, Check } from 'lucide-react'
+import { ChevronRight, Plus, MessageCircle, Zap, Check, X } from 'lucide-react'
 import type { InventoryItem, CommerceMode } from './data/highlandMotorsData'
 
 interface InventoryGridViewProps {
+  isOpen: boolean
   categoryName: string
   items: InventoryItem[]
   onItemTap: (itemId: string) => void
-  onBack: () => void
+  onClose: () => void
   accentColor: string
   onAddToCart?: (item: InventoryItem) => void
   onBuyNow?: (item: InventoryItem) => void
@@ -19,11 +20,12 @@ interface InventoryGridViewProps {
 /**
  * InventoryGridView - List view with thumbnails
  *
- * Styled to match CategoryDrawer - consistent Slydes brand:
- * - Dark #1c1c1e background
- * - Grouped list with #2c2c2e cards
- * - Handle bar + centered title header
- * - Clean typography, subtle separators
+ * Partial-height sheet matching other Slydes sheets (InfoSheet, FAQSheet):
+ * - Backdrop with dismiss on tap
+ * - Rounded top corners
+ * - Drag handle + X close button
+ * - Spring animation (damping: 28, stiffness: 350)
+ * - Max 80% height
  *
  * E-commerce support:
  * - Optional commerce_mode per item (add_to_cart, buy_now, enquire)
@@ -115,10 +117,11 @@ function CommerceButton({
 }
 
 export function InventoryGridView({
+  isOpen,
   categoryName,
   items,
   onItemTap,
-  onBack,
+  onClose,
   accentColor,
   onAddToCart,
   onBuyNow,
@@ -135,110 +138,133 @@ export function InventoryGridView({
       onEnquire(item)
     }
   }
+
   return (
-    <div className="relative w-full h-full bg-[#1c1c1e] flex flex-col">
-      {/* Header - Slydes brand style (matches CategoryDrawer) */}
-      <div className="pt-8 pb-3 bg-[#1c1c1e]">
-        {/* Handle bar */}
-        <div className="flex justify-center pb-3">
-          <div className="w-9 h-[5px] rounded-full bg-white/30" />
-        </div>
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop - tap to dismiss */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="absolute inset-0 bg-black/60 z-[55]"
+            onClick={onClose}
+          />
 
-        {/* Header row with back button centered title */}
-        <div className="flex items-center justify-between px-4">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-0.5 -ml-1"
-            style={{ color: accentColor }}
+          {/* Sheet */}
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 28, stiffness: 350 }}
+            className="absolute bottom-0 left-0 right-0 bg-[#1c1c1e] rounded-t-2xl z-[60] flex flex-col"
+            style={{ maxHeight: '80%' }}
           >
-            <ChevronLeft className="w-5 h-5" />
-            <span className="text-[15px]">Back</span>
-          </button>
-          <h2 className="text-white text-[17px] font-semibold">
-            {categoryName}
-          </h2>
-          <div className="w-14" /> {/* Spacer for centering */}
-        </div>
-      </div>
+            {/* Header */}
+            <div className="pt-3 pb-3 flex-shrink-0">
+              {/* Drag handle */}
+              <div className="flex justify-center pb-3">
+                <div className="w-9 h-[5px] rounded-full bg-white/30" />
+              </div>
 
-      {/* iOS Grouped List */}
-      <div
-        className="flex-1 overflow-y-auto"
-        style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-        }}
-      >
-        <style jsx>{`
-          div::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
-
-        {/* Grouped container with rounded corners */}
-        <div className="mx-4 mt-2 mb-6 bg-[#2c2c2e] rounded-xl overflow-hidden">
-          {items.map((item, index) => (
-            <div key={item.id}>
-              <motion.button
-                onClick={() => onItemTap(item.id)}
-                className="w-full flex items-center gap-3 px-4 py-3 text-left active:bg-white/5 transition-colors"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: index * 0.02 }}
-              >
-                {/* Square Thumbnail */}
-                <div className="w-12 h-12 rounded-lg bg-[#3a3a3c] flex-shrink-0 overflow-hidden">
-                  {item.image ? (
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        // Fallback to gradient placeholder if image fails
-                        e.currentTarget.style.display = 'none'
-                        e.currentTarget.nextElementSibling?.classList.remove('hidden')
-                      }}
-                    />
-                  ) : null}
-                  <div className={`w-full h-full bg-gradient-to-br from-[#3a3a3c] to-[#2c2c2e] ${item.image ? 'hidden' : ''}`} />
-                </div>
-
-                {/* Item Info */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-white text-[15px] font-medium line-clamp-1">
-                    {item.title}
-                  </h3>
-                  {item.subtitle && (
-                    <p className="text-white/50 text-[13px] line-clamp-1 mt-0.5">
-                      {item.subtitle}
-                    </p>
-                  )}
-                </div>
-
-                {/* Commerce button or chevron */}
-                {item.commerce_mode && item.commerce_mode !== 'none' ? (
-                  <CommerceButton
-                    mode={item.commerce_mode}
-                    accentColor={accentColor}
-                    onClick={(e) => handleCommerceClick(e, item)}
-                  />
-                ) : (
-                  <ChevronRight className="w-5 h-5 text-white/20 flex-shrink-0" />
-                )}
-              </motion.button>
-              {/* iOS separator - inset from left (aligned with text, not thumbnail) */}
-              {index < items.length - 1 && (
-                <div className="ml-[76px] h-[0.5px] bg-white/10" />
-              )}
+              {/* Title row with X close button */}
+              <div className="flex items-center justify-between px-4">
+                <div className="w-8" /> {/* Spacer for centering */}
+                <h2 className="text-white text-[17px] font-semibold">
+                  {categoryName}
+                </h2>
+                <button
+                  onClick={onClose}
+                  className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"
+                >
+                  <X className="w-4 h-4 text-white/70" />
+                </button>
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Home indicator */}
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-        <div className="w-32 h-1 rounded-full bg-white/30" />
-      </div>
-    </div>
+            {/* iOS Grouped List */}
+            <div
+              className="flex-1 overflow-y-auto pb-8"
+              style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}
+            >
+              <style jsx>{`
+                div::-webkit-scrollbar {
+                  display: none;
+                }
+              `}</style>
+
+              {/* Grouped container with rounded corners */}
+              <div className="mx-4 mt-2 mb-6 bg-[#2c2c2e] rounded-xl overflow-hidden">
+                {items.map((item, index) => (
+                  <div key={item.id}>
+                    <motion.button
+                      onClick={() => onItemTap(item.id)}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-left active:bg-white/5 transition-colors"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: index * 0.02 }}
+                    >
+                      {/* Square Thumbnail */}
+                      <div className="w-12 h-12 rounded-lg bg-[#3a3a3c] flex-shrink-0 overflow-hidden">
+                        {item.image ? (
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              // Fallback to gradient placeholder if image fails
+                              e.currentTarget.style.display = 'none'
+                              e.currentTarget.nextElementSibling?.classList.remove('hidden')
+                            }}
+                          />
+                        ) : null}
+                        <div className={`w-full h-full bg-gradient-to-br from-[#3a3a3c] to-[#2c2c2e] ${item.image ? 'hidden' : ''}`} />
+                      </div>
+
+                      {/* Item Info */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-white text-[15px] font-medium line-clamp-1">
+                          {item.title}
+                        </h3>
+                        {item.subtitle && (
+                          <p className="text-white/50 text-[13px] line-clamp-1 mt-0.5">
+                            {item.subtitle}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Commerce button or chevron */}
+                      {item.commerce_mode && item.commerce_mode !== 'none' ? (
+                        <CommerceButton
+                          mode={item.commerce_mode}
+                          accentColor={accentColor}
+                          onClick={(e) => handleCommerceClick(e, item)}
+                        />
+                      ) : (
+                        <ChevronRight className="w-5 h-5 text-white/20 flex-shrink-0" />
+                      )}
+                    </motion.button>
+                    {/* iOS separator - inset from left (aligned with text, not thumbnail) */}
+                    {index < items.length - 1 && (
+                      <div className="ml-[76px] h-[0.5px] bg-white/10" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Home indicator */}
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
+              <div className="w-32 h-1 rounded-full bg-white/30" />
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   )
 }

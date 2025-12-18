@@ -344,7 +344,7 @@ export default function HQMockupPage() {
                         </div>
 
                         {/* Quick stats (placeholder for now) */}
-                        <div className="flex items-center gap-4 py-3 px-3 -mx-3 mb-3 bg-gray-50 rounded-xl dark:bg-white/5">
+                        <div className="flex items-center gap-4 px-3 py-2 bg-gray-50 rounded-lg mb-3 border border-gray-200 dark:bg-white/5 dark:border-white/10">
                           <div className="flex items-center gap-1.5">
                             <Eye className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" />
                             <span className="text-xs font-mono font-semibold text-gray-700 dark:text-white/70">—</span>

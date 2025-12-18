@@ -10,7 +10,7 @@ interface MetricCardProps {
     label: string
   }
   icon?: React.ReactNode
-  color?: 'default' | 'blue' | 'green' | 'amber'
+  color?: 'default' | 'blue' | 'green' | 'amber' | 'cyan'
 }
 
 // Apple HIG dark mode colors
@@ -34,6 +34,11 @@ const COLOR_CLASSES = {
     iconBg: 'bg-amber-500/20',
     iconText: 'text-amber-400',
     valueText: 'text-amber-400',
+  },
+  cyan: {
+    iconBg: 'bg-cyan-500/20',
+    iconText: 'text-cyan-400',
+    valueText: 'text-cyan-400',
   },
 }
 
