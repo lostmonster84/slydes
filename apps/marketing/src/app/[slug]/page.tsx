@@ -102,7 +102,7 @@ async function SlugPageContent({ paramsPromise }: { paramsPromise: Promise<{ slu
   // Not a username, check if it's a business slug
   const { data: org, error: orgError } = await admin
     .from('organizations')
-    .select('id, slug, name, primary_color, home_video_stream_uid, home_video_poster_url')
+    .select('id, slug, name, primary_color, home_video_stream_uid, home_video_poster_url, home_audio_r2_key, home_audio_library_id, home_audio_enabled')
     .eq('slug', slug)
     .single()
 
@@ -134,6 +134,19 @@ async function SlugPageContent({ paramsPromise }: { paramsPromise: Promise<{ slu
     ? `https://customer-${cfAccountHash}.cloudflarestream.com/${org.home_video_stream_uid}/manifest/video.m3u8`
     : ''
 
+  // Build audio URL from R2 key or library ID
+  const r2PublicUrl = process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://pub-98abdd0a909a4a78b03fe6de579904ae.r2.dev'
+  let audioSrc: string | undefined
+  if (org.home_audio_enabled !== false) {
+    if (org.home_audio_r2_key) {
+      audioSrc = `${r2PublicUrl}/${org.home_audio_r2_key}`
+    } else if (org.home_audio_library_id) {
+      // Library tracks - for now just use demo track as placeholder
+      // TODO: Map library IDs to actual URLs
+      audioSrc = `${r2PublicUrl}/demo/slydesanthem.mp3`
+    }
+  }
+
   return (
     <PublicHomeClient
       businessSlug={slug}
@@ -142,6 +155,8 @@ async function SlugPageContent({ paramsPromise }: { paramsPromise: Promise<{ slu
       videoSrc={videoSrc}
       posterSrc={org.home_video_poster_url || undefined}
       categories={categories}
+      audioSrc={audioSrc}
+      audioEnabled={org.home_audio_enabled !== false}
     />
   )
 }

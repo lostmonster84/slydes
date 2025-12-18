@@ -22,6 +22,9 @@ interface HomeSlydeScreenProps {
   videoFilter?: VideoFilterPreset
   videoVignette?: boolean
   videoSpeed?: VideoSpeedPreset
+  // Audio props for background music
+  audioSrc?: string
+  audioEnabled?: boolean
 }
 
 /**
@@ -34,14 +37,16 @@ interface HomeSlydeScreenProps {
  *
  * @see docs/UI-PATTERNS.md for full specification
  */
-export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video', imageSrc, videoFilter = 'original', videoVignette = false, videoSpeed = 'normal' }: HomeSlydeScreenProps) {
+export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video', imageSrc, videoFilter = 'original', videoVignette = false, videoSpeed = 'normal', audioSrc, audioEnabled = true }: HomeSlydeScreenProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
   const [isHearted, setIsHearted] = useState(false)
   const [heartCount, setHeartCount] = useState(2400)
   const [isMuted, setIsMuted] = useState(true)
+  const [audioUnlocked, setAudioUnlocked] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const audioRef = useRef<HTMLAudioElement>(null)
   const sessionIdRef = useRef<string | null>(null)
   const firstSeenAtRef = useRef<number | null>(null)
   const drawerOpenedOnceRef = useRef(false)
@@ -55,11 +60,26 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
   }, [])
 
   const toggleMute = useCallback(() => {
+    const newMuted = !isMuted
+    setIsMuted(newMuted)
+
+    // Toggle video audio
     if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted
-      setIsMuted(!isMuted)
+      videoRef.current.muted = newMuted
     }
-  }, [isMuted])
+
+    // Toggle background music
+    if (audioRef.current && audioSrc && audioEnabled) {
+      audioRef.current.muted = newMuted
+      // If unmuting for the first time, start playback (mobile autoplay policy)
+      if (!newMuted && !audioUnlocked) {
+        setAudioUnlocked(true)
+        audioRef.current.play().catch(() => {
+          // Autoplay blocked - will start on next interaction
+        })
+      }
+    }
+  }, [isMuted, audioSrc, audioEnabled, audioUnlocked])
 
   const emit = useCallback(
     async (eventType: 'sessionStart' | 'drawerOpen' | 'categorySelect' | 'videoLoop', meta?: Record<string, unknown>) => {
@@ -120,6 +140,18 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
 
   return (
     <div className="relative w-full h-full overflow-hidden">
+      {/* Background Audio (hidden) */}
+      {audioSrc && audioEnabled && (
+        <audio
+          ref={audioRef}
+          src={audioSrc}
+          loop
+          muted={isMuted}
+          playsInline
+          style={{ display: 'none' }}
+        />
+      )}
+
       {/* Background (Video or Image) */}
       <motion.div
         className="absolute inset-0 pointer-events-none"

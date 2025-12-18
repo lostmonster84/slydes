@@ -359,6 +359,7 @@ function SortableFrameRow({
   setPreviewFrameIndex,
   sizes,
   children,
+  shouldPulse,
 }: {
   frame: FrameData
   idx: number
@@ -382,6 +383,7 @@ function SortableFrameRow({
   setPreviewFrameIndex: (i: number) => void
   sizes: SizeClasses
   children?: React.ReactNode
+  shouldPulse?: boolean
 }) {
   const {
     attributes,
@@ -412,7 +414,7 @@ function SortableFrameRow({
           isFrameSelected
             ? 'bg-blue-50 dark:bg-white/10 text-gray-900 dark:text-white'
             : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
-        } ${isDragging ? 'cursor-grabbing' : ''}`}
+        } ${isDragging ? 'cursor-grabbing' : ''} ${shouldPulse ? 'animate-pulse-hint' : ''}`}
       >
         {/* Chevron for frames with inventory */}
         {hasInventory ? (
@@ -828,8 +830,23 @@ export function UnifiedStudioEditor() {
         return 'add-section'
       }
 
-      // Step 4b: Section exists but has no frames - pulse the first incomplete section to hint "click me"
-      const firstIncompleteSection = categories.find(cat => (childFrames[cat.id]?.length || 0) === 0)
+      // Check if user has completed at least one frame - if so, show demo preview!
+      const hasCompleteFrame = categories.some(cat => {
+        const frames = childFrames[cat.id] || []
+        return frames.some(f => f.title?.trim() && f.background?.src?.trim())
+      })
+      if (hasCompleteFrame && !onboardingVisited.demoPreview) {
+        return 'demo-preview'
+      }
+
+      // Step 4b: Section exists but is incomplete - pulse it to hint "click me"
+      // Incomplete = no frames OR has frames without title/background
+      const firstIncompleteSection = categories.find(cat => {
+        const frames = childFrames[cat.id] || []
+        if (frames.length === 0) return true
+        // Check if any frame is incomplete
+        return frames.some(f => !f.title?.trim() || !f.background?.src?.trim())
+      })
       if (firstIncompleteSection) {
         return `section-${firstIncompleteSection.id}`
       }
@@ -849,10 +866,16 @@ export function UnifiedStudioEditor() {
         return 'category-subtitle-input'
       }
 
-      // Step 8: Add frame
+      // Step 8: Add frame (if none exist)
       const selectedCatFrames = childFrames[selection.categoryId] || []
       if (selectedCatFrames.length === 0) {
         return 'add-frame'
+      }
+
+      // Step 9: Frame exists - pulse it to hint "click me to edit"
+      const firstIncompleteFrame = selectedCatFrames.find(f => !f.title?.trim() || !f.background?.src?.trim())
+      if (firstIncompleteFrame) {
+        return `frame-${firstIncompleteFrame.id}`
       }
     }
 
@@ -874,14 +897,14 @@ export function UnifiedStudioEditor() {
       }
     }
 
-    // PHASE 4: Demo preview - after completing a frame
+    // PHASE 4: Guide user back to Home to see demo preview
     const hasCompleteFrame = categories.some(cat => {
       const frames = childFrames[cat.id] || []
       return frames.some(f => f.title?.trim() && f.background?.src?.trim())
     })
 
-    if (hasCompleteFrame && selection.type === 'home' && !onboardingVisited.demoPreview) {
-      return 'demo-preview'
+    if (hasCompleteFrame && !onboardingVisited.demoPreview && selection.type !== 'home') {
+      return 'nav-home'
     }
 
     // All done! No pulse needed - they've learned the pattern
@@ -1116,17 +1139,19 @@ export function UnifiedStudioEditor() {
     if (savedFrames && savedFrames.length > 0) {
       setChildFrames(prev => ({ ...prev, [categoryId]: savedFrames }))
     } else {
-      // Create starter frames
+      // Create starter frames - empty to trigger onboarding flow
       const starterFrames: FrameData[] = [
         {
           id: '1',
           order: 1,
           templateType: 'hook',
-          title: 'Frame 1',
-          subtitle: 'Add your subtitle here',
+          title: '', // Empty - onboarding will prompt user
+          subtitle: '',
           heartCount: 0,
-          background: { type: 'image', src: '' },
+          background: { type: 'video', src: '' }, // Default to video
           accentColor: brandProfile.primaryColor,
+          // Default CTA - "Call" button ready to go
+          ctas: [{ type: 'call' as CTAType, icon: 'phone' as CTAIconType, label: 'Call', value: '' }],
         },
       ]
       setChildFrames(prev => ({ ...prev, [categoryId]: starterFrames }))
@@ -1137,16 +1162,17 @@ export function UnifiedStudioEditor() {
     const frames = childFrames[categoryId] || []
     const newId = `frame-${Date.now()}`
     const frameNumber = frames.length + 1
-    const newTitle = `Frame ${frameNumber}`
     const newFrame: FrameData = {
       id: newId,
       order: frameNumber,
       templateType: 'custom',
-      title: newTitle,
-      subtitle: 'Add your subtitle here',
+      title: '', // Empty - onboarding will prompt user to add title
+      subtitle: '',
       heartCount: 0,
-      background: { type: 'image', src: '' },
+      background: { type: 'video', src: '' }, // Default to video, empty src
       accentColor: brandProfile.primaryColor,
+      // Default CTA - "Call" button ready to go
+      ctas: [{ type: 'call' as CTAType, icon: 'phone' as CTAIconType, label: 'Call', value: '' }],
     }
     setChildFrames(prev => ({
       ...prev,
@@ -1654,7 +1680,7 @@ export function UnifiedStudioEditor() {
                           selection.type === 'home'
                             ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/20'
                             : 'hover:bg-gray-100 dark:hover:bg-white/5 text-gray-700 dark:text-white/70'
-                        }`}
+                        } ${onboardingPulseTarget === 'nav-home' ? 'animate-pulse-hint' : ''}`}
                       >
                         <HomeIcon className={`${sizes.icon} ${selection.type === 'home' ? 'text-white' : 'text-gray-400 dark:text-white/40'}`} />
                         <span className={`${sizes.text} font-medium flex-1`}>Home</span>
@@ -1741,6 +1767,7 @@ export function UnifiedStudioEditor() {
                                             setSelection={setSelection}
                                             setPreviewFrameIndex={setPreviewFrameIndex}
                                             sizes={sizes}
+                                            shouldPulse={onboardingPulseTarget === `frame-${frame.id}`}
                                           >
 
                                       {/* Inventory Items (nested under frame) */}

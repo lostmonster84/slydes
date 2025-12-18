@@ -24,11 +24,22 @@ async function BusinessSlydePageContent({
 
   const { data: org } = await admin
     .from('organizations')
-    .select('id, slug, name, primary_color')
+    .select('id, slug, name, primary_color, home_audio_r2_key, home_audio_library_id, home_audio_enabled')
     .eq('slug', businessSlug)
     .single()
 
   if (!org) return notFound()
+
+  // Build audio URL from R2 key or library ID
+  const r2PublicUrl = process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://pub-98abdd0a909a4a78b03fe6de579904ae.r2.dev'
+  let audioSrc: string | undefined
+  if (org.home_audio_enabled !== false) {
+    if (org.home_audio_r2_key) {
+      audioSrc = `${r2PublicUrl}/${org.home_audio_r2_key}`
+    } else if (org.home_audio_library_id) {
+      audioSrc = `${r2PublicUrl}/demo/slydesanthem.mp3`
+    }
+  }
 
   const { data: slyde } = await admin
     .from('slydes')
@@ -62,6 +73,8 @@ async function BusinessSlydePageContent({
       slydeSlug={slydeSlug}
       frameMedia={frameMedia}
       businessName={(org.name as string) ?? businessSlug}
+      audioSrc={audioSrc}
+      audioEnabled={org.home_audio_enabled !== false}
     />
   )
 }

@@ -56,15 +56,40 @@ export function PublicSlydeClient({
   slydeSlug,
   frameMedia,
   businessName,
+  audioSrc,
+  audioEnabled = true,
 }: {
   businessSlug: string
   slydeSlug: string
   frameMedia: FrameMedia[]
   businessName: string
+  audioSrc?: string
+  audioEnabled?: boolean
 }) {
   const sp = useSearchParams()
   const brand = useDemoBrand()
   const accent = useMemo(() => demoBrandGradient(brand), [brand])
+
+  // Audio state - managed here so it persists across the experience
+  const [isMuted, setIsMuted] = useState(true)
+  const [audioUnlocked, setAudioUnlocked] = useState(false)
+  const audioRef = useRef<HTMLAudioElement>(null)
+
+  const handleMuteToggle = useCallback(() => {
+    const newMuted = !isMuted
+    setIsMuted(newMuted)
+
+    if (audioRef.current && audioSrc && audioEnabled) {
+      audioRef.current.muted = newMuted
+      // If unmuting for the first time, start playback
+      if (!newMuted && !audioUnlocked) {
+        setAudioUnlocked(true)
+        audioRef.current.play().catch(() => {
+          // Autoplay blocked
+        })
+      }
+    }
+  }, [isMuted, audioSrc, audioEnabled, audioUnlocked])
 
   const { frames, faqs } = useMemo(() => {
     if (slydeSlug === 'just-drive') return { frames: justDriveFrames, faqs: justDriveFAQs }
@@ -257,6 +282,18 @@ export function PublicSlydeClient({
 
   return (
     <main className="min-h-screen bg-black">
+      {/* Background Audio (hidden) - managed at this level for persistence */}
+      {audioSrc && audioEnabled && (
+        <audio
+          ref={audioRef}
+          src={audioSrc}
+          loop
+          muted={isMuted}
+          playsInline
+          style={{ display: 'none' }}
+        />
+      )}
+
       {/* Minimal top bar (keeps it shareable / debuggable) */}
       <div className="fixed top-0 left-0 right-0 z-50 px-4 py-3 bg-black/30 backdrop-blur border-b border-white/10">
         <div className="max-w-xl mx-auto flex items-center justify-between">
@@ -280,6 +317,10 @@ export function PublicSlydeClient({
           analyticsOrgSlug={businessSlug}
           analyticsSlydePublicId={slydeSlug}
           analyticsSource="direct"
+          audioSrc={audioSrc}
+          audioEnabled={audioEnabled}
+          isMuted={isMuted}
+          onMuteToggle={handleMuteToggle}
         />
       </div>
     </main>

@@ -19,6 +19,8 @@ interface PublicHomeClientProps {
   videoSrc: string
   posterSrc?: string
   categories: Category[]
+  audioSrc?: string
+  audioEnabled?: boolean
 }
 
 export function PublicHomeClient({
@@ -28,6 +30,8 @@ export function PublicHomeClient({
   videoSrc,
   posterSrc,
   categories,
+  audioSrc,
+  audioEnabled = true,
 }: PublicHomeClientProps) {
   const router = useRouter()
 
@@ -63,6 +67,8 @@ export function PublicHomeClient({
             if (!child) return
             router.push(`/${encodeURIComponent(businessSlug)}/${encodeURIComponent(child)}`)
           }}
+          audioSrc={audioSrc}
+          audioEnabled={audioEnabled}
         />
       </div>
     </main>

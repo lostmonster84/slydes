@@ -74,6 +74,7 @@ export const DEMO_HOME_SLYDE_STORAGE_KEY = 'slydes_demo_home_slyde'
 export const DEMO_HOME_SLYDE_CHANGE_EVENT = 'slydes_demo_home_slyde_change'
 
 export const DEFAULT_DEMO_HOME_SLYDE: DemoHomeSlyde = {
+  backgroundType: 'video',
   videoSrc: '',
   posterSrc: undefined,
   categories: [],

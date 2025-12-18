@@ -71,7 +71,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ sounds })
   } catch (err) {
     console.error('Error listing sounds:', err)
-    return NextResponse.json({ error: 'Failed to list sounds' }, { status: 500 })
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return NextResponse.json({ error: `Failed to list sounds: ${message}` }, { status: 500 })
   }
 }
 
@@ -131,7 +132,8 @@ export async function POST(request: NextRequest) {
     })
   } catch (err) {
     console.error('Error uploading sound:', err)
-    return NextResponse.json({ error: 'Failed to upload sound' }, { status: 500 })
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return NextResponse.json({ error: `Failed to upload sound: ${message}` }, { status: 500 })
   }
 }
 
