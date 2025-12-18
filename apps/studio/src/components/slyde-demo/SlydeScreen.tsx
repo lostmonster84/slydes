@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronUp, ChevronLeft, Info } from 'lucide-react'
+import { ChevronUp, ChevronLeft, Info, Volume2, VolumeX } from 'lucide-react'
 import { Badge } from './Badge'
 import { RatingDisplay } from './RatingDisplay'
 import { SocialActionStack } from './SocialActionStack'
@@ -62,6 +62,14 @@ interface SlydeScreenProps {
   videoFilter?: VideoFilterPreset
   /** Whether to show vignette overlay */
   videoVignette?: boolean
+  /** Audio source URL for background music */
+  audioSrc?: string
+  /** Whether audio is enabled */
+  audioEnabled?: boolean
+  /** Whether audio is currently muted (controlled by parent) */
+  isMuted?: boolean
+  /** Callback when mute toggle is pressed */
+  onMuteToggle?: () => void
 }
 
 /**
@@ -101,6 +109,10 @@ export function SlydeScreen({
   onListView,
   videoFilter = 'original',
   videoVignette = false,
+  audioSrc,
+  audioEnabled = true,
+  isMuted = true,
+  onMuteToggle,
 }: SlydeScreenProps) {
   const [currentFrame, setCurrentFrame] = useState(initialFrameIndex)
   const syncingFromPropRef = useRef(false)
@@ -634,6 +646,23 @@ export function SlydeScreen({
           className="absolute top-10 left-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center z-[70] pointer-events-auto"
         >
           <ChevronLeft className="w-5 h-5 text-white" />
+        </button>
+      )}
+
+      {/* Sound toggle - Top left (after back button if present) */}
+      {!isSlydesPromo && audioSrc && audioEnabled && onMuteToggle && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onMuteToggle()
+          }}
+          className={`absolute top-10 ${context === 'category' && onBack ? 'left-14' : 'left-3'} w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center z-[70] pointer-events-auto`}
+        >
+          {isMuted ? (
+            <VolumeX className="w-4 h-4 text-white" />
+          ) : (
+            <Volume2 className="w-4 h-4 text-white" />
+          )}
         </button>
       )}
 

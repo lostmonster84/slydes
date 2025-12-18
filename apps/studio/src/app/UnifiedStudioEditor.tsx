@@ -623,6 +623,29 @@ export function UnifiedStudioEditor() {
   const [musicEnabled, setMusicEnabled] = useState(homeSlyde.musicEnabled ?? true)
   const [musicCustomUrl, setMusicCustomUrl] = useState<string | null>(homeSlyde.musicCustomUrl ?? null)
 
+  // Audio playback state (for preview)
+  const [isMusicMuted, setIsMusicMuted] = useState(true)
+  const [musicUnlocked, setMusicUnlocked] = useState(false)
+  const audioRef = useRef<HTMLAudioElement>(null)
+
+  // Audio source URL
+  const audioSrc = musicCustomUrl || (musicEnabled ? 'https://pub-98abdd0a909a4a78b03fe6de579904ae.r2.dev/demo/slydesanthem.mp3' : null)
+
+  const handleMusicToggle = useCallback(() => {
+    const newMuted = !isMusicMuted
+    setIsMusicMuted(newMuted)
+
+    if (audioRef.current && audioSrc && musicEnabled) {
+      audioRef.current.muted = newMuted
+      if (!newMuted && !musicUnlocked) {
+        setMusicUnlocked(true)
+        audioRef.current.play().catch(() => {
+          // Autoplay blocked
+        })
+      }
+    }
+  }, [isMusicMuted, audioSrc, musicEnabled, musicUnlocked])
+
   // =============================================
   // SHARE LINK STATE
   // =============================================
@@ -831,21 +854,22 @@ export function UnifiedStudioEditor() {
       }
 
       // Check if user has completed at least one frame - if so, show demo preview!
+      // Complete = has title (background is optional - reduces friction)
       const hasCompleteFrame = categories.some(cat => {
         const frames = childFrames[cat.id] || []
-        return frames.some(f => f.title?.trim() && f.background?.src?.trim())
+        return frames.some(f => f.title?.trim())
       })
       if (hasCompleteFrame && !onboardingVisited.demoPreview) {
         return 'demo-preview'
       }
 
       // Step 4b: Section exists but is incomplete - pulse it to hint "click me"
-      // Incomplete = no frames OR has frames without title/background
+      // Incomplete = no frames OR has frames without title
       const firstIncompleteSection = categories.find(cat => {
         const frames = childFrames[cat.id] || []
         if (frames.length === 0) return true
-        // Check if any frame is incomplete
-        return frames.some(f => !f.title?.trim() || !f.background?.src?.trim())
+        // Check if any frame is incomplete (just needs title)
+        return frames.some(f => !f.title?.trim())
       })
       if (firstIncompleteSection) {
         return `section-${firstIncompleteSection.id}`
@@ -873,26 +897,20 @@ export function UnifiedStudioEditor() {
       }
 
       // Step 9: Frame exists - pulse it to hint "click me to edit"
-      const firstIncompleteFrame = selectedCatFrames.find(f => !f.title?.trim() || !f.background?.src?.trim())
+      const firstIncompleteFrame = selectedCatFrames.find(f => !f.title?.trim())
       if (firstIncompleteFrame) {
         return `frame-${firstIncompleteFrame.id}`
       }
     }
 
-    // PHASE 3: Frame editing - guide through content then background
+    // PHASE 3: Frame editing - guide through content (title only, background optional)
     if (selection.type === 'categoryFrame' && selection.categoryId && selection.categoryFrameId) {
       const catFramesForSelection = childFrames[selection.categoryId] || []
       const selectedFrame = catFramesForSelection.find(f => f.id === selection.categoryFrameId)
       if (selectedFrame) {
-        // Step 5: Content - need title
+        // Just need title - background is optional to reduce friction
         if (!selectedFrame.title || selectedFrame.title.trim() === '') {
           return inspectorSections.content ? 'frame-content-title-input' : 'frame-content-section'
-        }
-
-        // Step 6: Background - need video or image on frame
-        const frameBg = selectedFrame.background
-        if (!frameBg?.src || frameBg.src.trim() === '') {
-          return inspectorSections.video ? 'frame-background-input' : 'frame-background-section'
         }
       }
     }
@@ -900,7 +918,7 @@ export function UnifiedStudioEditor() {
     // PHASE 4: Guide user back to Home to see demo preview
     const hasCompleteFrame = categories.some(cat => {
       const frames = childFrames[cat.id] || []
-      return frames.some(f => f.title?.trim() && f.background?.src?.trim())
+      return frames.some(f => f.title?.trim())
     })
 
     if (hasCompleteFrame && !onboardingVisited.demoPreview && selection.type !== 'home') {
@@ -1151,7 +1169,7 @@ export function UnifiedStudioEditor() {
           background: { type: 'video', src: '' }, // Default to video
           accentColor: brandProfile.primaryColor,
           // Default CTA - "Call" button ready to go
-          ctas: [{ type: 'call' as CTAType, icon: 'phone' as CTAIconType, label: 'Call', value: '' }],
+          cta: { type: 'call' as CTAType, icon: 'phone' as CTAIconType, text: 'Call', value: '' },
         },
       ]
       setChildFrames(prev => ({ ...prev, [categoryId]: starterFrames }))
@@ -1172,7 +1190,7 @@ export function UnifiedStudioEditor() {
       background: { type: 'video', src: '' }, // Default to video, empty src
       accentColor: brandProfile.primaryColor,
       // Default CTA - "Call" button ready to go
-      ctas: [{ type: 'call' as CTAType, icon: 'phone' as CTAIconType, label: 'Call', value: '' }],
+      cta: { type: 'call' as CTAType, icon: 'phone' as CTAIconType, text: 'Call', value: '' },
     }
     setChildFrames(prev => ({
       ...prev,
@@ -1543,6 +1561,18 @@ export function UnifiedStudioEditor() {
   // =============================================
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white overflow-hidden">
+      {/* Background Audio (hidden) - for preview playback */}
+      {audioSrc && musicEnabled && (
+        <audio
+          ref={audioRef}
+          src={audioSrc}
+          loop
+          muted={isMusicMuted}
+          playsInline
+          style={{ display: 'none' }}
+        />
+      )}
+
       <div className="flex h-screen">
         <HQSidebarConnected activePage="home-slyde" />
 
@@ -2063,6 +2093,10 @@ export function UnifiedStudioEditor() {
                             setSelection({ type: 'list', listId: frame.listId, categoryId: selection.categoryId })
                           }
                         }}
+                        audioSrc={audioSrc || undefined}
+                        audioEnabled={musicEnabled}
+                        isMuted={isMusicMuted}
+                        onMuteToggle={handleMusicToggle}
                       />
                     ) : (
                       <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white">
@@ -2136,6 +2170,10 @@ export function UnifiedStudioEditor() {
                             setSelection({ type: 'home' })
                           }
                         }}
+                        audioSrc={audioSrc || undefined}
+                        audioEnabled={musicEnabled}
+                        isMuted={isMusicMuted}
+                        onMuteToggle={handleMusicToggle}
                       />
                     ) : (
                       <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white p-6">
