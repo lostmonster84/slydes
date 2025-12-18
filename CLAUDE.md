@@ -166,6 +166,14 @@ What are we tackling? 🚀
 - Adding items should NOT auto-select - user clicks when ready
 - **If it looks different, it's WRONG**
 
+**8. VIDEO DURATION LIMITS** 🎬
+- Storage cost control: limit video durations to prevent bloat
+- **Home background video**: Max 5 minutes (300s) - "Make it impactful. Pair with epic music."
+- **Frame videos**: Max 20 seconds - Short, punchy content
+- Use `VideoTrimEditor` with `maxDuration` prop to constrain selection
+- Use `BackgroundMediaInput` with `context` prop ('home' | 'frame') for context-aware limits
+- Helper text guides users: always show max duration + trim capability
+
 ---
 
 ## 🎯 CURRENT PROJECTS

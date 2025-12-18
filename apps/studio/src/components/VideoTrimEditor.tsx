@@ -46,6 +46,7 @@ export function VideoTrimEditor({
   const [state, setState] = useState<TrimState>('loading')
   const [error, setError] = useState<string | null>(null)
   const [progress, setProgress] = useState(0)
+  const [loadingProgress, setLoadingProgress] = useState(0) // Progress for loading FFmpeg
 
   // Video state
   const [videoUrl, setVideoUrl] = useState<string | null>(null)
@@ -89,26 +90,55 @@ export function VideoTrimEditor({
           if (isMounted) setProgress(Math.round(progress * 100))
         })
 
-        // Load from CDN with timeout
+        // Load from CDN with progress tracking
         const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm'
 
-        // Fetch with timeout to prevent hanging
-        const fetchWithTimeout = async (url: string, type: string) => {
+        // Fetch with progress tracking (WASM file is ~31MB, JS is ~200KB)
+        const fetchWithProgress = async (url: string, expectedSize: number, progressOffset: number, progressWeight: number) => {
           const response = await fetch(url, { signal: controller.signal })
-          if (!response.ok) throw new Error(`Failed to fetch ${type}`)
-          const blob = await response.blob()
+          if (!response.ok) throw new Error(`Failed to fetch ${url}`)
+
+          const contentLength = response.headers.get('content-length')
+          const total = contentLength ? parseInt(contentLength, 10) : expectedSize
+
+          if (!response.body) {
+            // Fallback if ReadableStream not supported
+            const blob = await response.blob()
+            if (isMounted) setLoadingProgress(progressOffset + progressWeight)
+            return URL.createObjectURL(blob)
+          }
+
+          const reader = response.body.getReader()
+          const chunks: Uint8Array[] = []
+          let received = 0
+
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+            chunks.push(value)
+            received += value.length
+            const fileProgress = Math.round((received / total) * progressWeight)
+            if (isMounted) setLoadingProgress(progressOffset + fileProgress)
+          }
+
+          const blob = new Blob(chunks)
           return URL.createObjectURL(blob)
         }
 
-        const [coreURL, wasmURL] = await Promise.all([
-          fetchWithTimeout(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-          fetchWithTimeout(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
-        ])
+        // JS file is ~5% of load, WASM is ~95%
+        const coreURL = await fetchWithProgress(`${baseURL}/ffmpeg-core.js`, 200000, 0, 5)
+        const wasmURL = await fetchWithProgress(`${baseURL}/ffmpeg-core.wasm`, 31000000, 5, 90)
+
+        // Final 5% is for ffmpeg.load()
+        if (isMounted) setLoadingProgress(95)
 
         await ffmpeg.load({ coreURL, wasmURL })
 
         ffmpegLoadedRef.current = true
-        if (isMounted) setState('ready')
+        if (isMounted) {
+          setLoadingProgress(100)
+          setState('ready')
+        }
       } catch (err) {
         if (!isMounted) return
         console.error('Failed to load FFmpeg:', err)
@@ -390,16 +420,14 @@ export function VideoTrimEditor({
           <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center">
             <Loader2 className="w-10 h-10 text-white animate-spin mb-3" />
             <p className="text-white text-sm font-medium">
-              {state === 'loading' ? 'Loading editor...' : `Trimming... ${progress}%`}
+              {state === 'loading' ? `Loading editor... ${loadingProgress}%` : `Trimming... ${progress}%`}
             </p>
-            {state === 'trimming' && (
-              <div className="w-48 h-1.5 bg-white/20 rounded-full mt-3 overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-            )}
+            <div className="w-48 h-1.5 bg-white/20 rounded-full mt-3 overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-300"
+                style={{ width: `${state === 'loading' ? loadingProgress : progress}%` }}
+              />
+            </div>
           </div>
         )}
 
