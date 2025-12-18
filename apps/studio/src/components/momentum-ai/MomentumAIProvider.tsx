@@ -9,6 +9,10 @@ interface MomentumAIContextValue {
   open: () => void
   close: () => void
   toggle: () => void
+  /** Hide the floating trigger (e.g., when a modal is open) */
+  hideTrigger: () => void
+  /** Show the floating trigger again */
+  showTrigger: () => void
 }
 
 const MomentumAIContext = createContext<MomentumAIContextValue | null>(null)
@@ -29,18 +33,21 @@ export function useMomentumAI() {
  */
 export function MomentumAIProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isTriggerVisible, setIsTriggerVisible] = useState(true)
   const { isPro } = usePlan()
 
   const open = () => setIsOpen(true)
   const close = () => setIsOpen(false)
   const toggle = () => setIsOpen((v) => !v)
+  const hideTrigger = () => setIsTriggerVisible(false)
+  const showTrigger = () => setIsTriggerVisible(true)
 
   return (
-    <MomentumAIContext.Provider value={{ isOpen, open, close, toggle }}>
+    <MomentumAIContext.Provider value={{ isOpen, open, close, toggle, hideTrigger, showTrigger }}>
       {children}
 
-      {/* Global floating trigger - always visible */}
-      <MomentumAITrigger onClick={open} />
+      {/* Global floating trigger - hidden when modals are open */}
+      {isTriggerVisible && <MomentumAITrigger onClick={open} />}
 
       {/* The panel itself */}
       <MomentumAI

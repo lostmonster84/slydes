@@ -44,6 +44,9 @@ interface BackgroundMediaInputProps {
 
   // Context: 'home' for Home Slyde (5 min), 'frame' for frames (20 sec)
   context?: 'home' | 'frame'
+
+  // Onboarding: pulse the URL input field
+  shouldPulseInput?: boolean
 }
 
 /**
@@ -75,6 +78,7 @@ export function BackgroundMediaInput({
   showFilters = true,
   className = '',
   context = 'home',
+  shouldPulseInput = false,
 }: BackgroundMediaInputProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [pendingVideoFile, setPendingVideoFile] = useState<File | null>(null)
@@ -274,7 +278,7 @@ export function BackgroundMediaInput({
                 onChange={(e) => onVideoSrcChange(e.target.value)}
                 placeholder="Paste YouTube, Vimeo, or video URL..."
                 disabled={isProcessing}
-                className="w-full px-3 py-2 pr-10 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50"
+                className={`w-full px-3 py-2 pr-10 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50 ${shouldPulseInput && isVideo ? 'animate-pulse-hint' : ''}`}
               />
               {videoSrc && (
                 <button
@@ -300,7 +304,7 @@ export function BackgroundMediaInput({
             <button
               onClick={() => videoInputRef.current?.click()}
               disabled={isProcessing}
-              className="px-3 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 border border-gray-300 dark:border-white/15 rounded-lg text-gray-700 dark:text-white/70 transition-colors disabled:opacity-50"
+              className={`px-3 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 border border-gray-300 dark:border-white/15 rounded-lg text-gray-700 dark:text-white/70 transition-colors disabled:opacity-50 ${shouldPulseInput && isVideo ? 'animate-pulse-hint' : ''}`}
               title="Upload video"
             >
               {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
@@ -379,7 +383,7 @@ export function BackgroundMediaInput({
                 onChange={(e) => onImageSrcChange(e.target.value)}
                 placeholder="Paste image URL..."
                 disabled={isProcessing}
-                className="w-full px-3 py-2 pr-10 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50"
+                className={`w-full px-3 py-2 pr-10 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50 ${shouldPulseInput && !isVideo ? 'animate-pulse-hint' : ''}`}
               />
               {imageSrc && (
                 <button
@@ -394,7 +398,7 @@ export function BackgroundMediaInput({
             <button
               onClick={() => imageInputRef.current?.click()}
               disabled={isProcessing}
-              className="px-3 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 border border-gray-300 dark:border-white/15 rounded-lg text-gray-700 dark:text-white/70 transition-colors disabled:opacity-50"
+              className={`px-3 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 border border-gray-300 dark:border-white/15 rounded-lg text-gray-700 dark:text-white/70 transition-colors disabled:opacity-50 ${shouldPulseInput && !isVideo ? 'animate-pulse-hint' : ''}`}
               title="Upload image"
             >
               {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
@@ -512,6 +516,7 @@ export function BackgroundMediaInput({
               videoFile={pendingVideoFile}
               onTrimComplete={handleTrimComplete}
               onCancel={handleTrimCancel}
+              onSkip={handleSkipTrim}
               maxDuration={maxDuration}
             />
           </div>

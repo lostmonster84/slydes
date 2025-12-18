@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { Scissors, Play, Pause, Loader2, Check, RotateCcw, ChevronLeft, ChevronRight } from 'lucide-react'
 import { FFmpeg } from '@ffmpeg/ffmpeg'
-import { fetchFile, toBlobURL } from '@ffmpeg/util'
+import { fetchFile } from '@ffmpeg/util'
+import { useMomentumAI } from '@/components/momentum-ai'
 
 interface VideoTrimEditorProps {
   /** The video file to trim (from user upload) */
@@ -12,6 +13,8 @@ interface VideoTrimEditorProps {
   onTrimComplete: (trimmedFile: File) => void
   /** Called when user cancels trimming */
   onCancel: () => void
+  /** Called when user wants to skip trimming and upload directly */
+  onSkip?: () => void
   /** Maximum duration allowed in seconds (e.g., 20 for frames, 300 for home) */
   maxDuration?: number
   /** Optional className */
@@ -39,9 +42,17 @@ export function VideoTrimEditor({
   videoFile,
   onTrimComplete,
   onCancel,
+  onSkip,
   maxDuration,
   className = '',
 }: VideoTrimEditorProps) {
+  // Hide Momentum AI trigger while trim editor is open
+  const { hideTrigger, showTrigger } = useMomentumAI()
+  useEffect(() => {
+    hideTrigger()
+    return () => showTrigger()
+  }, [hideTrigger, showTrigger])
+
   // Core state
   const [state, setState] = useState<TrimState>('loading')
   const [error, setError] = useState<string | null>(null)
@@ -73,7 +84,7 @@ export function VideoTrimEditor({
   // Load FFmpeg on mount
   useEffect(() => {
     let isMounted = true
-    const controller = new AbortController()
+    let progressInterval: NodeJS.Timeout | null = null
 
     const loadFFmpeg = async () => {
       if (ffmpegLoadedRef.current) {
@@ -85,54 +96,36 @@ export function VideoTrimEditor({
         const ffmpeg = new FFmpeg()
         ffmpegRef.current = ffmpeg
 
-        // Log progress
+        // Log progress during trimming
         ffmpeg.on('progress', ({ progress }) => {
           if (isMounted) setProgress(Math.round(progress * 100))
         })
 
-        // Load from CDN with progress tracking
-        const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm'
+        // Load FFmpeg from local files (hosted in public/ffmpeg)
+        // Using toBlobURL from @ffmpeg/util for proper ES module compatibility
 
-        // Fetch with progress tracking (WASM file is ~31MB, JS is ~200KB)
-        const fetchWithProgress = async (url: string, expectedSize: number, progressOffset: number, progressWeight: number) => {
-          const response = await fetch(url, { signal: controller.signal })
-          if (!response.ok) throw new Error(`Failed to fetch ${url}`)
+        // Start progress animation (asymptotic approach to 90%)
+        let simulatedProgress = 0
+        progressInterval = setInterval(() => {
+          simulatedProgress += (90 - simulatedProgress) * 0.08
+          if (isMounted) setLoadingProgress(Math.round(simulatedProgress))
+        }, 200)
 
-          const contentLength = response.headers.get('content-length')
-          const total = contentLength ? parseInt(contentLength, 10) : expectedSize
+        // Use direct URLs (UMD core) so the @ffmpeg/ffmpeg worker can `importScripts(coreURL)`.
+        // Cache-bust to avoid any 304/caching edge cases with large WASM payloads.
+        const cacheBust = Date.now()
+        const coreURL = `/ffmpeg/ffmpeg-core.js?v=${cacheBust}`
+        const wasmURL = `/ffmpeg/ffmpeg-core.wasm?v=${cacheBust}`
+        const workerURL = `/ffmpeg/ffmpeg-core.worker.js?v=${cacheBust}`
 
-          if (!response.body) {
-            // Fallback if ReadableStream not supported
-            const blob = await response.blob()
-            if (isMounted) setLoadingProgress(progressOffset + progressWeight)
-            return URL.createObjectURL(blob)
-          }
+        await ffmpeg.load({ coreURL, wasmURL, workerURL })
 
-          const reader = response.body.getReader()
-          const chunks: Uint8Array[] = []
-          let received = 0
-
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) break
-            chunks.push(value)
-            received += value.length
-            const fileProgress = Math.round((received / total) * progressWeight)
-            if (isMounted) setLoadingProgress(progressOffset + fileProgress)
-          }
-
-          const blob = new Blob(chunks)
-          return URL.createObjectURL(blob)
+        // Stop simulated progress, jump to 95%
+        if (progressInterval) {
+          clearInterval(progressInterval)
+          progressInterval = null
         }
-
-        // JS file is ~5% of load, WASM is ~95%
-        const coreURL = await fetchWithProgress(`${baseURL}/ffmpeg-core.js`, 200000, 0, 5)
-        const wasmURL = await fetchWithProgress(`${baseURL}/ffmpeg-core.wasm`, 31000000, 5, 90)
-
-        // Final 5% is for ffmpeg.load()
         if (isMounted) setLoadingProgress(95)
-
-        await ffmpeg.load({ coreURL, wasmURL })
 
         ffmpegLoadedRef.current = true
         if (isMounted) {
@@ -140,11 +133,13 @@ export function VideoTrimEditor({
           setState('ready')
         }
       } catch (err) {
+        if (progressInterval) {
+          clearInterval(progressInterval)
+          progressInterval = null
+        }
         if (!isMounted) return
         console.error('Failed to load FFmpeg:', err)
-        const message = err instanceof Error && err.name === 'AbortError'
-          ? 'Loading cancelled'
-          : 'Failed to load video editor. Please try again.'
+        const message = err instanceof Error ? err.message : 'Failed to load video editor. Please try again.'
         setError(message)
         setState('error')
       }
@@ -154,7 +149,7 @@ export function VideoTrimEditor({
 
     return () => {
       isMounted = false
-      controller.abort()
+      if (progressInterval) clearInterval(progressInterval)
     }
   }, [])
 
@@ -600,19 +595,29 @@ export function VideoTrimEditor({
         <div className="px-4 pb-4 bg-gray-900">
           <p className="text-red-400 text-sm text-center mb-2">{error}</p>
           {state === 'error' && (
-            <button
-              onClick={() => {
-                setError(null)
-                setState('loading')
-                ffmpegLoadedRef.current = false
-                ffmpegRef.current = null
-                // Trigger re-mount by changing key would be better, but for now just reload
-                window.location.reload()
-              }}
-              className="w-full py-2 px-4 bg-white/10 hover:bg-white/15 text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              Retry
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setError(null)
+                  setState('loading')
+                  ffmpegLoadedRef.current = false
+                  ffmpegRef.current = null
+                  // Trigger re-mount by changing key would be better, but for now just reload
+                  window.location.reload()
+                }}
+                className="flex-1 py-2 px-4 bg-white/10 hover:bg-white/15 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                Retry
+              </button>
+              {onSkip && (
+                <button
+                  onClick={onSkip}
+                  className="flex-1 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                >
+                  Upload without trimming
+                </button>
+              )}
+            </div>
           )}
         </div>
       )}

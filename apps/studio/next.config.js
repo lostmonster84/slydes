@@ -20,6 +20,8 @@ const nextConfig = {
       },
     ],
   },
+  // Note: Using single-threaded @ffmpeg/core which doesn't require SharedArrayBuffer
+  // No COOP/COEP headers needed
 }
 
 module.exports = nextConfig
