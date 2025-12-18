@@ -36,6 +36,7 @@ export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | 'onboarded' | 'pending'>('all')
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
   const fetchUsers = useCallback(async () => {
     setIsRefreshing(true)
@@ -268,8 +269,9 @@ export default function UsersPage() {
                 </span>
 
                 {/* Actions dropdown */}
-                <div className="relative group">
+                <div className="relative">
                   <button
+                    onClick={() => setOpenDropdown(openDropdown === user.id ? null : user.id)}
                     disabled={actionLoading === user.id}
                     className="p-2 text-[#636366] hover:text-white hover:bg-[#48484a] rounded-lg transition-colors disabled:opacity-50"
                   >
@@ -286,29 +288,47 @@ export default function UsersPage() {
                   </button>
 
                   {/* Dropdown menu */}
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-[#3a3a3c] border border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
-                    {user.onboarding_completed ? (
-                      <button
-                        onClick={() => handleAction(user.id, 'reset_onboarding')}
-                        className="w-full px-4 py-2.5 text-left text-sm text-amber-400 hover:bg-[#48484a] rounded-t-lg transition-colors"
-                      >
-                        Reset Onboarding
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleAction(user.id, 'complete_onboarding')}
-                        className="w-full px-4 py-2.5 text-left text-sm text-green-400 hover:bg-[#48484a] rounded-t-lg transition-colors"
-                      >
-                        Mark Onboarded
-                      </button>
-                    )}
-                    <button
-                      onClick={() => handleDelete(user.id, user.email)}
-                      className="w-full px-4 py-2.5 text-left text-sm text-red-400 hover:bg-[#48484a] rounded-b-lg transition-colors"
-                    >
-                      Delete User
-                    </button>
-                  </div>
+                  {openDropdown === user.id && (
+                    <>
+                      {/* Backdrop to close dropdown */}
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setOpenDropdown(null)}
+                      />
+                      <div className="absolute right-0 top-full mt-1 w-48 bg-[#3a3a3c] border border-white/10 rounded-lg shadow-xl z-20">
+                        {user.onboarding_completed ? (
+                          <button
+                            onClick={() => {
+                              setOpenDropdown(null)
+                              handleAction(user.id, 'reset_onboarding')
+                            }}
+                            className="w-full px-4 py-2.5 text-left text-sm text-amber-400 hover:bg-[#48484a] rounded-t-lg transition-colors"
+                          >
+                            Reset Onboarding
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setOpenDropdown(null)
+                              handleAction(user.id, 'complete_onboarding')
+                            }}
+                            className="w-full px-4 py-2.5 text-left text-sm text-green-400 hover:bg-[#48484a] rounded-t-lg transition-colors"
+                          >
+                            Mark Onboarded
+                          </button>
+                        )}
+                        <button
+                          onClick={() => {
+                            setOpenDropdown(null)
+                            handleDelete(user.id, user.email)
+                          }}
+                          className="w-full px-4 py-2.5 text-left text-sm text-red-400 hover:bg-[#48484a] rounded-b-lg transition-colors"
+                        >
+                          Delete User
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { UnifiedStudioEditor } from './UnifiedStudioEditor'
+import { StudioClient } from './StudioClient'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -11,16 +11,16 @@ export default async function DashboardPage() {
   //   redirect('/login')
   // }
 
-  // Check onboarding status (temporarily bypassed for development)
-  // const { data: profile } = await supabase
-  //   .from('profiles')
-  //   .select('onboarding_completed')
-  //   .eq('id', user.id)
-  //   .single()
+  // Check if user has an organization
+  let hasOrganization = false
+  if (user) {
+    const { data: orgs } = await supabase
+      .from('organizations')
+      .select('id')
+      .limit(1)
 
-  // if (!profile?.onboarding_completed) {
-  //   redirect('/onboarding')
-  // }
+    hasOrganization = (orgs && orgs.length > 0)
+  }
 
-  return <UnifiedStudioEditor />
+  return <StudioClient hasOrganization={hasOrganization} />
 }
