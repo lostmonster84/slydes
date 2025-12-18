@@ -6,6 +6,7 @@ import {
   Flower, Heart, Truck, Info, Utensils, Calendar, Image, Phone,
   Scissors, Users, Package, User, Mail, Bed, Coffee, MapPin,
   Dumbbell, CreditCard, ShoppingBag, Home, Sparkles, Briefcase,
+  Car, Ship, Anchor, Route,
   type LucideIcon,
 } from 'lucide-react'
 import { type TemplateSection } from '@/lib/templates'
@@ -42,6 +43,11 @@ const ICON_MAP: Record<string, LucideIcon> = {
   sparkles: Sparkles,
   briefcase: Briefcase,
   star: Star,
+  // Transport & tours
+  car: Car,
+  ship: Ship,
+  anchor: Anchor,
+  route: Route,
 }
 
 // Get Lucide icon by name

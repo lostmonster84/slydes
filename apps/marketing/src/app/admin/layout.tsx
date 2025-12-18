@@ -4,6 +4,7 @@ import { useState, useEffect, ReactNode } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { Sun, Moon, Monitor } from 'lucide-react'
 import { AskHQ } from './_components/AskHQ'
 
 interface AdminLayoutProps {
@@ -156,6 +157,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [waitlistTodayCount, setWaitlistTodayCount] = useState(0)
   const [messagesUnreadCount, setMessagesUnreadCount] = useState(0)
   const [healthStatus, setHealthStatus] = useState<'healthy' | 'degraded' | 'unhealthy' | null>(null)
+  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('dark')
   const pathname = usePathname()
   const router = useRouter()
 
@@ -260,6 +262,44 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
   }, [isAuthenticated])
 
+  // Theme persistence and application
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem('slydes_hq_theme') as 'light' | 'dark' | 'system' | null
+      if (stored) setTheme(stored)
+    } catch {
+      // ignore
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('slydes_hq_theme', theme)
+    } catch {
+      // ignore
+    }
+
+    // Apply theme to document
+    const root = document.documentElement
+    if (theme === 'system') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      root.classList.toggle('dark', prefersDark)
+    } else {
+      root.classList.toggle('dark', theme === 'dark')
+    }
+  }, [theme])
+
+  // Listen for system theme changes when in 'system' mode
+  useEffect(() => {
+    if (theme !== 'system') return
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = (e: MediaQueryListEvent) => {
+      document.documentElement.classList.toggle('dark', e.matches)
+    }
+    mediaQuery.addEventListener('change', handler)
+    return () => mediaQuery.removeEventListener('change', handler)
+  }, [theme])
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -336,25 +376,25 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     )
   }
 
-  // Authenticated layout with side nav (Dark mode, Apple HIG)
+  // Authenticated layout with side nav (Dark/Light mode, Apple HIG)
   return (
-    <div className="min-h-screen bg-[#1c1c1e] flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#1c1c1e] flex">
       {/* Side Navigation - Apple HIG sidebar */}
       <aside
         className={`${
           isNavCollapsed ? 'w-16' : 'w-60'
-        } bg-[#2c2c2e] text-white flex flex-col fixed h-full border-r border-white/10 transition-all duration-200`}
+        } bg-white dark:bg-[#2c2c2e] text-gray-900 dark:text-white flex flex-col fixed h-full border-r border-gray-200 dark:border-white/10 transition-all duration-200`}
       >
         {/* Logo */}
-        <div className="p-4 border-b border-white/10">
+        <div className="p-4 border-b border-gray-200 dark:border-white/10">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 flex-shrink-0">
               <Image src="/logo.svg" alt="Slydes" width={32} height={32} />
             </div>
             {!isNavCollapsed && (
               <div className="overflow-hidden">
-                <h1 className="font-bold text-base text-white">Slydes HQ</h1>
-                <p className="text-xs text-gray-400">Admin</p>
+                <h1 className="font-bold text-base text-gray-900 dark:text-white">Slydes HQ</h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Admin</p>
               </div>
             )}
           </div>
@@ -366,12 +406,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             {getNavSections({ triageCount, waitlistTodayCount, messagesUnreadCount, healthStatus }).map((section, sectionIdx) => (
               <div key={sectionIdx}>
                 {section.label && !isNavCollapsed && (
-                  <p className="px-3 py-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  <p className="px-3 py-1.5 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
                     {section.label}
                   </p>
                 )}
                 {section.label && isNavCollapsed && (
-                  <div className="mx-3 my-2 border-t border-white/10" />
+                  <div className="mx-3 my-2 border-t border-gray-200 dark:border-white/10" />
                 )}
                 <ul className="space-y-1">
                   {section.items.map((item) => {
@@ -391,14 +431,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
                             isActive
                               ? 'bg-leader-blue text-white'
-                              : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white'
                           } ${isNavCollapsed ? 'justify-center' : ''}`}
                         >
                           <span className="relative">
                             <NavIcon name={item.icon} />
                             {/* Health dot indicator */}
                             {healthDotClass && (
-                              <span className={`absolute -top-0.5 -right-0.5 w-2 h-2 ${healthDotClass} rounded-full ring-2 ring-[#2c2c2e]`} />
+                              <span className={`absolute -top-0.5 -right-0.5 w-2 h-2 ${healthDotClass} rounded-full ring-2 ring-white dark:ring-[#2c2c2e]`} />
                             )}
                           </span>
                           {!isNavCollapsed && (
@@ -426,12 +466,54 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         </nav>
 
+        {/* Theme Toggle */}
+        {!isNavCollapsed && (
+          <div className="px-3 pb-2">
+            <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 px-1">Theme</div>
+            <div className="flex gap-1 p-1 bg-gray-100 dark:bg-white/5 rounded-lg">
+              <button
+                onClick={() => setTheme('light')}
+                className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium rounded-md transition-all ${
+                  theme === 'light'
+                    ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                }`}
+              >
+                <Sun className="w-3.5 h-3.5" />
+                Light
+              </button>
+              <button
+                onClick={() => setTheme('dark')}
+                className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium rounded-md transition-all ${
+                  theme === 'dark'
+                    ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                }`}
+              >
+                <Moon className="w-3.5 h-3.5" />
+                Dark
+              </button>
+              <button
+                onClick={() => setTheme('system')}
+                className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium rounded-md transition-all ${
+                  theme === 'system'
+                    ? 'bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
+                }`}
+              >
+                <Monitor className="w-3.5 h-3.5" />
+                Auto
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Collapse Toggle + Logout */}
-        <div className="p-2 border-t border-white/10 space-y-1">
+        <div className="p-2 border-t border-gray-200 dark:border-white/10 space-y-1">
           <button
             onClick={() => setIsNavCollapsed(!isNavCollapsed)}
             title={isNavCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            className={`flex items-center gap-3 px-3 py-2.5 w-full text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all ${
+            className={`flex items-center gap-3 px-3 py-2.5 w-full text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-white/10 rounded-lg transition-all ${
               isNavCollapsed ? 'justify-center' : ''
             }`}
           >
@@ -448,7 +530,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <button
             onClick={handleLogout}
             title={isNavCollapsed ? 'Logout' : undefined}
-            className={`flex items-center gap-3 px-3 py-2.5 w-full text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all ${
+            className={`flex items-center gap-3 px-3 py-2.5 w-full text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-white/10 rounded-lg transition-all ${
               isNavCollapsed ? 'justify-center' : ''
             }`}
           >

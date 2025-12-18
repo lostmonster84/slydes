@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/Button'
+import { ContactModal } from '@/components/ui/ContactModal'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
@@ -11,7 +12,8 @@ export default function InvestorsPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
-  
+  const [showContactModal, setShowContactModal] = useState(false)
+
   // Enquiry form state
   const [enquiryForm, setEnquiryForm] = useState({
     name: '',
@@ -244,7 +246,13 @@ export default function InvestorsPage() {
                     </Button>
                   </Link>
                   <p className="text-sm text-gray-500">
-                    Or email directly: <a href="mailto:invest@slydes.io" className="text-leader-blue hover:underline">invest@slydes.io</a>
+                    Or{' '}
+                    <button
+                      onClick={() => setShowContactModal(true)}
+                      className="text-leader-blue hover:underline"
+                    >
+                      send us a message
+                    </button>
                   </p>
                 </div>
               </motion.div>
@@ -317,6 +325,12 @@ export default function InvestorsPage() {
           </section>
         </main>
         <Footer />
+
+        <ContactModal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+          type="investor"
+        />
       </>
     )
   }

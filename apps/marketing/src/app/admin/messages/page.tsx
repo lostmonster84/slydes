@@ -12,12 +12,15 @@ import {
   Archive,
   ExternalLink,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  DollarSign,
+  Users,
+  Rocket
 } from 'lucide-react'
 
 interface Message {
   id: string
-  type: 'general' | 'music_help' | 'contact' | 'support'
+  type: 'general' | 'music_help' | 'contact' | 'support' | 'investor' | 'affiliate' | 'partner'
   subject: string | null
   message: string
   user_email: string | null
@@ -33,6 +36,9 @@ const TYPE_CONFIG = {
   contact: { icon: Mail, label: 'Contact', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
   support: { icon: HelpCircle, label: 'Support', color: 'bg-orange-500/20 text-orange-400 border-orange-500/30' },
   general: { icon: MessageSquare, label: 'General', color: 'bg-gray-500/20 text-gray-400 border-gray-500/30' },
+  investor: { icon: DollarSign, label: 'Investor', color: 'bg-green-500/20 text-green-400 border-green-500/30' },
+  affiliate: { icon: Users, label: 'Affiliate', color: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30' },
+  partner: { icon: Rocket, label: 'Partner', color: 'bg-pink-500/20 text-pink-400 border-pink-500/30' },
 }
 
 const STATUS_CONFIG = {

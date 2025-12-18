@@ -92,13 +92,27 @@ export function PreviewLaunchStep() {
         hasInventory: false,
       }))
 
-      // Determine primary CTA based on contact info
-      let primaryCta = { text: 'Contact Us', action: '#' }
-      if (state.contactInfo.phone) {
-        primaryCta = { text: 'Call Now', action: `tel:${state.contactInfo.phone.replace(/\s/g, '')}` }
-      } else if (state.contactInfo.email) {
-        primaryCta = { text: 'Email Us', action: `mailto:${state.contactInfo.email}` }
+      // Determine primary CTA using template-first approach
+      const ctaType = state.template?.homeDefaults.primaryCtaType || 'call'
+      const ctaText = state.template?.homeDefaults.primaryCtaText || 'Contact Us'
+      const phone = state.contactInfo.phone?.replace(/\s/g, '')
+      const email = state.contactInfo.email
+
+      let ctaAction = '#'
+      if (ctaType === 'call' && phone) {
+        ctaAction = `tel:${phone}`
+      } else if (ctaType === 'email' && email) {
+        ctaAction = `mailto:${email}`
+      } else if (ctaType === 'link') {
+        ctaAction = '#booking' // placeholder - user sets real URL in editor
+      } else if (phone) {
+        ctaAction = `tel:${phone}` // fallback to phone if available
+      } else if (email) {
+        ctaAction = `mailto:${email}` // fallback to email
       }
+      // If still '#', that's okay - user can set it in editor
+
+      const primaryCta = { text: ctaText, action: ctaAction }
 
       // Build social links
       const socialLinks: Record<string, string> = {}

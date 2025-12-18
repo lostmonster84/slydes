@@ -16,6 +16,8 @@ export type BusinessType =
   | 'gym'
   | 'retail'
   | 'events'
+  | 'car-hire'
+  | 'tours'
   | 'generic'
 
 export interface TemplateSection {
@@ -279,6 +281,62 @@ export const eventsTemplate: WizardTemplate = {
   },
 }
 
+export const carHireTemplate: WizardTemplate = {
+  id: 'car-hire',
+  name: 'Car Hire',
+  icon: '🚗',
+  description: 'Vehicle rental, car hire, van hire',
+
+  sections: [
+    { id: 'fleet', name: 'Our Fleet', icon: 'car', enabled: true },
+    { id: 'rates', name: 'Rates', icon: 'credit-card', enabled: true },
+    { id: 'locations', name: 'Locations', icon: 'map-pin', enabled: true },
+    { id: 'about', name: 'About Us', icon: 'info', enabled: true },
+  ],
+
+  homeDefaults: {
+    primaryCtaText: 'Book Now',
+    primaryCtaType: 'link',
+    showCategoryIcons: true,
+    showHearts: true,
+    showShare: true,
+    showSound: true,
+    showReviews: true,
+  },
+
+  placeholders: {
+    tagline: 'Your adventure starts here',
+  },
+}
+
+export const toursTemplate: WizardTemplate = {
+  id: 'tours',
+  name: 'Tours & Activities',
+  icon: '⛵',
+  description: 'Boat tours, walking tours, experiences, activities',
+
+  sections: [
+    { id: 'tours', name: 'Our Tours', icon: 'ship', enabled: true },
+    { id: 'schedule', name: 'Schedule', icon: 'calendar', enabled: true },
+    { id: 'pricing', name: 'Pricing', icon: 'credit-card', enabled: true },
+    { id: 'gallery', name: 'Gallery', icon: 'image', enabled: true },
+  ],
+
+  homeDefaults: {
+    primaryCtaText: 'Book a Tour',
+    primaryCtaType: 'link',
+    showCategoryIcons: true,
+    showHearts: true,
+    showShare: true,
+    showSound: true,
+    showReviews: true,
+  },
+
+  placeholders: {
+    tagline: 'Unforgettable experiences await',
+  },
+}
+
 export const genericTemplate: WizardTemplate = {
   id: 'generic',
   name: 'Other',
@@ -320,6 +378,8 @@ export const TEMPLATES: Record<BusinessType, WizardTemplate> = {
   gym: gymTemplate,
   retail: retailTemplate,
   events: eventsTemplate,
+  'car-hire': carHireTemplate,
+  tours: toursTemplate,
   generic: genericTemplate,
 }
 
@@ -332,6 +392,8 @@ export const TEMPLATE_LIST: WizardTemplate[] = [
   gymTemplate,
   retailTemplate,
   eventsTemplate,
+  carHireTemplate,
+  toursTemplate,
   genericTemplate,
 ]
 

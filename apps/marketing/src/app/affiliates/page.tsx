@@ -3,6 +3,7 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/Button'
+import { ContactModal } from '@/components/ui/ContactModal'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
@@ -79,6 +80,7 @@ function EarningsCalculator() {
 export default function AffiliatesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [showContactModal, setShowContactModal] = useState(false)
   const [formData, setFormData] = useState<Partial<FormData>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -199,13 +201,25 @@ export default function AffiliatesPage() {
                 </div>
 
                 <p className="text-sm text-gray-500">
-                  Questions? Email us at <a href="mailto:affiliates@slydes.io" className="text-leader-blue hover:underline">affiliates@slydes.io</a>
+                  Questions?{' '}
+                  <button
+                    onClick={() => setShowContactModal(true)}
+                    className="text-leader-blue hover:underline"
+                  >
+                    Send us a message
+                  </button>
                 </p>
               </div>
             </motion.div>
           </div>
         </main>
         <Footer />
+
+        <ContactModal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+          type="affiliate"
+        />
       </>
     )
   }
@@ -214,10 +228,10 @@ export default function AffiliatesPage() {
     <>
       <Header />
       <main className="pt-24 pb-16 bg-gradient-to-b from-white via-blue-50/30 to-white min-h-screen relative overflow-hidden">
-        
+
         <div className="max-w-5xl mx-auto px-6 relative z-10">
           {/* Hero Section */}
-          <motion.div 
+          <motion.div
             className="text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

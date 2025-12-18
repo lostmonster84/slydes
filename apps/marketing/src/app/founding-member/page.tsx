@@ -3,6 +3,7 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/Button'
+import { ContactModal } from '@/components/ui/ContactModal'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
@@ -70,6 +71,7 @@ function EarningsCalculator() {
 export default function FoundingPartnerPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [showContactModal, setShowContactModal] = useState(false)
   const [formData, setFormData] = useState<Partial<FormData>>({
     platforms: []
   })
@@ -188,13 +190,25 @@ export default function FoundingPartnerPage() {
                 </div>
 
                 <p className="text-sm text-gray-500">
-                  Questions? Email us at <a href="mailto:partners@slydes.io" className="text-leader-blue hover:underline">partners@slydes.io</a>
+                  Questions?{' '}
+                  <button
+                    onClick={() => setShowContactModal(true)}
+                    className="text-leader-blue hover:underline"
+                  >
+                    Send us a message
+                  </button>
                 </p>
               </div>
             </motion.div>
           </div>
         </main>
         <Footer />
+
+        <ContactModal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+          type="partner"
+        />
       </>
     )
   }
