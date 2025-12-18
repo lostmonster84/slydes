@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Upload, Link2, X, Loader2, Youtube, Film } from 'lucide-react'
+import { Upload, Link2, X, Loader2, Youtube, Film, Scissors } from 'lucide-react'
 import { useMediaUpload } from '@/hooks/useMediaUpload'
 import { VIDEO_FILTERS, VIDEO_SPEEDS, type VideoFilterPreset, type VideoSpeedPreset } from '@/lib/videoFilters'
+import { VideoTrimEditor } from './VideoTrimEditor'
 
 // Parse video URLs and return embed-friendly format
 export function parseVideoUrl(url: string): { type: 'youtube' | 'vimeo' | 'cloudflare' | 'direct', embedUrl: string, videoId?: string } | null {
@@ -118,18 +119,36 @@ export function VideoMediaInput({
   className = '',
 }: VideoMediaInputProps) {
   const [isUploading, setIsUploading] = useState(false)
+  const [pendingFile, setPendingFile] = useState<File | null>(null)
+  const [showTrimEditor, setShowTrimEditor] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { uploadVideo, videoStatus, videoProgress } = useMediaUpload()
 
   const parsedVideo = value ? parseVideoUrl(value) : null
 
+  // When user selects a file, show trim editor first
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
+    // Reset file input immediately so same file can be selected again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+
+    // Show trim editor
+    setPendingFile(file)
+    setShowTrimEditor(true)
+  }
+
+  // After trimming, upload the trimmed file
+  const handleTrimComplete = async (trimmedFile: File) => {
+    setShowTrimEditor(false)
+    setPendingFile(null)
     setIsUploading(true)
+
     try {
-      const result = await uploadVideo(file)
+      const result = await uploadVideo(trimmedFile)
       if (result?.playback?.hls) {
         // Use the HLS URL for Cloudflare Stream videos
         onChange(result.playback.hls)
@@ -138,10 +157,32 @@ export function VideoMediaInput({
       console.error('Video upload failed:', error)
     } finally {
       setIsUploading(false)
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
+    }
+  }
+
+  // Cancel trimming
+  const handleTrimCancel = () => {
+    setShowTrimEditor(false)
+    setPendingFile(null)
+  }
+
+  // Skip trimming and upload directly
+  const handleSkipTrim = async () => {
+    if (!pendingFile) return
+
+    setShowTrimEditor(false)
+    setIsUploading(true)
+
+    try {
+      const result = await uploadVideo(pendingFile)
+      if (result?.playback?.hls) {
+        onChange(result.playback.hls)
       }
+    } catch (error) {
+      console.error('Video upload failed:', error)
+    } finally {
+      setIsUploading(false)
+      setPendingFile(null)
     }
   }
 
@@ -327,6 +368,34 @@ export function VideoMediaInput({
         <p className="mt-1.5 text-[11px] text-gray-400 dark:text-white/40">
           Paste a YouTube, Vimeo, or direct video URL, or upload a file
         </p>
+      )}
+
+      {/* Trim Editor Modal */}
+      {showTrimEditor && pendingFile && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2 text-white">
+                <Scissors className="w-5 h-5" />
+                <span className="font-medium">Trim Video</span>
+              </div>
+              <button
+                onClick={handleSkipTrim}
+                className="text-white/60 hover:text-white text-sm transition-colors"
+              >
+                Skip trimming →
+              </button>
+            </div>
+
+            {/* Trim Editor */}
+            <VideoTrimEditor
+              videoFile={pendingFile}
+              onTrimComplete={handleTrimComplete}
+              onCancel={handleTrimCancel}
+            />
+          </div>
+        </div>
       )}
     </div>
   )

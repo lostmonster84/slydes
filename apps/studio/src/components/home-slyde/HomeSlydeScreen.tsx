@@ -23,6 +23,10 @@ interface HomeSlydeScreenProps {
   videoFilter?: VideoFilterPreset
   videoVignette?: boolean
   videoSpeed?: VideoSpeedPreset
+  // Music props (optional - for when music is managed externally)
+  hasMusicTrack?: boolean
+  isMusicMuted?: boolean
+  onMusicToggle?: () => void
 }
 
 /**
@@ -35,7 +39,7 @@ interface HomeSlydeScreenProps {
  *
  * @see docs/UI-PATTERNS.md for full specification
  */
-export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video', imageSrc, videoFilter = 'original', videoVignette = false, videoSpeed = 'normal' }: HomeSlydeScreenProps) {
+export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video', imageSrc, videoFilter = 'original', videoVignette = false, videoSpeed = 'normal', hasMusicTrack, isMusicMuted, onMusicToggle }: HomeSlydeScreenProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
@@ -71,11 +75,20 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
   }, [])
 
   const toggleMute = useCallback(() => {
+    // If music is managed externally, use the callback
+    if (hasMusicTrack && onMusicToggle) {
+      onMusicToggle()
+      return
+    }
+    // Otherwise, toggle video audio
     if (videoRef.current) {
       videoRef.current.muted = !videoRef.current.muted
       setIsMuted(!isMuted)
     }
-  }, [isMuted])
+  }, [isMuted, hasMusicTrack, onMusicToggle])
+
+  // Determine effective muted state (music takes precedence if available)
+  const effectiveMuted = hasMusicTrack ? isMusicMuted : isMuted
 
   const emit = useCallback(
     async (eventType: 'sessionStart' | 'drawerOpen' | 'categorySelect' | 'videoLoop', meta?: Record<string, unknown>) => {
@@ -237,7 +250,7 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
             toggleMute()
           }}
         >
-          {isMuted ? (
+          {effectiveMuted ? (
             <VolumeX className="w-4 h-4 text-white" />
           ) : (
             <Volume2 className="w-4 h-4 text-white" />

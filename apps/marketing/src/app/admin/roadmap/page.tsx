@@ -30,6 +30,9 @@ interface RoadmapItem {
 
 const STORAGE_KEY = 'slydes_hq_roadmap'
 
+// API endpoint for syncing with Studio suggestions
+const ROADMAP_API = '/api/admin/roadmap'
+
 const CATEGORY_LABELS: Record<string, string> = {
   editor: 'Editor / Studio',
   slydes: 'Slydes & Content',
@@ -57,17 +60,46 @@ export default function RoadmapPage() {
   const [dropTarget, setDropTarget] = useState<RoadmapItem['status'] | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Load from localStorage on mount
+  // Load from localStorage + API on mount
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        setItems(JSON.parse(stored))
+    const loadItems = async () => {
+      try {
+        // 1. Load from localStorage first (fast)
+        const stored = localStorage.getItem(STORAGE_KEY)
+        const localItems: RoadmapItem[] = stored ? JSON.parse(stored) : []
+
+        // 2. Fetch from API (to get Studio suggestions)
+        try {
+          const res = await fetch(ROADMAP_API)
+          if (res.ok) {
+            const data = await res.json()
+            const apiItems: RoadmapItem[] = data.items || []
+
+            // 3. Merge: API items that aren't in localStorage
+            const localIds = new Set(localItems.map(i => i.id))
+            const newFromApi = apiItems.filter(i => !localIds.has(i.id))
+
+            if (newFromApi.length > 0) {
+              const merged = [...newFromApi, ...localItems]
+              setItems(merged)
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
+            } else {
+              setItems(localItems)
+            }
+          } else {
+            setItems(localItems)
+          }
+        } catch {
+          // API failed, use localStorage only
+          setItems(localItems)
+        }
+      } catch {
+        // ignore localStorage errors
       }
-    } catch {
-      // ignore
+      setIsLoading(false)
     }
-    setIsLoading(false)
+
+    loadItems()
   }, [])
 
   // Save to localStorage on change

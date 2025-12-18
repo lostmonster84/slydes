@@ -142,10 +142,15 @@ What are we tackling? 🚀
   - Typography (font sizes, weights, colors)
   - Dark mode patterns (`dark:bg-[#2c2c2e]`, `dark:text-white/70`)
   - Empty states (dashed affordance pattern)
+  - Error states (red-50/red-500/10 bg, red-200/red-500/20 border, red-600/red-400 text)
+  - Progress bars (h-1, bg-gray-200/white-10, blue-500 fill)
+  - Modal overlays (bg-black/80, backdrop-blur-sm, rounded-2xl content)
 - **NEVER** create a page that looks different from the rest of Studio
 - When in doubt, copy existing patterns exactly
 - Reference: `HomeSlydeEditorClient.tsx` for Navigator/Inspector patterns
 - Reference: `HQSidebarConnected.tsx` for sidebar nav patterns
+- Reference: `VideoTrimEditor.tsx` for modal editor patterns (dark theme, timeline UI)
+- Reference: `BackgroundMediaInput.tsx` for media input patterns (upload, URL paste, filters)
 
 **7. STUDIO EDITOR - Preview vs Inspector Mental Model** 🎯
 - **Inspector** = What you're EDITING (controlled by selection)

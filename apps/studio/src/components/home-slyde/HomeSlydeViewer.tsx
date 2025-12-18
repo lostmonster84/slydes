@@ -11,6 +11,8 @@ import { highlandMotorsData } from './data/highlandMotorsData'
 import type { HomeSlydeData, CategoryData, FrameData as ViewerFrameData, InventoryItem } from './data/highlandMotorsData'
 import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 import { useOrganization } from '@/hooks/useOrganization'
+import { useBackgroundMusic } from '@/hooks/useBackgroundMusic'
+import { BackgroundAudioPlayer } from '@/components/audio/BackgroundAudioPlayer'
 import { useCart } from '@/lib/useCart'
 import { useDemoCheckout } from '@/lib/useCheckout'
 import type { FrameData as EditorFrameData, ListData } from '@/components/slyde-demo/frameData'
@@ -146,6 +148,20 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = f
   const { organization, isLoading: orgLoading } = useOrganization()
   const cart = useCart()
   const { checkout, isLoading: isCheckingOut } = useDemoCheckout()
+
+  // Background music
+  const {
+    audioRef,
+    isPlaying: isMusicPlaying,
+    isMuted: isMusicMuted,
+    toggleMute: toggleMusicMute,
+    unlockAudio,
+    audioSrc: musicSrc,
+  } = useBackgroundMusic({
+    customUrl: demoHome.musicCustomUrl,
+    enabled: demoHome.musicEnabled ?? true,
+    autoStart: true,
+  })
 
   // Show loading state while data is hydrating
   const isLoading = !useHardcodedData && (orgLoading || !demoHydrated)
@@ -551,6 +567,21 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, useHardcodedData = f
         onRemoveItem={cart.removeItem}
         onClearCart={cart.clearCart}
         accentColor={viewerData.accentColor}
+      />
+
+      {/* BACKGROUND AUDIO PLAYER - Persistent across navigation */}
+      <BackgroundAudioPlayer
+        ref={audioRef}
+        src={musicSrc}
+        muted={isMusicMuted}
+      />
+
+      {/* Invisible tap target to unlock audio on first interaction (mobile) */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-auto"
+        onClick={unlockAudio}
+        onTouchStart={unlockAudio}
+        style={{ pointerEvents: isMusicPlaying ? 'none' : 'auto' }}
       />
 
     </div>

@@ -1,19 +1,61 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, useRef, Component, ReactNode } from 'react'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
-import { Upload, Lock, Check } from 'lucide-react'
-import { readDemoBrandProfile, writeDemoBrandProfile } from '@/lib/demoBrand'
+import { Upload, Lock, Check, Loader2 } from 'lucide-react'
 import { usePlan } from '@/hooks/usePlan'
+import { useOrganization } from '@/hooks/useOrganization'
 
 // Force dynamic rendering to avoid build-time Supabase calls
 export const dynamic = 'force-dynamic'
 
+// Error boundary to catch rendering errors
+class BrandErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { hasError: false, error: null }
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error }
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Brand page error:', error, errorInfo)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-gray-50 dark:bg-[#1c1c1e] flex items-center justify-center p-8">
+          <div className="max-w-md text-center">
+            <div className="text-6xl mb-4">💥</div>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Something went wrong</h1>
+            <p className="text-gray-600 dark:text-white/60 mb-4">
+              {this.state.error?.message || 'Unknown error'}
+            </p>
+            <pre className="text-xs text-left bg-gray-100 dark:bg-black/30 p-4 rounded-lg overflow-auto max-h-40 text-gray-700 dark:text-white/70">
+              {this.state.error?.stack}
+            </pre>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Reload page
+            </button>
+          </div>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
 /**
  * Slydes HQ — Brand Settings
- * 
+ *
  * Customize how your Slydes look and feel.
- * Following CONSTX.md for consistency.
+ * Connected to real organization data via useOrganization.
  */
 
 const FONT_OPTIONS = [
@@ -43,49 +85,140 @@ const COLOR_SWATCHES = [
   { hex: '#1F2937', name: 'Slate', pairings: ['#F59E0B', '#06B6D4', '#10B981'] },
 ]
 
-export default function HQBrandPage() {
+// Helper to normalize hex colors for comparison (uppercase, with #)
+function normalizeHex(color: string | null | undefined): string {
+  if (!color) return ''
+  const hex = color.trim().toUpperCase()
+  return hex.startsWith('#') ? hex : `#${hex}`
+}
+
+function BrandPageContent() {
   const { isPaid } = usePlan()
+  const { organization, isLoading: orgLoading, updateOrganization } = useOrganization()
+
+  // Track original values from DB to detect changes
+  const originalValues = useRef<{
+    primaryColor: string
+    businessName: string
+    brandFont: string
+    brandVoice: string
+  } | null>(null)
+
+  // Form state
   const [primaryColor, setPrimaryColor] = useState('#2563EB')
-  const [secondaryColor, setSecondaryColor] = useState('#06B6D4')
-  const [businessName, setBusinessName] = useState('WildTrax')
-  const [tagline, setTagline] = useState('Adventure awaits')
+  const [businessName, setBusinessName] = useState('')
   const [selectedFont, setSelectedFont] = useState('space-grotesk')
   const [selectedVoice, setSelectedVoice] = useState('bold')
-  const [hasLogo, setHasLogo] = useState(true)
-  const [savedTick, setSavedTick] = useState(0)
+  const [hasLogo, setHasLogo] = useState(false)
 
-  // Load persisted brand profile (demo)
-  useEffect(() => {
-    const profile = readDemoBrandProfile()
-    setBusinessName(profile.businessName)
-    setTagline(profile.tagline)
-    setPrimaryColor(profile.primaryColor)
-    setSecondaryColor(profile.secondaryColor)
-  }, [])
+  // Save state
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveSuccess, setSaveSuccess] = useState(false)
 
-  // Auto-persist as you edit (demo)
+  // Load organization data when available
   useEffect(() => {
-    writeDemoBrandProfile({
-      businessName,
-      tagline,
-      primaryColor,
-      secondaryColor,
-    })
-  }, [businessName, tagline, primaryColor, secondaryColor])
+    if (organization) {
+      const orgPrimary = organization.primary_color || '#2563EB'
+      const orgName = organization.name || ''
+      const orgFont = organization.brand_font || 'space-grotesk'
+      const orgVoice = organization.brand_voice || 'bold'
+
+      setPrimaryColor(orgPrimary)
+      setBusinessName(orgName)
+      setSelectedFont(orgFont)
+      setSelectedVoice(orgVoice)
+      setHasLogo(!!organization.logo_url)
+
+      // Store original values for dirty detection
+      originalValues.current = {
+        primaryColor: orgPrimary,
+        businessName: orgName,
+        brandFont: orgFont,
+        brandVoice: orgVoice,
+      }
+    }
+  }, [organization])
+
+  // Check if form has unsaved changes (case-insensitive hex comparison)
+  const isDirty = useMemo(() => {
+    if (!originalValues.current) return false
+
+    const primaryChanged = normalizeHex(primaryColor) !== normalizeHex(originalValues.current.primaryColor)
+    const nameChanged = businessName !== originalValues.current.businessName
+    const fontChanged = selectedFont !== originalValues.current.brandFont
+    const voiceChanged = selectedVoice !== originalValues.current.brandVoice
+
+    return primaryChanged || nameChanged || fontChanged || voiceChanged
+  }, [primaryColor, businessName, selectedFont, selectedVoice])
+
+  // Handle save
+  const handleSave = async () => {
+    if (!organization || !isDirty) return
+
+    setIsSaving(true)
+    setSaveSuccess(false)
+
+    try {
+      await updateOrganization({
+        name: businessName,
+        primary_color: primaryColor,
+        brand_font: selectedFont,
+        brand_voice: selectedVoice,
+      })
+
+      // Update original values after successful save
+      originalValues.current = {
+        primaryColor,
+        businessName,
+        brandFont: selectedFont,
+        brandVoice: selectedVoice,
+      }
+
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 2000)
+    } catch (error) {
+      console.error('Failed to save brand settings:', error)
+      // Show error to user
+      alert(`Save failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   // isPaid = creator OR pro (both have brand customization access)
   const isCreator = isPaid
 
+  // Loading state
+  if (orgLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600 dark:text-cyan-400" />
+      </div>
+    )
+  }
+
+  // No organization state
+  if (!organization) {
+    return (
+      <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-500 dark:text-white/50">No organization found</p>
+          <p className="text-sm text-gray-400 dark:text-white/30 mt-1">Create an organization to customize your brand</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white overflow-hidden">
       <div className="flex h-screen">
-        
+
         {/* Sidebar */}
         <HQSidebarConnected activePage="brand" />
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-w-0">
-          
+
           {/* Header */}
           <header className="h-16 border-b border-gray-200 flex items-center justify-between px-8 shrink-0 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#1c1c1e]/80">
             <div>
@@ -93,17 +226,22 @@ export default function HQBrandPage() {
               <p className="text-sm text-gray-500 dark:text-white/50">Customize how your Slydes look and feel</p>
             </div>
             <div className="flex items-center gap-3">
-              {savedTick > 0 && (
-                <div className="text-sm text-gray-500 dark:text-white/50">
+              {saveSuccess && (
+                <div className="flex items-center gap-1.5 text-sm text-emerald-600 dark:text-emerald-400">
+                  <Check className="w-4 h-4" />
                   Saved
                 </div>
               )}
-              <button
-                onClick={() => setSavedTick((v) => v + 1)}
-                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15"
-              >
-                Save changes
-              </button>
+              {isDirty && (
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15 disabled:opacity-50 flex items-center gap-2"
+                >
+                  {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Save changes
+                </button>
+              )}
             </div>
           </header>
 
@@ -111,10 +249,10 @@ export default function HQBrandPage() {
           <div className="flex-1 overflow-y-auto p-8">
             <div className="max-w-6xl">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
+
                 {/* Left Column - Settings */}
                 <div className="lg:col-span-2 space-y-6">
-                  
+
                   {/* Logo & Identity */}
                   <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden dark:bg-[#2c2c2e] dark:border-white/10">
                     <div className="p-6 border-b border-gray-200 dark:border-white/10">
@@ -130,18 +268,21 @@ export default function HQBrandPage() {
                       {/* Logo Upload */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">Logo</label>
-                        <div 
+                        <div
                           className="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center hover:border-blue-500 transition-colors cursor-pointer dark:border-white/20 dark:hover:border-cyan-400"
                           onClick={() => setHasLogo(!hasLogo)}
                         >
                           {hasLogo ? (
                             <div className="flex items-center justify-center gap-4">
-                              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-2xl">
-                                W
+                              <div
+                                className="w-16 h-16 rounded-xl flex items-center justify-center text-white font-bold text-2xl"
+                                style={{ backgroundColor: primaryColor }}
+                              >
+                                {businessName.charAt(0) || 'B'}
                               </div>
                               <div className="text-left">
-                                <div className="text-sm font-medium text-gray-900 dark:text-white">wildtrax-logo.png</div>
-                                <div className="text-xs text-gray-500 dark:text-white/50">200 × 200px • 24KB</div>
+                                <div className="text-sm font-medium text-gray-900 dark:text-white">Logo uploaded</div>
+                                <div className="text-xs text-gray-500 dark:text-white/50">200 × 200px</div>
                                 <button className="mt-1 text-xs text-blue-600 hover:text-blue-700 dark:text-cyan-400 dark:hover:text-cyan-300">
                                   Replace
                                 </button>
@@ -172,22 +313,6 @@ export default function HQBrandPage() {
                           placeholder="Your business name"
                         />
                       </div>
-
-                      {/* Tagline */}
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
-                          Tagline <span className="text-gray-400 dark:text-white/40">(optional)</span>
-                        </label>
-                        <input
-                          type="text"
-                          value={tagline}
-                          onChange={(e) => setTagline(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-inner text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-colors dark:bg-white/5 dark:border-white/10 dark:text-white dark:shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)] dark:focus-visible:ring-cyan-400/30 dark:focus-visible:ring-offset-[#2c2c2e]"
-                          placeholder="A short description (max 60 characters)"
-                          maxLength={60}
-                        />
-                        <p className="mt-1 text-xs text-gray-500 dark:text-white/50 text-right">{tagline.length}/60</p>
-                      </div>
                     </div>
                   </div>
 
@@ -203,91 +328,38 @@ export default function HQBrandPage() {
                       </div>
                     </div>
                     <div className="p-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        {/* Primary Color */}
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">Primary color</label>
-                          <div className="flex items-center gap-3">
-                            <div
-                              className="w-12 h-12 rounded-xl border-2 border-gray-200 cursor-pointer hover:scale-105 transition-transform dark:border-white/20"
-                              style={{ backgroundColor: primaryColor }}
-                            />
-                            <input
-                              type="text"
-                              value={primaryColor}
-                              onChange={(e) => setPrimaryColor(e.target.value)}
-                              className="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-inner text-gray-900 font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-colors dark:bg-white/5 dark:border-white/10 dark:text-white dark:shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)] dark:focus-visible:ring-cyan-400/30 dark:focus-visible:ring-offset-[#2c2c2e]"
-                            />
-                          </div>
-                          {/* Primary Color Swatches */}
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            {COLOR_SWATCHES.map((swatch) => (
-                              <button
-                                key={swatch.hex}
-                                onClick={() => setPrimaryColor(swatch.hex)}
-                                className={`w-8 h-8 rounded-lg transition-all hover:scale-110 ${
-                                  primaryColor.toUpperCase() === swatch.hex.toUpperCase()
-                                    ? 'ring-2 ring-offset-2 ring-blue-500 dark:ring-cyan-400 dark:ring-offset-[#2c2c2e]'
-                                    : 'ring-1 ring-gray-200 dark:ring-white/20'
-                                }`}
-                                style={{ backgroundColor: swatch.hex }}
-                                title={swatch.name}
-                              />
-                            ))}
-                          </div>
-                          <p className="mt-2 text-xs text-gray-500 dark:text-white/50">Used for buttons and accents</p>
+                      {/* Primary Color */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">Brand color</label>
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="w-12 h-12 rounded-xl border-2 border-gray-200 cursor-pointer hover:scale-105 transition-transform dark:border-white/20"
+                            style={{ backgroundColor: primaryColor }}
+                          />
+                          <input
+                            type="text"
+                            value={primaryColor}
+                            onChange={(e) => setPrimaryColor(e.target.value)}
+                            className="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-inner text-gray-900 font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-colors dark:bg-white/5 dark:border-white/10 dark:text-white dark:shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)] dark:focus-visible:ring-cyan-400/30 dark:focus-visible:ring-offset-[#2c2c2e]"
+                          />
                         </div>
-
-                        {/* Secondary Color */}
-                        <div className={!isCreator ? 'opacity-60' : ''}>
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
-                            Secondary color
-                            {!isCreator && <Lock className="w-3.5 h-3.5 text-gray-400" />}
-                          </label>
-                          <div className="flex items-center gap-3">
-                            <div
-                              className={`w-12 h-12 rounded-xl border-2 border-gray-200 dark:border-white/20 ${isCreator ? 'cursor-pointer hover:scale-105 transition-transform' : 'cursor-not-allowed'}`}
-                              style={{ backgroundColor: secondaryColor }}
+                        {/* Color Swatches */}
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {COLOR_SWATCHES.map((swatch) => (
+                            <button
+                              key={swatch.hex}
+                              onClick={() => setPrimaryColor(swatch.hex)}
+                              className={`w-8 h-8 rounded-lg transition-all hover:scale-110 ${
+                                primaryColor.toUpperCase() === swatch.hex.toUpperCase()
+                                  ? 'ring-2 ring-offset-2 ring-blue-500 dark:ring-cyan-400 dark:ring-offset-[#2c2c2e]'
+                                  : 'ring-1 ring-gray-200 dark:ring-white/20'
+                              }`}
+                              style={{ backgroundColor: swatch.hex }}
+                              title={swatch.name}
                             />
-                            <input
-                              type="text"
-                              value={secondaryColor}
-                              disabled={!isCreator}
-                              onChange={(e) => setSecondaryColor(e.target.value)}
-                              className="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-inner text-gray-900 font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed dark:bg-white/5 dark:border-white/10 dark:text-white dark:shadow-[inset_0_1px_3px_rgba(0,0,0,0.3)] dark:focus-visible:ring-cyan-400/30 dark:focus-visible:ring-offset-[#2c2c2e] dark:disabled:bg-white/5"
-                            />
-                          </div>
-                          {/* Smart Pairings based on Primary */}
-                          {isCreator && (() => {
-                            const activeSwatch = COLOR_SWATCHES.find(s => s.hex.toUpperCase() === primaryColor.toUpperCase())
-                            const pairings = activeSwatch?.pairings || COLOR_SWATCHES[0].pairings
-                            return (
-                              <div className="mt-3">
-                                <p className="text-xs text-gray-500 dark:text-white/50 mb-2">Pairs well with:</p>
-                                <div className="flex gap-2">
-                                  {pairings.map((hex) => (
-                                    <button
-                                      key={hex}
-                                      onClick={() => setSecondaryColor(hex)}
-                                      className={`w-8 h-8 rounded-lg transition-all hover:scale-110 ${
-                                        secondaryColor.toUpperCase() === hex.toUpperCase()
-                                          ? 'ring-2 ring-offset-2 ring-blue-500 dark:ring-cyan-400 dark:ring-offset-[#2c2c2e]'
-                                          : 'ring-1 ring-gray-200 dark:ring-white/20'
-                                      }`}
-                                      style={{ backgroundColor: hex }}
-                                      title={COLOR_SWATCHES.find(s => s.hex === hex)?.name || hex}
-                                    />
-                                  ))}
-                                </div>
-                              </div>
-                            )
-                          })()}
-                          {!isCreator && (
-                            <p className="mt-2 text-xs text-blue-600 dark:text-cyan-400">
-                              Available on Creator plan
-                            </p>
-                          )}
+                          ))}
                         </div>
+                        <p className="mt-2 text-xs text-gray-500 dark:text-white/50">Used for buttons, accents, and your profile</p>
                       </div>
                     </div>
                   </div>
@@ -406,9 +478,9 @@ export default function HQBrandPage() {
                           {/* Phone Frame */}
                           <div className="relative bg-black rounded-[24px] p-2 shadow-xl">
                             {/* Screen */}
-                            <div 
+                            <div
                               className="relative rounded-[18px] overflow-hidden"
-                              style={{ aspectRatio: '9/16', background: `linear-gradient(135deg, ${primaryColor}22, ${secondaryColor}22)` }}
+                              style={{ aspectRatio: '9/16', background: `linear-gradient(135deg, ${primaryColor}22, ${primaryColor}44)` }}
                             >
                               {/* Content */}
                               <div className="absolute inset-0 flex flex-col">
@@ -416,26 +488,26 @@ export default function HQBrandPage() {
                                 <div className="p-3">
                                   {/* Profile Pill */}
                                   <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/90 dark:bg-black/50">
-                                    <div 
+                                    <div
                                       className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[8px] font-bold"
                                       style={{ backgroundColor: primaryColor }}
                                     >
-                                      {businessName.charAt(0)}
+                                      {businessName.charAt(0) || 'B'}
                                     </div>
-                                    <span className="text-[9px] font-semibold text-gray-900 dark:text-white">{businessName}</span>
+                                    <span className="text-[9px] font-semibold text-gray-900 dark:text-white">{businessName || 'Business'}</span>
                                   </div>
                                 </div>
 
                                 {/* Main content area */}
                                 <div className="flex-1 flex items-center justify-center p-4">
                                   <div className="text-center">
-                                    <div className="text-[10px] font-bold text-gray-900 dark:text-white">{tagline || 'Your tagline here'}</div>
+                                    <div className="text-[10px] font-bold text-gray-900 dark:text-white">Your content here</div>
                                   </div>
                                 </div>
 
                                 {/* CTA Button */}
                                 <div className="p-3">
-                                  <div 
+                                  <div
                                     className="w-full py-2 rounded-lg text-center text-[9px] font-semibold text-white"
                                     style={{ backgroundColor: primaryColor }}
                                   >
@@ -474,3 +546,11 @@ export default function HQBrandPage() {
   )
 }
 
+// Export with error boundary wrapper
+export default function HQBrandPage() {
+  return (
+    <BrandErrorBoundary>
+      <BrandPageContent />
+    </BrandErrorBoundary>
+  )
+}

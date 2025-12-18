@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { createSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 /**
  * Roadmap API - HQ Admin
@@ -7,13 +7,8 @@ import { cookies } from 'next/headers'
  * GET: Retrieve all roadmap items
  * POST: Add a new item (used by feature suggestions from Studio)
  *
- * For now, uses a simple JSON file for storage.
- * Can be migrated to Supabase later.
+ * Uses Supabase for persistence.
  */
-
-// In-memory storage for development (will reset on server restart)
-// TODO: Move to Supabase for persistence
-let roadmapItems: RoadmapItem[] = []
 
 interface RoadmapItem {
   id: string
@@ -22,27 +17,55 @@ interface RoadmapItem {
   status: 'triage' | 'planned' | 'in-progress' | 'done'
   priority: 'high' | 'medium' | 'low'
   category?: string
-  requestType?: string
+  request_type?: string
   source: 'manual' | 'suggestion'
-  userEmail?: string
-  orgName?: string
-  createdAt: string
+  user_email?: string
+  org_name?: string
+  created_at: string
 }
 
-// Simple auth check for admin routes
-async function isAuthenticated(): Promise<boolean> {
-  const cookieStore = await cookies()
-  const token = cookieStore.get('admin_token')
-  return token?.value === process.env.ADMIN_PASSWORD
+// Map DB snake_case to camelCase for frontend
+function toFrontend(item: RoadmapItem) {
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    status: item.status,
+    priority: item.priority,
+    category: item.category,
+    requestType: item.request_type,
+    source: item.source,
+    userEmail: item.user_email,
+    orgName: item.org_name,
+    createdAt: item.created_at,
+  }
 }
 
 export async function GET() {
-  // For GET, we allow cross-origin to let Studio fetch
-  return NextResponse.json({ items: roadmapItems }, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
+  try {
+    const supabase = createSupabaseAdmin()
+
+    const { data, error } = await supabase
+      .from('roadmap_items')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching roadmap items:', error)
+      return NextResponse.json({ error: 'Failed to fetch items' }, { status: 500 })
     }
-  })
+
+    const items = (data || []).map(toFrontend)
+
+    return NextResponse.json({ items }, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      }
+    })
+  } catch (err) {
+    console.error('Error in roadmap GET:', err)
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+  }
 }
 
 export async function POST(req: Request) {
@@ -54,23 +77,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
     }
 
-    const newItem: RoadmapItem = {
-      id: crypto.randomUUID(),
+    const supabase = createSupabaseAdmin()
+
+    const newItem = {
       title: body.title.trim(),
-      description: body.description?.trim() || undefined,
+      description: body.description?.trim() || null,
       status: 'triage', // Suggestions always start in triage
       priority: body.priority || 'medium',
-      category: body.category || undefined,
-      requestType: body.requestType || 'feature',
+      category: body.category || null,
+      request_type: body.requestType || 'feature',
       source: body.source || 'suggestion',
-      userEmail: body.userEmail || undefined,
-      orgName: body.orgName || undefined,
-      createdAt: new Date().toISOString(),
+      user_email: body.userEmail || null,
+      org_name: body.orgName || null,
     }
 
-    roadmapItems.unshift(newItem)
+    const { data, error } = await supabase
+      .from('roadmap_items')
+      .insert(newItem)
+      .select()
+      .single()
 
-    return NextResponse.json({ success: true, item: newItem }, {
+    if (error) {
+      console.error('Error inserting roadmap item:', error)
+      return NextResponse.json({ error: 'Failed to add item' }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, item: toFrontend(data) }, {
       headers: {
         'Access-Control-Allow-Origin': '*',
       }

@@ -61,7 +61,8 @@ export async function POST(req: Request) {
           maxDurationSeconds,
           expiry: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30 min expiry
           requireSignedURLs: false, // Set to true for production
-          allowedOrigins: [process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3001'],
+          // Cloudflare wants just hostname, not protocol
+          allowedOrigins: ['*'], // Allow all origins for dev; tighten in production
           creator: data.user.id,
           meta: {
             userId: data.user.id,

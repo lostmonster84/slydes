@@ -9,6 +9,7 @@ import {
   ResendIcon,
   AnthropicIcon,
   AnalyticsIcon,
+  R2Icon,
 } from '../_components/IntegrationCard'
 import { StatusBadge } from '../_components/StatusBadge'
 
@@ -27,6 +28,7 @@ type HealthData = {
     supabase: IntegrationStatus
     cloudflareStream: IntegrationStatus
     cloudflareImages: IntegrationStatus
+    cloudflareR2: IntegrationStatus
     resend: IntegrationStatus
     anthropic: IntegrationStatus
     analytics: IntegrationStatus
@@ -65,6 +67,14 @@ const INTEGRATION_INFO = {
     critical: false,
     docs: 'https://developers.cloudflare.com/images',
     envVars: ['CLOUDFLARE_ACCOUNT_ID', 'CLOUDFLARE_IMAGES_TOKEN'],
+  },
+  cloudflareR2: {
+    name: 'Cloudflare R2',
+    description: 'Object storage for audio files and background music',
+    icon: <R2Icon />,
+    critical: false,
+    docs: 'https://developers.cloudflare.com/r2',
+    envVars: ['CLOUDFLARE_ACCOUNT_ID', 'CLOUDFLARE_R2_ACCESS_KEY_ID', 'CLOUDFLARE_R2_SECRET_ACCESS_KEY', 'CLOUDFLARE_R2_BUCKET_NAME'],
   },
   resend: {
     name: 'Resend',

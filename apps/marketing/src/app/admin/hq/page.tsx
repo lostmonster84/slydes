@@ -10,6 +10,7 @@ import {
   ResendIcon,
   AnthropicIcon,
   AnalyticsIcon,
+  R2Icon,
 } from '../_components/IntegrationCard'
 import {
   MetricCard,
@@ -37,6 +38,7 @@ type HealthData = {
     supabase: IntegrationStatus
     cloudflareStream: IntegrationStatus
     cloudflareImages: IntegrationStatus
+    cloudflareR2: IntegrationStatus
     resend: IntegrationStatus
     anthropic: IntegrationStatus
     analytics: IntegrationStatus
@@ -367,6 +369,14 @@ export default function AdminOverviewPage() {
                 tooltip="Image hosting and optimization. Stores and serves images with automatic resizing."
               />
               <IntegrationCard
+                name="Cloudflare R2"
+                status={health.integrations.cloudflareR2.status}
+                message={health.integrations.cloudflareR2.message}
+                icon={<R2Icon />}
+                lastChecked={health.integrations.cloudflareR2.lastChecked}
+                tooltip="Object storage for audio files. Stores background music uploads."
+              />
+              <IntegrationCard
                 name="Resend"
                 status={health.integrations.resend.status}
                 message={health.integrations.resend.message}
@@ -395,7 +405,7 @@ export default function AdminOverviewPage() {
 
           {!health && (
             <>
-              {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div
                   key={i}
                   className="bg-[#2c2c2e] rounded-xl border border-white/10 p-5 animate-pulse"

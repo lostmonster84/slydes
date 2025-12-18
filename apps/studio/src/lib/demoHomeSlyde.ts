@@ -40,6 +40,7 @@ export type DemoHomeSlyde = {
   videoFilter?: VideoFilterPreset
   videoVignette?: boolean
   videoSpeed?: VideoSpeedPreset
+  videoStartTime?: number  // Start time for YouTube/Vimeo videos (in seconds)
   posterSrc?: string
   categories: DemoHomeSlydeCategory[]
   primaryCta?: {
@@ -66,7 +67,6 @@ export type DemoHomeSlyde = {
   lists?: ListData[]
   // Background music
   musicEnabled?: boolean
-  musicLibraryId?: string | null
   musicCustomUrl?: string | null
 }
 
@@ -98,7 +98,6 @@ export const DEFAULT_DEMO_HOME_SLYDE: DemoHomeSlyde = {
   lists: [],
   // Background music - enabled by default, no track selected
   musicEnabled: true,
-  musicLibraryId: null,
   musicCustomUrl: null,
 }
 
@@ -180,7 +179,6 @@ export function readDemoHomeSlyde(): DemoHomeSlyde {
     lists: Array.isArray(parsed.lists) ? parsed.lists : [],
     // Parse music settings
     musicEnabled: typeof parsed.musicEnabled === 'boolean' ? parsed.musicEnabled : true,
-    musicLibraryId: typeof parsed.musicLibraryId === 'string' ? parsed.musicLibraryId : null,
     musicCustomUrl: typeof parsed.musicCustomUrl === 'string' ? parsed.musicCustomUrl : null,
   }
 }

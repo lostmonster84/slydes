@@ -6,62 +6,114 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 5.9s
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (129kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ ⚠ Compiled with warnings in 701ms
+
+../../node_modules/.pnpm/@supabase+realtime-js@2.87.1/node_modules/@supabase/realtime-js/dist/module/lib/websocket-factory.js
+A Node.js API is used (process.versions at line: 39) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace for requested module:
+../../node_modules/.pnpm/@supabase+realtime-js@2.87.1/node_modules/@supabase/realtime-js/dist/module/lib/websocket-factory.js
+../../node_modules/.pnpm/@supabase+realtime-js@2.87.1/node_modules/@supabase/realtime-js/dist/module/index.js
+../../node_modules/.pnpm/@supabase+supabase-js@2.87.1/node_modules/@supabase/supabase-js/dist/main/index.js
+../../node_modules/.pnpm/@supabase+supabase-js@2.87.1/node_modules/@supabase/supabase-js/dist/esm/wrapper.mjs
+../../node_modules/.pnpm/@supabase+ssr@0.5.2_@supabase+supabase-js@2.87.1/node_modules/@supabase/ssr/dist/module/createBrowserClient.js
+../../node_modules/.pnpm/@supabase+ssr@0.5.2_@supabase+supabase-js@2.87.1/node_modules/@supabase/ssr/dist/module/index.js
+./src/lib/supabase/middleware.ts
+
+../../node_modules/.pnpm/@supabase+supabase-js@2.87.1/node_modules/@supabase/supabase-js/dist/main/index.js
+A Node.js API is used (process.version at line: 60) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace for requested module:
+../../node_modules/.pnpm/@supabase+supabase-js@2.87.1/node_modules/@supabase/supabase-js/dist/main/index.js
+../../node_modules/.pnpm/@supabase+supabase-js@2.87.1/node_modules/@supabase/supabase-js/dist/esm/wrapper.mjs
+../../node_modules/.pnpm/@supabase+ssr@0.5.2_@supabase+supabase-js@2.87.1/node_modules/@supabase/ssr/dist/module/createBrowserClient.js
+../../node_modules/.pnpm/@supabase+ssr@0.5.2_@supabase+supabase-js@2.87.1/node_modules/@supabase/ssr/dist/module/index.js
+./src/lib/supabase/middleware.ts
+
+ ✓ Compiled successfully in 7.2s
    Skipping linting
    Checking validity of types ...
    Collecting page data ...
-   Generating static pages (0/42) ...
-   Generating static pages (10/42) 
-   Generating static pages (20/42) 
-   Generating static pages (31/42) 
- ✓ Generating static pages (42/42)
+   Generating static pages (0/65) ...
+   Generating static pages (16/65) 
+   Generating static pages (32/65) 
+   Generating static pages (48/65) 
+ ✓ Generating static pages (65/65)
    Finalizing page optimization ...
    Collecting build traces ...
 
 Route (app)                                 Size  First Load JS
-┌ ƒ /                                      15 kB         261 kB
-├ ○ /_not-found                            991 B         103 kB
-├ ○ /analytics                           10.4 kB         230 kB
-├ ƒ /api/billing/create-checkout           176 B         102 kB
-├ ƒ /api/billing/portal                    176 B         102 kB
-├ ƒ /api/billing/webhook                   176 B         102 kB
-├ ƒ /api/feedback                          176 B         102 kB
-├ ƒ /api/media/attach-to-frame             176 B         102 kB
-├ ƒ /api/media/create-image-upload         176 B         102 kB
-├ ƒ /api/media/create-upload               176 B         102 kB
-├ ƒ /api/media/create-video-upload         176 B         102 kB
-├ ƒ /api/media/sync-video-status           176 B         102 kB
-├ ƒ /api/media/video-status                176 B         102 kB
-├ ƒ /api/stripe/checkout                   176 B         102 kB
-├ ƒ /api/stripe/connect                    176 B         102 kB
-├ ƒ /api/stripe/demo-checkout              176 B         102 kB
-├ ƒ /api/stripe/webhook                    176 B         102 kB
-├ ƒ /auth/auth-code-error                  164 B         105 kB
-├ ƒ /auth/callback                         176 B         102 kB
-├ ƒ /auth/confirm                          176 B         102 kB
-├ ƒ /auth/signout                          176 B         102 kB
-├ ○ /brand                               4.23 kB         183 kB
-├ ○ /checkout/success                    1.51 kB         107 kB
-├ ○ /dashboard                            4.2 kB         183 kB
+┌ ƒ /                                    39.5 kB         298 kB
+├ ○ /_not-found                             1 kB         103 kB
+├ ○ /admin/affiliates                    2.92 kB         188 kB
+├ ○ /analytics                           10.3 kB         237 kB
+├ ƒ /api/account/delete                    226 B         103 kB
+├ ƒ /api/account/slug                      226 B         103 kB
+├ ƒ /api/account/username                  226 B         103 kB
+├ ƒ /api/ai/chat                           226 B         103 kB
+├ ƒ /api/ai/context                        226 B         103 kB
+├ ƒ /api/analytics/momentum                226 B         103 kB
+├ ƒ /api/analytics/slyde                   226 B         103 kB
+├ ƒ /api/auth/dev-login                    226 B         103 kB
+├ ƒ /api/billing/create-checkout           226 B         103 kB
+├ ƒ /api/billing/portal                    226 B         103 kB
+├ ƒ /api/billing/webhook                   226 B         103 kB
+├ ƒ /api/dev/demos                         226 B         103 kB
+├ ƒ /api/dev/demos/[id]                    226 B         103 kB
+├ ƒ /api/dev/demos/[id]/load               226 B         103 kB
+├ ƒ /api/dev/generate-slyde-content        226 B         103 kB
+├ ƒ /api/dev/scrape-business               226 B         103 kB
+├ ƒ /api/domain/add                        226 B         103 kB
+├ ƒ /api/domain/remove                     226 B         103 kB
+├ ƒ /api/domain/setup-checkout             226 B         103 kB
+├ ƒ /api/domain/verify                     226 B         103 kB
+├ ƒ /api/feedback                          226 B         103 kB
+├ ƒ /api/media/attach-audio                226 B         103 kB
+├ ƒ /api/media/attach-to-frame             226 B         103 kB
+├ ƒ /api/media/create-audio-upload         226 B         103 kB
+├ ƒ /api/media/create-image-upload         226 B         103 kB
+├ ƒ /api/media/create-upload               226 B         103 kB
+├ ƒ /api/media/create-video-upload         226 B         103 kB
+├ ƒ /api/media/sync-video-status           226 B         103 kB
+├ ƒ /api/media/video-status                226 B         103 kB
+├ ƒ /api/social/instagram                  226 B         103 kB
+├ ƒ /api/social/tiktok                     226 B         103 kB
+├ ƒ /api/stripe/checkout                   226 B         103 kB
+├ ƒ /api/stripe/connect                    226 B         103 kB
+├ ƒ /api/stripe/demo-checkout              226 B         103 kB
+├ ƒ /api/stripe/webhook                    226 B         103 kB
+├ ƒ /auth/auth-code-error                  166 B         106 kB
+├ ƒ /auth/callback                         226 B         103 kB
+├ ƒ /auth/confirm                          226 B         103 kB
+├ ƒ /auth/signout                          226 B         103 kB
+├ ○ /brand                               4.71 kB         190 kB
+├ ○ /checkout/success                    1.52 kB         107 kB
+├ ○ /dashboard                           8.79 kB         195 kB
+├ ○ /dev/demos                           4.97 kB         111 kB
+├ ○ /faqs                                5.85 kB         191 kB
 ├ ○ /icon.svg                                0 B            0 B
-├ ○ /inbox                               3.02 kB         182 kB
-├ ○ /lists                               2.67 kB         181 kB
-├ ○ /login                               3.09 kB         164 kB
-├ ○ /onboarding                          7.54 kB         206 kB
-├ ○ /preview                             2.72 kB         178 kB
-├ ƒ /settings                            1.18 kB         106 kB
-├ ○ /settings/billing                    5.63 kB         169 kB
-├ ƒ /settings/media                      4.14 kB         168 kB
-├ ○ /settings/payments                   2.84 kB         105 kB
-├ ○ /settings/profile                    2.49 kB         166 kB
-├ ○ /shop                                4.43 kB         248 kB
-├ ○ /shop/orders                          4.3 kB         183 kB
-├ ○ /shop/products                       1.31 kB         180 kB
-└ ○ /slydes                              5.64 kB         184 kB
+├ ○ /inbox                               2.97 kB         188 kB
+├ ○ /lists                               3.53 kB         189 kB
+├ ○ /login                               3.55 kB         165 kB
+├ ○ /onboarding                          7.98 kB         207 kB
+├ ○ /preview                             1.83 kB         245 kB
+├ ○ /settings                            13.6 kB         182 kB
+├ ○ /settings/billing                    2.67 kB         171 kB
+├ ƒ /settings/domain                     5.36 kB         111 kB
+├ ƒ /settings/media                      4.31 kB         169 kB
+├ ○ /settings/payments                   2.86 kB         105 kB
+├ ○ /settings/profile                     2.6 kB         167 kB
+├ ○ /shop                                4.45 kB         259 kB
+├ ○ /shop/orders                         4.17 kB         189 kB
+├ ○ /shop/products                       1.32 kB         187 kB
+└ ○ /slydes                              6.22 kB         191 kB
 + First Load JS shared by all             102 kB
-  ├ chunks/960-d2a9785a0faedc69.js       45.5 kB
-  ├ chunks/b653352e-6220146327652a4e.js  54.2 kB
-  └ other shared chunks (total)          1.94 kB
+  ├ chunks/960-9074e57d59702200.js       46.2 kB
+  ├ chunks/b653352e-2c3f19b15f03879e.js  54.2 kB
+  └ other shared chunks (total)          2.06 kB
 
 
 ƒ Middleware                             85.7 kB

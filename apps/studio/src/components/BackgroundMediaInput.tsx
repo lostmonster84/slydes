@@ -1,13 +1,15 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Upload, Link2, X, Loader2, Youtube, Film, Image as ImageIcon, Video } from 'lucide-react'
+import { Upload, Link2, X, Loader2, Youtube, Film, Image as ImageIcon, Video, Scissors } from 'lucide-react'
 import { useMediaUpload } from '@/hooks/useMediaUpload'
 import { VIDEO_FILTERS, VIDEO_SPEEDS, type VideoFilterPreset, type VideoSpeedPreset } from '@/lib/videoFilters'
 import type { BackgroundType } from '@/lib/demoHomeSlyde'
+import { VideoTrimEditor } from './VideoTrimEditor'
 
 // Re-export parseVideoUrl from VideoMediaInput for backwards compatibility
-export { parseVideoUrl } from './VideoMediaInput'
+import { parseVideoUrl } from './VideoMediaInput'
+export { parseVideoUrl }
 
 interface BackgroundMediaInputProps {
   // Background type
@@ -31,6 +33,10 @@ interface BackgroundMediaInputProps {
   // Speed props (video only)
   speed?: VideoSpeedPreset
   onSpeedChange?: (speed: VideoSpeedPreset) => void
+
+  // Start time (for YouTube/Vimeo)
+  startTime?: number
+  onStartTimeChange?: (time: number) => void
 
   // UI options
   showFilters?: boolean
@@ -61,24 +67,41 @@ export function BackgroundMediaInput({
   onVignetteChange,
   speed = 'normal',
   onSpeedChange,
+  startTime = 0,
+  onStartTimeChange,
   showFilters = true,
   className = '',
 }: BackgroundMediaInputProps) {
   const [isUploading, setIsUploading] = useState(false)
+  const [pendingVideoFile, setPendingVideoFile] = useState<File | null>(null)
+  const [showTrimEditor, setShowTrimEditor] = useState(false)
   const videoInputRef = useRef<HTMLInputElement>(null)
   const imageInputRef = useRef<HTMLInputElement>(null)
   const { uploadVideo, uploadImage, videoStatus, videoProgress, imageStatus } = useMediaUpload()
 
   const isVideo = backgroundType === 'video'
 
-  // Handle video file upload
-  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle video file selection - show trim editor first
+  const handleVideoFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
+    // Reset file input immediately
+    if (videoInputRef.current) videoInputRef.current.value = ''
+
+    // Show trim editor
+    setPendingVideoFile(file)
+    setShowTrimEditor(true)
+  }
+
+  // After trimming, upload the trimmed file
+  const handleTrimComplete = async (trimmedFile: File) => {
+    setShowTrimEditor(false)
+    setPendingVideoFile(null)
     setIsUploading(true)
+
     try {
-      const result = await uploadVideo(file)
+      const result = await uploadVideo(trimmedFile)
       if (result?.playback?.hls) {
         onVideoSrcChange(result.playback.hls)
       }
@@ -86,7 +109,71 @@ export function BackgroundMediaInput({
       console.error('Video upload failed:', error)
     } finally {
       setIsUploading(false)
-      if (videoInputRef.current) videoInputRef.current.value = ''
+    }
+  }
+
+  // Cancel trimming
+  const handleTrimCancel = () => {
+    setShowTrimEditor(false)
+    setPendingVideoFile(null)
+  }
+
+  // Skip trimming and upload directly
+  const handleSkipTrim = async () => {
+    if (!pendingVideoFile) return
+
+    setShowTrimEditor(false)
+    setIsUploading(true)
+
+    try {
+      const result = await uploadVideo(pendingVideoFile)
+      if (result?.playback?.hls) {
+        onVideoSrcChange(result.playback.hls)
+      }
+    } catch (error) {
+      console.error('Video upload failed:', error)
+    } finally {
+      setIsUploading(false)
+      setPendingVideoFile(null)
+    }
+  }
+
+  // Check if current video is a direct MP4 that can be trimmed
+  const canTrimExisting = videoSrc && (
+    videoSrc.endsWith('.mp4') ||
+    videoSrc.endsWith('.webm') ||
+    videoSrc.endsWith('.mov') ||
+    videoSrc.includes('.mp4?') ||
+    videoSrc.includes('.webm?')
+  ) && !videoSrc.includes('cloudflarestream.com') // Can't trim HLS streams
+
+  // Trim existing video URL
+  const [trimError, setTrimError] = useState<string | null>(null)
+
+  const handleTrimExisting = async () => {
+    if (!videoSrc || !canTrimExisting) return
+
+    setIsUploading(true)
+    setTrimError(null)
+    try {
+      // Fetch the video as a blob
+      const response = await fetch(videoSrc)
+      if (!response.ok) {
+        throw new Error(`Failed to fetch video: ${response.status}`)
+      }
+      const blob = await response.blob()
+      if (blob.size === 0) {
+        throw new Error('Video file is empty')
+      }
+      const file = new File([blob], 'video.mp4', { type: blob.type || 'video/mp4' })
+
+      setIsUploading(false)
+      setPendingVideoFile(file)
+      setShowTrimEditor(true)
+    } catch (error) {
+      console.error('Failed to fetch video for trimming:', error)
+      setTrimError(error instanceof Error ? error.message : 'Failed to load video for trimming')
+      setIsUploading(false)
     }
   }
 
@@ -119,6 +206,17 @@ export function BackgroundMediaInput({
   }
 
   const isProcessing = isUploading || videoStatus === 'uploading' || videoStatus === 'processing' || imageStatus === 'uploading'
+
+  // Detect if video is YouTube or Vimeo (supports start time)
+  const parsedVideo = videoSrc ? parseVideoUrl(videoSrc) : null
+  const isYouTubeOrVimeo = parsedVideo?.type === 'youtube' || parsedVideo?.type === 'vimeo'
+
+  // Format seconds to MM:SS
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = Math.floor(seconds % 60)
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
 
   return (
     <div className={className}>
@@ -176,6 +274,17 @@ export function BackgroundMediaInput({
                 </button>
               )}
             </div>
+            {/* Trim existing video button */}
+            {canTrimExisting && (
+              <button
+                onClick={handleTrimExisting}
+                disabled={isProcessing}
+                className="px-3 py-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 border border-gray-300 dark:border-white/15 rounded-lg text-gray-700 dark:text-white/70 transition-colors disabled:opacity-50"
+                title="Trim video"
+              >
+                <Scissors className="w-4 h-4" />
+              </button>
+            )}
             <button
               onClick={() => videoInputRef.current?.click()}
               disabled={isProcessing}
@@ -188,7 +297,7 @@ export function BackgroundMediaInput({
               ref={videoInputRef}
               type="file"
               accept="video/mp4,video/quicktime,video/webm,video/*"
-              onChange={handleVideoUpload}
+              onChange={handleVideoFileSelect}
               className="hidden"
             />
           </div>
@@ -205,6 +314,43 @@ export function BackgroundMediaInput({
               <div className="h-1 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
                 <div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${videoProgress}%` }} />
               </div>
+            </div>
+          )}
+
+          {/* Trim error message */}
+          {trimError && (
+            <div className="mt-2 p-2 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-lg">
+              <p className="text-xs text-red-600 dark:text-red-400">{trimError}</p>
+            </div>
+          )}
+
+          {/* Start Time Control - for YouTube/Vimeo */}
+          {isYouTubeOrVimeo && onStartTimeChange && (
+            <div className="mt-3 p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-[13px] font-medium text-gray-700 dark:text-white/70">
+                  Start at
+                </label>
+                <span className="text-sm font-mono text-gray-900 dark:text-white">
+                  {formatTime(startTime)}
+                </span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={300}
+                step={1}
+                value={startTime}
+                onChange={(e) => onStartTimeChange(Number(e.target.value))}
+                className="w-full h-2 bg-gray-200 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
+              />
+              <div className="flex justify-between mt-1 text-[10px] text-gray-400 dark:text-white/40">
+                <span>0:00</span>
+                <span>5:00</span>
+              </div>
+              <p className="mt-2 text-[11px] text-gray-500 dark:text-white/50">
+                {parsedVideo?.type === 'youtube' ? 'YouTube' : 'Vimeo'} video will start at this time
+              </p>
             </div>
           )}
         </div>
@@ -323,6 +469,34 @@ export function BackgroundMediaInput({
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Trim Editor Modal */}
+      {showTrimEditor && pendingVideoFile && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2 text-white">
+                <Scissors className="w-5 h-5" />
+                <span className="font-medium">Trim Video</span>
+              </div>
+              <button
+                onClick={handleSkipTrim}
+                className="text-white/60 hover:text-white text-sm transition-colors"
+              >
+                Skip trimming →
+              </button>
+            </div>
+
+            {/* Trim Editor */}
+            <VideoTrimEditor
+              videoFile={pendingVideoFile}
+              onTrimComplete={handleTrimComplete}
+              onCancel={handleTrimCancel}
+            />
+          </div>
         </div>
       )}
     </div>

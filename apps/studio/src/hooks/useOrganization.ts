@@ -13,7 +13,9 @@ export interface Organization {
   business_type: string | null
   logo_url: string | null
   primary_color: string
-  secondary_color: string
+  secondary_color: string | null
+  brand_font: string | null
+  brand_voice: string | null
   home_video_stream_uid: string | null
   home_video_poster_url: string | null
   instagram_handle: string | null

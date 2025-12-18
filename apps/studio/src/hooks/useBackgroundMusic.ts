@@ -1,12 +1,9 @@
 'use client'
 
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { getTrackById, type MusicTrack } from '@/lib/musicLibrary'
 
 interface UseBackgroundMusicOptions {
-  /** Library track ID (mutually exclusive with customUrl) */
-  libraryId?: string | null
-  /** Custom audio URL (mutually exclusive with libraryId) */
+  /** Custom audio URL */
   customUrl?: string | null
   /** Whether music is enabled */
   enabled?: boolean
@@ -23,8 +20,6 @@ interface UseBackgroundMusicReturn {
   isMuted: boolean
   /** Whether audio has been unlocked (user interaction occurred) */
   isUnlocked: boolean
-  /** Current track info (if using library) */
-  currentTrack: MusicTrack | null
   /** Audio source URL */
   audioSrc: string | null
   /** Start playback */
@@ -48,12 +43,12 @@ interface UseBackgroundMusicReturn {
  *
  * Handles:
  * - Mobile autoplay policies (requires user interaction to start)
- * - Library tracks or custom uploads
+ * - Custom uploads
  * - Persistent playback across navigation
  * - Mute/unmute controls
  */
 export function useBackgroundMusic(options: UseBackgroundMusicOptions = {}): UseBackgroundMusicReturn {
-  const { libraryId, customUrl, enabled = true, autoStart = true } = options
+  const { customUrl, enabled = true, autoStart = true } = options
 
   const audioRef = useRef<HTMLAudioElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -61,8 +56,7 @@ export function useBackgroundMusic(options: UseBackgroundMusicOptions = {}): Use
   const [isUnlocked, setIsUnlocked] = useState(false)
 
   // Resolve audio source
-  const currentTrack = libraryId ? getTrackById(libraryId) ?? null : null
-  const audioSrc = currentTrack?.url ?? customUrl ?? null
+  const audioSrc = customUrl ?? null
 
   // Play audio
   const play = useCallback(() => {
@@ -183,7 +177,6 @@ export function useBackgroundMusic(options: UseBackgroundMusicOptions = {}): Use
     isPlaying,
     isMuted,
     isUnlocked,
-    currentTrack,
     audioSrc,
     play,
     pause,

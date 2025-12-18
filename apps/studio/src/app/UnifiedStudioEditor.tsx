@@ -110,6 +110,7 @@ import {
   Check,
   Mail,
   ArrowRight,
+  Music,
   type LucideIcon,
 } from 'lucide-react'
 import { Toggle } from '@/components/ui/Toggle'
@@ -499,12 +500,12 @@ export function UnifiedStudioEditor() {
     })
   )
 
-  // Brand profile
+  // Brand profile - pulls from organization data
   const brandProfile = {
     businessName: organization?.name || 'Your Business',
     tagline: '',
     primaryColor: organization?.primary_color || '#2563EB',
-    secondaryColor: '#22D3EE',
+    secondaryColor: organization?.secondary_color || '#06B6D4',
     logoUrl: organization?.logo_url || null,
   }
 
@@ -517,6 +518,7 @@ export function UnifiedStudioEditor() {
   const [videoFilter, setVideoFilter] = useState<VideoFilterPreset>(homeSlyde.videoFilter || 'original')
   const [videoVignette, setVideoVignette] = useState(homeSlyde.videoVignette ?? false)
   const [videoSpeed, setVideoSpeed] = useState<VideoSpeedPreset>(homeSlyde.videoSpeed || 'normal')
+  const [videoStartTime, setVideoStartTime] = useState(homeSlyde.videoStartTime || 0)
   const [posterSrc, setPosterSrc] = useState(homeSlyde.posterSrc || '')
   const [brandName, setBrandName] = useState(brandProfile.businessName)
   const [tagline, setTagline] = useState(brandProfile.tagline)
@@ -536,7 +538,6 @@ export function UnifiedStudioEditor() {
   const [lists, setLists] = useState<ListData[]>(homeSlyde.lists ?? [])
   // Music state
   const [musicEnabled, setMusicEnabled] = useState(homeSlyde.musicEnabled ?? true)
-  const [musicLibraryId, setMusicLibraryId] = useState<string | null>(homeSlyde.musicLibraryId ?? null)
   const [musicCustomUrl, setMusicCustomUrl] = useState<string | null>(homeSlyde.musicCustomUrl ?? null)
 
   // =============================================
@@ -717,19 +718,19 @@ export function UnifiedStudioEditor() {
           return { brand: true, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
         case 'category':
           // Slyde name/subtitle are always visible (not in collapsible), FAQ section closed
-          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
         case 'categoryFrame':
         case 'itemFrame':
           // Content open first (what does this frame say?), Background closed, Inventory collapsed (advanced feature)
-          return { brand: false, video: false, socialMedia: false, settings: false, content: true, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: true, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
         case 'list':
           // List name is always visible (not in collapsible)
-          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
         case 'item':
           // Item fields are always visible (not in collapsible)
-          return { brand: false, video: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          return { brand: false, video: false, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
         default:
-          return { brand: false, video: true, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
+          return { brand: false, video: true, music: false, socialMedia: false, settings: false, content: false, style: false, info: false, faqs: false, homeFaqs: false, cta: false, inventory: false }
       }
     }
     setInspectorSections(getDefaultSections(selection.type))
@@ -748,6 +749,7 @@ export function UnifiedStudioEditor() {
     setBackgroundType(homeSlyde.backgroundType || 'video')
     setVideoSrc(homeSlyde.videoSrc)
     setImageSrc(homeSlyde.imageSrc || '')
+    setVideoStartTime(homeSlyde.videoStartTime || 0)
     setPosterSrc(homeSlyde.posterSrc || '')
     setCategories(homeSlyde.categories)
     setLists(homeSlyde.lists ?? [])
@@ -759,7 +761,6 @@ export function UnifiedStudioEditor() {
     setSocialLinks(homeSlyde.socialLinks || {})
     // Music
     setMusicEnabled(homeSlyde.musicEnabled ?? true)
-    setMusicLibraryId(homeSlyde.musicLibraryId ?? null)
     setMusicCustomUrl(homeSlyde.musicCustomUrl ?? null)
   }, [homeSlyde, homeSlydeHydrated])
 
@@ -779,6 +780,7 @@ export function UnifiedStudioEditor() {
       videoFilter,
       videoVignette,
       videoSpeed,
+      videoStartTime: videoStartTime || undefined,
       posterSrc: posterSrc || undefined,
       categories,
       showCategoryIcons,
@@ -794,11 +796,10 @@ export function UnifiedStudioEditor() {
       lists,
       // Music
       musicEnabled,
-      musicLibraryId,
       musicCustomUrl,
     }
     writeDemoHomeSlyde(next)
-  }, [backgroundType, videoSrc, imageSrc, videoFilter, videoVignette, videoSpeed, posterSrc, categories, showCategoryIcons, showHearts, showShare, showSound, showReviews, socialLinks, lists, homeSlyde.childFrames, homeSlyde.childFAQs, homeSlyde.homeFAQs, homeSlyde.faqInbox, musicEnabled, musicLibraryId, musicCustomUrl])
+  }, [backgroundType, videoSrc, imageSrc, videoFilter, videoVignette, videoSpeed, videoStartTime, posterSrc, categories, showCategoryIcons, showHearts, showShare, showSound, showReviews, socialLinks, lists, homeSlyde.childFrames, homeSlyde.childFAQs, homeSlyde.homeFAQs, homeSlyde.faqInbox, musicEnabled, musicCustomUrl])
 
   useEffect(() => {
     const timeout = setTimeout(persistHomeSlyde, 300)
@@ -926,12 +927,12 @@ export function UnifiedStudioEditor() {
           subtitle: 'Add your subtitle here',
           heartCount: 0,
           background: { type: 'image', src: '' },
-          accentColor: brandProfile.secondaryColor,
+          accentColor: brandProfile.primaryColor,
         },
       ]
       setChildFrames(prev => ({ ...prev, [categoryId]: starterFrames }))
     }
-  }, [childFrames, brandProfile.secondaryColor])
+  }, [childFrames, brandProfile.primaryColor])
 
   const addCategoryFrame = useCallback((categoryId: string) => {
     const frames = childFrames[categoryId] || []
@@ -946,14 +947,14 @@ export function UnifiedStudioEditor() {
       subtitle: 'Add your subtitle here',
       heartCount: 0,
       background: { type: 'image', src: '' },
-      accentColor: brandProfile.secondaryColor,
+      accentColor: brandProfile.primaryColor,
     }
     setChildFrames(prev => ({
       ...prev,
       [categoryId]: [...(prev[categoryId] || []), newFrame],
     }))
     // Don't auto-select or auto-edit - user clicks when ready (consistent with sections)
-  }, [childFrames, brandProfile.secondaryColor])
+  }, [childFrames, brandProfile.primaryColor])
 
   const updateCategoryFrame = useCallback((categoryId: string, frameId: string, updates: Partial<FrameData>) => {
     setChildFrames(prev => ({
@@ -1089,7 +1090,7 @@ export function UnifiedStudioEditor() {
       subtitle: 'Add your subtitle here',
       heartCount: 0,
       background: { type: 'image', src: '' },
-      accentColor: brandProfile.secondaryColor,
+      accentColor: brandProfile.primaryColor,
     }
     setLists(prev => prev.map(l => l.id === listId
       ? {
@@ -1103,7 +1104,7 @@ export function UnifiedStudioEditor() {
     ))
     setSelection({ type: 'itemFrame', listId, itemId, itemFrameId: newId })
     startEditing(newId, newTitle)
-  }, [lists, brandProfile.secondaryColor])
+  }, [lists, brandProfile.primaryColor])
 
   const updateItemFrame = useCallback((listId: string, itemId: string, frameId: string, updates: Partial<FrameData>) => {
     setLists(prev => prev.map(l => l.id === listId
@@ -1169,7 +1170,7 @@ export function UnifiedStudioEditor() {
   const previewData: HomeSlydeData = {
     businessName: brandName,
     tagline,
-    accentColor: brandProfile.secondaryColor,
+    accentColor: brandProfile.primaryColor,
     backgroundGradient: 'from-slate-900 via-slate-800 to-slate-900',
     videoSrc,
     posterSrc: posterSrc || undefined,
@@ -1204,7 +1205,7 @@ export function UnifiedStudioEditor() {
     about,
     highlights: [],
     contact: { phone },
-    accentColor: brandProfile.secondaryColor,
+    accentColor: brandProfile.primaryColor,
   }
 
   const totalItems = lists.reduce((acc, l) => acc + l.items.length, 0)
@@ -2083,6 +2084,32 @@ export function UnifiedStudioEditor() {
                           onVignetteChange={setVideoVignette}
                           speed={videoSpeed}
                           onSpeedChange={setVideoSpeed}
+                          startTime={videoStartTime}
+                          onStartTimeChange={setVideoStartTime}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Music Section */}
+                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                    <button
+                      onClick={() => toggleInspectorSection('music')}
+                      className={`w-full flex items-center justify-between ${sizes.inspectorSectionPadding} bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors`}
+                    >
+                      <span className={`${sizes.inspectorSectionTitle} font-semibold text-gray-900 dark:text-white flex items-center gap-2`}>
+                        <Music className={`${sizes.icon} text-gray-500 dark:text-white/50`} />
+                        Music
+                      </span>
+                      <ChevronDown className={`${sizes.icon} text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.music ? '' : '-rotate-90'}`} />
+                    </button>
+                    {inspectorSections.music && (
+                      <div className={`${sizes.inspectorContentPadding} border-t border-gray-200 dark:border-white/10`}>
+                        <MusicSelector
+                          enabled={musicEnabled}
+                          onEnabledChange={setMusicEnabled}
+                          customUrl={musicCustomUrl}
+                          onCustomUrlChange={setMusicCustomUrl}
                         />
                       </div>
                     )}
@@ -2680,6 +2707,10 @@ export function UnifiedStudioEditor() {
                           speed={selectedCategoryFrame.background?.speed || 'normal'}
                           onSpeedChange={(speed) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
                             background: { ...selectedCategoryFrame.background, speed }
+                          })}
+                          startTime={selectedCategoryFrame.background?.startTime || 0}
+                          onStartTimeChange={(startTime) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                            background: { ...selectedCategoryFrame.background, startTime }
                           })}
                         />
                       </div>
@@ -3351,6 +3382,10 @@ export function UnifiedStudioEditor() {
                           speed={selectedItemFrame.background?.speed || 'normal'}
                           onSpeedChange={(speed) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, {
                             background: { ...selectedItemFrame.background, speed }
+                          })}
+                          startTime={selectedItemFrame.background?.startTime || 0}
+                          onStartTimeChange={(startTime) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, {
+                            background: { ...selectedItemFrame.background, startTime }
                           })}
                         />
                       </div>
