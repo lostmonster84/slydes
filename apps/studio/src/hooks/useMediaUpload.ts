@@ -143,21 +143,37 @@ export function useMediaUpload(): UseMediaUploadReturn {
 
       const { uid, uploadURL } = await createResponse.json()
 
-      // 2. Upload file directly to Cloudflare using TUS protocol
+      // 2. Upload file directly to Cloudflare with progress tracking
       setVideoStatus('uploading')
 
-      // Use fetch for simple upload (TUS for resumable uploads would be better for large files)
-      const formData = new FormData()
-      formData.append('file', file)
+      // Use XMLHttpRequest to track upload progress (fetch doesn't support upload progress)
+      await new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        const formData = new FormData()
+        formData.append('file', file)
 
-      const uploadResponse = await fetch(uploadURL, {
-        method: 'POST',
-        body: formData,
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 100)
+            setVideoProgress(percent)
+          }
+        })
+
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve()
+          } else {
+            reject(new Error('Failed to upload video to Cloudflare'))
+          }
+        })
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Upload failed - network error'))
+        })
+
+        xhr.open('POST', uploadURL)
+        xhr.send(formData)
       })
-
-      if (!uploadResponse.ok) {
-        throw new Error('Failed to upload video to Cloudflare')
-      }
 
       setVideoProgress(100)
       setVideoStatus('processing')
@@ -194,22 +210,41 @@ export function useMediaUpload(): UseMediaUploadReturn {
 
       const { id, uploadURL } = await createResponse.json()
 
-      // 2. Upload file directly to Cloudflare
+      // 2. Upload file directly to Cloudflare with progress tracking
       setImageStatus('uploading')
 
-      const formData = new FormData()
-      formData.append('file', file)
+      // Use XMLHttpRequest to track upload progress
+      const uploadResult = await new Promise<{ result?: { id?: string; variants?: string[] } }>((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        const formData = new FormData()
+        formData.append('file', file)
 
-      const uploadResponse = await fetch(uploadURL, {
-        method: 'POST',
-        body: formData,
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 100)
+            setImageProgress(percent)
+          }
+        })
+
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              resolve(JSON.parse(xhr.responseText))
+            } catch {
+              resolve({})
+            }
+          } else {
+            reject(new Error('Failed to upload image to Cloudflare'))
+          }
+        })
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Upload failed - network error'))
+        })
+
+        xhr.open('POST', uploadURL)
+        xhr.send(formData)
       })
-
-      if (!uploadResponse.ok) {
-        throw new Error('Failed to upload image to Cloudflare')
-      }
-
-      const uploadResult = await uploadResponse.json()
 
       setImageProgress(100)
       setImageStatus('ready')
