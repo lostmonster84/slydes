@@ -56,24 +56,23 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Check if user needs onboarding (skip for auth routes, API routes, and onboarding itself)
-  // TEMPORARILY DISABLED - allow all authenticated users through
-  // const isOnboardingRoute = request.nextUrl.pathname.startsWith('/onboarding')
+  const isOnboardingRoute = request.nextUrl.pathname.startsWith('/onboarding')
 
-  // if (user && !isAuthRoute && !isOnboardingRoute && !isApiRoute) {
-  //   // Check if profile exists and onboarding is completed
-  //   const { data: profile } = await supabase
-  //     .from('profiles')
-  //     .select('onboarding_completed')
-  //     .eq('id', user.id)
-  //     .single()
+  if (user && !isAuthRoute && !isOnboardingRoute && !isApiRoute) {
+    // Check if profile exists and onboarding is completed
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('onboarding_completed')
+      .eq('id', user.id)
+      .single()
 
-  //   // If no profile or onboarding not completed, redirect to onboarding
-  //   if (!profile || !profile.onboarding_completed) {
-  //     const url = request.nextUrl.clone()
-  //     url.pathname = '/onboarding'
-  //     return NextResponse.redirect(url)
-  //   }
-  // }
+    // If no profile or onboarding not completed, redirect to onboarding
+    if (!profile || !profile.onboarding_completed) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/onboarding'
+      return NextResponse.redirect(url)
+    }
+  }
 
   return supabaseResponse
 }
