@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
+import { DesktopSlydeWrapper } from '@/components/DesktopSlydeWrapper'
 import {
   campingFrames,
   campingFAQs,
@@ -23,6 +24,42 @@ export type FrameMedia = {
   imageId: string | null
   imageVariant: string | null
   videoStatus: string | null
+}
+
+export type SlydeInfo = {
+  id: string
+  publicId: string
+  title: string
+  description: string
+  icon: string
+}
+
+export type DBFrame = {
+  id: string
+  publicId: string
+  frameIndex: number
+  templateType: string | null
+  title: string | null
+  subtitle: string | null
+  mediaType: 'video' | 'image' | null
+  videoUid: string | null
+  videoPosterUrl: string | null
+  videoStatus: string | null
+  imageUrl: string | null
+  imageId: string | null
+  imageVariant: string | null
+  ctaText: string | null
+  ctaAction: string | null
+  ctaIcon: string | null
+  ctaType: string | null
+  accentColor: string | null
+  demoVideoUrl: string | null
+  backgroundType: 'video' | 'image' | 'gradient' | 'color' | null
+  backgroundGradient: string | null
+  backgroundColor: string | null
+  videoFilter: string | null
+  videoVignette: boolean | null
+  videoSpeed: string | null
 }
 
 function isStreamPlaceholder(src: string) {
@@ -54,6 +91,8 @@ function buildStreamIframeUrl(uid: string, token?: string) {
 export function PublicSlydeClient({
   businessSlug,
   slydeSlug,
+  slydeInfo,
+  dbFrames,
   frameMedia,
   businessName,
   audioSrc,
@@ -61,6 +100,8 @@ export function PublicSlydeClient({
 }: {
   businessSlug: string
   slydeSlug: string
+  slydeInfo?: SlydeInfo
+  dbFrames?: DBFrame[]
   frameMedia: FrameMedia[]
   businessName: string
   audioSrc?: string
@@ -69,6 +110,9 @@ export function PublicSlydeClient({
   const sp = useSearchParams()
   const brand = useDemoBrand()
   const accent = useMemo(() => demoBrandGradient(brand), [brand])
+
+  // Check if we're in embed mode (inside iframe)
+  const isEmbed = sp.get('embed') === 'true'
 
   // Audio state - managed here so it persists across the experience
   const [isMuted, setIsMuted] = useState(true)
@@ -91,10 +135,62 @@ export function PublicSlydeClient({
     }
   }, [isMuted, audioSrc, audioEnabled, audioUnlocked])
 
+  // Convert DBFrame to FrameData format
+  const convertDBFrameToFrameData = useCallback((dbFrame: DBFrame, index: number): FrameData => {
+    // Build background source
+    let backgroundSrc = ''
+    if (dbFrame.mediaType === 'video' && dbFrame.videoUid) {
+      const isReady = dbFrame.videoStatus === 'ready' || dbFrame.videoStatus === null
+      backgroundSrc = isReady ? `stream:${dbFrame.videoUid}` : `stream-processing:${dbFrame.videoUid}`
+    } else if (dbFrame.mediaType === 'image' && dbFrame.imageUrl) {
+      backgroundSrc = dbFrame.imageUrl
+    }
+
+    // Map DB templateType to valid FrameData templateType
+    const validTemplateTypes = ['hook', 'how', 'who', 'what', 'proof', 'trust', 'action', 'slydes', 'custom'] as const
+    const templateType = validTemplateTypes.includes(dbFrame.templateType as any)
+      ? (dbFrame.templateType as typeof validTemplateTypes[number])
+      : 'custom'
+
+    // Map DB ctaIcon to valid CTAIconType
+    const validCtaIcons = ['book', 'call', 'view', 'arrow', 'menu', 'list'] as const
+    const ctaIcon = validCtaIcons.includes(dbFrame.ctaIcon as any)
+      ? (dbFrame.ctaIcon as typeof validCtaIcons[number])
+      : 'call'
+
+    return {
+      id: dbFrame.id,
+      order: index + 1, // 1-indexed order
+      templateType,
+      title: dbFrame.title ?? '',
+      subtitle: dbFrame.subtitle ?? '',
+      heartCount: 0,
+      background: {
+        type: (dbFrame.backgroundType ?? dbFrame.mediaType ?? 'video') as 'video' | 'image',
+        src: backgroundSrc,
+        startTime: 0,
+      },
+      accentColor: dbFrame.accentColor ?? accent,
+      demoVideoUrl: dbFrame.demoVideoUrl ?? undefined,
+      cta: dbFrame.ctaText ? {
+        text: dbFrame.ctaText,
+        icon: ctaIcon,
+        action: dbFrame.ctaAction ?? undefined,
+      } : undefined,
+    }
+  }, [accent])
+
+  // Use DB frames if available, otherwise fall back to demo frames
   const { frames, faqs } = useMemo(() => {
+    // If we have DB frames, use them
+    if (dbFrames && dbFrames.length > 0) {
+      const convertedFrames = dbFrames.map((f, i) => convertDBFrameToFrameData(f, i))
+      return { frames: convertedFrames, faqs: [] as any[] } // TODO: Load FAQs from DB
+    }
+    // Fall back to demo frames
     if (slydeSlug === 'just-drive') return { frames: justDriveFrames, faqs: justDriveFAQs }
     return { frames: campingFrames, faqs: campingFAQs }
-  }, [slydeSlug])
+  }, [slydeSlug, dbFrames, convertDBFrameToFrameData])
 
   const initialFrameIndex = useMemo(() => {
     const raw = sp.get('f')
@@ -112,6 +208,10 @@ export function PublicSlydeClient({
     accentColor: accent,
   }))
 
+  // When using DB frames, they already have media baked in (from convertDBFrameToFrameData)
+  // When using demo frames, we need to overlay frameMedia
+  const hasDBFrames = dbFrames && dbFrames.length > 0
+
   const baseFrames = useMemo<FrameData[]>(
     () => frames.map((f) => ({ ...f, accentColor: accent })),
     [frames, accent]
@@ -120,8 +220,15 @@ export function PublicSlydeClient({
   const [renderFrames, setRenderFrames] = useState<FrameData[]>(() => baseFrames)
   const tokenCacheRef = useRef<Map<string, string>>(new Map())
 
-  // Apply DB-provided media onto the demo frame scaffolding.
+  // Apply DB-provided media onto demo frames (only when NOT using DB frames)
   useEffect(() => {
+    // If we have DB frames, they already contain media data from convertDBFrameToFrameData
+    if (hasDBFrames) {
+      setRenderFrames(baseFrames)
+      return
+    }
+
+    // For demo frames, overlay the frameMedia
     const byIndex = new Map<number, FrameMedia>()
     for (const m of frameMedia ?? []) {
       if (typeof m?.frameIndex === 'number') byIndex.set(m.frameIndex, m)
@@ -152,7 +259,7 @@ export function PublicSlydeClient({
     })
 
     setRenderFrames(next)
-  }, [baseFrames, frameMedia])
+  }, [baseFrames, frameMedia, hasDBFrames])
 
   useEffect(() => {
     setBusiness((prev) => ({
@@ -280,8 +387,9 @@ export function PublicSlydeClient({
     [renderFrames, checkIfVideoReady, hydrateFrameVideo]
   )
 
-  return (
-    <main className="min-h-screen bg-black">
+  // Shared content for both embed and normal modes
+  const slydeContent = (
+    <>
       {/* Background Audio (hidden) - managed at this level for persistence */}
       {audioSrc && audioEnabled && (
         <audio
@@ -323,7 +431,19 @@ export function PublicSlydeClient({
           onMuteToggle={handleMuteToggle}
         />
       </div>
-    </main>
+    </>
+  )
+
+  // Embed mode: render directly (no wrapper, for iframe)
+  if (isEmbed) {
+    return <main className="min-h-screen bg-black">{slydeContent}</main>
+  }
+
+  // Normal mode: render with desktop wrapper
+  return (
+    <DesktopSlydeWrapper businessName={businessName} slug={`${businessSlug}/${slydeSlug}`}>
+      {slydeContent}
+    </DesktopSlydeWrapper>
   )
 }
 

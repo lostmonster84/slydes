@@ -1,8 +1,9 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { HomeSlydeScreen } from '@/app/demo/home-slyde/components/HomeSlydeScreen'
+import { DesktopSlydeWrapper } from '@/components/DesktopSlydeWrapper'
 
 type Category = {
   id: string
@@ -34,6 +35,10 @@ export function PublicHomeClient({
   audioEnabled = true,
 }: PublicHomeClientProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Check if we're in embed mode (inside iframe)
+  const isEmbed = searchParams.get('embed') === 'true'
 
   // Create gradient from primary color
   const accent = useMemo(() => {
@@ -41,37 +46,46 @@ export function PublicHomeClient({
     return `linear-gradient(135deg, ${primaryColor} 0%, ${adjustColor(primaryColor, 30)} 100%)`
   }, [primaryColor])
 
+  // Shared HomeSlydeScreen component
+  const slydeScreen = (
+    <HomeSlydeScreen
+      data={{
+        businessName,
+        tagline: '', // TODO: Add tagline to organization
+        accentColor: accent,
+        backgroundGradient: 'from-slate-950 via-slate-950 to-black',
+        videoSrc,
+        posterSrc,
+        categories: categories.map((c) => ({
+          id: c.id,
+          label: c.name,
+          icon: c.icon,
+          description: c.description,
+          frames: [],
+        })),
+        primaryCta: undefined, // TODO: Add CTA to organization
+      }}
+      onCategoryTap={(categoryId) => {
+        const cat = categories.find((c) => c.id === categoryId)
+        const child = cat?.childSlydeId
+        if (!child) return
+        router.push(`/${encodeURIComponent(businessSlug)}/${encodeURIComponent(child)}`)
+      }}
+      audioSrc={audioSrc}
+      audioEnabled={audioEnabled}
+    />
+  )
+
+  // Embed mode: render Slyde directly (no wrapper, for iframe)
+  if (isEmbed) {
+    return <main className="h-screen w-full bg-black">{slydeScreen}</main>
+  }
+
+  // Normal mode: render with desktop wrapper
   return (
-    <main className="min-h-screen bg-black">
-      <div className="h-screen w-full">
-        <HomeSlydeScreen
-          data={{
-            businessName,
-            tagline: '', // TODO: Add tagline to organization
-            accentColor: accent,
-            backgroundGradient: 'from-slate-950 via-slate-950 to-black',
-            videoSrc,
-            posterSrc,
-            categories: categories.map((c) => ({
-              id: c.id,
-              label: c.name,
-              icon: c.icon,
-              description: c.description,
-              frames: [],
-            })),
-            primaryCta: undefined, // TODO: Add CTA to organization
-          }}
-          onCategoryTap={(categoryId) => {
-            const cat = categories.find((c) => c.id === categoryId)
-            const child = cat?.childSlydeId
-            if (!child) return
-            router.push(`/${encodeURIComponent(businessSlug)}/${encodeURIComponent(child)}`)
-          }}
-          audioSrc={audioSrc}
-          audioEnabled={audioEnabled}
-        />
-      </div>
-    </main>
+    <DesktopSlydeWrapper businessName={businessName} slug={businessSlug}>
+      {slydeScreen}
+    </DesktopSlydeWrapper>
   )
 }
 

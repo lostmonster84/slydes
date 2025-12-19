@@ -48,16 +48,7 @@ import { HomeSlydeScreen } from '@/components/home-slyde/HomeSlydeScreen'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
 import type { FrameData, FAQItem, BusinessInfo, CTAIconType, CTAType, ListItem, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
-import { useOrganization, useSocialFollowers } from '@/hooks'
-import {
-  useDemoHomeSlyde,
-  writeDemoHomeSlyde,
-  readChildFrames,
-  writeChildFrames,
-  deleteChildFrames,
-  type DemoHomeSlyde,
-  type DemoHomeSlydeCategory,
-} from '@/lib/demoHomeSlyde'
+import { useOrganization, useSocialFollowers, useSlydes, useHomeSlyde, useCategoryFrames, type HomeSlydeCategory, type BackgroundType, type HomeSlyde } from '@/hooks'
 import type { HomeSlydeData } from '@/components/home-slyde/data/highlandMotorsData'
 import {
   UploadCloud,
@@ -120,7 +111,6 @@ import { Toggle } from '@/components/ui/Toggle'
 import { BackgroundMediaInput } from '@/components/BackgroundMediaInput'
 import { MusicSelector } from '@/components/audio/MusicSelector'
 import { type VideoFilterPreset, type VideoSpeedPreset } from '@/lib/videoFilters'
-import type { BackgroundType } from '@/lib/demoHomeSlyde'
 import { InventoryGridView } from '@/components/home-slyde/InventoryGridView'
 import type { InventoryItem } from '@/components/home-slyde/data/highlandMotorsData'
 import { useFAQs } from '@/hooks/useFAQs'
@@ -221,7 +211,7 @@ function SortableSectionRow({
   children,
   shouldPulse,
 }: {
-  cat: DemoHomeSlydeCategory
+  cat: HomeSlydeCategory
   isSelected: boolean
   isExpanded: boolean
   isEditing: boolean
@@ -230,7 +220,7 @@ function SortableSectionRow({
   editingValue: string
   setEditingValue: (v: string) => void
   editInputRef: React.RefObject<HTMLInputElement>
-  updateCategory: (id: string, updates: Partial<DemoHomeSlydeCategory>) => void
+  updateCategory: (id: string, updates: Partial<HomeSlydeCategory>) => void
   cancelEditing: () => void
   startEditing: (id: string, value: string) => void
   deleteCategory: (id: string) => void
@@ -569,7 +559,28 @@ export function UnifiedStudioEditor() {
   const searchParams = useSearchParams()
   const { organization, isLoading: orgLoading } = useOrganization()
   const { saveInstagramHandle, fetchTikTokFollowers } = useSocialFollowers(organization?.id)
-  const { data: homeSlyde, hydrated: homeSlydeHydrated } = useDemoHomeSlyde()
+  const {
+    data: homeSlyde,
+    hydrated: homeSlydeHydrated,
+    isLoading: homeSlydeLoading,
+    updateHomeSlyde,
+    addCategory: addHomeSlydeCategory,
+    updateCategory: updateHomeSlydeCategory,
+    deleteCategory: deleteHomeSlydeCategory,
+    reorderCategories: reorderHomeSlydeCategories,
+    publishAll,
+  } = useHomeSlyde()
+  const { slydes, publishSlyde } = useSlydes()
+
+  // Category frames from Supabase
+  const {
+    framesByCategory: childFrames,
+    loadFramesForCategory,
+    addFrame: addCategoryFrameDB,
+    updateFrame: updateCategoryFrameDB,
+    deleteFrame: deleteCategoryFrameDB,
+    reorderFrames: reorderCategoryFramesDB,
+  } = useCategoryFrames()
 
   // DnD sensors for drag and drop reordering
   const sensors = useSensors(
@@ -611,7 +622,7 @@ export function UnifiedStudioEditor() {
   const [address, setAddress] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
-  const [categories, setCategories] = useState<DemoHomeSlydeCategory[]>(homeSlyde.categories)
+  const [categories, setCategories] = useState<HomeSlydeCategory[]>(homeSlyde.categories)
   const [showCategoryIcons, setShowCategoryIcons] = useState(homeSlyde.showCategoryIcons ?? false)
   const [showHearts, setShowHearts] = useState(homeSlyde.showHearts ?? true)
   const [showShare, setShowShare] = useState(homeSlyde.showShare ?? true)
@@ -673,6 +684,32 @@ export function UnifiedStudioEditor() {
       document.body.removeChild(textarea)
       setLinkCopied(true)
       setTimeout(() => setLinkCopied(false), 2000)
+    }
+  }
+
+  // Publish all slydes for this organization
+  const [isPublishing, setIsPublishing] = useState(false)
+  const handlePublish = async () => {
+    if (isPublishing) return
+
+    setIsPublishing(true)
+    try {
+      // Save any pending changes first
+      await persistHomeSlyde()
+
+      // Publish all slydes (categories)
+      await publishAll()
+
+      // 🎉 Confetti celebration!
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.3 },
+      })
+    } catch (err) {
+      console.error('Failed to publish:', err)
+    } finally {
+      setIsPublishing(false)
     }
   }
 
@@ -795,10 +832,8 @@ export function UnifiedStudioEditor() {
   const [editingValue, setEditingValue] = useState('')
   const editInputRef = useRef<HTMLInputElement>(null)
 
-  // =============================================
-  // CHILD FRAMES STATE (Category Slydes)
-  // =============================================
-  const [childFrames, setChildFrames] = useState<Record<string, FrameData[]>>({})
+  // NOTE: childFrames now comes from useCategoryFrames hook (framesByCategory)
+  // The hook manages frames in Supabase instead of localStorage
 
   // =============================================
   // INSPECTOR SECTIONS STATE
@@ -1010,40 +1045,46 @@ export function UnifiedStudioEditor() {
   }, [brandProfile.businessName, brandProfile.tagline])
 
   // =============================================
-  // PERSISTENCE
+  // PERSISTENCE - Updates organization settings in Supabase
+  // Categories are handled separately via addHomeSlydeCategory/updateHomeSlydeCategory
   // =============================================
-  const persistHomeSlyde = useCallback(() => {
-    const next: DemoHomeSlyde = {
+  const persistHomeSlyde = useCallback(async () => {
+    if (!organization) return
+
+    const updates: Partial<HomeSlyde> = {
       backgroundType,
-      videoSrc,
       imageSrc: imageSrc || undefined,
+      posterSrc: posterSrc || undefined,
       videoFilter,
       videoVignette,
       videoSpeed,
       videoStartTime: videoStartTime || undefined,
-      posterSrc: posterSrc || undefined,
-      categories,
       showCategoryIcons,
       showHearts,
       showShare,
       showSound,
       showReviews,
       socialLinks: Object.values(socialLinks).some(Boolean) ? socialLinks : undefined,
-      childFrames: homeSlyde.childFrames,
-      childFAQs: homeSlyde.childFAQs,
       homeFAQs: homeSlyde.homeFAQs,
       faqInbox: homeSlyde.faqInbox,
-      lists,
-      // Music
       musicEnabled,
-      musicCustomUrl,
     }
-    writeDemoHomeSlyde(next)
-  }, [backgroundType, videoSrc, imageSrc, videoFilter, videoVignette, videoSpeed, videoStartTime, posterSrc, categories, showCategoryIcons, showHearts, showShare, showSound, showReviews, socialLinks, lists, homeSlyde.childFrames, homeSlyde.childFAQs, homeSlyde.homeFAQs, homeSlyde.faqInbox, musicEnabled, musicCustomUrl])
 
+    try {
+      await updateHomeSlyde(updates)
+    } catch (err) {
+      console.error('Failed to persist home slyde:', err)
+    }
+  }, [organization, backgroundType, imageSrc, posterSrc, videoFilter, videoVignette, videoSpeed, videoStartTime, showCategoryIcons, showHearts, showShare, showSound, showReviews, socialLinks, homeSlyde.homeFAQs, homeSlyde.faqInbox, musicEnabled, updateHomeSlyde])
+
+  // Debounced persistence - save after 500ms of no changes
+  const persistTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   useEffect(() => {
-    const timeout = setTimeout(persistHomeSlyde, 300)
-    return () => clearTimeout(timeout)
+    if (persistTimeoutRef.current) clearTimeout(persistTimeoutRef.current)
+    persistTimeoutRef.current = setTimeout(persistHomeSlyde, 500)
+    return () => {
+      if (persistTimeoutRef.current) clearTimeout(persistTimeoutRef.current)
+    }
   }, [persistHomeSlyde])
 
   // =============================================
@@ -1104,144 +1145,126 @@ export function UnifiedStudioEditor() {
   }
 
   // =============================================
-  // CATEGORY CRUD
+  // CATEGORY CRUD - Now backed by Supabase slydes table
   // =============================================
-  const addCategory = useCallback(() => {
+  const addCategory = useCallback(async () => {
     if (categories.length >= 6) return
-    const newId = `cat-${Date.now()}`
     const slydeNumber = categories.length + 1
     const newName = `New Slyde ${slydeNumber}`
-    setCategories(prev => [
-      ...prev,
-      { id: newId, icon: 'sparkles', name: newName, description: '', childSlydeId: 'default', hasInventory: false },
-    ])
-    setExpandedSections(prev => ({ ...prev, categories: true }))
-    // Don't auto-select - user stays in current context and clicks when ready
-  }, [categories.length])
 
-  const updateCategory = useCallback((id: string, updates: Partial<DemoHomeSlydeCategory>) => {
+    try {
+      const newPublicId = await addHomeSlydeCategory({
+        icon: 'sparkles',
+        name: newName,
+        description: '',
+        hasInventory: false,
+      })
+      setExpandedSections(prev => ({ ...prev, categories: true }))
+      // Categories will update from hook's refetch
+    } catch (err) {
+      console.error('Failed to add category:', err)
+    }
+  }, [categories.length, addHomeSlydeCategory])
+
+  const updateCategory = useCallback(async (id: string, updates: Partial<HomeSlydeCategory>) => {
+    // Optimistic update for local state
     setCategories(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c))
-  }, [])
 
-  const deleteCategory = useCallback((id: string) => {
+    try {
+      await updateHomeSlydeCategory(id, updates)
+    } catch (err) {
+      console.error('Failed to update category:', err)
+      // Revert on error - refetch will fix state
+    }
+  }, [updateHomeSlydeCategory])
+
+  const deleteCategory = useCallback(async (id: string) => {
+    // Optimistic update for UI
     setCategories(prev => prev.filter(c => c.id !== id))
-    deleteChildFrames(id)
-    setChildFrames(prev => {
-      const { [id]: _, ...rest } = prev
-      return rest
-    })
+    // Note: Frames are deleted via DB cascade when slyde is deleted
+
     if (selection.categoryId === id) {
       setPreviewMode('home')
       setSelection({ type: 'home' })
     }
-  }, [selection.categoryId])
+
+    try {
+      await deleteHomeSlydeCategory(id)
+    } catch (err) {
+      console.error('Failed to delete category:', err)
+    }
+  }, [selection.categoryId, deleteHomeSlydeCategory])
 
   // Reorder sections via drag-and-drop
-  const handleSectionDragEnd = useCallback((event: DragEndEvent) => {
+  const handleSectionDragEnd = useCallback(async (event: DragEndEvent) => {
     const { active, over } = event
     if (over && active.id !== over.id) {
-      setCategories(prev => {
-        const oldIndex = prev.findIndex(c => c.id === active.id)
-        const newIndex = prev.findIndex(c => c.id === over.id)
-        return arrayMove(prev, oldIndex, newIndex)
-      })
+      // Optimistic reorder
+      const newCategories = [...categories]
+      const oldIndex = newCategories.findIndex(c => c.id === active.id)
+      const newIndex = newCategories.findIndex(c => c.id === over.id)
+      const reordered = arrayMove(newCategories, oldIndex, newIndex)
+      setCategories(reordered)
+
+      // Persist to database
+      try {
+        await reorderHomeSlydeCategories(reordered.map(c => c.id))
+      } catch (err) {
+        console.error('Failed to reorder categories:', err)
+      }
     }
-  }, [])
+  }, [categories, reorderHomeSlydeCategories])
 
   // =============================================
-  // CATEGORY FRAME CRUD
+  // CATEGORY FRAME CRUD - Now backed by Supabase via useCategoryFrames hook
   // =============================================
+
+  // Load frames for a category from Supabase
   const loadCategoryFrames = useCallback((categoryId: string) => {
-    if (childFrames[categoryId]) return // Already loaded
-    const savedFrames = readChildFrames(categoryId)
-    if (savedFrames && savedFrames.length > 0) {
-      setChildFrames(prev => ({ ...prev, [categoryId]: savedFrames }))
-    } else {
-      // Create starter frames - empty to trigger onboarding flow
-      const starterFrames: FrameData[] = [
-        {
-          id: '1',
-          order: 1,
-          templateType: 'hook',
-          title: '', // Empty - onboarding will prompt user
-          subtitle: '',
-          heartCount: 0,
-          background: { type: 'video', src: '' }, // Default to video
-          accentColor: brandProfile.primaryColor,
-          // Default CTA - "Call" button ready to go
-          cta: { type: 'call' as CTAType, icon: 'phone' as CTAIconType, text: 'Call', value: '' },
-        },
-      ]
-      setChildFrames(prev => ({ ...prev, [categoryId]: starterFrames }))
-    }
-  }, [childFrames, brandProfile.primaryColor])
+    loadFramesForCategory(categoryId)
+  }, [loadFramesForCategory])
 
-  const addCategoryFrame = useCallback((categoryId: string) => {
-    const frames = childFrames[categoryId] || []
-    const newId = `frame-${Date.now()}`
-    const frameNumber = frames.length + 1
-    const newFrame: FrameData = {
-      id: newId,
-      order: frameNumber,
-      templateType: 'custom',
-      title: '', // Empty - onboarding will prompt user to add title
-      subtitle: '',
-      heartCount: 0,
-      background: { type: 'video', src: '' }, // Default to video, empty src
-      accentColor: brandProfile.primaryColor,
-      // Default CTA - "Call" button ready to go
-      cta: { type: 'call' as CTAType, icon: 'phone' as CTAIconType, text: 'Call', value: '' },
-    }
-    setChildFrames(prev => ({
-      ...prev,
-      [categoryId]: [...(prev[categoryId] || []), newFrame],
-    }))
-    // Don't auto-select or auto-edit - user clicks when ready (consistent with sections)
-  }, [childFrames, brandProfile.primaryColor])
+  // Add a new frame to a category
+  const addCategoryFrame = useCallback(async (categoryId: string) => {
+    await addCategoryFrameDB(categoryId)
+  }, [addCategoryFrameDB])
 
-  const updateCategoryFrame = useCallback((categoryId: string, frameId: string, updates: Partial<FrameData>) => {
-    setChildFrames(prev => ({
-      ...prev,
-      [categoryId]: (prev[categoryId] || []).map(f => f.id === frameId ? { ...f, ...updates } : f),
-    }))
-  }, [])
-
-  const deleteCategoryFrame = useCallback((categoryId: string, frameId: string) => {
-    const frames = childFrames[categoryId] || []
-    if (frames.length <= 1) return
-    setChildFrames(prev => ({
-      ...prev,
-      [categoryId]: (prev[categoryId] || []).filter(f => f.id !== frameId),
-    }))
-    if (selection.categoryFrameId === frameId) {
-      setSelection({ type: 'category', categoryId })
+  // Update a frame's data
+  const updateCategoryFrame = useCallback(async (categoryId: string, frameId: string, updates: Partial<FrameData>) => {
+    try {
+      await updateCategoryFrameDB(categoryId, frameId, updates)
+    } catch (err) {
+      console.error('Failed to update frame:', err)
     }
-  }, [childFrames, selection.categoryFrameId])
+  }, [updateCategoryFrameDB])
+
+  // Delete a frame
+  const deleteCategoryFrame = useCallback(async (categoryId: string, frameId: string) => {
+    try {
+      await deleteCategoryFrameDB(categoryId, frameId)
+      if (selection.categoryFrameId === frameId) {
+        setSelection({ type: 'category', categoryId })
+      }
+    } catch (err) {
+      console.error('Failed to delete frame:', err)
+    }
+  }, [deleteCategoryFrameDB, selection.categoryFrameId])
 
   // Reorder frames within a category via drag-and-drop
-  const handleFrameDragEnd = useCallback((categoryId: string) => (event: DragEndEvent) => {
+  const handleFrameDragEnd = useCallback((categoryId: string) => async (event: DragEndEvent) => {
     const { active, over } = event
     if (over && active.id !== over.id) {
-      setChildFrames(prev => {
-        const frames = prev[categoryId] || []
-        const oldIndex = frames.findIndex(f => f.id === active.id)
-        const newIndex = frames.findIndex(f => f.id === over.id)
-        return {
-          ...prev,
-          [categoryId]: arrayMove(frames, oldIndex, newIndex),
-        }
-      })
-    }
-  }, [])
-
-  // Persist category frames
-  useEffect(() => {
-    Object.entries(childFrames).forEach(([categoryId, frames]) => {
-      if (frames.length > 0) {
-        writeChildFrames(categoryId, frames)
+      const frames = childFrames[categoryId] || []
+      const oldIndex = frames.findIndex(f => f.id === active.id)
+      const newIndex = frames.findIndex(f => f.id === over.id)
+      const reordered = arrayMove(frames, oldIndex, newIndex)
+      try {
+        await reorderCategoryFramesDB(categoryId, reordered.map(f => f.id))
+      } catch (err) {
+        console.error('Failed to reorder frames:', err)
       }
-    })
-  }, [childFrames])
+    }
+  }, [childFrames, reorderCategoryFramesDB])
 
   // Handle URL params to auto-select category (from Slydes page "Edit" link)
   useEffect(() => {
@@ -1632,10 +1655,12 @@ export function UnifiedStudioEditor() {
 
               <button
                 type="button"
-                className={`inline-flex items-center gap-2 px-5 py-2.5 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity ${HQ_PRIMARY_SHADOW} ${HQ_PRIMARY_GRADIENT}`}
+                onClick={handlePublish}
+                disabled={isPublishing}
+                className={`inline-flex items-center gap-2 px-5 py-2.5 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed ${HQ_PRIMARY_SHADOW} ${HQ_PRIMARY_GRADIENT}`}
               >
-                <UploadCloud className="w-4 h-4" />
-                Publish
+                <UploadCloud className={`w-4 h-4 ${isPublishing ? 'animate-pulse' : ''}`} />
+                {isPublishing ? 'Publishing...' : 'Publish'}
               </button>
             </div>
           </header>

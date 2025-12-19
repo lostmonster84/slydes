@@ -22,6 +22,22 @@ export interface Frame {
   image_variant: string | null
   created_at: string
   updated_at: string
+  // New columns from migration 027
+  subtitle: string | null
+  cta_text: string | null
+  cta_action: string | null
+  cta_icon: string | null
+  cta_type: string | null
+  accent_color: string | null
+  demo_video_url: string | null
+  background_type: 'video' | 'image' | 'gradient' | 'color' | null
+  background_gradient: string | null
+  background_color: string | null
+  video_filter: string | null
+  video_vignette: boolean | null
+  video_speed: string | null
+  list_id: string | null
+  list_item_id: string | null
 }
 
 interface UseFramesReturn {

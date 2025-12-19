@@ -11,11 +11,12 @@ export type { Slyde } from './useSlydes'
 
 // Frames
 export { useFrames, useFrame } from './useFrames'
+export { useCategoryFrames, frameToFrameData, frameDataToFrameUpdates } from './useCategoryFrames'
 export type { Frame } from './useFrames'
 
 // Home Slyde (composite hook)
 export { useHomeSlyde } from './useHomeSlyde'
-export type { HomeSlyde, HomeSlydeCategory } from './useHomeSlyde'
+export type { HomeSlyde, HomeSlydeCategory, BackgroundType } from './useHomeSlyde'
 
 // Media uploads
 export { useMediaUpload } from './useMediaUpload'
