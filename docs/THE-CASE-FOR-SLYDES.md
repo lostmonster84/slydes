@@ -144,6 +144,12 @@ Smart CTAs at every step. Make it stupid-easy to book, buy, or contact.
 - Personal trainers showing results
 - Wedding planners with portfolio work
 
+**Creatives**
+- Musicians with live clips, releases, and tour dates
+- Video producers with full-screen showreels
+- Photographers with scrollable portfolios
+- Artists showcasing process videos and exhibitions
+
 **If your business can be shown through video, you need Slydes.**
 
 ---

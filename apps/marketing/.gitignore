@@ -3,3 +3,4 @@ apps/marketing/.env.vercel-production
 
 # Local roadmap data (dev only)
 .roadmap-data.json
+.env*.local

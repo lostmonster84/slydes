@@ -154,13 +154,13 @@ export default function DemosPage() {
             >
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-leader-blue/10 text-leader-blue text-sm font-medium mb-6">
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                LIVE DEMOS
+                INTERACTIVE EXAMPLES
               </span>
               <h1 className="mb-4">
                 See Slydes <span className="gradient-text">in action</span>
               </h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Real businesses, real video experiences. Every demo shows what YOUR mobile site could look like.
+                WildTrax is live. The rest are templates showing what YOUR business could look like.
                 <br />
                 <span className="text-leader-blue font-semibold">Swipe, scroll, fall in love.</span>
               </p>
@@ -237,8 +237,8 @@ export default function DemosPage() {
                           LIVE
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">
-                          DEMO
+                        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-semibold">
+                          TEMPLATE
                         </span>
                       )}
                       <span className="text-sm text-gray-500">{currentDemo.industry}</span>
@@ -314,7 +314,7 @@ export default function DemosPage() {
             >
               <h2 className="mb-4">What you're looking at</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                This isn't a mockup. This is the real Slydes experience. The same technology your business will use.
+                WildTrax is a live customer. The templates show real Slydes technology applied to different industries.
               </p>
             </motion.div>
 

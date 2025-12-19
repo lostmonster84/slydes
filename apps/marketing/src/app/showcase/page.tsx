@@ -9,6 +9,7 @@ import { motion } from 'framer-motion'
 
 // Demo examples - showing what's possible with Slydes
 const demoExamples = [
+  // Experience & Hospitality
   {
     id: 'hospitality',
     title: 'Maison Lumière',
@@ -45,6 +46,43 @@ const demoExamples = [
     color: 'from-zinc-700 to-zinc-900',
     isDemo: true,
   },
+  // Creatives
+  {
+    id: 'musicians',
+    title: 'NOVA',
+    label: 'Musicians',
+    variant: 'hospitality' as const,
+    description: 'Live clips, new releases, tour dates, and merch drops.',
+    color: 'from-purple-600 to-purple-900',
+    isDemo: true,
+  },
+  {
+    id: 'videographers',
+    title: 'Frame & Flow',
+    label: 'Video Producers',
+    variant: 'hospitality' as const,
+    description: 'Your showreel, full-screen. The way it was meant to be seen.',
+    color: 'from-rose-600 to-rose-900',
+    isDemo: true,
+  },
+  {
+    id: 'photographers',
+    title: 'Lena Park',
+    label: 'Photographers',
+    variant: 'hospitality' as const,
+    description: 'Portfolio that scrolls. Packages and booking in one swipe.',
+    color: 'from-sky-600 to-sky-900',
+    isDemo: true,
+  },
+  {
+    id: 'artists',
+    title: 'Studio Mira',
+    label: 'Artists',
+    variant: 'hospitality' as const,
+    description: 'Gallery in your pocket. Process videos, exhibitions, commissions.',
+    color: 'from-fuchsia-600 to-fuchsia-900',
+    isDemo: true,
+  },
 ]
 
 
@@ -62,10 +100,10 @@ export default function ShowcasePage() {
               transition={{ duration: 0.5 }}
             >
               <h1 className="mb-4">
-                See Slydes <span className="gradient-text">in action</span>
+                One live example. <span className="gradient-text">Endless possibilities.</span>
               </h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                See how real businesses use Slydes to turn mobile visitors into bookings and leads. Your industry can be next.
+                WildTrax is live and crushing it. See what YOUR industry could look like on Slydes.
               </p>
             </motion.div>
           </div>
@@ -214,14 +252,14 @@ export default function ShowcasePage() {
               className="text-center mb-12"
             >
               <div className="flex items-center justify-center gap-3 mb-4">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-semibold">
-                  💡 Demo Examples
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-sm font-semibold">
+                  INDUSTRY TEMPLATES
                 </span>
               </div>
-              <h2 className="mb-4">What&apos;s possible with Slydes</h2>
+              <h2 className="mb-4">Your industry, your way</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                These demos show what Slydes can do for different industries. 
-                <strong> Your industry can be next.</strong>
+                See how Slydes works for your vertical. From restaurants to musicians, rentals to video producers.
+                <strong> If it can be shown through video, it belongs on Slydes.</strong>
               </p>
             </motion.div>
 
@@ -255,8 +293,8 @@ export default function ShowcasePage() {
                       <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
                         {demo.label}
                       </span>
-                      <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
-                        Demo
+                      <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                        Template
                       </span>
                     </div>
                     <h4 className="font-semibold text-sm mb-1">{demo.title}</h4>
