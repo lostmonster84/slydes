@@ -312,7 +312,7 @@ export function MomentumAI({ isOpen, onClose, isPro = false }: MomentumAIProps) 
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask Momentum anything..."
-                  className="flex-1 px-4 py-3 rounded-xl bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-cyan-500"
+                  className="flex-1 px-4 py-3 rounded-xl bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-leader-blue"
                   disabled={isLoading}
                 />
                 <button
@@ -384,18 +384,22 @@ export function MomentumAI({ isOpen, onClose, isPro = false }: MomentumAIProps) 
 }
 
 /**
- * Floating trigger button for Momentum AI
+ * Floating trigger bubble for Momentum AI
+ * Shows as a round icon button on all pages except Dashboard
  */
 export function MomentumAITrigger({ onClick, hasUnread = false }: { onClick: () => void; hasUnread?: boolean }) {
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-30 flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-full shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105 transition-all"
+      className="fixed bottom-6 right-6 z-30 w-14 h-14 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-full shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-110 transition-all flex items-center justify-center group"
+      title="Ask Momentum AI"
     >
-      <Sparkles className="w-5 h-5" />
-      <span>Ask Momentum</span>
+      {/* Pulse glow - only on hover */}
+      <span className="absolute inset-[-4px] rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 opacity-0 group-hover:opacity-40 blur-md group-hover:animate-pulse transition-opacity" />
+      {/* Icon */}
+      <Sparkles className="w-6 h-6 relative z-10 group-hover:rotate-12 transition-transform" />
       {hasUnread && (
-        <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white" />
+        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 rounded-full border-2 border-white z-20" />
       )}
     </button>
   )

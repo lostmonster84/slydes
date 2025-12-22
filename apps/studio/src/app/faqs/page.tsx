@@ -253,7 +253,7 @@ export default function FAQsPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search FAQs..."
-                    className="w-full pl-12 pr-4 py-3 bg-white dark:bg-[#2c2c2e] border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full pl-12 pr-4 py-3 bg-white dark:bg-[#2c2c2e] border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                   />
                 </div>
               )}
@@ -357,7 +357,7 @@ export default function FAQsPage() {
                                             type="text"
                                             value={editingQuestion}
                                             onChange={(e) => setEditingQuestion(e.target.value)}
-                                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                                             placeholder="What's your question?"
                                             autoFocus
                                           />
@@ -368,7 +368,7 @@ export default function FAQsPage() {
                                             value={editingAnswer}
                                             onChange={(e) => setEditingAnswer(e.target.value)}
                                             rows={3}
-                                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none"
+                                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40 resize-none"
                                             placeholder="Provide a helpful answer..."
                                           />
                                         </div>

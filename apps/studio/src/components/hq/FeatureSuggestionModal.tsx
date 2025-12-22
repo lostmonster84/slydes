@@ -155,7 +155,7 @@ export function FeatureSuggestionModal({ isOpen, onClose }: FeatureSuggestionMod
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500 transition-colors dark:bg-white/5 dark:border-white/10 dark:text-white appearance-none cursor-pointer"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-leader-blue/40 focus:border-cyan-500 transition-colors dark:bg-white/5 dark:border-white/10 dark:text-white appearance-none cursor-pointer"
                     style={{ fontSize: '16px' }}
                   >
                     <option value="">Select a category...</option>
@@ -175,7 +175,7 @@ export function FeatureSuggestionModal({ isOpen, onClose }: FeatureSuggestionMod
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g., Add dark mode toggle"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500 transition-colors dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder-white/40"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-leader-blue/40 focus:border-cyan-500 transition-colors dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder-white/40"
                     style={{ fontSize: '16px' }}
                     autoFocus
                   />
@@ -191,7 +191,7 @@ export function FeatureSuggestionModal({ isOpen, onClose }: FeatureSuggestionMod
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Tell us more about your idea..."
                     rows={3}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500 transition-colors resize-none dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder-white/40"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-leader-blue/40 focus:border-cyan-500 transition-colors resize-none dark:bg-white/5 dark:border-white/10 dark:text-white dark:placeholder-white/40"
                     style={{ fontSize: '16px' }}
                   />
                 </div>

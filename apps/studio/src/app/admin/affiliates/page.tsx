@@ -142,7 +142,7 @@ export default function AdminAffiliatesPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'instagram' | 'tiktok' | 'total')}
-                className="px-3 py-2 bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="px-3 py-2 bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               >
                 <option value="total">Sort by Total</option>
                 <option value="instagram">Sort by Instagram</option>

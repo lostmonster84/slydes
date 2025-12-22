@@ -141,7 +141,7 @@ export function SectionRow({ section, onToggle, onRename, onRemove }: SectionRow
             className="
               w-full rounded-md border border-blue-300 bg-white px-2 py-1
               text-sm font-medium text-gray-900
-              focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30
+              focus:border-leader-blue focus:outline-none focus:ring-2 focus:ring-leader-blue/40
               dark:border-blue-500/50 dark:bg-[#1c1c1e] dark:text-white
             "
           />

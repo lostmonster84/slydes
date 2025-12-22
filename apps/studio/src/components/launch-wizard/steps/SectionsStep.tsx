@@ -73,7 +73,7 @@ export function SectionsStep() {
               className="
                 flex-1 rounded-md border border-gray-200 bg-white px-3 py-2
                 text-sm text-gray-900 placeholder:text-gray-400
-                focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30
+                focus:border-leader-blue focus:outline-none focus:ring-2 focus:ring-leader-blue/40
                 dark:border-white/10 dark:bg-[#1c1c1e] dark:text-white dark:placeholder:text-white/40
               "
               autoFocus

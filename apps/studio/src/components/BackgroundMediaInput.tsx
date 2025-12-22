@@ -278,7 +278,7 @@ export function BackgroundMediaInput({
                 onChange={(e) => onVideoSrcChange(e.target.value)}
                 placeholder="Paste YouTube, Vimeo, or video URL..."
                 disabled={isProcessing}
-                className={`w-full px-3 py-2 pr-10 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50 ${shouldPulseInput && isVideo ? 'animate-pulse-hint' : ''}`}
+                className={`w-full px-3 py-2 pr-10 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 disabled:opacity-50 ${shouldPulseInput && isVideo ? 'animate-pulse-hint' : ''}`}
               />
               {videoSrc && (
                 <button
@@ -383,7 +383,7 @@ export function BackgroundMediaInput({
                 onChange={(e) => onImageSrcChange(e.target.value)}
                 placeholder="Paste image URL..."
                 disabled={isProcessing}
-                className={`w-full px-3 py-2 pr-10 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 disabled:opacity-50 ${shouldPulseInput && !isVideo ? 'animate-pulse-hint' : ''}`}
+                className={`w-full px-3 py-2 pr-10 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 disabled:opacity-50 ${shouldPulseInput && !isVideo ? 'animate-pulse-hint' : ''}`}
               />
               {imageSrc && (
                 <button
@@ -454,7 +454,7 @@ export function BackgroundMediaInput({
                 type="checkbox"
                 checked={vignette}
                 onChange={(e) => onVignetteChange(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 dark:border-white/20 text-blue-600 focus:ring-blue-500 focus:ring-offset-0 bg-white dark:bg-white/10"
+                className="w-4 h-4 rounded border-gray-300 dark:border-white/20 text-blue-600 focus:ring-leader-blue focus:ring-offset-0 bg-white dark:bg-white/10"
               />
               <span className="text-xs text-gray-600 dark:text-white/60">
                 Vignette (darkened edges)

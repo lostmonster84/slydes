@@ -2381,7 +2381,7 @@ export function UnifiedStudioEditor() {
                             type="text"
                             value={brandName}
                             onChange={(e) => setBrandName(e.target.value)}
-                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${onboardingPulseTarget === 'home-brand-name-input' ? 'animate-pulse-hint' : ''}`}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 ${onboardingPulseTarget === 'home-brand-name-input' ? 'animate-pulse-hint' : ''}`}
                           />
                           <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Shown on home screen and profile pill</p>
                         </div>
@@ -2391,7 +2391,7 @@ export function UnifiedStudioEditor() {
                             type="text"
                             value={tagline}
                             onChange={(e) => setTagline(e.target.value)}
-                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40`}
                           />
                           <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Appears below your business name</p>
                         </div>
@@ -2401,7 +2401,7 @@ export function UnifiedStudioEditor() {
                             value={about}
                             onChange={(e) => setAbout(e.target.value)}
                             rows={3}
-                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none`}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 resize-none`}
                             placeholder="Tell customers about your business..."
                           />
                           <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Shown when visitors tap your profile</p>
@@ -2412,7 +2412,7 @@ export function UnifiedStudioEditor() {
                             type="text"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
-                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40`}
                             placeholder="London, Highlands, etc."
                           />
                           <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>City or area displayed in your profile</p>
@@ -2423,7 +2423,7 @@ export function UnifiedStudioEditor() {
                             type="tel"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40`}
                             placeholder="+44 123..."
                           />
                           <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Call button in your profile sheet</p>
@@ -2434,7 +2434,7 @@ export function UnifiedStudioEditor() {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20`}
+                            className={`w-full ${sizes.inspectorInput} bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40`}
                             placeholder="hello@..."
                           />
                           <p className={`${sizes.inspectorHint} text-gray-500 dark:text-white/40 mt-1`}>Email button in your profile sheet</p>
@@ -2537,7 +2537,7 @@ export function UnifiedStudioEditor() {
                                   saveInstagramHandle(e.target.value)
                                 }
                               }}
-                              className="flex-1 px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                              className="flex-1 px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                               placeholder="https://instagram.com/yourbusiness"
                             />
                             <input
@@ -2549,7 +2549,7 @@ export function UnifiedStudioEditor() {
                                   saveInstagramHandle(socialLinks.instagram, followers)
                                 }
                               }}
-                              className="w-24 px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              className="w-24 px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               placeholder="Followers"
                             />
                           </div>
@@ -2579,7 +2579,7 @@ export function UnifiedStudioEditor() {
                                 fetchTikTokFollowers(e.target.value)
                               }
                             }}
-                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                             placeholder="https://tiktok.com/@yourbusiness"
                           />
                         </div>
@@ -2594,7 +2594,7 @@ export function UnifiedStudioEditor() {
                             type="url"
                             value={socialLinks.facebook || ''}
                             onChange={(e) => setSocialLinks(prev => ({ ...prev, facebook: e.target.value || undefined }))}
-                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                             placeholder="https://facebook.com/yourbusiness"
                           />
                         </div>
@@ -2609,7 +2609,7 @@ export function UnifiedStudioEditor() {
                             type="url"
                             value={socialLinks.youtube || ''}
                             onChange={(e) => setSocialLinks(prev => ({ ...prev, youtube: e.target.value || undefined }))}
-                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                             placeholder="https://youtube.com/@yourbusiness"
                           />
                         </div>
@@ -2626,7 +2626,7 @@ export function UnifiedStudioEditor() {
                             type="url"
                             value={socialLinks.twitter || ''}
                             onChange={(e) => setSocialLinks(prev => ({ ...prev, twitter: e.target.value || undefined }))}
-                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                             placeholder="https://x.com/yourbusiness"
                           />
                         </div>
@@ -2641,7 +2641,7 @@ export function UnifiedStudioEditor() {
                             type="url"
                             value={socialLinks.linkedin || ''}
                             onChange={(e) => setSocialLinks(prev => ({ ...prev, linkedin: e.target.value || undefined }))}
-                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-3 py-2 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                             placeholder="https://linkedin.com/company/yourbusiness"
                           />
                         </div>
@@ -2725,7 +2725,7 @@ export function UnifiedStudioEditor() {
                                     type="text"
                                     value={editingFAQQuestion}
                                     onChange={(e) => setEditingFAQQuestion(e.target.value)}
-                                    className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                    className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                                     placeholder="What's your question?"
                                     autoFocus
                                   />
@@ -2736,7 +2736,7 @@ export function UnifiedStudioEditor() {
                                     value={editingFAQAnswer}
                                     onChange={(e) => setEditingFAQAnswer(e.target.value)}
                                     rows={3}
-                                    className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none"
+                                    className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40 resize-none"
                                     placeholder="Provide a helpful answer..."
                                   />
                                 </div>
@@ -2838,7 +2838,7 @@ export function UnifiedStudioEditor() {
                         type="text"
                         value={selectedCategory.name}
                         onChange={(e) => updateCategory(selectedCategory.id, { name: e.target.value })}
-                        className={`w-full px-3 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${onboardingPulseTarget === 'category-name-input' ? 'animate-pulse-hint' : ''}`}
+                        className={`w-full px-3 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40 ${onboardingPulseTarget === 'category-name-input' ? 'animate-pulse-hint' : ''}`}
                       />
                       <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">The main title shown in the slydes drawer</p>
                     </div>
@@ -2850,7 +2850,7 @@ export function UnifiedStudioEditor() {
                         value={selectedCategory.description || ''}
                         onChange={(e) => updateCategory(selectedCategory.id, { description: e.target.value })}
                         placeholder="e.g. Browse our latest offers"
-                        className={`w-full px-3 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${onboardingPulseTarget === 'category-subtitle-input' ? 'animate-pulse-hint' : ''}`}
+                        className={`w-full px-3 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40 ${onboardingPulseTarget === 'category-subtitle-input' ? 'animate-pulse-hint' : ''}`}
                       />
                       <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Appears below the name in the drawer</p>
                     </div>
@@ -2967,7 +2967,7 @@ export function UnifiedStudioEditor() {
                               value={selectedCategory.contactPhone || ''}
                               onChange={(e) => updateCategory(selectedCategory.id, { contactPhone: e.target.value })}
                               placeholder="+44 1234 567890"
-                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                             />
                           </div>
                           <div>
@@ -2977,7 +2977,7 @@ export function UnifiedStudioEditor() {
                               value={selectedCategory.contactEmail || ''}
                               onChange={(e) => updateCategory(selectedCategory.id, { contactEmail: e.target.value })}
                               placeholder="hello@example.com"
-                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                             />
                           </div>
                           <div>
@@ -2987,7 +2987,7 @@ export function UnifiedStudioEditor() {
                               value={selectedCategory.contactWhatsapp || ''}
                               onChange={(e) => updateCategory(selectedCategory.id, { contactWhatsapp: e.target.value })}
                               placeholder="+44 7123 456789"
-                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                             />
                             <p className="text-[10px] text-gray-400 dark:text-white/30 mt-1">
                               Include country code for WhatsApp links
@@ -3042,7 +3042,7 @@ export function UnifiedStudioEditor() {
                                       type="text"
                                       value={editingFAQQuestion}
                                       onChange={(e) => setEditingFAQQuestion(e.target.value)}
-                                      className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                      className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                                       placeholder="What's your question?"
                                       autoFocus
                                     />
@@ -3053,7 +3053,7 @@ export function UnifiedStudioEditor() {
                                       value={editingFAQAnswer}
                                       onChange={(e) => setEditingFAQAnswer(e.target.value)}
                                       rows={3}
-                                      className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none"
+                                      className="w-full px-3 py-2 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40 resize-none"
                                       placeholder="Provide a helpful answer..."
                                     />
                                   </div>
@@ -3164,7 +3164,7 @@ export function UnifiedStudioEditor() {
                             type="text"
                             value={selectedCategoryFrame.title || ''}
                             onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { title: e.target.value })}
-                            className={`w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 ${onboardingPulseTarget === 'frame-content-title-input' ? 'animate-pulse-hint' : ''}`}
+                            className={`w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 ${onboardingPulseTarget === 'frame-content-title-input' ? 'animate-pulse-hint' : ''}`}
                           />
                           <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Main heading shown on this frame</p>
                         </div>
@@ -3174,7 +3174,7 @@ export function UnifiedStudioEditor() {
                             type="text"
                             value={selectedCategoryFrame.subtitle || ''}
                             onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { subtitle: e.target.value })}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                           />
                           <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Supporting text below the title</p>
                         </div>
@@ -3277,7 +3277,7 @@ export function UnifiedStudioEditor() {
                                 type="text"
                                 value={selectedCategoryFrame.cta.text}
                                 onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, text: e.target.value } })}
-                                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                               />
                             </div>
                             <div>
@@ -3311,7 +3311,7 @@ export function UnifiedStudioEditor() {
                                   value={selectedCategoryFrame.cta.value || ''}
                                   onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, value: e.target.value } })}
                                   placeholder={selectedCtaType.placeholder}
-                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                 />
                               </div>
                             )}
@@ -3325,7 +3325,7 @@ export function UnifiedStudioEditor() {
                                   value={selectedCategoryFrame.cta.value || selectedCategoryFrame.cta.action || ''}
                                   onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, value: e.target.value, action: e.target.value } })}
                                   placeholder={selectedCtaType.placeholder}
-                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                 />
                               </div>
                             )}
@@ -3337,7 +3337,7 @@ export function UnifiedStudioEditor() {
                                   value={selectedCategoryFrame.cta.value || ''}
                                   onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, value: e.target.value } })}
                                   placeholder={selectedCtaType.placeholder}
-                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                 />
                               </div>
                             )}
@@ -3347,7 +3347,7 @@ export function UnifiedStudioEditor() {
                                 <select
                                   value={selectedCategoryFrame.cta.value || ''}
                                   onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { cta: { ...selectedCategoryFrame.cta!, value: e.target.value } })}
-                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                 >
                                   <option value="">Select a frame...</option>
                                   {selectedCategoryFrames.map((frame, idx) => (
@@ -3390,7 +3390,7 @@ export function UnifiedStudioEditor() {
                               infoContent: { ...selectedCategoryFrame.infoContent, headline: e.target.value, description: selectedCategoryFrame.infoContent?.description || '', items: selectedCategoryFrame.infoContent?.items || [] }
                             })}
                             placeholder="e.g. The Full Experience"
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                           />
                         </div>
                         <div>
@@ -3402,7 +3402,7 @@ export function UnifiedStudioEditor() {
                             })}
                             rows={3}
                             placeholder="Detailed description for this frame..."
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none"
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 resize-none"
                           />
                         </div>
                         <div>
@@ -3418,7 +3418,7 @@ export function UnifiedStudioEditor() {
                             })}
                             rows={4}
                             placeholder={"Rooftop tent\nKitchen setup\nBedding\nChairs & table"}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none font-mono"
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 resize-none font-mono"
                           />
                         </div>
                       </div>
@@ -3563,7 +3563,7 @@ export function UnifiedStudioEditor() {
                                         })
                                       }
                                     }}
-                                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                   >
                                     <option value="">Select a list...</option>
                                     {lists.map((list) => (
@@ -3588,7 +3588,7 @@ export function UnifiedStudioEditor() {
                                       }
                                     }}
                                     placeholder="e.g. Our Vehicles, Menu Items..."
-                                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                   />
                                   <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Name your inventory list</p>
                                 </div>
@@ -3605,7 +3605,7 @@ export function UnifiedStudioEditor() {
                                       } : undefined
                                     })}
                                     placeholder="e.g. View All, Browse Items..."
-                                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                   />
                                   <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Button text that opens the inventory list</p>
                                 </div>
@@ -3653,7 +3653,7 @@ export function UnifiedStudioEditor() {
                       type="text"
                       value={selectedList.name}
                       onChange={(e) => updateListById(selectedList.id, { name: e.target.value })}
-                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
                       placeholder="e.g. Our Vehicles, Hair Products"
                     />
                     <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Internal name for organizing your lists</p>
@@ -3756,7 +3756,7 @@ export function UnifiedStudioEditor() {
                       type="text"
                       value={selectedItem.title}
                       onChange={(e) => updateItem(selectedList.id, selectedItem.id, { title: e.target.value })}
-                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
                       placeholder="e.g. BMW M3 Competition"
                     />
                     <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Main name shown in the inventory list</p>
@@ -3768,7 +3768,7 @@ export function UnifiedStudioEditor() {
                       type="text"
                       value={selectedItem.subtitle || ''}
                       onChange={(e) => updateItem(selectedList.id, selectedItem.id, { subtitle: e.target.value })}
-                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
                       placeholder="e.g. 2023 Model • 12,000 miles"
                     />
                     <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Secondary info below the title</p>
@@ -3780,7 +3780,7 @@ export function UnifiedStudioEditor() {
                       type="text"
                       value={selectedItem.price || ''}
                       onChange={(e) => updateItem(selectedList.id, selectedItem.id, { price: e.target.value })}
-                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
                       placeholder="£45,000"
                     />
                     <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Displayed on the item card</p>
@@ -3792,7 +3792,7 @@ export function UnifiedStudioEditor() {
                       type="text"
                       value={selectedItem.image || ''}
                       onChange={(e) => updateItem(selectedList.id, selectedItem.id, { image: e.target.value })}
-                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
+                      className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 dark:focus:border-cyan-400 dark:focus:ring-cyan-400/20 transition-shadow text-sm"
                       placeholder="https://..."
                     />
                     <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Thumbnail shown in the inventory list</p>
@@ -3906,7 +3906,7 @@ export function UnifiedStudioEditor() {
                             type="text"
                             value={selectedItemFrame.title || ''}
                             onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { title: e.target.value })}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                           />
                           <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Main heading shown on this frame</p>
                         </div>
@@ -3916,7 +3916,7 @@ export function UnifiedStudioEditor() {
                             type="text"
                             value={selectedItemFrame.subtitle || ''}
                             onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { subtitle: e.target.value })}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                           />
                           <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">Supporting text below the title</p>
                         </div>
@@ -3969,7 +3969,7 @@ export function UnifiedStudioEditor() {
                                 type="text"
                                 value={selectedItemFrame.cta.text}
                                 onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, text: e.target.value } })}
-                                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                               />
                             </div>
                             <div>
@@ -4003,7 +4003,7 @@ export function UnifiedStudioEditor() {
                                   value={selectedItemFrame.cta.value || ''}
                                   onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, value: e.target.value } })}
                                   placeholder={selectedCtaType.placeholder}
-                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                 />
                               </div>
                             )}
@@ -4017,7 +4017,7 @@ export function UnifiedStudioEditor() {
                                   value={selectedItemFrame.cta.value || selectedItemFrame.cta.action || ''}
                                   onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, value: e.target.value, action: e.target.value } })}
                                   placeholder={selectedCtaType.placeholder}
-                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                 />
                               </div>
                             )}
@@ -4029,7 +4029,7 @@ export function UnifiedStudioEditor() {
                                   value={selectedItemFrame.cta.value || ''}
                                   onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, value: e.target.value } })}
                                   placeholder={selectedCtaType.placeholder}
-                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                 />
                               </div>
                             )}
@@ -4039,7 +4039,7 @@ export function UnifiedStudioEditor() {
                                 <select
                                   value={selectedItemFrame.cta.value || ''}
                                   onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { cta: { ...selectedItemFrame.cta!, value: e.target.value } })}
-                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                                 >
                                   <option value="">Select a frame...</option>
                                   {(selectedItem.frames || []).map((frame, idx) => (
@@ -4082,7 +4082,7 @@ export function UnifiedStudioEditor() {
                               infoContent: { ...selectedItemFrame.infoContent, headline: e.target.value, description: selectedItemFrame.infoContent?.description || '', items: selectedItemFrame.infoContent?.items || [] }
                             })}
                             placeholder="e.g. Specifications"
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40"
                           />
                         </div>
                         <div>
@@ -4094,7 +4094,7 @@ export function UnifiedStudioEditor() {
                             })}
                             rows={3}
                             placeholder="Detailed description..."
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none"
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 resize-none"
                           />
                         </div>
                         <div>
@@ -4110,7 +4110,7 @@ export function UnifiedStudioEditor() {
                             })}
                             rows={4}
                             placeholder={"Feature 1\nFeature 2\nFeature 3"}
-                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none font-mono"
+                            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-leader-blue focus:ring-2 focus:ring-leader-blue/40 resize-none font-mono"
                           />
                         </div>
                       </div>

@@ -45,7 +45,7 @@ export function ContactInfoStep() {
             className="
               w-full rounded-xl border border-gray-200 bg-white px-4 py-3
               text-gray-900 placeholder:text-gray-400
-              transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30
+              transition-colors focus:border-leader-blue focus:outline-none focus:ring-2 focus:ring-leader-blue/40
               dark:border-white/10 dark:bg-[#2c2c2e] dark:text-white dark:placeholder:text-white/40
             "
             style={{ fontSize: '16px' }}
@@ -67,7 +67,7 @@ export function ContactInfoStep() {
             className="
               w-full rounded-xl border border-gray-200 bg-white px-4 py-3
               text-gray-900 placeholder:text-gray-400
-              transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30
+              transition-colors focus:border-leader-blue focus:outline-none focus:ring-2 focus:ring-leader-blue/40
               dark:border-white/10 dark:bg-[#2c2c2e] dark:text-white dark:placeholder:text-white/40
             "
             style={{ fontSize: '16px' }}
@@ -90,7 +90,7 @@ export function ContactInfoStep() {
             className="
               w-full rounded-xl border border-gray-200 bg-white px-4 py-3
               text-gray-900 placeholder:text-gray-400
-              transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30
+              transition-colors focus:border-leader-blue focus:outline-none focus:ring-2 focus:ring-leader-blue/40
               dark:border-white/10 dark:bg-[#2c2c2e] dark:text-white dark:placeholder:text-white/40
             "
             style={{ fontSize: '16px' }}
@@ -117,7 +117,7 @@ export function ContactInfoStep() {
                 className="
                   flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2
                   text-sm text-gray-900 placeholder:text-gray-400
-                  transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30
+                  transition-colors focus:border-leader-blue focus:outline-none focus:ring-2 focus:ring-leader-blue/40
                   dark:border-white/10 dark:bg-[#1c1c1e] dark:text-white dark:placeholder:text-white/40
                 "
               />
@@ -133,7 +133,7 @@ export function ContactInfoStep() {
                 className="
                   flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2
                   text-sm text-gray-900 placeholder:text-gray-400
-                  transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30
+                  transition-colors focus:border-leader-blue focus:outline-none focus:ring-2 focus:ring-leader-blue/40
                   dark:border-white/10 dark:bg-[#1c1c1e] dark:text-white dark:placeholder:text-white/40
                 "
               />
@@ -149,7 +149,7 @@ export function ContactInfoStep() {
                 className="
                   flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2
                   text-sm text-gray-900 placeholder:text-gray-400
-                  transition-colors focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30
+                  transition-colors focus:border-leader-blue focus:outline-none focus:ring-2 focus:ring-leader-blue/40
                   dark:border-white/10 dark:bg-[#1c1c1e] dark:text-white dark:placeholder:text-white/40
                 "
               />

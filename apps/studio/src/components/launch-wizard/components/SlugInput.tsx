@@ -114,7 +114,7 @@ export function SlugInput({
               ? 'border-green-500 focus:ring-green-500/30'
               : availability === false
                 ? 'border-red-500 focus:ring-red-500/30'
-                : 'border-gray-200 focus:ring-blue-500/30 dark:border-white/10'
+                : 'border-gray-200 focus:ring-leader-blue/40 dark:border-white/10'
             }
           `}
           style={{ fontSize: '16px' }}

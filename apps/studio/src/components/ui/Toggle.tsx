@@ -20,7 +20,7 @@ export function Toggle({ enabled, onChange, label, description }: ToggleProps) {
     <button
       type="button"
       onClick={() => onChange(!enabled)}
-      className={`relative w-[51px] h-[31px] rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/30 ${
+      className={`relative w-[51px] h-[31px] rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-leader-blue/40 ${
         enabled ? 'bg-blue-500' : 'bg-gray-300 dark:bg-white/20'
       }`}
       role="switch"
