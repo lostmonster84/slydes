@@ -135,7 +135,7 @@ export function PropertySection({
                 value={property?.locationUrl || ''}
                 onChange={(e) => updateProperty({ locationUrl: e.target.value })}
                 placeholder="https://maps.google.com/..."
-                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               />
             </div>
 
@@ -150,7 +150,7 @@ export function PropertySection({
                 value={property?.virtualTourUrl || ''}
                 onChange={(e) => updateProperty({ virtualTourUrl: e.target.value })}
                 placeholder="https://my.matterport.com/..."
-                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               />
             </div>
 
@@ -165,7 +165,7 @@ export function PropertySection({
                 value={property?.floorPlanUrl || ''}
                 onChange={(e) => updateProperty({ floorPlanUrl: e.target.value })}
                 placeholder="https://... (image or PDF)"
-                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               />
             </div>
 
@@ -180,7 +180,7 @@ export function PropertySection({
                 value={property?.bookViewingUrl || ''}
                 onChange={(e) => updateProperty({ bookViewingUrl: e.target.value })}
                 placeholder="https://calendly.com/..."
-                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               />
             </div>
 
@@ -195,7 +195,7 @@ export function PropertySection({
                 value={property?.brochureUrl || ''}
                 onChange={(e) => updateProperty({ brochureUrl: e.target.value })}
                 placeholder="https://... (PDF download)"
-                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               />
             </div>
 
@@ -210,7 +210,7 @@ export function PropertySection({
                 value={property?.agentPhone || ''}
                 onChange={(e) => updateProperty({ agentPhone: e.target.value })}
                 placeholder="+44 7700 900000"
-                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               />
             </div>
 
@@ -225,7 +225,7 @@ export function PropertySection({
                 value={property?.applyUrl || ''}
                 onChange={(e) => updateProperty({ applyUrl: e.target.value })}
                 placeholder="https://... (application form)"
-                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               />
             </div>
 
@@ -240,7 +240,7 @@ export function PropertySection({
                 value={property?.makeOfferUrl || ''}
                 onChange={(e) => updateProperty({ makeOfferUrl: e.target.value })}
                 placeholder="https://... (offer form)"
-                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               />
             </div>
           </div>
@@ -268,7 +268,7 @@ export function PropertySection({
                   value={property?.price || ''}
                   onChange={(e) => updateProperty({ price: e.target.value })}
                   placeholder="£425,000"
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 />
               </div>
               <div className="space-y-1">
@@ -278,7 +278,7 @@ export function PropertySection({
                 <select
                   value={property?.priceQualifier || ''}
                   onChange={(e) => updateProperty({ priceQualifier: e.target.value as typeof PRICE_QUALIFIERS[number]['value'] || undefined })}
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 >
                   <option value="">Select...</option>
                   {PRICE_QUALIFIERS.map((q) => (
@@ -301,7 +301,7 @@ export function PropertySection({
                   value={property?.bedrooms ?? ''}
                   onChange={(e) => updateProperty({ bedrooms: e.target.value ? parseInt(e.target.value) : undefined })}
                   placeholder="3"
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 />
               </div>
               <div className="space-y-1">
@@ -315,7 +315,7 @@ export function PropertySection({
                   value={property?.bathrooms ?? ''}
                   onChange={(e) => updateProperty({ bathrooms: e.target.value ? parseInt(e.target.value) : undefined })}
                   placeholder="2"
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 />
               </div>
             </div>
@@ -329,7 +329,7 @@ export function PropertySection({
                 <select
                   value={property?.propertyType || ''}
                   onChange={(e) => updateProperty({ propertyType: e.target.value as typeof PROPERTY_TYPES[number]['value'] || undefined })}
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 >
                   <option value="">Select...</option>
                   {PROPERTY_TYPES.map((t) => (
@@ -348,7 +348,7 @@ export function PropertySection({
                   value={property?.sqft ?? ''}
                   onChange={(e) => updateProperty({ sqft: e.target.value ? parseInt(e.target.value) : undefined })}
                   placeholder="1,450"
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 />
               </div>
             </div>
@@ -363,7 +363,7 @@ export function PropertySection({
                 <select
                   value={property?.epcRating || ''}
                   onChange={(e) => updateProperty({ epcRating: e.target.value as typeof EPC_RATINGS[number] || undefined })}
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 >
                   <option value="">Select...</option>
                   {EPC_RATINGS.map((r) => (
@@ -379,7 +379,7 @@ export function PropertySection({
                 <select
                   value={property?.councilTaxBand || ''}
                   onChange={(e) => updateProperty({ councilTaxBand: e.target.value as typeof COUNCIL_TAX_BANDS[number] || undefined })}
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 >
                   <option value="">Select...</option>
                   {COUNCIL_TAX_BANDS.map((b) => (
@@ -398,7 +398,7 @@ export function PropertySection({
               <select
                 value={property?.tenure || ''}
                 onChange={(e) => updateProperty({ tenure: e.target.value as typeof TENURE_OPTIONS[number]['value'] || undefined })}
-                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               >
                 <option value="">Select...</option>
                 {TENURE_OPTIONS.map((t) => (
@@ -418,7 +418,7 @@ export function PropertySection({
                   value={property?.leaseLength || ''}
                   onChange={(e) => updateProperty({ leaseLength: e.target.value })}
                   placeholder="990 years remaining"
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 />
               </div>
             )}
@@ -435,7 +435,7 @@ export function PropertySection({
                     value={property?.serviceCharge || ''}
                     onChange={(e) => updateProperty({ serviceCharge: e.target.value })}
                     placeholder="£150/month"
-                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                   />
                 </div>
                 <div className="space-y-1">
@@ -447,7 +447,7 @@ export function PropertySection({
                     value={property?.groundRent || ''}
                     onChange={(e) => updateProperty({ groundRent: e.target.value })}
                     placeholder="£250/year"
-                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                   />
                 </div>
               </div>
@@ -463,7 +463,7 @@ export function PropertySection({
                 value={property?.availability || ''}
                 onChange={(e) => updateProperty({ availability: e.target.value })}
                 placeholder="Available now / 1st February 2025"
-                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
               />
             </div>
 
@@ -479,7 +479,7 @@ export function PropertySection({
                   value={property?.parking || ''}
                   onChange={(e) => updateProperty({ parking: e.target.value })}
                   placeholder="Driveway, Garage"
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 />
               </div>
               <div className="space-y-1">
@@ -492,7 +492,7 @@ export function PropertySection({
                   value={property?.garden || ''}
                   onChange={(e) => updateProperty({ garden: e.target.value })}
                   placeholder="Private garden"
-                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
                 />
               </div>
             </div>
@@ -505,13 +505,13 @@ export function PropertySection({
               </label>
               <button
                 onClick={() => updateProperty({ petFriendly: !property?.petFriendly })}
-                className={`relative w-10 h-6 rounded-full transition-colors ${
-                  property?.petFriendly ? 'bg-green-500' : 'bg-gray-200 dark:bg-white/20'
+                className={`relative w-12 h-7 rounded-full transition-colors ${
+                  property?.petFriendly ? 'bg-leader-blue' : 'bg-gray-200 dark:bg-white/20'
                 }`}
               >
                 <span
-                  className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
-                    property?.petFriendly ? 'translate-x-4' : 'translate-x-0'
+                  className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
+                    property?.petFriendly ? 'translate-x-5' : 'translate-x-0'
                   }`}
                 />
               </button>

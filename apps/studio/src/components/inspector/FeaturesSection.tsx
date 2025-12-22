@@ -54,7 +54,7 @@ export function FeaturesSection({
               value={locationAddress || ''}
               onChange={(e) => onLocationAddressChange?.(e.target.value)}
               placeholder="123 Main St, City, Country"
-              className="w-full px-3 py-2.5 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="w-full px-3 py-2.5 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/40"
             />
             <p className="text-[10px] text-gray-500 dark:text-white/40">
               {locationAddress
