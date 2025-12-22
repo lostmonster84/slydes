@@ -6,6 +6,7 @@ import { useOrganization } from './useOrganization'
 import { useSlydes } from './useSlydes'
 import type { Frame } from './useFrames'
 import type { FrameData, CTAType, CTAIconType } from '@/components/slyde-demo/frameData'
+import type { FrameTemplate } from '@/components/slyde-wizard/templates'
 
 // ============================================
 // Type Converters - Frame <-> FrameData
@@ -70,8 +71,8 @@ export function frameDataToFrameUpdates(frameData: Partial<FrameData>): Partial<
   if (frameData.accentColor !== undefined) updates.accent_color = frameData.accentColor || null
   if (frameData.demoVideoUrl !== undefined) updates.demo_video_url = frameData.demoVideoUrl || null
 
-  // Handle CTA
-  if (frameData.cta !== undefined) {
+  // Handle CTA (check if key exists, not just if value is truthy)
+  if ('cta' in frameData) {
     if (frameData.cta) {
       updates.cta_text = frameData.cta.text || null
       updates.cta_icon = frameData.cta.icon || null
@@ -118,6 +119,7 @@ interface UseCategoryFramesReturn {
 
   // CRUD operations
   addFrame: (categoryPublicId: string) => Promise<string | null>
+  addFramesFromTemplate: (categoryPublicId: string, frames: FrameTemplate[]) => Promise<boolean>
   updateFrame: (categoryPublicId: string, frameId: string, updates: Partial<FrameData>) => Promise<void>
   deleteFrame: (categoryPublicId: string, frameId: string) => Promise<void>
   reorderFrames: (categoryPublicId: string, frameIds: string[]) => Promise<void>
@@ -174,23 +176,10 @@ export function useCategoryFrames(): UseCategoryFramesReturn {
 
       loadedCategories.current.add(categoryPublicId)
 
-      if (frames && frames.length > 0) {
-        // Store raw frames
-        setRawFramesByCategory(prev => ({ ...prev, [categoryPublicId]: frames }))
-        // Convert to FrameData
-        const frameDataList = frames.map(f => frameToFrameData(f, accentColor))
-        setFramesByCategory(prev => ({ ...prev, [categoryPublicId]: frameDataList }))
-      } else {
-        // No frames yet - create a starter frame
-        const starterFrame = await createStarterFrame(slyde.id, categoryPublicId)
-        if (starterFrame) {
-          setRawFramesByCategory(prev => ({ ...prev, [categoryPublicId]: [starterFrame] }))
-          setFramesByCategory(prev => ({
-            ...prev,
-            [categoryPublicId]: [frameToFrameData(starterFrame, accentColor)]
-          }))
-        }
-      }
+      // Store frames (empty array if no frames yet - user will click "Add Frame")
+      setRawFramesByCategory(prev => ({ ...prev, [categoryPublicId]: frames || [] }))
+      const frameDataList = (frames || []).map(f => frameToFrameData(f, accentColor))
+      setFramesByCategory(prev => ({ ...prev, [categoryPublicId]: frameDataList }))
     } catch (err) {
       console.error('Error loading frames:', err)
       setError(err instanceof Error ? err : new Error('Failed to load frames'))
@@ -199,83 +188,200 @@ export function useCategoryFrames(): UseCategoryFramesReturn {
     }
   }, [organization, slydesLoading, findSlydeByPublicId, supabase, accentColor])
 
-  // Create a starter frame for new categories
-  const createStarterFrame = async (slydeId: string, categoryPublicId: string): Promise<Frame | null> => {
-    if (!organization) return null
+  // Add a new frame to a category
+  const addFrame = useCallback(async (categoryPublicId: string): Promise<string | null> => {
+    if (!organization) {
+      console.error('addFrame: No organization available')
+      return null
+    }
 
-    const { data: newFrame, error } = await supabase
-      .from('frames')
-      .insert({
+    const slyde = findSlydeByPublicId(categoryPublicId)
+    if (!slyde) {
+      console.error('addFrame: Slyde not found for categoryPublicId:', categoryPublicId, 'Available slydes:', slydes.map(s => s.public_id))
+      return null
+    }
+
+    const existingFrames = rawFramesByCategory[categoryPublicId] || []
+    const nextIndex = existingFrames.length + 1
+    const tempId = `temp-${Date.now()}`
+
+    // Optimistic: create temp frame immediately
+    const tempFrame: FrameData = {
+      id: tempId,
+      order: nextIndex,
+      templateType: 'custom',
+      title: '',
+      subtitle: '',
+      heartCount: 0,
+      background: { type: 'video', src: '', startTime: 0 },
+      accentColor,
+      cta: { text: 'Call', icon: 'call', action: undefined },
+    }
+    setFramesByCategory(prev => ({
+      ...prev,
+      [categoryPublicId]: [...(prev[categoryPublicId] || []), tempFrame],
+    }))
+
+    try {
+      const insertPayload = {
         organization_id: organization.id,
-        slyde_id: slydeId,
+        slyde_id: slyde.id,
         public_id: `frame-${Date.now()}`,
-        frame_index: 1,
-        template_type: 'hook',
+        frame_index: nextIndex,
+        template_type: 'custom',
         title: '',
         subtitle: '',
         cta_type: 'call',
         cta_icon: 'call',
         cta_text: 'Call',
         background_type: 'video',
-      })
-      .select()
-      .single()
+      }
 
-    if (error) {
-      console.error('Error creating starter frame:', error)
-      return null
-    }
-
-    return newFrame
-  }
-
-  // Add a new frame to a category
-  const addFrame = useCallback(async (categoryPublicId: string): Promise<string | null> => {
-    if (!organization) return null
-
-    const slyde = findSlydeByPublicId(categoryPublicId)
-    if (!slyde) return null
-
-    const existingFrames = rawFramesByCategory[categoryPublicId] || []
-    const nextIndex = existingFrames.length + 1
-
-    try {
-      const { data: newFrame, error } = await supabase
+      // First insert without .single() to see raw response
+      const insertResult = await supabase
         .from('frames')
-        .insert({
-          organization_id: organization.id,
-          slyde_id: slyde.id,
-          public_id: `frame-${Date.now()}`,
-          frame_index: nextIndex,
-          template_type: 'custom',
-          title: '',
-          subtitle: '',
-          cta_type: 'call',
-          cta_icon: 'call',
-          cta_text: 'Call',
-          background_type: 'video',
-        })
+        .insert(insertPayload)
         .select()
-        .single()
 
-      if (error) throw error
+      console.log('Insert result:', {
+        data: insertResult.data,
+        error: insertResult.error,
+        count: insertResult.count,
+        status: insertResult.status,
+        statusText: insertResult.statusText,
+      })
 
-      // Update state
+      if (insertResult.error) {
+        console.error('Supabase error adding frame:', {
+          message: insertResult.error.message,
+          code: insertResult.error.code,
+          details: insertResult.error.details,
+          hint: insertResult.error.hint,
+          insertPayload,
+        })
+        throw insertResult.error
+      }
+
+      const newFrame = insertResult.data?.[0]
+      if (!newFrame) {
+        console.error('Insert returned no data - RLS may be blocking insert', { insertPayload })
+        throw new Error('Insert returned no data - RLS may be blocking insert')
+      }
+
+      // Replace temp with real frame
       setRawFramesByCategory(prev => ({
         ...prev,
         [categoryPublicId]: [...(prev[categoryPublicId] || []), newFrame],
       }))
       setFramesByCategory(prev => ({
         ...prev,
-        [categoryPublicId]: [...(prev[categoryPublicId] || []), frameToFrameData(newFrame, accentColor)],
+        [categoryPublicId]: (prev[categoryPublicId] || []).map(f =>
+          f.id === tempId ? frameToFrameData(newFrame, accentColor) : f
+        ),
       }))
 
       return newFrame.id
     } catch (err) {
-      console.error('Error adding frame:', err)
+      // Log error with full details (Supabase errors are plain objects, not Error instances)
+      const errorDetails = err instanceof Error
+        ? { message: err.message, name: err.name }
+        : typeof err === 'object' && err !== null
+          ? JSON.stringify(err)
+          : String(err)
+      console.error('Error adding frame:', errorDetails)
+      // Rollback: remove temp frame
+      setFramesByCategory(prev => ({
+        ...prev,
+        [categoryPublicId]: (prev[categoryPublicId] || []).filter(f => f.id !== tempId),
+      }))
       return null
     }
-  }, [organization, findSlydeByPublicId, rawFramesByCategory, supabase, accentColor])
+  }, [organization, findSlydeByPublicId, rawFramesByCategory, supabase, accentColor, slydes])
+
+  // Add multiple frames from a template
+  const addFramesFromTemplate = useCallback(async (
+    categoryPublicId: string,
+    frameTemplates: FrameTemplate[]
+  ): Promise<boolean> => {
+    if (!organization) {
+      console.error('addFramesFromTemplate: No organization available')
+      return false
+    }
+
+    const slyde = findSlydeByPublicId(categoryPublicId)
+    if (!slyde) {
+      console.error('addFramesFromTemplate: Slyde not found for categoryPublicId:', categoryPublicId)
+      return false
+    }
+
+    if (frameTemplates.length === 0) {
+      console.warn('addFramesFromTemplate: No frames to create')
+      return true
+    }
+
+    try {
+      // Map CTA type to icon for DB storage
+      const typeToIcon: Record<string, string> = {
+        'call': 'call',
+        'link': 'view',
+        'email': 'view',
+        'directions': 'view',
+        'info': 'view',
+        'faq': 'view',
+        'reviews': 'view',
+        'frame': 'arrow',
+        'list': 'list',
+      }
+
+      // Build insert payloads for all frames
+      const insertPayloads = frameTemplates.map((template, index) => ({
+        organization_id: organization.id,
+        slyde_id: slyde.id,
+        public_id: `frame-${Date.now()}-${index}`,
+        frame_index: index + 1,
+        template_type: template.templateType || 'custom',
+        title: template.title || '',
+        subtitle: template.subtitle || '',
+        cta_text: template.cta?.text || null,
+        cta_type: template.cta?.type || null,
+        cta_icon: template.cta ? (typeToIcon[template.cta.type] || 'view') : null,
+        cta_action: template.cta?.value || null,
+        background_type: 'video', // Default to video, user will upload
+      }))
+
+      // Batch insert all frames
+      const { data: newFrames, error } = await supabase
+        .from('frames')
+        .insert(insertPayloads)
+        .select()
+
+      if (error) {
+        console.error('Error batch inserting frames:', error)
+        throw error
+      }
+
+      if (!newFrames || newFrames.length === 0) {
+        console.error('Batch insert returned no data - RLS may be blocking')
+        throw new Error('Batch insert returned no data')
+      }
+
+      // Mark category as loaded and update state
+      loadedCategories.current.add(categoryPublicId)
+      setRawFramesByCategory(prev => ({
+        ...prev,
+        [categoryPublicId]: newFrames,
+      }))
+      setFramesByCategory(prev => ({
+        ...prev,
+        [categoryPublicId]: newFrames.map(f => frameToFrameData(f, accentColor)),
+      }))
+
+      return true
+    } catch (err) {
+      console.error('Error in addFramesFromTemplate:', err)
+      return false
+    }
+  }, [organization, findSlydeByPublicId, supabase, accentColor])
 
   // Update a frame
   const updateFrame = useCallback(async (
@@ -283,7 +389,23 @@ export function useCategoryFrames(): UseCategoryFramesReturn {
     frameId: string,
     updates: Partial<FrameData>
   ) => {
+    // Save old state for rollback
+    const oldFrame = framesByCategory[categoryPublicId]?.find(f => f.id === frameId)
+
+    // Optimistic: update state immediately
+    setFramesByCategory(prev => ({
+      ...prev,
+      [categoryPublicId]: (prev[categoryPublicId] || []).map(f =>
+        f.id === frameId ? { ...f, ...updates } : f
+      ),
+    }))
+
     const dbUpdates = frameDataToFrameUpdates(updates)
+
+    // Skip DB call if no updates to send
+    if (Object.keys(dbUpdates).length === 0) {
+      return
+    }
 
     try {
       const { data, error } = await supabase
@@ -291,38 +413,58 @@ export function useCategoryFrames(): UseCategoryFramesReturn {
         .update(dbUpdates)
         .eq('id', frameId)
         .select()
-        .single()
 
       if (error) throw error
 
-      // Update raw frames
-      setRawFramesByCategory(prev => ({
-        ...prev,
-        [categoryPublicId]: (prev[categoryPublicId] || []).map(f =>
-          f.id === frameId ? data : f
-        ),
-      }))
-
-      // Update FrameData
-      setFramesByCategory(prev => ({
-        ...prev,
-        [categoryPublicId]: (prev[categoryPublicId] || []).map(f =>
-          f.id === frameId ? { ...f, ...updates } : f
-        ),
-      }))
+      // Update raw frames with DB response (if we got data back)
+      if (data && data.length > 0) {
+        setRawFramesByCategory(prev => ({
+          ...prev,
+          [categoryPublicId]: (prev[categoryPublicId] || []).map(f =>
+            f.id === frameId ? data[0] : f
+          ),
+        }))
+      }
     } catch (err) {
-      console.error('Error updating frame:', err)
+      const errorDetails = err instanceof Error
+        ? { message: err.message, name: err.name, stack: err.stack }
+        : JSON.stringify(err, Object.getOwnPropertyNames(err as object))
+      console.error('Error updating frame:', errorDetails, 'Updates:', dbUpdates, 'FrameId:', frameId)
+      // Rollback: restore old frame
+      if (oldFrame) {
+        setFramesByCategory(prev => ({
+          ...prev,
+          [categoryPublicId]: (prev[categoryPublicId] || []).map(f =>
+            f.id === frameId ? oldFrame : f
+          ),
+        }))
+      }
       throw err
     }
-  }, [supabase])
+  }, [supabase, framesByCategory])
 
   // Delete a frame
   const deleteFrame = useCallback(async (categoryPublicId: string, frameId: string) => {
-    const frames = rawFramesByCategory[categoryPublicId] || []
-    if (frames.length <= 1) {
+    const rawFrames = rawFramesByCategory[categoryPublicId] || []
+    const frames = framesByCategory[categoryPublicId] || []
+    if (rawFrames.length <= 1) {
       console.warn('Cannot delete the last frame')
       return
     }
+
+    // Save old state for rollback
+    const deletedRawFrame = rawFrames.find(f => f.id === frameId)
+    const deletedFrame = frames.find(f => f.id === frameId)
+
+    // Optimistic: remove immediately
+    setRawFramesByCategory(prev => ({
+      ...prev,
+      [categoryPublicId]: (prev[categoryPublicId] || []).filter(f => f.id !== frameId),
+    }))
+    setFramesByCategory(prev => ({
+      ...prev,
+      [categoryPublicId]: (prev[categoryPublicId] || []).filter(f => f.id !== frameId),
+    }))
 
     try {
       const { error } = await supabase
@@ -331,24 +473,50 @@ export function useCategoryFrames(): UseCategoryFramesReturn {
         .eq('id', frameId)
 
       if (error) throw error
-
-      // Update state
-      setRawFramesByCategory(prev => ({
-        ...prev,
-        [categoryPublicId]: (prev[categoryPublicId] || []).filter(f => f.id !== frameId),
-      }))
-      setFramesByCategory(prev => ({
-        ...prev,
-        [categoryPublicId]: (prev[categoryPublicId] || []).filter(f => f.id !== frameId),
-      }))
     } catch (err) {
       console.error('Error deleting frame:', err)
+      // Rollback: restore deleted frame
+      if (deletedRawFrame) {
+        setRawFramesByCategory(prev => ({
+          ...prev,
+          [categoryPublicId]: [...(prev[categoryPublicId] || []), deletedRawFrame],
+        }))
+      }
+      if (deletedFrame) {
+        setFramesByCategory(prev => ({
+          ...prev,
+          [categoryPublicId]: [...(prev[categoryPublicId] || []), deletedFrame],
+        }))
+      }
       throw err
     }
-  }, [rawFramesByCategory, supabase])
+  }, [rawFramesByCategory, framesByCategory, supabase])
 
   // Reorder frames
   const reorderFrames = useCallback(async (categoryPublicId: string, frameIds: string[]) => {
+    // Save old state for rollback
+    const oldRawFrames = rawFramesByCategory[categoryPublicId] || []
+    const oldFrames = framesByCategory[categoryPublicId] || []
+
+    // Optimistic: update local state immediately
+    setRawFramesByCategory(prev => {
+      const frames = prev[categoryPublicId] || []
+      const reordered = frameIds
+        .map(id => frames.find(f => f.id === id))
+        .filter(Boolean) as Frame[]
+      reordered.forEach((f, i) => { f.frame_index = i + 1 })
+      return { ...prev, [categoryPublicId]: reordered }
+    })
+
+    setFramesByCategory(prev => {
+      const frames = prev[categoryPublicId] || []
+      const reordered = frameIds
+        .map(id => frames.find(f => f.id === id))
+        .filter(Boolean) as FrameData[]
+      reordered.forEach((f, i) => { f.order = i + 1 })
+      return { ...prev, [categoryPublicId]: reordered }
+    })
+
     try {
       // Update DB
       await Promise.all(
@@ -359,30 +527,20 @@ export function useCategoryFrames(): UseCategoryFramesReturn {
             .eq('id', id)
         )
       )
-
-      // Update local state
-      setRawFramesByCategory(prev => {
-        const frames = prev[categoryPublicId] || []
-        const reordered = frameIds
-          .map(id => frames.find(f => f.id === id))
-          .filter(Boolean) as Frame[]
-        reordered.forEach((f, i) => { f.frame_index = i + 1 })
-        return { ...prev, [categoryPublicId]: reordered }
-      })
-
-      setFramesByCategory(prev => {
-        const frames = prev[categoryPublicId] || []
-        const reordered = frameIds
-          .map(id => frames.find(f => f.id === id))
-          .filter(Boolean) as FrameData[]
-        reordered.forEach((f, i) => { f.order = i + 1 })
-        return { ...prev, [categoryPublicId]: reordered }
-      })
     } catch (err) {
       console.error('Error reordering frames:', err)
+      // Rollback: restore old order
+      setRawFramesByCategory(prev => ({
+        ...prev,
+        [categoryPublicId]: oldRawFrames,
+      }))
+      setFramesByCategory(prev => ({
+        ...prev,
+        [categoryPublicId]: oldFrames,
+      }))
       throw err
     }
-  }, [supabase])
+  }, [supabase, rawFramesByCategory, framesByCategory])
 
   return {
     framesByCategory,
@@ -390,6 +548,7 @@ export function useCategoryFrames(): UseCategoryFramesReturn {
     error,
     loadFramesForCategory,
     addFrame,
+    addFramesFromTemplate,
     updateFrame,
     deleteFrame,
     reorderFrames,

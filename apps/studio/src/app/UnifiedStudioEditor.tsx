@@ -50,6 +50,7 @@ import { SlydeCover } from '@/components/slyde-demo/SlydeCover'
 import type { FrameData, FAQItem, BusinessInfo, CTAIconType, CTAType, ListItem, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
 import type { LocationData } from '@slydes/types'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
+import { SlydeWizard, type SlydeTemplate } from '@/components/slyde-wizard'
 import { useOrganization, useSocialFollowers, useSlydes, useHomeSlyde, useCategoryFrames, type HomeSlydeCategory, type BackgroundType, type HomeSlyde } from '@/hooks'
 import type { HomeSlydeData } from '@/components/home-slyde/data/highlandMotorsData'
 import {
@@ -600,6 +601,7 @@ export function UnifiedStudioEditor() {
     framesByCategory: childFrames,
     loadFramesForCategory,
     addFrame: addCategoryFrameDB,
+    addFramesFromTemplate,
     updateFrame: updateCategoryFrameDB,
     deleteFrame: deleteCategoryFrameDB,
     reorderFrames: reorderCategoryFramesDB,
@@ -690,6 +692,12 @@ export function UnifiedStudioEditor() {
   // DEMO MODE STATE
   // =============================================
   const [showDemoMode, setShowDemoMode] = useState(false)
+
+  // =============================================
+  // SLYDE WIZARD STATE
+  // =============================================
+  const [showSlydeWizard, setShowSlydeWizard] = useState(false)
+  const [wizardLoading, setWizardLoading] = useState(false)
 
   const handleCopyLink = async () => {
     if (!shareableLink) return
@@ -884,17 +892,36 @@ export function UnifiedStudioEditor() {
     demoPreview: false,
   })
 
+  // Platform settings - controls onboarding pulse globally
+  const [onboardingPulseEnabled, setOnboardingPulseEnabled] = useState(false)
+
+  // Fetch platform settings on mount
+  useEffect(() => {
+    const fetchPlatformSettings = async () => {
+      try {
+        const res = await fetch('/api/platform-settings')
+        if (res.ok) {
+          const data = await res.json()
+          setOnboardingPulseEnabled(data.features?.onboardingPulse ?? false)
+        }
+      } catch (err) {
+        console.error('Failed to fetch platform settings:', err)
+      }
+    }
+    fetchPlatformSettings()
+  }, [])
+
   // =============================================
   // ONBOARDING FLOW - GPS-style guidance through first Slyde creation
   // =============================================
   // Principle: Always pulse the next action. If user wanders off, recalculate and guide them back.
   // This teaches them the pattern once - after that, they're on their own.
-  // NOTE: Temporarily disabled - re-enable when onboarding is refined
+  // Controlled by platform setting in HQ Admin > Platform
 
   // Compute which element should pulse based on current state
   const getOnboardingPulseTarget = (): string | null => {
-    // Disabled for now - pulses were getting in the way during development
-    return null
+    // Controlled by platform setting (toggle in HQ Admin > Platform)
+    if (!onboardingPulseEnabled) return null
 
     // PHASE 1: Home screen setup (only when viewing home)
     if (selection.type === 'home') {
@@ -1185,7 +1212,7 @@ export function UnifiedStudioEditor() {
     const newName = `New Slyde ${slydeNumber}`
 
     // Optimistic update - add placeholder immediately
-    const tempId = `temp-${Date.now()}`
+    const tempId = `temp-${crypto.randomUUID()}`
     const newCategory: HomeSlydeCategory = {
       id: tempId,
       childSlydeId: tempId,
@@ -1217,6 +1244,75 @@ export function UnifiedStudioEditor() {
       setCategories(prev => prev.filter(c => c.id !== tempId))
     }
   }, [categories.length, addHomeSlydeCategory])
+
+  // Handle template selection from Slyde Wizard
+  const handleSelectTemplate = useCallback(async (template: SlydeTemplate | null) => {
+    setWizardLoading(true)
+
+    try {
+      if (template === null) {
+        // Start Blank - use existing addCategory logic
+        await addCategory()
+      } else {
+        // Create from template
+        if (categories.length >= 6) {
+          setWizardLoading(false)
+          return
+        }
+
+        // Create the Slyde with template name
+        const tempId = `temp-${crypto.randomUUID()}`
+        const newCategory: HomeSlydeCategory = {
+          id: tempId,
+          childSlydeId: tempId,
+          icon: template.icon,
+          name: template.name,
+          description: template.description,
+          hasInventory: false,
+        }
+        setCategories(prev => [...prev, newCategory])
+        setExpandedSections(prev => ({ ...prev, categories: true }))
+
+        try {
+          // Create Slyde in DB
+          const newPublicId = await addHomeSlydeCategory({
+            icon: template.icon,
+            name: template.name,
+            description: template.description,
+            hasInventory: false,
+          })
+
+          // Replace temp with real ID
+          setCategories(prev =>
+            prev.map(c => c.id === tempId
+              ? { ...c, id: newPublicId, childSlydeId: newPublicId }
+              : c
+            )
+          )
+
+          // Create frames from template
+          if (template.frames.length > 0) {
+            await addFramesFromTemplate(newPublicId, template.frames)
+          }
+
+          // Expand the new category in the navigator
+          setExpandedCategories(prev => ({ ...prev, [newPublicId]: true }))
+
+          // Select the new category (shows cover in preview)
+          setSelection({ type: 'category', categoryId: newPublicId })
+          setPreviewMode('cover')
+        } catch (err) {
+          console.error('Failed to create slyde from template:', err)
+          // Revert optimistic update
+          setCategories(prev => prev.filter(c => c.id !== tempId))
+        }
+      }
+
+      setShowSlydeWizard(false)
+    } finally {
+      setWizardLoading(false)
+    }
+  }, [categories.length, addHomeSlydeCategory, addFramesFromTemplate, addCategory])
 
   const updateCategory = useCallback(async (id: string, updates: Partial<HomeSlydeCategory>) => {
     // Save old state for rollback
@@ -2060,16 +2156,28 @@ export function UnifiedStudioEditor() {
                             )
                           })}
 
-                          {/* Add Section */}
+                          {/* Add Section - Two Options */}
                           {categories.length < 6 && (
-                            <button
-                              onClick={addCategory}
-                              disabled={orgLoading || !organization}
-                              className={`w-full flex items-center justify-center gap-1.5 ${sizes.padding} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${onboardingPulseTarget === 'add-section' ? 'animate-pulse-hint' : ''}`}
-                            >
-                              <Plus className={sizes.icon} />
-                              <span className={`${sizes.textSmall} font-medium`}>Add Slyde</span>
-                            </button>
+                            <div className="flex gap-2">
+                              {/* Quick Add - Blank Slyde */}
+                              <button
+                                onClick={addCategory}
+                                disabled={orgLoading || !organization}
+                                className={`flex-1 flex items-center justify-center gap-1.5 ${sizes.padding} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${onboardingPulseTarget === 'add-section' ? 'animate-pulse-hint' : ''}`}
+                              >
+                                <Plus className={sizes.icon} />
+                                <span className={`${sizes.textSmall} font-medium`}>Quick Add</span>
+                              </button>
+                              {/* Use Template - Opens Wizard */}
+                              <button
+                                onClick={() => setShowSlydeWizard(true)}
+                                disabled={orgLoading || !organization}
+                                className={`flex-1 flex items-center justify-center gap-1.5 ${sizes.padding} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-cyan-300 dark:hover:border-cyan-500/30 hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+                              >
+                                <Sparkles className={sizes.icon} />
+                                <span className={`${sizes.textSmall} font-medium`}>Template</span>
+                              </button>
+                            </div>
                           )}
                         </div>
                       </SortableContext>
@@ -4159,6 +4267,15 @@ export function UnifiedStudioEditor() {
         videoSpeed={videoSpeed}
         businessInfo={businessInfo}
         socialLinks={socialLinks}
+      />
+
+      {/* Slyde Wizard */}
+      <SlydeWizard
+        isOpen={showSlydeWizard}
+        onClose={() => setShowSlydeWizard(false)}
+        onSelectTemplate={handleSelectTemplate}
+        vertical={organization?.vertical ?? null}
+        isLoading={wizardLoading}
       />
     </div>
   )
