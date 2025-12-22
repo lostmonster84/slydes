@@ -1,34 +1,42 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Eye, Heart, TrendingUp, X, Check, Copy, ExternalLink, LayoutGrid, LayoutList } from 'lucide-react'
+import { Eye, Heart, TrendingUp, X, Check, Copy, ExternalLink, LayoutGrid, LayoutList, Loader2 } from 'lucide-react'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useDemoBusiness } from '@/lib/demoBusiness'
-import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
+import { useSlydes, Slyde } from '@/hooks/useSlydes'
+import { useOrganization } from '@/hooks/useOrganization'
 import { usePlan } from '@/hooks/usePlan'
 
 /**
  * Slydes HQ — Slydes List
  *
- * Shows all Child Slydes (Category Slydes + Item Slydes).
- * Reads from localStorage to show dynamic content.
+ * Shows all Slydes from Supabase.
  */
 
-export default function HQMockupPage() {
+export default function SlydesPage() {
   const router = useRouter()
   const { plan, isPaid } = usePlan()
+  const { slydes, isLoading: slydesLoading } = useSlydes()
+  const { organization } = useOrganization()
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
-  const [shareModal, setShareModal] = useState<{ open: boolean; slyde: string; name: string }>({ open: false, slyde: '', name: '' })
+  const [shareModal, setShareModal] = useState<{ open: boolean; slyde: Slyde | null }>({ open: false, slyde: null })
   const [copied, setCopied] = useState(false)
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
-  const demoBusiness = useDemoBusiness()
-  const { data: homeSlyde } = useDemoHomeSlyde()
+
+  // Derived values
+  const hasSlydes = slydes.length > 0
+  const slydesCount = slydes.length
+  const publishedCount = slydes.filter(s => s.published).length
+  const draftCount = slydesCount - publishedCount
+  const orgSlug = organization?.slug || ''
+  const orgName = organization?.name || 'Your Business'
 
   // Handle share link copy
   const handleCopyLink = async () => {
-    const shareUrl = `${window.location.origin}/preview/${shareModal.slyde}`
+    if (!shareModal.slyde || !orgSlug) return
+    const shareUrl = `${window.location.origin}/${orgSlug}/${shareModal.slyde.public_id}`
     try {
       await navigator.clipboard.writeText(shareUrl)
       setCopied(true)
@@ -49,7 +57,7 @@ export default function HQMockupPage() {
   // Handle Create Slyde click — gate for Free users with existing Slydes
   const handleCreateSlyde = () => {
     // Free users can only have 1 Slyde
-    if (plan === 'free' && homeSlyde.categories.length >= 1) {
+    if (plan === 'free' && slydes.length >= 1) {
       setShowUpgradeModal(true)
     } else {
       // Go to Home Slyde editor to add a new category
@@ -77,6 +85,18 @@ export default function HQMockupPage() {
   // isPaid = creator OR pro (both have more Slydes than free tier)
   const isCreator = isPaid
 
+  // Get plan limit
+  const limit = isCreator ? 10 : 1
+
+  // Gradient colors for visual variety
+  const gradients = [
+    'from-emerald-900 via-emerald-800 to-emerald-950',
+    'from-blue-950 via-slate-900 to-cyan-950',
+    'from-orange-900 via-amber-800 to-orange-950',
+    'from-purple-900 via-violet-800 to-purple-950',
+    'from-rose-900 via-pink-800 to-rose-950',
+  ]
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-[#1c1c1e] dark:text-white overflow-hidden">
       {/* Full-screen mockup container */}
@@ -93,9 +113,11 @@ export default function HQMockupPage() {
             <div>
               <h1 className="text-xl font-bold font-display tracking-tight text-gray-900 dark:text-white">Your Slydes</h1>
               <p className="text-sm text-gray-500 dark:text-white/60">
-                {demoBusiness.hasSlydes
-                  ? `${demoBusiness.slydesCount} ${demoBusiness.slydesCount === 1 ? 'experience' : 'experiences'} • ${demoBusiness.framesTotal} frames total`
-                  : 'No Slydes yet • create your first one'}
+                {slydesLoading
+                  ? 'Loading...'
+                  : hasSlydes
+                    ? `${slydesCount} ${slydesCount === 1 ? 'slyde' : 'slydes'}`
+                    : 'No Slydes yet • create your first one'}
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -141,13 +163,21 @@ export default function HQMockupPage() {
           <div className="flex-1 overflow-y-auto p-8">
             <div className="max-w-6xl">
 
-            {!demoBusiness.hasSlydes ? (
+            {/* Loading State */}
+            {slydesLoading && (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+              </div>
+            )}
+
+            {/* Empty State */}
+            {!slydesLoading && !hasSlydes && (
               <div className="max-w-3xl">
                 <div className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-sm dark:bg-[#2c2c2e] dark:border-white/10">
                   <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
                   <div className="p-6">
                     <div className="text-sm text-gray-600 dark:text-white/60">
-                      You're signed in as <span className="font-semibold text-gray-900 dark:text-white">{demoBusiness.name}</span>.
+                      You're signed in as <span className="font-semibold text-gray-900 dark:text-white">{orgName}</span>.
                     </div>
                     <div className="mt-2 text-2xl md:text-3xl font-display font-bold tracking-tight text-gray-900 dark:text-white">
                       Create your first Slyde.
@@ -185,18 +215,12 @@ export default function HQMockupPage() {
                   </div>
                 </div>
               </div>
-            ) : (
+            )}
+
+            {/* Has Slydes */}
+            {!slydesLoading && hasSlydes && (
               <>
-
-            {/* Slydes Summary - dynamic from localStorage */}
-            {(() => {
-              const categoryCount = homeSlyde.categories.length
-              const publishedCount = homeSlyde.categories.filter(c => (homeSlyde.childFrames?.[c.id]?.length ?? 0) > 0).length
-              const draftCount = categoryCount - publishedCount
-              const totalFrames = homeSlyde.categories.reduce((sum, c) => sum + (homeSlyde.childFrames?.[c.id]?.length ?? 0), 0)
-              const limit = isCreator ? 10 : 1
-
-              return (
+                {/* Slydes Summary */}
                 <div className="grid grid-cols-4 gap-4 mb-8">
                   <div className="p-5 rounded-2xl bg-white border border-gray-200 shadow-sm dark:bg-[#2c2c2e] dark:border-white/10">
                     <div className="text-xs text-gray-500 dark:text-white/60 font-semibold mb-1">Published</div>
@@ -206,354 +230,278 @@ export default function HQMockupPage() {
                   <div className="p-5 rounded-2xl bg-white border border-gray-200 shadow-sm dark:bg-[#2c2c2e] dark:border-white/10">
                     <div className="text-xs text-gray-500 dark:text-white/60 font-semibold mb-1">Drafts</div>
                     <div className="text-2xl font-mono font-bold mb-1">{draftCount}</div>
-                    <div className="text-sm text-gray-500 dark:text-white/60">Unpublished changes</div>
+                    <div className="text-sm text-gray-500 dark:text-white/60">Unpublished</div>
                   </div>
                   <div className="p-5 rounded-2xl bg-white border border-gray-200 shadow-sm dark:bg-[#2c2c2e] dark:border-white/10">
-                    <div className="text-xs text-gray-500 dark:text-white/60 font-semibold mb-1">Frames</div>
-                    <div className="text-2xl font-mono font-bold mb-1">{totalFrames}</div>
-                    <div className="text-sm text-gray-500 dark:text-white/60">Across all Slydes</div>
+                    <div className="text-xs text-gray-500 dark:text-white/60 font-semibold mb-1">Total</div>
+                    <div className="text-2xl font-mono font-bold mb-1">{slydesCount}</div>
+                    <div className="text-sm text-gray-500 dark:text-white/60">All slydes</div>
                   </div>
                   <div className="p-5 rounded-2xl bg-white border border-gray-200 shadow-sm relative overflow-hidden dark:bg-[#2c2c2e] dark:border-white/10">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-50/70 via-white/30 to-cyan-50/50 dark:from-blue-500/10 dark:via-white/0 dark:to-cyan-500/10" />
                     <div className="relative">
-                      <div className="text-xs text-gray-500 dark:text-white/60 font-semibold mb-1">Upgrade</div>
-                      <div className="text-lg font-display font-bold mb-1 text-gray-900 dark:text-white">{isCreator ? "You're on Creator" : 'Creator'}</div>
+                      <div className="text-xs text-gray-500 dark:text-white/60 font-semibold mb-1">Plan</div>
+                      <div className="text-lg font-display font-bold mb-1 text-gray-900 dark:text-white">{isCreator ? 'Creator' : 'Free'}</div>
                       <div className="text-sm text-gray-500 dark:text-white/60">
-                        {isCreator ? 'No watermark • analytics on Dashboard • up to 10 Slydes' : 'Up to 10 Slydes • no watermark • analytics'}
+                        {isCreator ? 'No watermark • analytics' : 'Up to 1 Slyde'}
                       </div>
                     </div>
                   </div>
                 </div>
-              )
-            })()}
 
-            {/* Slydes - Card View */}
-            {viewMode === 'card' && (
-              <div className="grid grid-cols-12 gap-6">
+                {/* Slydes - Card View */}
+                {viewMode === 'card' && (
+                  <div className="grid grid-cols-12 gap-6">
+                    {slydes.map((slyde, index) => {
+                      const gradient = gradients[index % gradients.length]
+                      const isLive = slyde.published
 
-              {homeSlyde.categories.map((category, index) => {
-                const frameCount = homeSlyde.childFrames?.[category.id]?.length ?? 0
-                const slug = category.name.toLowerCase().replace(/\s+/g, '-')
-                const firstFrame = homeSlyde.childFrames?.[category.id]?.[0]
+                      return (
+                        <div
+                          key={slyde.id}
+                          className="col-span-12 lg:col-span-6 group relative bg-white rounded-3xl border border-gray-200 overflow-hidden hover:border-gray-300 transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:bg-[#2c2c2e] dark:border-white/10 dark:hover:border-white/20 dark:hover:shadow-blue-500/10"
+                        >
+                          <div className="flex p-6 gap-6">
+                            {/* Phone Preview */}
+                            <div className="relative shrink-0">
+                              <div className="w-32 h-64 bg-gradient-to-b from-gray-800 to-gray-900 rounded-[1.5rem] p-1.5 shadow-2xl">
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-gray-800 rounded-b-xl z-10" />
+                                <div className="w-full h-full rounded-[1.25rem] overflow-hidden relative">
+                                  {/* Background */}
+                                  <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-                // Gradient colors based on index for visual variety
-                const gradients = [
-                  'from-emerald-900 via-emerald-800 to-emerald-950',
-                  'from-blue-950 via-slate-900 to-cyan-950',
-                  'from-orange-900 via-amber-800 to-orange-950',
-                  'from-purple-900 via-violet-800 to-purple-950',
-                  'from-rose-900 via-pink-800 to-rose-950',
-                ]
-                const gradient = gradients[index % gradients.length]
+                                  {/* Content overlay */}
+                                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                                    <div className="text-white text-sm font-bold leading-tight">
+                                      {slyde.title}
+                                    </div>
+                                    {slyde.description && (
+                                      <div className="text-white/80 text-xs line-clamp-2">{slyde.description}</div>
+                                    )}
+                                  </div>
 
-                return (
-                  <div
-                    key={category.id}
-                    className="col-span-12 lg:col-span-6 group relative bg-white rounded-3xl border border-gray-200 overflow-hidden hover:border-gray-300 transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:bg-[#2c2c2e] dark:border-white/10 dark:hover:border-white/20 dark:hover:shadow-blue-500/10"
-                  >
-                    <div className="flex p-6 gap-6">
-
-                      {/* Phone Preview */}
-                      <div className="relative shrink-0">
-                        <div className="w-32 h-64 bg-gradient-to-b from-gray-800 to-gray-900 rounded-[1.5rem] p-1.5 shadow-2xl">
-                          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-gray-800 rounded-b-xl z-10" />
-                          <div className="w-full h-full rounded-[1.25rem] overflow-hidden relative">
-                            {/* Background */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
-                            {firstFrame?.background?.src && (
-                              <div
-                                className="absolute inset-0 bg-cover bg-center opacity-60"
-                                style={{ backgroundImage: `url(${firstFrame.background.src})` }}
-                              />
-                            )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-                            {/* Content overlay */}
-                            <div className="absolute bottom-0 left-0 right-0 p-3">
-                              {firstFrame?.badge && (
-                                <div className="text-[8px] bg-white/20 backdrop-blur-sm px-1.5 py-0.5 rounded-full inline-block mb-1">
-                                  {firstFrame.badge}
+                                  {/* Social stack */}
+                                  <div className="absolute right-2 bottom-16 flex flex-col items-center gap-2">
+                                    <div className="w-6 h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                                      <span className="text-[8px]">❤️</span>
+                                    </div>
+                                    <div className="w-6 h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                                      <span className="text-[8px]">❓</span>
+                                    </div>
+                                  </div>
                                 </div>
-                              )}
-                              <div className="text-white text-sm font-bold leading-tight">
-                                {firstFrame?.title || category.name}
                               </div>
-                              {firstFrame?.subtitle && (
-                                <div className="text-white/80 text-xs">{firstFrame.subtitle}</div>
-                              )}
+
+                              {/* Status badge */}
+                              <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1 rounded-full ${
+                                isLive
+                                  ? 'bg-emerald-50 border border-emerald-200 dark:bg-emerald-500/15 dark:border-emerald-500/30'
+                                  : 'bg-gray-100 border border-gray-200 dark:bg-white/10 dark:border-white/20'
+                              }`}>
+                                {isLive ? (
+                                  <>
+                                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                                    <span className="text-[10px] text-emerald-700 font-medium dark:text-emerald-300">Live</span>
+                                  </>
+                                ) : (
+                                  <span className="text-[10px] text-gray-500 font-medium dark:text-white/50">Draft</span>
+                                )}
+                              </div>
                             </div>
 
-                            {/* Social stack */}
-                            <div className="absolute right-2 bottom-16 flex flex-col items-center gap-2">
-                              <div className="w-6 h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                                <span className="text-[8px]">❤️</span>
+                            {/* Info */}
+                            <div className="flex-1 flex flex-col py-2">
+                              <div className="flex items-start justify-between mb-2">
+                                <div>
+                                  <h3 className="text-lg font-display font-bold text-gray-900 mb-1 dark:text-white">{slyde.title}</h3>
+                                  <p className="text-sm text-gray-500 dark:text-white/60 line-clamp-2">{slyde.description || 'No description'}</p>
+                                </div>
+                                <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors dark:hover:bg-white/10">
+                                  <svg className="w-5 h-5 text-gray-400 dark:text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                  </svg>
+                                </button>
                               </div>
-                              <div className="w-6 h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                                <span className="text-[8px]">❓</span>
+
+                              {/* Quick stats (placeholder for now) */}
+                              <div className="flex items-center gap-4 px-3 py-2 bg-gray-50 rounded-lg mb-3 border border-gray-200 dark:bg-white/5 dark:border-white/10">
+                                <div className="flex items-center gap-1.5">
+                                  <Eye className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" />
+                                  <span className="text-xs font-mono font-semibold text-gray-700 dark:text-white/70">—</span>
+                                  <span className="text-xs text-gray-400 dark:text-white/40">views</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                  <Heart className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" />
+                                  <span className="text-xs font-mono font-semibold text-gray-700 dark:text-white/70">—</span>
+                                </div>
+                                {isLive && (
+                                  <div className="flex items-center gap-1.5">
+                                    <TrendingUp className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
+                                    <span className="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400">Ready</span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* URL */}
+                              <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg mb-4 border border-gray-200 dark:bg-white/5 dark:border-white/10">
+                                <span className="text-xs text-gray-500 dark:text-white/50">slydes.io/{orgSlug}/</span>
+                                <span className="text-xs text-gray-900 font-medium dark:text-white">{slyde.public_id}</span>
+                                <button className="ml-auto p-1 hover:bg-gray-100 rounded transition-colors dark:hover:bg-white/10">
+                                  <svg className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                  </svg>
+                                </button>
+                              </div>
+
+                              {/* Actions */}
+                              <div className="flex items-center gap-2 mt-auto">
+                                <Link
+                                  href={`/?slyde=${slyde.id}`}
+                                  className="flex-1 py-2.5 px-4 bg-gray-900 text-white font-semibold text-sm rounded-xl hover:bg-gray-800 transition-colors dark:bg-white dark:text-gray-900 dark:hover:bg-white/90 text-center"
+                                >
+                                  Edit
+                                </Link>
+                                <Link
+                                  href={`/${orgSlug}/${slyde.public_id}`}
+                                  target="_blank"
+                                  className="py-2.5 px-4 bg-gray-100 text-gray-800 font-medium text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15 text-center"
+                                >
+                                  Preview
+                                </Link>
+                                <button
+                                  onClick={() => setShareModal({ open: true, slyde })}
+                                  className="py-2.5 px-4 bg-gray-100 text-gray-800 font-medium text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15 text-center"
+                                >
+                                  Share
+                                </button>
                               </div>
                             </div>
                           </div>
                         </div>
+                      )
+                    })}
 
-                        {/* Status badge */}
-                        <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1 rounded-full ${
-                          frameCount > 0
-                            ? 'bg-emerald-50 border border-emerald-200 dark:bg-emerald-500/15 dark:border-emerald-500/30'
-                            : 'bg-gray-100 border border-gray-200 dark:bg-white/10 dark:border-white/20'
-                        }`}>
-                          {frameCount > 0 ? (
-                            <>
-                              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                              <span className="text-[10px] text-emerald-700 font-medium dark:text-emerald-300">Live</span>
-                            </>
-                          ) : (
-                            <span className="text-[10px] text-gray-500 font-medium dark:text-white/50">Draft</span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Info */}
-                      <div className="flex-1 flex flex-col py-2">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h3 className="text-lg font-display font-bold text-gray-900 mb-1 dark:text-white">{category.name}</h3>
-                            <p className="text-sm text-gray-500 dark:text-white/60">{category.description}</p>
+                    {/* Create New Card */}
+                    <div className="col-span-12 relative">
+                      <button
+                        onClick={handleCreateSlyde}
+                        className="w-full p-8 rounded-3xl border-2 border-dashed border-gray-300 hover:border-gray-400 transition-colors cursor-pointer group dark:border-white/20 dark:hover:border-white/30 text-left"
+                      >
+                        <div className="flex flex-col items-center justify-center text-center">
+                          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform dark:from-blue-500/15 dark:to-cyan-500/15 dark:border-white/10">
+                            <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                            </svg>
                           </div>
-                          <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors dark:hover:bg-white/10">
-                            <svg className="w-5 h-5 text-gray-400 dark:text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                            </svg>
-                          </button>
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Create New Slyde</h3>
+                          <p className="text-sm text-gray-500 dark:text-white/60 max-w-md">
+                            Start from scratch or use a template. Build immersive mobile experiences in minutes.
+                          </p>
                         </div>
+                      </button>
+                    </div>
+                  </div>
+                )}
 
-                        {/* Meta */}
-                        <div className="flex items-center gap-4 mb-3">
-                          <div className="flex items-center gap-1.5">
-                            <svg className="w-4 h-4 text-gray-400 dark:text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
-                            <span className="text-sm text-gray-600 dark:text-white/60">
-                              {frameCount} {frameCount === 1 ? 'frame' : 'frames'}
+                {/* Slydes - List View */}
+                {viewMode === 'list' && (
+                  <div className="space-y-2">
+                    {/* List Header */}
+                    <div className="grid grid-cols-12 gap-4 px-4 py-2 text-xs font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
+                      <div className="col-span-5">Slyde</div>
+                      <div className="col-span-2">ID</div>
+                      <div className="col-span-2">Status</div>
+                      <div className="col-span-3 text-right">Actions</div>
+                    </div>
+
+                    {slydes.map((slyde, index) => {
+                      const gradient = gradients[index % gradients.length]
+                      const isLive = slyde.published
+
+                      return (
+                        <div
+                          key={slyde.id}
+                          className="grid grid-cols-12 gap-4 items-center px-4 py-3 bg-white dark:bg-[#2c2c2e] border border-gray-200 dark:border-white/10 rounded-xl hover:border-gray-300 dark:hover:border-white/20 transition-all group"
+                        >
+                          {/* Slyde Info */}
+                          <div className="col-span-5 flex items-center gap-3">
+                            {/* Mini Phone Preview */}
+                            <div className="relative shrink-0">
+                              <div className="w-10 h-[72px] bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-0.5 shadow-md">
+                                <div className="w-full h-full rounded-[6px] overflow-hidden relative">
+                                  <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="min-w-0">
+                              <div className="font-semibold text-gray-900 dark:text-white truncate">{slyde.title}</div>
+                              <div className="text-sm text-gray-500 dark:text-white/50 truncate">
+                                slydes.io/{orgSlug}/{slyde.public_id}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* ID */}
+                          <div className="col-span-2">
+                            <span className="text-sm font-mono text-gray-600 dark:text-white/60">
+                              {slyde.public_id}
                             </span>
                           </div>
-                          {category.icon && (
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-sm">{category.icon}</span>
+
+                          {/* Status */}
+                          <div className="col-span-2">
+                            <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
+                              isLive
+                                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
+                                : 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-white/50'
+                            }`}>
+                              {isLive && <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />}
+                              {isLive ? 'Live' : 'Draft'}
                             </div>
-                          )}
-                        </div>
-
-                        {/* Quick stats (placeholder for now) */}
-                        <div className="flex items-center gap-4 px-3 py-2 bg-gray-50 rounded-lg mb-3 border border-gray-200 dark:bg-white/5 dark:border-white/10">
-                          <div className="flex items-center gap-1.5">
-                            <Eye className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" />
-                            <span className="text-xs font-mono font-semibold text-gray-700 dark:text-white/70">—</span>
-                            <span className="text-xs text-gray-400 dark:text-white/40">views</span>
                           </div>
-                          <div className="flex items-center gap-1.5">
-                            <Heart className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" />
-                            <span className="text-xs font-mono font-semibold text-gray-700 dark:text-white/70">—</span>
+
+                          {/* Actions */}
+                          <div className="col-span-3 flex items-center justify-end gap-2">
+                            <Link
+                              href={`/?slyde=${slyde.id}`}
+                              className="px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-white bg-gray-100 dark:bg-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-white/15 transition-colors"
+                            >
+                              Edit
+                            </Link>
+                            <Link
+                              href={`/${orgSlug}/${slyde.public_id}`}
+                              target="_blank"
+                              className="px-3 py-1.5 text-sm font-medium text-gray-500 dark:text-white/60 hover:text-gray-700 dark:hover:text-white transition-colors"
+                            >
+                              Preview
+                            </Link>
+                            <button
+                              onClick={() => setShareModal({ open: true, slyde })}
+                              className="px-3 py-1.5 text-sm font-medium text-gray-500 dark:text-white/60 hover:text-gray-700 dark:hover:text-white transition-colors"
+                            >
+                              Share
+                            </button>
                           </div>
-                          {frameCount > 0 && (
-                            <div className="flex items-center gap-1.5">
-                              <TrendingUp className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
-                              <span className="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400">Ready</span>
-                            </div>
-                          )}
                         </div>
+                      )
+                    })}
 
-                        {/* URL */}
-                        <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg mb-4 border border-gray-200 dark:bg-white/5 dark:border-white/10">
-                          <span className="text-xs text-gray-500 dark:text-white/50">slydes.io/wildtrax/</span>
-                          <span className="text-xs text-gray-900 font-medium dark:text-white">{slug}</span>
-                          <button className="ml-auto p-1 hover:bg-gray-100 rounded transition-colors dark:hover:bg-white/10">
-                            <svg className="w-3.5 h-3.5 text-gray-400 dark:text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                          </button>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="flex items-center gap-2 mt-auto">
-                          <Link
-                            href={`/?category=${category.id}`}
-                            className="flex-1 py-2.5 px-4 bg-gray-900 text-white font-semibold text-sm rounded-xl hover:bg-gray-800 transition-colors dark:bg-white dark:text-gray-900 dark:hover:bg-white/90 text-center"
-                          >
-                            Edit
-                          </Link>
-                          <Link
-                            href={`/preview?category=${category.id}`}
-                            className="py-2.5 px-4 bg-gray-100 text-gray-800 font-medium text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15 text-center"
-                          >
-                            Preview
-                          </Link>
-                          <button
-                            onClick={() => setShareModal({ open: true, slyde: slug, name: category.name })}
-                            className="py-2.5 px-4 bg-gray-100 text-gray-800 font-medium text-sm rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15 text-center"
-                          >
-                            Share
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-
-              {/* Show empty state if no categories */}
-              {homeSlyde.categories.length === 0 && (
-                <div className="col-span-12 text-center py-12">
-                  <p className="text-gray-500 dark:text-white/50">No categories yet. Create one from the Home Slyde editor.</p>
-                  <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 mt-4 px-5 py-2.5 bg-gray-900 text-white font-semibold text-sm rounded-xl hover:bg-gray-800 transition-colors dark:bg-white dark:text-gray-900"
-                  >
-                    Go to Home Slyde Editor
-                  </Link>
-                </div>
-              )}
-
-              {/* Create New Card */}
-              <div className="col-span-12 relative">
-                <button
-                  onClick={handleCreateSlyde}
-                  className="w-full p-8 rounded-3xl border-2 border-dashed border-gray-300 hover:border-gray-400 transition-colors cursor-pointer group dark:border-white/20 dark:hover:border-white/30 text-left"
-                >
-                  <div className="flex flex-col items-center justify-center text-center">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform dark:from-blue-500/15 dark:to-cyan-500/15 dark:border-white/10">
-                      <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Create New Slyde</h3>
-                    <p className="text-sm text-gray-500 dark:text-white/60 max-w-md">
-                      Start from scratch or use a template. Build immersive mobile experiences in minutes.
-                    </p>
-                  </div>
-                </button>
-              </div>
-
-              </div>
-            )}
-
-            {/* Slydes - List View */}
-            {viewMode === 'list' && (
-              <div className="space-y-2">
-                {/* List Header */}
-                <div className="grid grid-cols-12 gap-4 px-4 py-2 text-xs font-semibold text-gray-500 dark:text-white/50 uppercase tracking-wider">
-                  <div className="col-span-5">Slyde</div>
-                  <div className="col-span-2">Frames</div>
-                  <div className="col-span-2">Status</div>
-                  <div className="col-span-3 text-right">Actions</div>
-                </div>
-
-                {homeSlyde.categories.map((category, index) => {
-                  const frameCount = homeSlyde.childFrames?.[category.id]?.length ?? 0
-                  const slug = category.name.toLowerCase().replace(/\s+/g, '-')
-                  const firstFrame = homeSlyde.childFrames?.[category.id]?.[0]
-                  const isLive = frameCount > 0
-
-                  // Gradient colors based on index for visual variety
-                  const gradients = [
-                    'from-emerald-900 via-emerald-800 to-emerald-950',
-                    'from-blue-950 via-slate-900 to-cyan-950',
-                    'from-orange-900 via-amber-800 to-orange-950',
-                    'from-purple-900 via-violet-800 to-purple-950',
-                    'from-rose-900 via-pink-800 to-rose-950',
-                  ]
-                  const gradient = gradients[index % gradients.length]
-
-                  return (
-                    <div
-                      key={category.id}
-                      className="grid grid-cols-12 gap-4 items-center px-4 py-3 bg-white dark:bg-[#2c2c2e] border border-gray-200 dark:border-white/10 rounded-xl hover:border-gray-300 dark:hover:border-white/20 transition-all group"
+                    {/* Create New Row */}
+                    <button
+                      onClick={handleCreateSlyde}
+                      className="w-full grid grid-cols-12 gap-4 items-center px-4 py-4 border-2 border-dashed border-gray-300 dark:border-white/20 rounded-xl hover:border-gray-400 dark:hover:border-white/30 transition-colors group"
                     >
-                      {/* Slyde Info */}
-                      <div className="col-span-5 flex items-center gap-3">
-                        {/* Mini Phone Preview */}
-                        <div className="relative shrink-0">
-                          <div className="w-10 h-[72px] bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg p-0.5 shadow-md">
-                            <div className="w-full h-full rounded-[6px] overflow-hidden relative">
-                              <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
-                              {firstFrame?.background?.src && (
-                                <div
-                                  className="absolute inset-0 bg-cover bg-center opacity-60"
-                                  style={{ backgroundImage: `url(${firstFrame.background.src})` }}
-                                />
-                              )}
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="min-w-0">
-                          <div className="font-semibold text-gray-900 dark:text-white truncate">{category.name}</div>
-                          <div className="text-sm text-gray-500 dark:text-white/50 truncate">
-                            slydes.io/wildtrax/{slug}
-                          </div>
-                        </div>
+                      <div className="col-span-12 flex items-center justify-center gap-2 text-gray-500 dark:text-white/50 group-hover:text-gray-700 dark:group-hover:text-white/70">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                        </svg>
+                        <span className="font-medium">Create New Slyde</span>
                       </div>
-
-                      {/* Frames */}
-                      <div className="col-span-2">
-                        <span className="text-sm font-mono font-semibold text-gray-700 dark:text-white/70">
-                          {frameCount}
-                        </span>
-                        <span className="text-sm text-gray-500 dark:text-white/50 ml-1">
-                          {frameCount === 1 ? 'frame' : 'frames'}
-                        </span>
-                      </div>
-
-                      {/* Status */}
-                      <div className="col-span-2">
-                        <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
-                          isLive
-                            ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
-                            : 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-white/50'
-                        }`}>
-                          {isLive && <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />}
-                          {isLive ? 'Live' : 'Draft'}
-                        </div>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="col-span-3 flex items-center justify-end gap-2">
-                        <Link
-                          href={`/?category=${category.id}`}
-                          className="px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-white bg-gray-100 dark:bg-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-white/15 transition-colors"
-                        >
-                          Edit
-                        </Link>
-                        <Link
-                          href={`/preview?category=${category.id}`}
-                          className="px-3 py-1.5 text-sm font-medium text-gray-500 dark:text-white/60 hover:text-gray-700 dark:hover:text-white transition-colors"
-                        >
-                          Preview
-                        </Link>
-                        <button
-                          onClick={() => setShareModal({ open: true, slyde: slug, name: category.name })}
-                          className="px-3 py-1.5 text-sm font-medium text-gray-500 dark:text-white/60 hover:text-gray-700 dark:hover:text-white transition-colors"
-                        >
-                          Share
-                        </button>
-                      </div>
-                    </div>
-                  )
-                })}
-
-                {/* Create New Row */}
-                <button
-                  onClick={handleCreateSlyde}
-                  className="w-full grid grid-cols-12 gap-4 items-center px-4 py-4 border-2 border-dashed border-gray-300 dark:border-white/20 rounded-xl hover:border-gray-400 dark:hover:border-white/30 transition-colors group"
-                >
-                  <div className="col-span-12 flex items-center justify-center gap-2 text-gray-500 dark:text-white/50 group-hover:text-gray-700 dark:group-hover:text-white/70">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span className="font-medium">Create New Slyde</span>
+                    </button>
                   </div>
-                </button>
-              </div>
-            )}
+                )}
               </>
             )}
             </div>
@@ -644,12 +592,12 @@ export default function HQMockupPage() {
       )}
 
       {/* Share Modal */}
-      {shareModal.open && (
+      {shareModal.open && shareModal.slyde && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setShareModal({ open: false, slyde: '', name: '' })}
+            onClick={() => setShareModal({ open: false, slyde: null })}
           />
 
           {/* Modal */}
@@ -659,7 +607,7 @@ export default function HQMockupPage() {
 
             {/* Close button */}
             <button
-              onClick={() => setShareModal({ open: false, slyde: '', name: '' })}
+              onClick={() => setShareModal({ open: false, slyde: null })}
               className="absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100 transition-colors dark:hover:bg-white/10"
             >
               <X className="w-5 h-5 text-gray-400 dark:text-white/40" />
@@ -672,7 +620,7 @@ export default function HQMockupPage() {
               </div>
 
               <h2 className="text-2xl font-display font-bold text-gray-900 dark:text-white mb-2">
-                Share "{shareModal.name}"
+                Share "{shareModal.slyde.title}"
               </h2>
               <p className="text-gray-600 dark:text-white/70 mb-6">
                 Copy this link to share your Slyde anywhere.
@@ -682,7 +630,7 @@ export default function HQMockupPage() {
               <div className="p-4 rounded-xl bg-gray-50 border border-gray-200 mb-6 dark:bg-white/5 dark:border-white/10">
                 <div className="flex items-center gap-3">
                   <div className="flex-1 font-mono text-sm text-gray-700 dark:text-white/80 truncate">
-                    {typeof window !== 'undefined' ? `${window.location.origin}/preview/${shareModal.slyde}` : '...'}
+                    {typeof window !== 'undefined' ? `${window.location.origin}/${orgSlug}/${shareModal.slyde.public_id}` : '...'}
                   </div>
                   <button
                     onClick={handleCopyLink}
@@ -705,7 +653,7 @@ export default function HQMockupPage() {
               {/* Actions */}
               <div className="flex gap-3">
                 <Link
-                  href={`/preview/${shareModal.slyde}`}
+                  href={`/${orgSlug}/${shareModal.slyde.public_id}`}
                   target="_blank"
                   className="flex-1 py-3 px-5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/15 text-center flex items-center justify-center gap-2"
                 >
@@ -713,7 +661,7 @@ export default function HQMockupPage() {
                   Open Slyde
                 </Link>
                 <button
-                  onClick={() => setShareModal({ open: false, slyde: '', name: '' })}
+                  onClick={() => setShareModal({ open: false, slyde: null })}
                   className="py-3 px-5 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors dark:bg-white/10 dark:text-white dark:hover:bg-white/15"
                 >
                   Done
