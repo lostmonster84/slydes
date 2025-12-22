@@ -3,8 +3,17 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Loader2, User, Building2, Globe, Check } from 'lucide-react'
+import { Loader2, User, Building2, Globe, Check, Home, Bed, Car, Sparkles, UtensilsCrossed } from 'lucide-react'
 import { useOrganization } from '@/hooks/useOrganization'
+
+const VERTICAL_INFO: Record<string, { name: string; icon: typeof Home }> = {
+  property: { name: 'Property', icon: Home },
+  hospitality: { name: 'Hospitality', icon: Bed },
+  automotive: { name: 'Automotive', icon: Car },
+  beauty: { name: 'Beauty & Wellness', icon: Sparkles },
+  food: { name: 'Food & Drink', icon: UtensilsCrossed },
+  other: { name: 'Other', icon: Building2 },
+}
 
 interface Profile {
   id: string
@@ -195,6 +204,24 @@ export function ProfileSettingsForm() {
             This is your business name shown throughout Slydes
           </p>
           <div className="space-y-4">
+            {/* Industry (read-only) */}
+            {organization.vertical && VERTICAL_INFO[organization.vertical] && (() => {
+              const verticalInfo = VERTICAL_INFO[organization.vertical!]
+              const VerticalIcon = verticalInfo.icon
+              return (
+                <div className="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-leader-blue/10">
+                      <VerticalIcon className="w-5 h-5 text-leader-blue" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-white/50 uppercase tracking-wider">Industry</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{verticalInfo.name}</p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })()}
             <div>
               <label htmlFor="org_name" className="block text-sm font-medium text-gray-700 dark:text-white/80 mb-2">
                 Business name

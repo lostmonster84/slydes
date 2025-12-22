@@ -11,6 +11,7 @@ export interface Organization {
   slug: string
   website: string | null
   business_type: string | null
+  vertical: 'property' | 'hospitality' | 'automotive' | 'beauty' | 'food' | 'other' | null
   logo_url: string | null
   primary_color: string
   secondary_color: string | null
@@ -28,6 +29,23 @@ export interface Organization {
   home_audio_r2_key: string | null
   home_audio_library_id: string | null
   home_audio_enabled: boolean
+  // Feature toggles (from vertical defaults, can be overridden per-slyde)
+  features_enabled: {
+    lists?: boolean
+    shop?: boolean
+    socialStack?: {
+      location?: boolean
+      info?: boolean
+      share?: boolean
+      heart?: boolean
+      connect?: boolean
+    }
+    sections?: {
+      contact?: boolean
+      faqs?: boolean
+      demoVideo?: boolean
+    }
+  } | null
   created_at: string
   updated_at: string
 }
@@ -133,6 +151,25 @@ export function useOrganization(): UseOrganizationReturn {
   }): Promise<Organization | null> => {
     if (!user) throw new Error('Must be logged in to create organization')
 
+    // Fetch vertical defaults for this business type (includes socialStack and sections)
+    let featuresEnabled: Organization['features_enabled'] = {
+      lists: false,
+      shop: false,
+      socialStack: { location: true, info: true, share: true, heart: false, connect: true },
+      sections: { contact: true, faqs: false, demoVideo: false }
+    }
+    if (data.business_type) {
+      const { data: verticalDefault } = await supabase
+        .from('vertical_defaults')
+        .select('features_enabled')
+        .eq('vertical_id', data.business_type)
+        .single()
+
+      if (verticalDefault?.features_enabled) {
+        featuresEnabled = verticalDefault.features_enabled as Organization['features_enabled']
+      }
+    }
+
     const { data: newOrg, error } = await supabase
       .from('organizations')
       .insert({
@@ -142,6 +179,7 @@ export function useOrganization(): UseOrganizationReturn {
         business_type: data.business_type || null,
         primary_color: '#2563EB',
         secondary_color: '#06B6D4',
+        features_enabled: featuresEnabled,
       })
       .select()
       .single()

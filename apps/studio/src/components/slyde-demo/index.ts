@@ -15,6 +15,7 @@
 // Core Components
 export { DevicePreview, HomeIndicator, PhoneFrame } from './DevicePreview'
 export { SlydeScreen } from './SlydeScreen'
+export { SlydeCover } from './SlydeCover'
 
 // UI Components
 export { Badge } from './Badge'
@@ -28,6 +29,8 @@ export { InfoSheet } from './InfoSheet'
 export { ShareSheet } from './ShareSheet'
 export { AboutSheet } from './AboutSheet'
 export { ConnectSheet } from './ConnectSheet'
+export { LocationSheet } from './LocationSheet'
+export { PropertyDetailsSheet } from './PropertyDetailsSheet'
 export { SheetHandle } from './SheetHandle'
 
 // Overlays

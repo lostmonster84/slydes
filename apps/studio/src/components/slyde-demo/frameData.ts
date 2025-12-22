@@ -92,6 +92,41 @@ export interface FrameData {
   inventoryCtaText?: string    // CTA text for inventory (e.g., "View All 12 Vehicles")
   // Demo video - full-screen video overlay for in-depth content
   demoVideoUrl?: string        // YouTube, Vimeo, or direct video URL
+
+  // ============================================
+  // PROPERTY VERTICAL FIELDS
+  // ============================================
+
+  // Property Action Fields (show as action stack buttons when filled)
+  property?: {
+    // Actions (buttons in action stack)
+    locationUrl?: string        // MapPin - Google Maps link or directions
+    virtualTourUrl?: string     // Video - Matterport, 360 tour, video walkthrough
+    floorPlanUrl?: string       // LayoutGrid - Floor plan image or PDF
+    bookViewingUrl?: string     // Calendar - Calendly, booking link
+    brochureUrl?: string        // FileText - PDF brochure download
+    agentPhone?: string         // Phone - Direct call to agent
+    applyUrl?: string           // ClipboardCheck - Rental application
+    makeOfferUrl?: string       // HandCoins - Make an offer (sales)
+
+    // Info Fields (displayed in PropertyDetails sheet)
+    price?: string              // £425,000 or £1,200 pcm
+    priceQualifier?: 'asking' | 'offers_over' | 'offers_in_region' | 'fixed' | 'poa' | 'pcm' | 'pw'
+    bedrooms?: number
+    bathrooms?: number
+    propertyType?: 'detached' | 'semi-detached' | 'terraced' | 'flat' | 'bungalow' | 'cottage' | 'villa' | 'land' | 'commercial' | 'other'
+    sqft?: number
+    epcRating?: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G'
+    councilTaxBand?: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H'
+    availability?: string       // "Available now" or "1st February 2025"
+    parking?: string            // "Driveway", "Garage", "Street parking"
+    garden?: string             // "Private garden", "Communal gardens", "Balcony"
+    petFriendly?: boolean
+    tenure?: 'freehold' | 'leasehold' | 'share_of_freehold'
+    leaseLength?: string        // "12 month minimum" or "990 years remaining"
+    serviceCharge?: string      // "£150/month"
+    groundRent?: string         // "£250/year"
+  }
 }
 
 export interface FAQItem {
@@ -160,6 +195,7 @@ export interface BusinessInfo {
     phone?: string
     email?: string
     website?: string
+    whatsapp?: string
   }
   social?: SocialLinks
   image?: string

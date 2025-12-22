@@ -46,7 +46,9 @@ import { CSS } from '@dnd-kit/utilities'
 import { DevicePreview, DemoModeOverlay } from '@/components/slyde-demo'
 import { HomeSlydeScreen } from '@/components/home-slyde/HomeSlydeScreen'
 import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
+import { SlydeCover } from '@/components/slyde-demo/SlydeCover'
 import type { FrameData, FAQItem, BusinessInfo, CTAIconType, CTAType, ListItem, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
+import type { LocationData } from '@slydes/types'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { useOrganization, useSocialFollowers, useSlydes, useHomeSlyde, useCategoryFrames, type HomeSlydeCategory, type BackgroundType, type HomeSlyde } from '@/hooks'
 import type { HomeSlydeData } from '@/components/home-slyde/data/highlandMotorsData'
@@ -115,6 +117,8 @@ import { InventoryGridView } from '@/components/home-slyde/InventoryGridView'
 import type { InventoryItem } from '@/components/home-slyde/data/highlandMotorsData'
 import { useFAQs } from '@/hooks/useFAQs'
 import { useHomeFAQs } from '@/hooks/useHomeFAQs'
+import { FeaturesSection } from '@/components/inspector/FeaturesSection'
+import { PropertySection } from '@/components/inspector/PropertySection'
 
 // HQ design tokens
 const HQ_PRIMARY_GRADIENT = 'bg-gradient-to-r from-blue-600 to-cyan-500'
@@ -204,9 +208,13 @@ function SortableSectionRow({
   startEditing,
   deleteCategory,
   toggleCategory,
+  selection,
   setSelection,
+  expandedCategories,
+  setExpandedCategories,
   loadCategoryFrames,
   setPreviewFrameIndex,
+  setPreviewMode,
   sizes,
   children,
   shouldPulse,
@@ -225,9 +233,13 @@ function SortableSectionRow({
   startEditing: (id: string, value: string) => void
   deleteCategory: (id: string) => void
   toggleCategory: (id: string) => void
+  selection: Selection
   setSelection: (s: Selection) => void
+  expandedCategories: Set<string>
+  setExpandedCategories: React.Dispatch<React.SetStateAction<Set<string>>>
   loadCategoryFrames: (id: string) => void
   setPreviewFrameIndex: (i: number) => void
+  setPreviewMode: (m: 'home' | 'cover' | 'category' | 'list' | 'item') => void
   sizes: SizeClasses
   children?: React.ReactNode
   shouldPulse?: boolean
@@ -252,10 +264,21 @@ function SortableSectionRow({
       {/* Section Row - click to expand/select, hold+drag to reorder, double click name to rename */}
       <div
         onClick={() => {
-          toggleCategory(cat.id)
-          setSelection({ type: 'category', categoryId: cat.id })
-          loadCategoryFrames(cat.id)
-          setPreviewFrameIndex(0)
+          const wasSelected = selection.type === 'category' && selection.categoryId === cat.id
+          if (wasSelected) {
+            // Already selected - toggle collapse
+            toggleCategory(cat.id)
+          } else {
+            // Not selected - select it, ensure expanded, show Cover
+            setSelection({ type: 'category', categoryId: cat.id })
+            setPreviewMode('cover') // Show Cover when selecting a Slyde
+            loadCategoryFrames(cat.id)
+            setPreviewFrameIndex(0)
+            // Ensure expanded when selecting
+            if (!expandedCategories.has(cat.id)) {
+              setExpandedCategories(prev => new Set([...prev, cat.id]))
+            }
+          }
         }}
         className={`group w-full flex items-center gap-2 ${sizes.padding} rounded-xl text-left transition-all cursor-pointer ${
           isSelected
@@ -817,7 +840,7 @@ export function UnifiedStudioEditor() {
   // - 'list' = show InventoryGridView
   // - 'item' = show item frames
   // =============================================
-  const [previewMode, setPreviewMode] = useState<'home' | 'category' | 'list' | 'item'>('home')
+  const [previewMode, setPreviewMode] = useState<'home' | 'cover' | 'category' | 'list' | 'item'>('home')
 
   // =============================================
   // PREVIEW FRAME INDEX (syncs with selected frame)
@@ -850,6 +873,9 @@ export function UnifiedStudioEditor() {
     faqs: false,
     homeFaqs: false,
     demoVideo: false,
+    contactDetails: false,
+    features: false,
+    property: false,
   })
 
   // Track which onboarding sections have been visited (opened at least once)
@@ -863,9 +889,13 @@ export function UnifiedStudioEditor() {
   // =============================================
   // Principle: Always pulse the next action. If user wanders off, recalculate and guide them back.
   // This teaches them the pattern once - after that, they're on their own.
+  // NOTE: Temporarily disabled - re-enable when onboarding is refined
 
   // Compute which element should pulse based on current state
   const getOnboardingPulseTarget = (): string | null => {
+    // Disabled for now - pulses were getting in the way during development
+    return null
+
     // PHASE 1: Home screen setup (only when viewing home)
     if (selection.type === 'home') {
       // Step 1: Business Info - need brand name
@@ -900,14 +930,12 @@ export function UnifiedStudioEditor() {
 
       // Step 4b: Section exists but is incomplete - pulse it to hint "click me"
       // Incomplete = no frames OR has frames without title
-      const firstIncompleteSection = categories.find(cat => {
+      for (const cat of categories) {
         const frames = childFrames[cat.id] || []
-        if (frames.length === 0) return true
-        // Check if any frame is incomplete (just needs title)
-        return frames.some(f => !f.title?.trim())
-      })
-      if (firstIncompleteSection) {
-        return `section-${firstIncompleteSection.id}`
+        const isIncomplete = frames.length === 0 || frames.some((f: FrameData) => !f.title?.trim())
+        if (isIncomplete) {
+          return `section-${cat.id}`
+        }
       }
     }
 
@@ -916,45 +944,49 @@ export function UnifiedStudioEditor() {
       const cat = categories.find(c => c.id === selection.categoryId)
 
       // Step 6: Name the section (if still default name)
-      if (cat && cat.name.startsWith('New Slyde')) {
+      if (cat?.name.startsWith('New Slyde')) {
         return 'category-name-input'
       }
 
       // Step 7: Add subtitle (if empty)
-      if (cat && !cat.description?.trim()) {
+      if (cat && !cat?.description?.trim()) {
         return 'category-subtitle-input'
       }
 
       // Step 8: Add frame (if none exist)
-      const selectedCatFrames = childFrames[selection.categoryId] || []
+      const catId = selection.categoryId!
+      const selectedCatFrames: FrameData[] = childFrames[catId] || []
       if (selectedCatFrames.length === 0) {
         return 'add-frame'
       }
 
       // Step 9: Frame exists - pulse it to hint "click me to edit"
-      const firstIncompleteFrame = selectedCatFrames.find(f => !f.title?.trim())
-      if (firstIncompleteFrame) {
-        return `frame-${firstIncompleteFrame.id}`
+      for (const frame of selectedCatFrames) {
+        if (!frame.title?.trim()) {
+          return `frame-${frame.id}`
+        }
       }
     }
 
     // PHASE 3: Frame editing - guide through content (title only, background optional)
     if (selection.type === 'categoryFrame' && selection.categoryId && selection.categoryFrameId) {
-      const catFramesForSelection = childFrames[selection.categoryId] || []
-      const selectedFrame = catFramesForSelection.find(f => f.id === selection.categoryFrameId)
-      if (selectedFrame) {
-        // Just need title - background is optional to reduce friction
-        if (!selectedFrame.title || selectedFrame.title.trim() === '') {
-          return inspectorSections.content ? 'frame-content-title-input' : 'frame-content-section'
-        }
+      const catFramesForSelection: FrameData[] = childFrames[selection.categoryId!] || []
+      const selectedFrame = catFramesForSelection.find((f: FrameData) => f.id === selection.categoryFrameId)
+      // Just need title - background is optional to reduce friction
+      if (selectedFrame && (!selectedFrame?.title || selectedFrame?.title?.trim() === '')) {
+        return inspectorSections.content ? 'frame-content-title-input' : 'frame-content-section'
       }
     }
 
     // PHASE 4: Guide user back to Home to see demo preview
-    const hasCompleteFrame = categories.some(cat => {
-      const frames = childFrames[cat.id] || []
-      return frames.some(f => f.title?.trim())
-    })
+    let hasCompleteFrame = false
+    for (const cat of categories) {
+      const frames: FrameData[] = childFrames[cat.id] || []
+      if (frames.some((f: FrameData) => f.title?.trim())) {
+        hasCompleteFrame = true
+        break
+      }
+    }
 
     if (hasCompleteFrame && !onboardingVisited.demoPreview && selection.type !== 'home') {
       return 'nav-home'
@@ -1152,6 +1184,19 @@ export function UnifiedStudioEditor() {
     const slydeNumber = categories.length + 1
     const newName = `New Slyde ${slydeNumber}`
 
+    // Optimistic update - add placeholder immediately
+    const tempId = `temp-${Date.now()}`
+    const newCategory: HomeSlydeCategory = {
+      id: tempId,
+      childSlydeId: tempId,
+      icon: 'sparkles',
+      name: newName,
+      description: '',
+      hasInventory: false,
+    }
+    setCategories(prev => [...prev, newCategory])
+    setExpandedSections(prev => ({ ...prev, categories: true }))
+
     try {
       const newPublicId = await addHomeSlydeCategory({
         icon: 'sparkles',
@@ -1159,14 +1204,24 @@ export function UnifiedStudioEditor() {
         description: '',
         hasInventory: false,
       })
-      setExpandedSections(prev => ({ ...prev, categories: true }))
-      // Categories will update from hook's refetch
+      // Replace temp with real ID
+      setCategories(prev =>
+        prev.map(c => c.id === tempId
+          ? { ...c, id: newPublicId, childSlydeId: newPublicId }
+          : c
+        )
+      )
     } catch (err) {
       console.error('Failed to add category:', err)
+      // Revert optimistic update on error
+      setCategories(prev => prev.filter(c => c.id !== tempId))
     }
   }, [categories.length, addHomeSlydeCategory])
 
   const updateCategory = useCallback(async (id: string, updates: Partial<HomeSlydeCategory>) => {
+    // Save old state for rollback
+    const oldCategory = categories.find(c => c.id === id)
+
     // Optimistic update for local state
     setCategories(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c))
 
@@ -1174,9 +1229,12 @@ export function UnifiedStudioEditor() {
       await updateHomeSlydeCategory(id, updates)
     } catch (err) {
       console.error('Failed to update category:', err)
-      // Revert on error - refetch will fix state
+      // Rollback: restore old category
+      if (oldCategory) {
+        setCategories(prev => prev.map(c => c.id === id ? oldCategory : c))
+      }
     }
-  }, [updateHomeSlydeCategory])
+  }, [updateHomeSlydeCategory, categories])
 
   const deleteCategory = useCallback(async (id: string) => {
     // Optimistic update for UI
@@ -1470,8 +1528,19 @@ export function UnifiedStudioEditor() {
     credentials: [],
     about,
     highlights: [],
-    contact: { phone },
+    contact: {
+      phone: selectedCategory?.contactPhone || phone || undefined,
+      email: selectedCategory?.contactEmail || undefined,
+      whatsapp: selectedCategory?.contactWhatsapp || undefined,
+    },
     accentColor: brandProfile.primaryColor,
+  }
+
+  // Location data - per-slyde (falls back to org-level address)
+  const locationData: LocationData = {
+    address: selectedCategory?.locationAddress || address || undefined,
+    lat: selectedCategory?.locationLat,
+    lng: selectedCategory?.locationLng,
   }
 
   const totalItems = lists.reduce((acc, l) => acc + l.items.length, 0)
@@ -1609,7 +1678,7 @@ export function UnifiedStudioEditor() {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              {/* Demo Mode Button */}
+              {/* Preview Mode Button */}
               <button
                 onClick={() => setShowDemoMode(true)}
                 className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all bg-gray-50 border-gray-200 hover:bg-gray-100 dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10"
@@ -1618,7 +1687,7 @@ export function UnifiedStudioEditor() {
                   <Play className="w-3 h-3 ml-0.5" />
                 </div>
                 <span className="text-sm font-medium text-gray-600 dark:text-white/70 group-hover:text-gray-900 dark:group-hover:text-white">
-                  Demo
+                  Preview
                 </span>
               </button>
 
@@ -1781,9 +1850,13 @@ export function UnifiedStudioEditor() {
                                 startEditing={startEditing}
                                 deleteCategory={deleteCategory}
                                 toggleCategory={toggleCategory}
+                                selection={selection}
                                 setSelection={setSelection}
+                                expandedCategories={expandedCategories}
+                                setExpandedCategories={setExpandedCategories}
                                 loadCategoryFrames={loadCategoryFrames}
                                 setPreviewFrameIndex={setPreviewFrameIndex}
+                                setPreviewMode={setPreviewMode}
                                 sizes={sizes}
                                 shouldPulse={onboardingPulseTarget === `section-${cat.id}`}
                               >
@@ -1991,7 +2064,8 @@ export function UnifiedStudioEditor() {
                           {categories.length < 6 && (
                             <button
                               onClick={addCategory}
-                              className={`w-full flex items-center justify-center gap-1.5 ${sizes.padding} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors ${onboardingPulseTarget === 'add-section' ? 'animate-pulse-hint' : ''}`}
+                              disabled={orgLoading || !organization}
+                              className={`w-full flex items-center justify-center gap-1.5 ${sizes.padding} rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30 hover:border-blue-300 dark:hover:border-cyan-500/30 hover:text-blue-500 dark:hover:text-cyan-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${onboardingPulseTarget === 'add-section' ? 'animate-pulse-hint' : ''}`}
                             >
                               <Plus className={sizes.icon} />
                               <span className={`${sizes.textSmall} font-medium`}>Add Slyde</span>
@@ -2077,8 +2151,8 @@ export function UnifiedStudioEditor() {
                 }}
               >
                 <DevicePreview enableTilt={false}>
-                  {/* Home Preview - shown when previewMode is 'home' OR when editing a section (sections are metadata, view in Home context) */}
-                  {(previewMode === 'home' || selection.type === 'category') && (
+                  {/* Home Preview - shown when previewMode is 'home' */}
+                  {previewMode === 'home' && (
                     <HomeSlydeScreen
                       data={previewData}
                       backgroundType={backgroundType}
@@ -2087,11 +2161,53 @@ export function UnifiedStudioEditor() {
                       videoVignette={videoVignette}
                       videoSpeed={videoSpeed}
                       onCategoryTap={(categoryId) => {
-                        // Tapping a category in preview = select it for editing (but stay on Home preview)
+                        // Tapping a category in preview = show its Cover
                         setExpandedCategories(prev => new Set([...prev, categoryId]))
                         setSelection({ type: 'category', categoryId })
+                        setPreviewMode('cover')
                         loadCategoryFrames(categoryId)
                       }}
+                    />
+                  )}
+
+                  {/* Cover Preview - shown when a Slyde/category is selected */}
+                  {previewMode === 'cover' && selectedCategory && (
+                    <SlydeCover
+                      name={selectedCategory.name}
+                      description={selectedCategory.description}
+                      backgroundType={selectedCategory.coverBackgroundType}
+                      videoSrc={selectedCategory.coverVideoStreamUid
+                        ? `https://customer-${process.env.NEXT_PUBLIC_CF_ACCOUNT_HASH}.cloudflarestream.com/${selectedCategory.coverVideoStreamUid}/manifest/video.m3u8`
+                        : undefined}
+                      imageSrc={selectedCategory.coverImageUrl}
+                      posterSrc={selectedCategory.coverPosterUrl}
+                      videoFilter={selectedCategory.coverVideoFilter}
+                      videoVignette={selectedCategory.coverVideoVignette}
+                      videoSpeed={selectedCategory.coverVideoSpeed}
+                      locationData={selectedCategory.locationAddress ? {
+                        address: selectedCategory.locationAddress,
+                        lat: selectedCategory.locationLat,
+                        lng: selectedCategory.locationLng,
+                      } : undefined}
+                      business={businessInfo}
+                      socialLinks={socialLinks}
+                      faqs={categoryFAQs}
+                      accentColor={brandProfile.primaryColor}
+                      onExplore={() => {
+                        // Swipe up on Cover = enter frames mode
+                        setPreviewMode('category')
+                        // Select first frame if exists
+                        const firstFrame = selectedCategoryFrames[0]
+                        if (firstFrame) {
+                          setSelection({ type: 'categoryFrame', categoryId: selection.categoryId, categoryFrameId: firstFrame.id })
+                        }
+                      }}
+                      onBack={() => {
+                        // Back from Cover = return to Home
+                        setPreviewMode('home')
+                        setSelection({ type: 'home' })
+                      }}
+                      showBack={true}
                     />
                   )}
 
@@ -2107,8 +2223,9 @@ export function UnifiedStudioEditor() {
                         onFrameChange={setPreviewFrameIndex}
                         autoAdvance={false}
                         onBack={() => {
-                          setPreviewMode('home')
-                          setSelection({ type: 'home' })
+                          // Back from frames = return to Cover
+                          setPreviewMode('cover')
+                          setSelection({ type: 'category', categoryId: selection.categoryId })
                         }}
                         onListView={(frame) => {
                           // When "View All" CTA is clicked, select the list
@@ -2129,8 +2246,8 @@ export function UnifiedStudioEditor() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
-                            setPreviewMode('home')
-                            setSelection({ type: 'home' })
+                            setPreviewMode('cover')
+                            setSelection({ type: 'category', categoryId: selection.categoryId })
                           }}
                           className="absolute top-4 left-4 z-50 flex items-center gap-1 text-white/80 hover:text-white transition-colors bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full"
                         >
@@ -2199,6 +2316,7 @@ export function UnifiedStudioEditor() {
                         audioEnabled={musicEnabled}
                         isMuted={isMusicMuted}
                         onMuteToggle={handleMusicToggle}
+                        locationData={locationData}
                       />
                     ) : (
                       <div className="relative w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white p-6">
@@ -2715,18 +2833,18 @@ export function UnifiedStudioEditor() {
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-1.5">Section Name</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-1.5">Slyde Name</label>
                       <input
                         type="text"
                         value={selectedCategory.name}
                         onChange={(e) => updateCategory(selectedCategory.id, { name: e.target.value })}
                         className={`w-full px-3 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${onboardingPulseTarget === 'category-name-input' ? 'animate-pulse-hint' : ''}`}
                       />
-                      <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">The main title shown in the sections drawer</p>
+                      <p className="text-[11px] text-gray-500 dark:text-white/40 mt-1">The main title shown in the slydes drawer</p>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-1.5">Section Subtitle</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-1.5">Slyde Subtitle</label>
                       <input
                         type="text"
                         value={selectedCategory.description || ''}
@@ -2761,6 +2879,131 @@ export function UnifiedStudioEditor() {
                         </div>
                       </div>
                     )}
+
+                    {/* Cover Background Section */}
+                    <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                      <button
+                        onClick={() => toggleInspectorSection('cover')}
+                        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Video className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                          <span className="text-[13px] font-semibold text-gray-900 dark:text-white">
+                            Cover Background
+                          </span>
+                          {(selectedCategory.coverVideoStreamUid || selectedCategory.coverImageUrl) && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400">
+                              Set
+                            </span>
+                          )}
+                        </div>
+                        <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.cover ? '' : '-rotate-90'}`} />
+                      </button>
+                      {inspectorSections.cover && (
+                        <div className="p-4 border-t border-gray-200 dark:border-white/10">
+                          <p className="text-[11px] text-gray-500 dark:text-white/40 mb-3">
+                            The landing page shown when users tap this Slyde
+                          </p>
+                          <BackgroundMediaInput
+                            context="frame"
+                            backgroundType={selectedCategory.coverBackgroundType || 'video'}
+                            onBackgroundTypeChange={(type) => updateCategory(selectedCategory.id, { coverBackgroundType: type })}
+                            videoSrc={selectedCategory.coverVideoStreamUid ? `https://customer-${process.env.NEXT_PUBLIC_CF_ACCOUNT_HASH}.cloudflarestream.com/${selectedCategory.coverVideoStreamUid}/manifest/video.m3u8` : ''}
+                            onVideoSrcChange={(src) => {
+                              // Extract stream UID from Cloudflare HLS URL
+                              const match = src.match(/cloudflarestream\.com\/([^/]+)\/manifest/)
+                              const streamUid = match ? match[1] : undefined
+                              updateCategory(selectedCategory.id, {
+                                coverBackgroundType: 'video',
+                                coverVideoStreamUid: streamUid,
+                                coverImageUrl: undefined,
+                              })
+                            }}
+                            imageSrc={selectedCategory.coverBackgroundType === 'image' ? (selectedCategory.coverImageUrl || '') : ''}
+                            onImageSrcChange={(src) => updateCategory(selectedCategory.id, {
+                              coverBackgroundType: 'image',
+                              coverImageUrl: src,
+                              coverVideoStreamUid: undefined,
+                            })}
+                            filter={selectedCategory.coverVideoFilter || 'original'}
+                            onFilterChange={(filter) => updateCategory(selectedCategory.id, { coverVideoFilter: filter })}
+                            vignette={selectedCategory.coverVideoVignette || false}
+                            onVignetteChange={(vignette) => updateCategory(selectedCategory.id, { coverVideoVignette: vignette })}
+                            speed={selectedCategory.coverVideoSpeed || 'normal'}
+                            onSpeedChange={(speed) => updateCategory(selectedCategory.id, { coverVideoSpeed: speed })}
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Contact Section */}
+                    <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                      <button
+                        onClick={() => toggleInspectorSection('contact')}
+                        className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Phone className="w-4 h-4 text-gray-500 dark:text-white/50" />
+                          <span className="text-[13px] font-semibold text-gray-900 dark:text-white">
+                            Contact Details
+                          </span>
+                          {(selectedCategory.contactPhone || selectedCategory.contactEmail || selectedCategory.contactWhatsapp) && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400">
+                              Set
+                            </span>
+                          )}
+                        </div>
+                        <ChevronDown className={`w-4 h-4 text-gray-400 dark:text-white/40 transition-transform ${inspectorSections.contact ? '' : '-rotate-90'}`} />
+                      </button>
+                      {inspectorSections.contact && (
+                        <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
+                          <p className="text-[11px] text-gray-500 dark:text-white/40">
+                            Shown in the Info sheet for this Slyde
+                          </p>
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1">Phone</label>
+                            <input
+                              type="tel"
+                              value={selectedCategory.contactPhone || ''}
+                              onChange={(e) => updateCategory(selectedCategory.id, { contactPhone: e.target.value })}
+                              placeholder="+44 1234 567890"
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1">Email</label>
+                            <input
+                              type="email"
+                              value={selectedCategory.contactEmail || ''}
+                              onChange={(e) => updateCategory(selectedCategory.id, { contactEmail: e.target.value })}
+                              placeholder="hello@example.com"
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[11px] font-medium text-gray-600 dark:text-white/60 mb-1">WhatsApp</label>
+                            <input
+                              type="tel"
+                              value={selectedCategory.contactWhatsapp || ''}
+                              onChange={(e) => updateCategory(selectedCategory.id, { contactWhatsapp: e.target.value })}
+                              placeholder="+44 7123 456789"
+                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                            />
+                            <p className="text-[10px] text-gray-400 dark:text-white/30 mt-1">
+                              Include country code for WhatsApp links
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Location Section */}
+                    <FeaturesSection
+                      isExpanded={inspectorSections.features}
+                      onToggle={() => toggleInspectorSection('features')}
+                      locationAddress={selectedCategory.locationAddress}
+                      onLocationAddressChange={(address) => updateCategory(selectedCategory.id, { locationAddress: address })}
+                    />
 
                     {/* FAQs Section */}
                     <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
@@ -3182,99 +3425,27 @@ export function UnifiedStudioEditor() {
                     )}
                   </div>
 
-                  {/* Demo Video Section */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
-                    <button
-                      onClick={() => toggleInspectorSection('demoVideo')}
-                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
-                    >
-                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                        <Clapperboard className="w-4 h-4 text-gray-500 dark:text-white/50" />
-                        Demo Video
-                      </span>
-                      <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${inspectorSections.demoVideo ? '' : '-rotate-90'}`} />
-                    </button>
-                    {inspectorSections.demoVideo && (
-                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
-                        <p className="text-[12px] text-gray-500 dark:text-white/50">
-                          Add a full-length demo video. Users tap the 🎬 button to watch.
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600 dark:text-white/60">Enable demo video</span>
-                          <Toggle
-                            enabled={!!selectedCategoryFrame.demoVideoUrl}
-                            onChange={(enabled) => {
-                              if (enabled) {
-                                updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { demoVideoUrl: '' })
-                              } else {
-                                updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { demoVideoUrl: undefined })
-                              }
-                            }}
-                          />
-                        </div>
-                        {selectedCategoryFrame.demoVideoUrl !== undefined && (
-                          <div>
-                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Video URL</label>
-                            <input
-                              type="url"
-                              value={selectedCategoryFrame.demoVideoUrl || ''}
-                              onChange={(e) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { demoVideoUrl: e.target.value })}
-                              placeholder="https://youtube.com/watch?v=... or Vimeo URL"
-                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                            />
-                            <p className="mt-1.5 text-[11px] text-gray-400 dark:text-white/40">
-                              YouTube, Vimeo, or direct video URL (mp4, webm)
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                  {/* Property Section - Only shows when org vertical is 'property' */}
+                  {organization?.vertical === 'property' && (
+                    <PropertySection
+                      isExpanded={inspectorSections.property}
+                      onToggle={() => toggleInspectorSection('property')}
+                      property={selectedCategoryFrame.property}
+                      onPropertyChange={(property) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { property })}
+                    />
+                  )}
 
-                  {/* Style Section */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
-                    <button
-                      onClick={() => toggleInspectorSection('style')}
-                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
-                    >
-                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                        <Palette className="w-4 h-4 text-gray-500 dark:text-white/50" />
-                        Style
-                      </span>
-                      <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${inspectorSections.style ? '' : '-rotate-90'}`} />
-                    </button>
-                    {inspectorSections.style && (
-                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Accent Color</label>
-                          <div className="grid grid-cols-6 gap-2">
-                            {['#2563EB', '#06B6D4', '#0F172A', '#059669', '#475569', '#1D4ED8'].map((color) => (
-                              <button
-                                key={color}
-                                onClick={() => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, { accentColor: color })}
-                                className={`w-full aspect-square rounded-lg ${
-                                  selectedCategoryFrame.accentColor === color ? 'ring-2 ring-offset-2 ring-gray-900 dark:ring-white dark:ring-offset-[#2c2c2e]' : ''
-                                }`}
-                                style={{ backgroundColor: color }}
-                              />
-                            ))}
-                          </div>
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-2">Used for buttons and highlights on this frame</p>
-                        </div>
-                        <div className="pt-3 border-t border-gray-200 dark:border-white/10">
-                          <button
-                            onClick={() => deleteCategoryFrame(selection.categoryId!, selectedCategoryFrame.id)}
-                            disabled={selectedCategoryFrames.length <= 1}
-                            className="w-full py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            Delete This Frame
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  {/* Delete Frame Button */}
+                  <button
+                    onClick={() => deleteCategoryFrame(selection.categoryId!, selectedCategoryFrame.id)}
+                    disabled={selectedCategoryFrames.length <= 1}
+                    className="w-full py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl border border-red-200 dark:border-red-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Delete This Frame
+                  </button>
 
-                  {/* Inventory Section - Advanced feature, collapsed by default */}
+                  {/* List Section - Only shows when Lists feature is enabled */}
+                  {organization?.features_enabled?.lists && (
                   <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
                     <button
                       onClick={() => toggleInspectorSection('inventory')}
@@ -3282,7 +3453,7 @@ export function UnifiedStudioEditor() {
                     >
                       <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         <List className="w-4 h-4 text-gray-500 dark:text-white/50" />
-                        Inventory
+                        List
                       </span>
                       <div className="flex items-center gap-2">
                         {selectedCategoryFrame.listId && (
@@ -3465,6 +3636,7 @@ export function UnifiedStudioEditor() {
                       </div>
                     )}
                   </div>
+                  )}
                 </div>
               )}
 
@@ -3945,97 +4117,14 @@ export function UnifiedStudioEditor() {
                     )}
                   </div>
 
-                  {/* Demo Video Section */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
-                    <button
-                      onClick={() => toggleInspectorSection('demoVideo')}
-                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
-                    >
-                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                        <Clapperboard className="w-4 h-4 text-gray-500 dark:text-white/50" />
-                        Demo Video
-                      </span>
-                      <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${inspectorSections.demoVideo ? '' : '-rotate-90'}`} />
-                    </button>
-                    {inspectorSections.demoVideo && (
-                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
-                        <p className="text-[12px] text-gray-500 dark:text-white/50">
-                          Add a full-length demo video. Users tap the 🎬 button to watch.
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600 dark:text-white/60">Enable demo video</span>
-                          <Toggle
-                            enabled={!!selectedItemFrame.demoVideoUrl}
-                            onChange={(enabled) => {
-                              if (enabled) {
-                                updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { demoVideoUrl: '' })
-                              } else {
-                                updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { demoVideoUrl: undefined })
-                              }
-                            }}
-                          />
-                        </div>
-                        {selectedItemFrame.demoVideoUrl !== undefined && (
-                          <div>
-                            <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Video URL</label>
-                            <input
-                              type="url"
-                              value={selectedItemFrame.demoVideoUrl || ''}
-                              onChange={(e) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { demoVideoUrl: e.target.value })}
-                              placeholder="https://youtube.com/watch?v=... or Vimeo URL"
-                              className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                            />
-                            <p className="mt-1.5 text-[11px] text-gray-400 dark:text-white/40">
-                              YouTube, Vimeo, or direct video URL (mp4, webm)
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Style Section */}
-                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
-                    <button
-                      onClick={() => toggleInspectorSection('style')}
-                      className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
-                    >
-                      <span className="text-[13px] font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                        <Palette className="w-4 h-4 text-gray-500 dark:text-white/50" />
-                        Style
-                      </span>
-                      <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${inspectorSections.style ? '' : '-rotate-90'}`} />
-                    </button>
-                    {inspectorSections.style && (
-                      <div className="p-4 space-y-3 border-t border-gray-200 dark:border-white/10">
-                        <div>
-                          <label className="block text-[13px] font-medium text-gray-700 dark:text-white/70 mb-1.5">Accent Color</label>
-                          <div className="grid grid-cols-6 gap-2">
-                            {['#2563EB', '#06B6D4', '#0F172A', '#059669', '#475569', '#1D4ED8'].map((color) => (
-                              <button
-                                key={color}
-                                onClick={() => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, { accentColor: color })}
-                                className={`w-full aspect-square rounded-lg ${
-                                  selectedItemFrame.accentColor === color ? 'ring-2 ring-offset-2 ring-gray-900 dark:ring-white dark:ring-offset-[#2c2c2e]' : ''
-                                }`}
-                                style={{ backgroundColor: color }}
-                              />
-                            ))}
-                          </div>
-                          <p className="text-[11px] text-gray-500 dark:text-white/40 mt-2">Used for buttons and highlights on this frame</p>
-                        </div>
-                        <div className="pt-3 border-t border-gray-200 dark:border-white/10">
-                          <button
-                            onClick={() => deleteItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id)}
-                            disabled={(selectedItem.frames?.length ?? 0) <= 1}
-                            className="w-full py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            Delete This Frame
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  {/* Delete Frame Button */}
+                  <button
+                    onClick={() => deleteItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id)}
+                    disabled={(selectedItem.frames?.length ?? 0) <= 1}
+                    className="w-full py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl border border-red-200 dark:border-red-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Delete This Frame
+                  </button>
                 </div>
               )}
 
