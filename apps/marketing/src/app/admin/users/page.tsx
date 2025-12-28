@@ -145,13 +145,13 @@ export default function UsersPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Users</h1>
-          <p className="text-[#98989d]">All Supabase auth users and their status</p>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Users</h1>
+          <p className="text-gray-500 dark:text-[#98989d]">All Supabase auth users and their status</p>
         </div>
         <button
           onClick={fetchUsers}
           disabled={isRefreshing}
-          className="px-4 py-2 text-sm font-medium bg-[#3a3a3c] text-white border border-white/10 rounded-lg hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
+          className="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-[#3a3a3c] text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
         >
           <svg
             className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
@@ -178,32 +178,31 @@ export default function UsersPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-5">
-          <p className="text-[#98989d] text-sm mb-1">Total Users</p>
-          <p className="text-3xl font-bold text-white">{stats.total}</p>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-5">
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Users</p>
+          <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
         </div>
-        <div className="bg-[#2c2c2e] rounded-xl border border-green-500/30 p-5">
-          <p className="text-[#98989d] text-sm mb-1">Onboarded</p>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-green-500/30 p-5">
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Onboarded</p>
           <p className="text-3xl font-bold text-green-400">{stats.onboarded}</p>
         </div>
-        <div className="bg-[#2c2c2e] rounded-xl border border-amber-500/30 p-5">
-          <p className="text-[#98989d] text-sm mb-1">Pending Onboarding</p>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-amber-500/30 p-5">
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Pending Onboarding</p>
           <p className="text-3xl font-bold text-amber-400">{stats.pending}</p>
         </div>
-        <div className="bg-[#2c2c2e] rounded-xl border border-blue-500/30 p-5">
-          <p className="text-[#98989d] text-sm mb-1">Email Confirmed</p>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-blue-500/30 p-5">
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Email Confirmed</p>
           <p className="text-3xl font-bold text-blue-400">{stats.confirmedEmail}</p>
         </div>
       </div>
 
       {/* User List */}
-      <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-6">
+      <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-semibold text-white">User List</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">User List</h2>
             <InfoIcon
               tooltip="Search by email, name, or company. Click actions to manage users."
-              light
             />
           </div>
 
@@ -211,7 +210,7 @@ export default function UsersPage() {
             {/* Search */}
             <div className="relative">
               <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#636366]"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-[#636366]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -228,7 +227,7 @@ export default function UsersPage() {
                 placeholder="Search email, name, company..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 bg-[#3a3a3c] border border-white/10 rounded-lg text-white placeholder-[#636366] text-sm w-72 focus:outline-none focus:border-white/20"
+                className="pl-10 pr-4 py-2 bg-gray-100 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-[#636366] text-sm w-72 focus:outline-none focus:border-gray-300 dark:focus:border-white/20"
               />
             </div>
 
@@ -244,8 +243,8 @@ export default function UsersPage() {
                         ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                         : f === 'pending'
                         ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                        : 'bg-white/10 text-white border border-white/20'
-                      : 'text-[#636366] hover:text-white hover:bg-[#3a3a3c]'
+                        : 'bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white border border-gray-300 dark:border-white/20'
+                      : 'text-gray-400 dark:text-[#636366] hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-[#3a3a3c]'
                   }`}
                 >
                   {f === 'all' ? `All (${stats.total})` : f === 'onboarded' ? `Onboarded (${stats.onboarded})` : `Pending (${stats.pending})`}
@@ -260,18 +259,18 @@ export default function UsersPage() {
           {filteredUsers.map((user) => (
             <div
               key={user.id}
-              className="flex items-center justify-between py-3 px-4 bg-[#3a3a3c]/50 rounded-lg hover:bg-[#3a3a3c] transition-colors"
+              className="flex items-center justify-between py-3 px-4 bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg hover:bg-gray-200 dark:hover:bg-[#3a3a3c] transition-colors"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm text-white font-medium truncate">{user.email}</p>
+                  <p className="text-sm text-gray-900 dark:text-white font-medium truncate">{user.email}</p>
                   {!user.email_confirmed && (
                     <span className="text-[10px] px-1.5 py-0.5 bg-amber-500/20 text-amber-400 rounded">
                       unverified
                     </span>
                   )}
                 </div>
-                <div className="flex items-center gap-3 text-xs text-[#636366] mt-0.5">
+                <div className="flex items-center gap-3 text-xs text-gray-400 dark:text-[#636366] mt-0.5">
                   {user.full_name && <span>{user.full_name}</span>}
                   {user.company_name && <span>• {user.company_name}</span>}
                   <span>• Joined {timeAgo(user.created_at)}</span>
@@ -298,7 +297,7 @@ export default function UsersPage() {
                   }}
                   onClick={() => handleOpenDropdown(user.id)}
                   disabled={actionLoading === user.id}
-                  className="p-2 text-[#636366] hover:text-white hover:bg-[#48484a] rounded-lg transition-colors disabled:opacity-50"
+                  className="p-2 text-gray-400 dark:text-[#636366] hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-[#48484a] rounded-lg transition-colors disabled:opacity-50"
                 >
                   {actionLoading === user.id ? (
                     <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -316,7 +315,7 @@ export default function UsersPage() {
           ))}
 
           {filteredUsers.length === 0 && (
-            <p className="text-[#636366] text-sm py-8 text-center">
+            <p className="text-gray-400 dark:text-[#636366] text-sm py-8 text-center">
               {searchQuery ? 'No users match your search' : 'No users yet'}
             </p>
           )}
@@ -324,8 +323,8 @@ export default function UsersPage() {
 
         {/* Footer */}
         {filteredUsers.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-white/10">
-            <p className="text-sm text-[#636366]">
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10">
+            <p className="text-sm text-gray-500 dark:text-[#636366]">
               Showing {filteredUsers.length} of {users.length} users
             </p>
           </div>
@@ -343,7 +342,7 @@ export default function UsersPage() {
             }}
           />
           <div
-            className="fixed w-48 bg-[#3a3a3c] border border-white/10 rounded-lg shadow-xl z-50"
+            className="fixed w-48 bg-gray-100 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10 rounded-lg shadow-xl z-50"
             style={{ top: dropdownPos.top, right: dropdownPos.right }}
           >
             {users.find(u => u.id === openDropdown)?.onboarding_completed ? (
@@ -354,7 +353,7 @@ export default function UsersPage() {
                   setDropdownPos(null)
                   handleAction(userId, 'reset_onboarding')
                 }}
-                className="w-full px-4 py-2.5 text-left text-sm text-amber-400 hover:bg-[#48484a] rounded-t-lg transition-colors"
+                className="w-full px-4 py-2.5 text-left text-sm text-amber-400 hover:bg-gray-200 dark:hover:bg-[#48484a] rounded-t-lg transition-colors"
               >
                 Reset Onboarding
               </button>
@@ -366,7 +365,7 @@ export default function UsersPage() {
                   setDropdownPos(null)
                   handleAction(userId, 'complete_onboarding')
                 }}
-                className="w-full px-4 py-2.5 text-left text-sm text-green-400 hover:bg-[#48484a] rounded-t-lg transition-colors"
+                className="w-full px-4 py-2.5 text-left text-sm text-green-400 hover:bg-gray-200 dark:hover:bg-[#48484a] rounded-t-lg transition-colors"
               >
                 Mark Onboarded
               </button>
@@ -378,7 +377,7 @@ export default function UsersPage() {
                 setDropdownPos(null)
                 handleAction(userId, 'send_password_reset')
               }}
-              className="w-full px-4 py-2.5 text-left text-sm text-blue-400 hover:bg-[#48484a] transition-colors"
+              className="w-full px-4 py-2.5 text-left text-sm text-blue-400 hover:bg-gray-200 dark:hover:bg-[#48484a] transition-colors"
             >
               Send Password Reset
             </button>
@@ -391,7 +390,7 @@ export default function UsersPage() {
                   handleDelete(user.id, user.email)
                 }
               }}
-              className="w-full px-4 py-2.5 text-left text-sm text-red-400 hover:bg-[#48484a] rounded-b-lg transition-colors"
+              className="w-full px-4 py-2.5 text-left text-sm text-red-400 hover:bg-gray-200 dark:hover:bg-[#48484a] rounded-b-lg transition-colors"
             >
               Delete User
             </button>

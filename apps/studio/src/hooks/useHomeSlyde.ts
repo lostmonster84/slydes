@@ -33,6 +33,7 @@ export type HomeSlydeCategory = {
   coverVideoFilter?: VideoFilterPreset
   coverVideoVignette?: boolean
   coverVideoSpeed?: VideoSpeedPreset
+  coverKenBurns?: boolean
 
   // === LOCATION (Slyde-level) ===
   locationAddress?: string
@@ -55,6 +56,7 @@ export type HomeSlyde = {
   videoVignette?: boolean
   videoSpeed?: VideoSpeedPreset
   videoStartTime?: number
+  kenBurns?: boolean
 
   // Categories (child slydes)
   categories: HomeSlydeCategory[]

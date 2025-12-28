@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, User, Video, Globe, CreditCard, UserCog, Loader2, ToggleRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { APP_VERSION } from '@/lib/version'
 import { ProfileSettingsForm } from '@/components/settings/ProfileSettingsForm'
 import { MediaSettingsForm } from '@/components/settings/MediaSettingsForm'
 import { DomainSettingsForm } from '@/components/settings/DomainSettingsForm'
@@ -221,6 +222,13 @@ function SettingsPageContent() {
           {activeTab === 'account' && <AccountSettingsForm />}
         </div>
       </main>
+
+      {/* Version */}
+      <footer className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <p className="text-xs text-gray-400 dark:text-white/30">
+          Version {APP_VERSION}
+        </p>
+      </footer>
     </div>
   )
 }

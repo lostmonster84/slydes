@@ -6,22 +6,12 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 11.6s
+ ✓ Compiled successfully in 5.8s
    Skipping linting
    Checking validity of types ...
    Collecting page data ...
-[Error [PageNotFoundError]: Cannot find module for page: /api/admin/seed-music-library] {
+unhandledRejection [Error [PageNotFoundError]: Cannot find module for page: /_document] {
+  type: 'PageNotFoundError',
   code: 'ENOENT'
-}
-[Error [PageNotFoundError]: Cannot find module for page: /api/ai/context] {
-  code: 'ENOENT'
-}
-[Error [PageNotFoundError]: Cannot find module for page: /api/ai/chat] {
-  code: 'ENOENT'
-}
-
-> Build error occurred
-[Error: Failed to collect page data for /api/admin/seed-music-library] {
-  type: 'Error'
 }
  ELIFECYCLE  Command failed with exit code 1.

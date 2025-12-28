@@ -638,6 +638,7 @@ export function UnifiedStudioEditor() {
   const [imageSrc, setImageSrc] = useState(homeSlyde.imageSrc || '')
   const [videoFilter, setVideoFilter] = useState<VideoFilterPreset>(homeSlyde.videoFilter || 'original')
   const [videoVignette, setVideoVignette] = useState(homeSlyde.videoVignette ?? false)
+  const [kenBurns, setKenBurns] = useState(homeSlyde.kenBurns ?? false)
   const [videoSpeed, setVideoSpeed] = useState<VideoSpeedPreset>(homeSlyde.videoSpeed || 'normal')
   const [videoStartTime, setVideoStartTime] = useState(homeSlyde.videoStartTime || 0)
   const [posterSrc, setPosterSrc] = useState(homeSlyde.posterSrc || '')
@@ -2270,6 +2271,7 @@ export function UnifiedStudioEditor() {
                       videoFilter={videoFilter}
                       videoVignette={videoVignette}
                       videoSpeed={videoSpeed}
+                      kenBurns={kenBurns}
                       onCategoryTap={(categoryId) => {
                         // Tapping a category in preview = show its Cover
                         setExpandedCategories(prev => new Set([...prev, categoryId]))
@@ -2578,6 +2580,8 @@ export function UnifiedStudioEditor() {
                           onFilterChange={setVideoFilter}
                           vignette={videoVignette}
                           onVignetteChange={setVideoVignette}
+                          kenBurns={kenBurns}
+                          onKenBurnsChange={setKenBurns}
                           speed={videoSpeed}
                           onSpeedChange={setVideoSpeed}
                           startTime={videoStartTime}
@@ -3039,6 +3043,8 @@ export function UnifiedStudioEditor() {
                             onFilterChange={(filter) => updateCategory(selectedCategory.id, { coverVideoFilter: filter })}
                             vignette={selectedCategory.coverVideoVignette || false}
                             onVignetteChange={(vignette) => updateCategory(selectedCategory.id, { coverVideoVignette: vignette })}
+                            kenBurns={selectedCategory.coverKenBurns || false}
+                            onKenBurnsChange={(kenBurns) => updateCategory(selectedCategory.id, { coverKenBurns: kenBurns })}
                             speed={selectedCategory.coverVideoSpeed || 'normal'}
                             onSpeedChange={(speed) => updateCategory(selectedCategory.id, { coverVideoSpeed: speed })}
                           />
@@ -3327,6 +3333,10 @@ export function UnifiedStudioEditor() {
                           vignette={selectedCategoryFrame.background?.vignette || false}
                           onVignetteChange={(vignette) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
                             background: { ...selectedCategoryFrame.background, vignette }
+                          })}
+                          kenBurns={selectedCategoryFrame.background?.kenBurns || false}
+                          onKenBurnsChange={(kenBurns) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
+                            background: { ...selectedCategoryFrame.background, kenBurns }
                           })}
                           speed={selectedCategoryFrame.background?.speed || 'normal'}
                           onSpeedChange={(speed) => updateCategoryFrame(selection.categoryId!, selectedCategoryFrame.id, {
@@ -3982,6 +3992,10 @@ export function UnifiedStudioEditor() {
                           vignette={selectedItemFrame.background?.vignette || false}
                           onVignetteChange={(vignette) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, {
                             background: { ...selectedItemFrame.background, vignette }
+                          })}
+                          kenBurns={selectedItemFrame.background?.kenBurns || false}
+                          onKenBurnsChange={(kenBurns) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, {
+                            background: { ...selectedItemFrame.background, kenBurns }
                           })}
                           speed={selectedItemFrame.background?.speed || 'normal'}
                           onSpeedChange={(speed) => updateItemFrame(selectedList.id, selectedItem.id, selectedItemFrame.id, {

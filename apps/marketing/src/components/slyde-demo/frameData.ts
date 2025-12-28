@@ -79,6 +79,7 @@ export interface FrameData {
     src: string
     position?: string
     startTime?: number  // Video start time in seconds
+    kenBurns?: boolean  // Subtle zoom/pan animation for static images
   }
   accentColor: string
   // Frame-specific info content for the Info sheet

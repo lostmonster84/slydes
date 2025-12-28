@@ -24,14 +24,14 @@ export function IntegrationCard({
 }: IntegrationCardProps) {
   return (
     <div
-      className={`bg-[#2c2c2e] rounded-xl border p-5 ${
+      className={`bg-white dark:bg-[#2c2c2e] rounded-xl border p-5 ${
         status === 'error' && critical
-          ? 'border-red-500/30 bg-red-500/10'
+          ? 'border-red-300 dark:border-red-500/30 bg-red-50 dark:bg-red-500/10'
           : status === 'error'
-          ? 'border-red-500/30'
+          ? 'border-red-300 dark:border-red-500/30'
           : status === 'warning'
-          ? 'border-amber-500/30'
-          : 'border-white/10'
+          ? 'border-amber-300 dark:border-amber-500/30'
+          : 'border-gray-200 dark:border-white/10'
       }`}
     >
       <div className="flex items-start justify-between mb-3">
@@ -39,21 +39,21 @@ export function IntegrationCard({
           <div
             className={`w-10 h-10 rounded-lg flex items-center justify-center ${
               status === 'healthy'
-                ? 'bg-[#3a3a3c] text-[#98989d]'
+                ? 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d]'
                 : status === 'warning'
-                ? 'bg-amber-500/20 text-amber-400'
-                : 'bg-red-500/20 text-red-400'
+                ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400'
+                : 'bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400'
             }`}
           >
             {icon}
           </div>
           <div>
             <div className="flex items-center gap-1">
-              <h3 className="font-semibold text-white">{name}</h3>
-              {tooltip && <InfoIcon tooltip={tooltip} light />}
+              <h3 className="font-semibold text-gray-900 dark:text-white">{name}</h3>
+              {tooltip && <InfoIcon tooltip={tooltip} />}
             </div>
             {critical && (
-              <span className="text-xs text-[#636366] uppercase tracking-wide">Critical</span>
+              <span className="text-xs text-gray-400 dark:text-[#636366] uppercase tracking-wide">Critical</span>
             )}
           </div>
         </div>
@@ -61,12 +61,12 @@ export function IntegrationCard({
       </div>
 
       <div className="flex items-center justify-between">
-        <p className="text-sm text-[#98989d] truncate flex-1">{message}</p>
+        <p className="text-sm text-gray-500 dark:text-[#98989d] truncate flex-1">{message}</p>
         <StatusText status={status} />
       </div>
 
       {lastChecked && (
-        <p className="text-xs text-[#636366] mt-2">
+        <p className="text-xs text-gray-400 dark:text-[#636366] mt-2">
           Last checked: {new Date(lastChecked).toLocaleTimeString()}
         </p>
       )}

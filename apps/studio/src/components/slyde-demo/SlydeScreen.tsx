@@ -564,7 +564,9 @@ export function SlydeScreen({
                 <img
                   src={currentFrameData.background.src}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                  className={`absolute inset-0 w-full h-full object-cover pointer-events-none ${
+                    currentFrameData.background.kenBurns ? 'animate-ken-burns' : ''
+                  }`}
                   style={{
                     objectPosition: currentFrameData.background.position || 'center',
                   }}

@@ -120,8 +120,8 @@ export default function BusinessPage() {
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Business Metrics</h1>
-          <p className="text-[#98989d]">Users, organizations, content, and revenue</p>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Business Metrics</h1>
+          <p className="text-gray-500 dark:text-[#98989d]">Users, organizations, content, and revenue</p>
         </div>
         <div className="flex items-center gap-3">
           <PeriodSelector
@@ -136,7 +136,7 @@ export default function BusinessPage() {
           <button
             onClick={fetchMetrics}
             disabled={isRefreshing}
-            className="px-4 py-2 text-sm font-medium bg-[#3a3a3c] text-white border border-white/10 rounded-lg hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-[#3a3a3c] text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
           >
             <svg
               className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
@@ -163,7 +163,7 @@ export default function BusinessPage() {
             <MailIcon />
             Waitlist
           </h2>
-          <InfoIcon tooltip="People who signed up to be notified when Slydes launches. These are your warmest leads - reach out when ready." light />
+          <InfoIcon tooltip="People who signed up to be notified when Slydes launches. These are your warmest leads - reach out when ready." />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <MetricCard
@@ -190,21 +190,21 @@ export default function BusinessPage() {
 
         {/* Industry Breakdown */}
         {metrics?.waitlist.industryBreakdown && metrics.waitlist.industryBreakdown.length > 0 && (
-          <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-6">
+          <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6">
             <div className="flex items-center gap-2 mb-4">
-              <h3 className="text-sm font-medium text-[#98989d]">By Industry</h3>
-              <InfoIcon tooltip="Shows which industries are most interested in Slydes. Helps focus marketing and feature development." light />
+              <h3 className="text-sm font-medium text-gray-500 dark:text-[#98989d]">By Industry</h3>
+              <InfoIcon tooltip="Shows which industries are most interested in Slydes. Helps focus marketing and feature development." />
             </div>
             <div className="space-y-3">
               {metrics.waitlist.industryBreakdown.slice(0, 8).map((item) => (
                 <div key={item.industry}>
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="text-white">{getLabel(item.industry, INDUSTRY_LABELS)}</span>
-                    <span className="text-[#636366]">
+                    <span className="text-gray-900 dark:text-white">{getLabel(item.industry, INDUSTRY_LABELS)}</span>
+                    <span className="text-gray-400 dark:text-[#636366]">
                       {item.count} ({Math.round((item.count / metrics.waitlist.total) * 100)}%)
                     </span>
                   </div>
-                  <div className="h-2 bg-[#3a3a3c] rounded-full overflow-hidden">
+                  <div className="h-2 bg-gray-100 dark:bg-[#3a3a3c] rounded-full overflow-hidden">
                     <div
                       className="h-full bg-blue-500 rounded-full transition-all duration-500"
                       style={{ width: `${(item.count / maxIndustryCount) * 100}%` }}
@@ -224,7 +224,7 @@ export default function BusinessPage() {
             <UsersIcon />
             Users & Organizations
           </h2>
-          <InfoIcon tooltip="Active accounts on the platform. Users create accounts, then may create Organizations (businesses) with Slydes." light />
+          <InfoIcon tooltip="Active accounts on the platform. Users create accounts, then may create Organizations (businesses) with Slydes." />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <MetricCard
@@ -258,35 +258,35 @@ export default function BusinessPage() {
         {/* Plan Breakdown */}
         {metrics?.users.byPlan && metrics.users.byPlan.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-6">
+            <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6">
               <div className="flex items-center gap-2 mb-4">
-                <h3 className="text-sm font-medium text-[#98989d]">Users by Plan</h3>
-                <InfoIcon tooltip="Distribution of users across subscription tiers. Higher paid tiers = healthier business." light />
+                <h3 className="text-sm font-medium text-gray-500 dark:text-[#98989d]">Users by Plan</h3>
+                <InfoIcon tooltip="Distribution of users across subscription tiers. Higher paid tiers = healthier business." />
               </div>
               <div className="space-y-3">
                 {metrics.users.byPlan.map((item) => (
                   <div key={item.plan} className="flex items-center justify-between">
-                    <span className="text-sm text-[#98989d] capitalize">{item.plan}</span>
-                    <span className="text-sm font-medium text-white">{item.count}</span>
+                    <span className="text-sm text-gray-500 dark:text-[#98989d] capitalize">{item.plan}</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">{item.count}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {metrics.organizations.byType && metrics.organizations.byType.length > 0 && (
-              <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-6">
+              <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <h3 className="text-sm font-medium text-[#98989d]">Organizations by Type</h3>
-                  <InfoIcon tooltip="What types of businesses are using Slydes. Helps identify best-fit industries." light />
+                  <h3 className="text-sm font-medium text-gray-500 dark:text-[#98989d]">Organizations by Type</h3>
+                  <InfoIcon tooltip="What types of businesses are using Slydes. Helps identify best-fit industries." />
                 </div>
                 <div className="space-y-3">
                   {metrics.organizations.byType.slice(0, 6).map((item) => (
                     <div key={item.type}>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-white">{getLabel(item.type, INDUSTRY_LABELS)}</span>
-                        <span className="text-[#636366]">{item.count}</span>
+                        <span className="text-gray-900 dark:text-white">{getLabel(item.type, INDUSTRY_LABELS)}</span>
+                        <span className="text-gray-400 dark:text-[#636366]">{item.count}</span>
                       </div>
-                      <div className="h-2 bg-[#3a3a3c] rounded-full overflow-hidden">
+                      <div className="h-2 bg-gray-100 dark:bg-[#3a3a3c] rounded-full overflow-hidden">
                         <div
                           className="h-full bg-cyan-500 rounded-full transition-all duration-500"
                           style={{ width: `${(item.count / maxTypeCount) * 100}%` }}
@@ -308,7 +308,7 @@ export default function BusinessPage() {
             <LayersIcon />
             Content
           </h2>
-          <InfoIcon tooltip="Content created on the platform. More content = more engaged users and better SEO/discovery." light />
+          <InfoIcon tooltip="Content created on the platform. More content = more engaged users and better SEO/discovery." />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <MetricCard
@@ -349,7 +349,7 @@ export default function BusinessPage() {
             <CurrencyIcon />
             Revenue
           </h2>
-          <InfoIcon tooltip="Summary view of revenue. See the Revenue page for detailed breakdowns and fee projections." light />
+          <InfoIcon tooltip="Summary view of revenue. See the Revenue page for detailed breakdowns and fee projections." />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <MetricCard

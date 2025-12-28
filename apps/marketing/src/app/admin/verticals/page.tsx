@@ -266,12 +266,12 @@ export default function VerticalsPage() {
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Verticals</h1>
-          <p className="text-[#98989d]">Manage industry verticals and their default features</p>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Verticals</h1>
+          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Manage industry verticals and their default features</p>
         </div>
         <button
           onClick={openCreateModal}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-gray-900 dark:text-white font-medium rounded-lg transition-colors flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -296,8 +296,8 @@ export default function VerticalsPage() {
             </svg>
           </div>
           <div>
-            <p className="text-white text-sm font-medium">How this works</p>
-            <p className="text-[#98989d] text-sm mt-1">
+            <p className="text-gray-900 dark:text-white text-sm font-medium">How this works</p>
+            <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mt-1">
               Verticals are industry categories that appear in forms and determine default features for new organizations.
               Add new verticals here without code changes. All forms will automatically update.
             </p>
@@ -308,11 +308,11 @@ export default function VerticalsPage() {
       {/* Verticals Grid */}
       <div className="grid gap-6">
         {verticals.length === 0 && (
-          <div className="text-center py-12 bg-[#2c2c2e] rounded-xl border border-white/10">
-            <p className="text-white/60 mb-4">No verticals configured yet.</p>
+          <div className="text-center py-12 bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10">
+            <p className="text-gray-900 dark:text-white/60 mb-4">No verticals configured yet.</p>
             <button
               onClick={openCreateModal}
-              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"
+              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-gray-900 dark:text-white font-medium rounded-lg transition-colors"
             >
               Add your first vertical
             </button>
@@ -321,29 +321,29 @@ export default function VerticalsPage() {
         {verticals.map((vertical) => (
           <div
             key={vertical.vertical_id}
-            className={`bg-[#2c2c2e] rounded-xl border overflow-hidden ${
-              vertical.enabled ? 'border-white/10' : 'border-yellow-500/30 opacity-60'
+            className={`bg-white dark:bg-[#2c2c2e] rounded-xl border overflow-hidden ${
+              vertical.enabled ? 'border-gray-200 dark:border-white/10' : 'border-yellow-500/30 opacity-60'
             }`}
           >
             {/* Vertical Header */}
-            <div className="px-6 py-4 border-b border-white/10 flex items-center gap-4">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center gap-4">
               <span className="text-2xl">{vertical.icon || '✨'}</span>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-semibold text-white">{vertical.name}</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{vertical.name}</h2>
                   {!vertical.enabled && (
                     <span className="px-2 py-0.5 text-xs font-medium bg-yellow-500/20 text-yellow-400 rounded">
                       Disabled
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-[#636366]">{vertical.description || 'No description'}</p>
+                <p className="text-sm text-gray-400 dark:text-gray-400 dark:text-[#636366]">{vertical.description || 'No description'}</p>
                 <p className="text-xs text-[#48484a] mt-0.5">ID: {vertical.vertical_id}</p>
               </div>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => openEditModal(vertical)}
-                  className="px-3 py-1.5 text-sm text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                  className="px-3 py-1.5 text-sm text-white/70 hover:text-gray-900 dark:text-white hover:bg-white/10 rounded-lg transition-colors"
                 >
                   Edit
                 </button>
@@ -379,8 +379,8 @@ export default function VerticalsPage() {
                   <div key={feature.id} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div>
-                        <p className="text-sm font-medium text-white">{feature.name}</p>
-                        <p className="text-xs text-[#636366]">{feature.description}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">{feature.name}</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">{feature.description}</p>
                       </div>
                     </div>
 
@@ -390,7 +390,7 @@ export default function VerticalsPage() {
                       className={`relative flex-shrink-0 w-12 h-7 rounded-full transition-colors ${
                         isEnabled
                           ? 'bg-blue-500'
-                          : 'bg-[#3a3a3c]'
+                          : 'bg-gray-100 dark:bg-[#3a3a3c]'
                       }`}
                     >
                       <span
@@ -420,8 +420,8 @@ export default function VerticalsPage() {
       </div>
 
       {/* Footer Note */}
-      <div className="mt-8 pt-6 border-t border-white/10">
-        <p className="text-xs text-[#636366]">
+      <div className="mt-8 pt-6 border-t border-gray-200 dark:border-white/10">
+        <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">
           Note: Changes here only affect <strong>new</strong> organizations. Existing organizations keep their current settings.
           Disabled verticals won't appear in signup forms but existing organizations in that vertical are unaffected.
         </p>
@@ -431,9 +431,9 @@ export default function VerticalsPage() {
       {editModal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeModal} />
-          <div className="relative bg-[#2c2c2e] rounded-2xl border border-white/10 w-full max-w-md mx-4 shadow-2xl">
-            <div className="p-6 border-b border-white/10">
-              <h2 className="text-xl font-semibold text-white">
+          <div className="relative bg-white dark:bg-[#2c2c2e] rounded-2xl border border-gray-200 dark:border-white/10 w-full max-w-md mx-4 shadow-2xl">
+            <div className="p-6 border-b border-gray-200 dark:border-white/10">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                 {editModal.mode === 'create' ? 'Add New Vertical' : 'Edit Vertical'}
               </h2>
             </div>
@@ -446,7 +446,7 @@ export default function VerticalsPage() {
               )}
 
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5">
+                <label className="block text-sm font-medium text-gray-900 dark:text-white/70 mb-1.5">
                   ID (slug)
                 </label>
                 <input
@@ -455,15 +455,15 @@ export default function VerticalsPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, vertical_id: e.target.value }))}
                   disabled={editModal.mode === 'edit'}
                   placeholder="e.g., fitness"
-                  className="w-full px-4 py-2.5 bg-[#1c1c1e] border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2.5 bg-[#1c1c1e] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 {editModal.mode === 'create' && (
-                  <p className="text-xs text-[#636366] mt-1">Lowercase, no spaces. This cannot be changed later.</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">Lowercase, no spaces. This cannot be changed later.</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5">
+                <label className="block text-sm font-medium text-gray-900 dark:text-white/70 mb-1.5">
                   Name
                 </label>
                 <input
@@ -471,12 +471,12 @@ export default function VerticalsPage() {
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="e.g., Fitness & Wellness"
-                  className="w-full px-4 py-2.5 bg-[#1c1c1e] border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                  className="w-full px-4 py-2.5 bg-[#1c1c1e] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5">
+                <label className="block text-sm font-medium text-gray-900 dark:text-white/70 mb-1.5">
                   Icon (emoji)
                 </label>
                 <input
@@ -484,12 +484,12 @@ export default function VerticalsPage() {
                   value={formData.icon}
                   onChange={(e) => setFormData(prev => ({ ...prev, icon: e.target.value }))}
                   placeholder="💪"
-                  className="w-full px-4 py-2.5 bg-[#1c1c1e] border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                  className="w-full px-4 py-2.5 bg-[#1c1c1e] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-1.5">
+                <label className="block text-sm font-medium text-gray-900 dark:text-white/70 mb-1.5">
                   Description
                 </label>
                 <textarea
@@ -497,12 +497,12 @@ export default function VerticalsPage() {
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Gyms, fitness studios, wellness centers..."
                   rows={2}
-                  className="w-full px-4 py-2.5 bg-[#1c1c1e] border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none"
+                  className="w-full px-4 py-2.5 bg-[#1c1c1e] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-3">
+                <label className="block text-sm font-medium text-gray-900 dark:text-white/70 mb-3">
                   Default Features
                 </label>
                 <div className="flex gap-4">
@@ -513,7 +513,7 @@ export default function VerticalsPage() {
                       onChange={(e) => setFormData(prev => ({ ...prev, lists: e.target.checked }))}
                       className="w-4 h-4 rounded border-white/20 bg-[#1c1c1e] text-blue-500 focus:ring-blue-500/50"
                     />
-                    <span className="text-sm text-white">Lists</span>
+                    <span className="text-sm text-gray-900 dark:text-white">Lists</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -522,7 +522,7 @@ export default function VerticalsPage() {
                       onChange={(e) => setFormData(prev => ({ ...prev, shop: e.target.checked }))}
                       className="w-4 h-4 rounded border-white/20 bg-[#1c1c1e] text-blue-500 focus:ring-blue-500/50"
                     />
-                    <span className="text-sm text-white">Shop</span>
+                    <span className="text-sm text-gray-900 dark:text-white">Shop</span>
                   </label>
                 </div>
               </div>
@@ -531,14 +531,14 @@ export default function VerticalsPage() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 px-4 py-2.5 bg-white/10 hover:bg-white/15 text-white font-medium rounded-lg transition-colors"
+                  className="flex-1 px-4 py-2.5 bg-white/10 hover:bg-white/15 text-gray-900 dark:text-white font-medium rounded-lg transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={formSaving}
-                  className="flex-1 px-4 py-2.5 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 px-4 py-2.5 bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-gray-900 dark:text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
                 >
                   {formSaving && (
                     <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">

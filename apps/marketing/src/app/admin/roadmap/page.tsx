@@ -179,9 +179,9 @@ export default function RoadmapPage() {
       <div className="flex items-start justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Roadmap</h1>
-          <p className="text-gray-500 dark:text-[#98989d]">Track product development from idea to shipped</p>
+          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Track product development from idea to shipped</p>
         </div>
-        <div className="text-sm text-gray-500 dark:text-[#98989d]">
+        <div className="text-sm text-gray-500 dark:text-gray-500 dark:text-[#98989d]">
           {items.length} items • {triage.length} in triage • {inProgress.length} in progress
         </div>
       </div>
@@ -385,7 +385,7 @@ function RoadmapCard({
 
         {/* Category */}
         {categoryLabel && (
-          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-white/50 border border-gray-200 dark:border-white/10">
+          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-900 dark:text-white/50 border border-gray-200 dark:border-white/10">
             {categoryLabel}
           </span>
         )}

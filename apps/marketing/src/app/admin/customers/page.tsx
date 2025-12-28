@@ -100,14 +100,14 @@ export default function CustomersPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Customers</h1>
-          <p className="text-[#98989d]">All signed up users across all tiers</p>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Customers</h1>
+          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">All signed up users across all tiers</p>
         </div>
         <div className="flex gap-3">
           <button
             onClick={fetchData}
             disabled={isRefreshing}
-            className="px-4 py-2 text-sm font-medium bg-[#3a3a3c] text-white border border-white/10 rounded-lg hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-[#3a3a3c] text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
           >
             <svg
               className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
@@ -127,7 +127,7 @@ export default function CustomersPage() {
           <button
             onClick={exportCSV}
             disabled={filteredUsers.length === 0}
-            className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-gray-900 dark:text-white rounded-lg transition-colors flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -150,43 +150,42 @@ export default function CustomersPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-5">
-          <p className="text-[#98989d] text-sm mb-1">Total Customers</p>
-          <p className="text-3xl font-bold text-white">{data.subscribers.total}</p>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-5">
+          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Customers</p>
+          <p className="text-3xl font-bold text-gray-900 dark:text-white">{data.subscribers.total}</p>
         </div>
-        <div className="bg-[#2c2c2e] rounded-xl border border-green-500/30 p-5">
-          <p className="text-[#98989d] text-sm mb-1">Pro</p>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-green-500/30 p-5">
+          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Pro</p>
           <p className="text-3xl font-bold text-green-400">{data.subscribers.pro}</p>
-          <p className="text-xs text-[#636366] mt-1">£50/mo each</p>
+          <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">£50/mo each</p>
         </div>
-        <div className="bg-[#2c2c2e] rounded-xl border border-blue-500/30 p-5">
-          <p className="text-[#98989d] text-sm mb-1">Creator</p>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-blue-500/30 p-5">
+          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Creator</p>
           <p className="text-3xl font-bold text-blue-400">{data.subscribers.creator}</p>
-          <p className="text-xs text-[#636366] mt-1">£25/mo each</p>
+          <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">£25/mo each</p>
         </div>
-        <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-5">
-          <p className="text-[#98989d] text-sm mb-1">Free</p>
-          <p className="text-3xl font-bold text-[#98989d]">{data.subscribers.free}</p>
-          <p className="text-xs text-[#636366] mt-1">potential upgrades</p>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-5">
+          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Free</p>
+          <p className="text-3xl font-bold text-gray-500 dark:text-gray-500 dark:text-[#98989d]">{data.subscribers.free}</p>
+          <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">potential upgrades</p>
         </div>
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-6">
+      <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-semibold text-white">Customer List</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Customer List</h2>
             <InfoIcon
               tooltip="All users who have signed up. Filter by plan or search by email. Export to CSV for email campaigns or analysis."
-              light
-            />
+              />
           </div>
 
           <div className="flex flex-col md:flex-row gap-3">
             {/* Search */}
             <div className="relative">
               <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#636366]"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-400 dark:text-[#636366]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -203,7 +202,7 @@ export default function CustomersPage() {
                 placeholder="Search by email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 bg-[#3a3a3c] border border-white/10 rounded-lg text-white placeholder-[#636366] text-sm w-64 focus:outline-none focus:border-white/20"
+                className="pl-10 pr-4 py-2 bg-gray-100 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-400 dark:placeholder-[#636366] text-sm w-64 focus:outline-none focus:border-white/20"
               />
             </div>
 
@@ -220,9 +219,9 @@ export default function CustomersPage() {
                         : filter === 'creator'
                         ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
                         : filter === 'free'
-                        ? 'bg-[#3a3a3c] text-[#98989d] border border-white/10'
+                        ? 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-gray-500 dark:text-[#98989d] border border-gray-200 dark:border-white/10'
                         : 'bg-white/10 text-white border border-white/20'
-                      : 'text-[#636366] hover:text-white hover:bg-[#3a3a3c]'
+                      : 'text-gray-400 dark:text-gray-400 dark:text-[#636366] hover:text-white hover:bg-gray-100 dark:bg-[#3a3a3c]'
                   }`}
                 >
                   {filter === 'all'
@@ -243,11 +242,11 @@ export default function CustomersPage() {
           {filteredUsers.map((user) => (
             <div
               key={user.id}
-              className="flex items-center justify-between py-3 px-4 bg-[#3a3a3c]/50 rounded-lg hover:bg-[#3a3a3c] transition-colors"
+              className="flex items-center justify-between py-3 px-4 bg-gray-100 dark:bg-gray-50 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg hover:bg-gray-100 dark:bg-[#3a3a3c] transition-colors"
             >
               <div className="min-w-0 flex-1">
-                <p className="text-sm text-white font-medium truncate">{user.email}</p>
-                <p className="text-xs text-[#636366]">
+                <p className="text-sm text-gray-900 dark:text-white font-medium truncate">{user.email}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">
                   Joined {new Date(user.created_at).toLocaleDateString()} ({timeAgo(user.created_at)})
                 </p>
               </div>
@@ -258,7 +257,7 @@ export default function CustomersPage() {
                       ? 'bg-green-500/20 text-green-400'
                       : user.plan === 'creator'
                       ? 'bg-blue-500/20 text-blue-400'
-                      : 'bg-[#3a3a3c] text-[#98989d]'
+                      : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-gray-500 dark:text-[#98989d]'
                   }`}
                 >
                   {user.plan}
@@ -266,7 +265,7 @@ export default function CustomersPage() {
                 {user.plan !== 'free' && (
                   <span
                     className={`text-xs ${
-                      user.status === 'active' ? 'text-green-400' : 'text-[#636366]'
+                      user.status === 'active' ? 'text-green-400' : 'text-gray-400 dark:text-gray-400 dark:text-[#636366]'
                     }`}
                   >
                     {user.status}
@@ -277,7 +276,7 @@ export default function CustomersPage() {
           ))}
 
           {filteredUsers.length === 0 && (
-            <p className="text-[#636366] text-sm py-8 text-center">
+            <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-sm py-8 text-center">
               {searchQuery ? 'No customers match your search' : 'No customers yet'}
             </p>
           )}
@@ -285,8 +284,8 @@ export default function CustomersPage() {
 
         {/* Footer with count */}
         {filteredUsers.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
-            <p className="text-sm text-[#636366]">
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10 flex items-center justify-between">
+            <p className="text-sm text-gray-400 dark:text-gray-400 dark:text-[#636366]">
               Showing {filteredUsers.length} of {data.allUsers.length} customers
             </p>
             <button

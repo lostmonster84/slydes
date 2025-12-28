@@ -38,13 +38,13 @@ export function StatusBadge({ status, size = 'md', pulse = true }: StatusBadgePr
 }
 
 export function StatusText({ status }: { status: Status }) {
-  const labels: Record<Status, { text: string; color: string }> = {
-    healthy: { text: 'Healthy', color: 'text-green-400' },
-    warning: { text: 'Warning', color: 'text-amber-400' },
-    error: { text: 'Error', color: 'text-red-400' },
+  const labels: Record<Status, { text: string; lightColor: string; darkColor: string }> = {
+    healthy: { text: 'Healthy', lightColor: 'text-green-600', darkColor: 'dark:text-green-400' },
+    warning: { text: 'Warning', lightColor: 'text-amber-600', darkColor: 'dark:text-amber-400' },
+    error: { text: 'Error', lightColor: 'text-red-600', darkColor: 'dark:text-red-400' },
   }
 
-  const { text, color } = labels[status]
+  const { text, lightColor, darkColor } = labels[status]
 
-  return <span className={`text-sm font-medium ${color}`}>{text}</span>
+  return <span className={`text-sm font-medium ${lightColor} ${darkColor}`}>{text}</span>
 }

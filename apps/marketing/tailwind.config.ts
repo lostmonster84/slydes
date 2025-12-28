@@ -32,6 +32,15 @@ const config: Config = {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-jetbrains-mono)', 'monospace'],
       },
+      keyframes: {
+        'ken-burns': {
+          '0%': { transform: 'scale(1) translate(0, 0)' },
+          '100%': { transform: 'scale(1.08) translate(-1%, -1%)' },
+        },
+      },
+      animation: {
+        'ken-burns': 'ken-burns 20s ease-in-out infinite alternate',
+      },
     },
   },
   plugins: [],

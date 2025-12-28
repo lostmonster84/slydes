@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { Chrome, Mail, Loader2, ArrowRight, Terminal } from 'lucide-react'
+import { Mail, Loader2, ArrowRight, Terminal } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -19,6 +20,11 @@ export default function LoginPage() {
   useEffect(() => {
     const host = window.location.host
     setIsLocalhost(host.includes('localhost') || host.includes('127.0.0.1'))
+  }, [])
+
+  // Clear any stale onboarding data when visiting login (returning user flow)
+  useEffect(() => {
+    localStorage.removeItem('pendingOnboarding')
   }, [])
 
   const supabase = createClient()
@@ -115,7 +121,7 @@ export default function LoginPage() {
     if (error) {
       setMessage({ type: 'error', text: formatAuthError(error.message) })
     } else {
-      setMessage({ type: 'success', text: 'Check your email for the magic link. If you’re new, this creates your account too.' })
+      setMessage({ type: 'success', text: 'Check your email for the sign-in link.' })
       setEmail('')
     }
   }
@@ -134,10 +140,10 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
           <h2 className="text-2xl font-display font-semibold text-center mb-2">
-            Welcome
+            Welcome back
           </h2>
           <p className="text-white/60 text-center mb-8">
-            Sign in (or create your account) to continue to your studio
+            Sign in to continue to your studio
           </p>
 
           {/* Dev Login - localhost only */}
@@ -245,7 +251,7 @@ export default function LoginPage() {
                 />
               </div>
               <p className="mt-2 text-xs text-white/40">
-                No account yet? Enter your email and we’ll create one when you use the magic link.
+                We'll send you a sign-in link
               </p>
             </div>
 
@@ -258,12 +264,28 @@ export default function LoginPage() {
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  Send magic link
+                  Send sign-in link
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
           </form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-4 my-6">
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-white/40 text-sm">New to Slydes?</span>
+            <div className="flex-1 h-px bg-white/10" />
+          </div>
+
+          {/* Get Started CTA */}
+          <Link
+            href="/onboarding"
+            className="w-full flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white font-medium py-3 px-4 rounded-xl transition-colors"
+          >
+            Get Started
+            <ArrowRight className="w-4 h-4" />
+          </Link>
 
           {/* Message */}
           {message && (

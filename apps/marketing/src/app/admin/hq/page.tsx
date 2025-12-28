@@ -180,8 +180,8 @@ export default function AdminOverviewPage() {
   if (error && !health) {
     return (
       <div className="p-8">
-        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6 text-center">
-          <p className="text-red-400 font-medium">{error}</p>
+        <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 rounded-xl p-6 text-center">
+          <p className="text-red-600 dark:text-red-400 font-medium">{error}</p>
           <button
             onClick={fetchData}
             className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
@@ -198,8 +198,8 @@ export default function AdminOverviewPage() {
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Overview</h1>
-          <p className="text-[#98989d]">System health and key metrics at a glance</p>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Overview</h1>
+          <p className="text-gray-500 dark:text-[#98989d]">System health and key metrics at a glance</p>
         </div>
         <PeriodSelector
           value={period}
@@ -227,8 +227,8 @@ export default function AdminOverviewPage() {
       {/* Site Visitors */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-lg font-semibold text-white">Site Visitors</h2>
-          <InfoIcon tooltip="Unique visitors to slydes.io. Based on anonymized fingerprints - no personal data stored." light />
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Site Visitors</h2>
+          <InfoIcon tooltip="Unique visitors to slydes.io. Based on anonymized fingerprints - no personal data stored." />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <MetricCard
@@ -259,8 +259,8 @@ export default function AdminOverviewPage() {
       {/* Key Metrics */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-lg font-semibold text-white">Key Metrics</h2>
-          <InfoIcon tooltip="Quick snapshot of your most important numbers. Click through to Business or Revenue pages for details." light />
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Key Metrics</h2>
+          <InfoIcon tooltip="Quick snapshot of your most important numbers. Click through to Business or Revenue pages for details." />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <MetricCard
@@ -309,8 +309,8 @@ export default function AdminOverviewPage() {
       {metrics && metrics.revenue.mrr > 0 && (
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-lg font-semibold text-white">Revenue</h2>
-            <InfoIcon tooltip="Monthly Recurring Revenue from subscriptions. See Revenue page for full breakdown." light />
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Revenue</h2>
+            <InfoIcon tooltip="Monthly Recurring Revenue from subscriptions. See Revenue page for full breakdown." />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <MetricCard
@@ -327,8 +327,8 @@ export default function AdminOverviewPage() {
       {/* Integration Status */}
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-lg font-semibold text-white">Integrations</h2>
-          <InfoIcon tooltip="Status of external services Slydes depends on. Green = working, Yellow = warning, Red = down. Critical services affect core functionality." light />
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Integrations</h2>
+          <InfoIcon tooltip="Status of external services Slydes depends on. Green = working, Yellow = warning, Red = down. Critical services affect core functionality." />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {health && (
@@ -408,13 +408,13 @@ export default function AdminOverviewPage() {
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div
                   key={i}
-                  className="bg-[#2c2c2e] rounded-xl border border-white/10 p-5 animate-pulse"
+                  className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-5 animate-pulse"
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[#3a3a3c] rounded-lg" />
-                    <div className="h-4 w-24 bg-[#3a3a3c] rounded" />
+                    <div className="w-10 h-10 bg-gray-200 dark:bg-[#3a3a3c] rounded-lg" />
+                    <div className="h-4 w-24 bg-gray-200 dark:bg-[#3a3a3c] rounded" />
                   </div>
-                  <div className="h-3 w-32 bg-[#3a3a3c] rounded" />
+                  <div className="h-3 w-32 bg-gray-200 dark:bg-[#3a3a3c] rounded" />
                 </div>
               ))}
             </>

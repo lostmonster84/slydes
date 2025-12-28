@@ -23,6 +23,7 @@ interface HomeSlydeScreenProps {
   videoFilter?: VideoFilterPreset
   videoVignette?: boolean
   videoSpeed?: VideoSpeedPreset
+  kenBurns?: boolean
   // Music props (optional - for when music is managed externally)
   hasMusicTrack?: boolean
   isMusicMuted?: boolean
@@ -39,7 +40,7 @@ interface HomeSlydeScreenProps {
  *
  * @see docs/UI-PATTERNS.md for full specification
  */
-export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video', imageSrc, videoFilter = 'original', videoVignette = false, videoSpeed = 'normal', hasMusicTrack, isMusicMuted, onMusicToggle }: HomeSlydeScreenProps) {
+export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video', imageSrc, videoFilter = 'original', videoVignette = false, videoSpeed = 'normal', kenBurns = false, hasMusicTrack, isMusicMuted, onMusicToggle }: HomeSlydeScreenProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
@@ -174,7 +175,7 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
           <img
             src={imageSrc}
             alt="Background"
-            className="absolute inset-0 w-full h-full object-cover"
+            className={`absolute inset-0 w-full h-full object-cover ${kenBurns ? 'animate-ken-burns' : ''}`}
           />
         ) : (
           // Video background

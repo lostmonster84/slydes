@@ -4,7 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/'
+  // Always redirect to /auth/complete to handle potential pending onboarding
+  const next = '/auth/complete'
   const errorDescription =
     searchParams.get('error_description') ?? searchParams.get('error') ?? undefined
 

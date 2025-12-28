@@ -175,7 +175,7 @@ export default function AdminSoundsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Sounds</h1>
-          <p className="text-gray-500 dark:text-[#98989d]">Upload and manage demo audio files</p>
+          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Upload and manage demo audio files</p>
         </div>
         <div className="flex gap-3">
           <button
@@ -193,7 +193,7 @@ export default function AdminSoundsPage() {
           <button
             onClick={fetchSounds}
             disabled={isLoading}
-            className="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-[#3a3a3c] text-gray-700 dark:text-white border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-[#3a3a3c] text-gray-700 dark:text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
@@ -211,7 +211,7 @@ export default function AdminSoundsPage() {
 
         {/* Custom name input */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-[#98989d] mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-500 dark:text-[#98989d] mb-2">
             File name (optional)
           </label>
           <input
@@ -219,9 +219,9 @@ export default function AdminSoundsPage() {
             value={customName}
             onChange={(e) => setCustomName(e.target.value)}
             placeholder="e.g. slydes-anthem"
-            className="w-full px-4 py-2.5 bg-gray-50 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#636366] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2.5 bg-gray-50 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 dark:text-[#636366] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-          <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">
+          <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">
             Will be saved as: demo/{customName || 'filename'}.mp3
           </p>
         </div>
@@ -293,7 +293,7 @@ export default function AdminSoundsPage() {
         {sounds.length === 0 && !isLoading ? (
           <div className="p-12 text-center">
             <Music className="w-12 h-12 text-gray-300 dark:text-white/20 mx-auto mb-3" />
-            <p className="text-gray-500 dark:text-[#636366]">No sounds uploaded yet</p>
+            <p className="text-gray-500 dark:text-gray-400 dark:text-[#636366]">No sounds uploaded yet</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-200 dark:divide-white/10">
@@ -323,7 +323,7 @@ export default function AdminSoundsPage() {
                   <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                     {sound.name}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-[#636366]">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 dark:text-[#636366]">
                     {formatBytes(sound.size)} &middot; {formatDate(sound.lastModified)}
                   </p>
                 </div>

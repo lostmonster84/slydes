@@ -73,7 +73,7 @@ export function AskHQ() {
         onClick={() => setIsOpen(!isOpen)}
         className={`fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all z-50 ${
           isOpen
-            ? 'bg-[#3a3a3c] text-white rotate-0'
+            ? 'bg-gray-200 dark:bg-[#3a3a3c] text-gray-700 dark:text-white rotate-0'
             : 'bg-leader-blue text-white hover:bg-blue-600'
         }`}
         title="Ask HQ"
@@ -96,16 +96,16 @@ export function AskHQ() {
 
       {/* Chat Panel */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-[#1c1c1e] rounded-2xl shadow-2xl border border-white/10 flex flex-col z-50 overflow-hidden">
+        <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-white dark:bg-[#1c1c1e] rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 flex flex-col z-50 overflow-hidden">
           {/* Header */}
-          <div className="px-4 py-3 border-b border-white/10 flex items-center gap-3">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-white/10 flex items-center gap-3">
             {messages.length > 0 ? (
               <button
                 onClick={() => setMessages([])}
-                className="w-8 h-8 rounded-full bg-[#2c2c2e] hover:bg-[#3a3a3c] flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-gray-100 dark:bg-[#2c2c2e] hover:bg-gray-200 dark:hover:bg-[#3a3a3c] flex items-center justify-center transition-colors"
                 title="New chat"
               >
-                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-gray-600 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </button>
@@ -122,8 +122,8 @@ export function AskHQ() {
               </div>
             )}
             <div>
-              <h3 className="text-sm font-semibold text-white">Ask HQ</h3>
-              <p className="text-xs text-[#636366]">Powered by Claude</p>
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Ask HQ</h3>
+              <p className="text-xs text-gray-500 dark:text-[#636366]">Powered by Claude</p>
             </div>
           </div>
 
@@ -131,7 +131,7 @@ export function AskHQ() {
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.length === 0 && (
               <div className="text-center py-8">
-                <p className="text-[#98989d] text-sm mb-4">Ask me anything about your business</p>
+                <p className="text-gray-500 dark:text-[#98989d] text-sm mb-4">Ask me anything about your business</p>
                 <div className="space-y-2">
                   {[
                     'How are we doing?',
@@ -141,7 +141,7 @@ export function AskHQ() {
                     <button
                       key={suggestion}
                       onClick={() => sendMessage(suggestion)}
-                      className="block w-full text-left px-3 py-2 text-sm text-white bg-[#2c2c2e] rounded-lg hover:bg-[#3a3a3c] transition-colors"
+                      className="block w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-white bg-gray-100 dark:bg-[#2c2c2e] rounded-lg hover:bg-gray-200 dark:hover:bg-[#3a3a3c] transition-colors"
                     >
                       {suggestion}
                     </button>
@@ -159,21 +159,21 @@ export function AskHQ() {
                   className={`max-w-[85%] px-3 py-2 rounded-2xl text-sm ${
                     msg.role === 'user'
                       ? 'bg-leader-blue text-white rounded-br-md'
-                      : 'bg-[#3a3a3c] rounded-bl-md'
+                      : 'bg-gray-100 dark:bg-[#3a3a3c] rounded-bl-md'
                   }`}
                 >
-                  <p className="whitespace-pre-wrap text-white">{msg.content}</p>
+                  <p className="whitespace-pre-wrap text-gray-900 dark:text-white">{msg.content}</p>
                 </div>
               </div>
             ))}
 
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-[#2c2c2e] px-4 py-3 rounded-2xl rounded-bl-md">
+                <div className="bg-gray-100 dark:bg-[#2c2c2e] px-4 py-3 rounded-2xl rounded-bl-md">
                   <div className="flex gap-1">
-                    <span className="w-2 h-2 bg-[#636366] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-2 h-2 bg-[#636366] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-2 h-2 bg-[#636366] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-2 h-2 bg-gray-400 dark:bg-[#636366] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 bg-gray-400 dark:bg-[#636366] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 bg-gray-400 dark:bg-[#636366] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -183,7 +183,7 @@ export function AskHQ() {
           </div>
 
           {/* Input */}
-          <div className="p-3 border-t border-white/10">
+          <div className="p-3 border-t border-gray-200 dark:border-white/10">
             <div className="flex gap-2">
               <input
                 ref={inputRef}
@@ -193,7 +193,7 @@ export function AskHQ() {
                 onKeyDown={handleKeyDown}
                 placeholder="Ask a question..."
                 disabled={isLoading}
-                className="flex-1 px-4 py-2.5 bg-[#2c2c2e] border border-white/10 rounded-xl text-white placeholder-[#636366] text-sm focus:outline-none focus:border-white/20 disabled:opacity-50"
+                className="flex-1 px-4 py-2.5 bg-gray-100 dark:bg-[#2c2c2e] border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-[#636366] text-sm focus:outline-none focus:border-gray-300 dark:focus:border-white/20 disabled:opacity-50"
               />
               <button
                 onClick={() => sendMessage()}

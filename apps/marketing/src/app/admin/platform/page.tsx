@@ -93,8 +93,8 @@ export default function PlatformSettingsPage() {
     <div className="p-8 max-w-3xl">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-white">Platform Settings</h1>
-        <p className="text-[#98989d]">Global feature toggles that affect all users</p>
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Platform Settings</h1>
+        <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Global feature toggles that affect all users</p>
       </div>
 
       {/* Error Banner */}
@@ -113,8 +113,8 @@ export default function PlatformSettingsPage() {
             </svg>
           </div>
           <div>
-            <p className="text-white text-sm font-medium">Platform-wide controls</p>
-            <p className="text-[#98989d] text-sm mt-1">
+            <p className="text-gray-900 dark:text-white text-sm font-medium">Platform-wide controls</p>
+            <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mt-1">
               These settings apply to ALL users across the platform. Use with care.
               Changes take effect immediately.
             </p>
@@ -123,11 +123,11 @@ export default function PlatformSettingsPage() {
       </div>
 
       {/* Features List */}
-      <div className="bg-[#2c2c2e] rounded-xl border border-white/10 overflow-hidden">
-        <div className="px-6 py-4 border-b border-white/10">
-          <h2 className="text-lg font-semibold text-white">Feature Toggles</h2>
+      <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-white/10">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Feature Toggles</h2>
           {updatedAt && (
-            <p className="text-xs text-[#636366] mt-1">
+            <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">
               Last updated: {new Date(updatedAt).toLocaleString()}
             </p>
           )}
@@ -143,12 +143,12 @@ export default function PlatformSettingsPage() {
               <div key={feature.id} className="px-6 py-4 flex items-center justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-white font-medium">{feature.name}</span>
-                    <span className="px-2 py-0.5 text-xs font-medium bg-white/10 text-white/60 rounded">
+                    <span className="text-gray-900 dark:text-white font-medium">{feature.name}</span>
+                    <span className="px-2 py-0.5 text-xs font-medium bg-white/10 text-gray-900 dark:text-white/60 rounded">
                       {feature.category}
                     </span>
                   </div>
-                  <p className="text-sm text-[#636366] mt-0.5">{feature.description}</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-0.5">{feature.description}</p>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -187,8 +187,8 @@ export default function PlatformSettingsPage() {
       </div>
 
       {/* Future: Add more platform settings here */}
-      <div className="mt-8 p-4 border-2 border-dashed border-white/10 rounded-xl text-center">
-        <p className="text-[#636366] text-sm">
+      <div className="mt-8 p-4 border-2 border-dashed border-gray-200 dark:border-white/10 rounded-xl text-center">
+        <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-sm">
           More platform settings coming soon (maintenance mode, feature flags, etc.)
         </p>
       </div>

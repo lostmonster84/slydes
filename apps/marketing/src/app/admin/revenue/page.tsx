@@ -153,8 +153,8 @@ export default function RevenuePage() {
       {/* Header - Apple HIG */}
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Revenue</h1>
-          <p className="text-[#98989d]">Subscriptions, MRR, and platform fees</p>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Revenue</h1>
+          <p className="text-gray-500 dark:text-[#98989d]">Subscriptions, MRR, and platform fees</p>
         </div>
         <div className="flex items-center gap-3">
           <PeriodSelector
@@ -169,7 +169,7 @@ export default function RevenuePage() {
           <button
             onClick={fetchData}
             disabled={isRefreshing}
-            className="px-4 py-2 text-sm font-medium bg-[#3a3a3c] text-white border border-white/10 rounded-lg hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-[#3a3a3c] text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
           >
             <svg
               className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
@@ -200,7 +200,7 @@ export default function RevenuePage() {
         <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6">
           <div className="flex items-center gap-1 mb-1">
             <p className="text-green-100 text-sm font-medium">Monthly Recurring Revenue</p>
-            <InfoIcon tooltip="MRR = Total monthly subscription revenue from all paying customers. Pro subscribers pay £50/mo, Creator subscribers pay £25/mo." light />
+            <InfoIcon tooltip="MRR = Total monthly subscription revenue from all paying customers. Pro subscribers pay £50/mo, Creator subscribers pay £25/mo." />
           </div>
           <p className="text-4xl font-bold text-white">{formatCurrency(data.mrr)}</p>
           <p className="text-green-200 text-sm mt-2">
@@ -211,7 +211,7 @@ export default function RevenuePage() {
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6">
           <div className="flex items-center gap-1 mb-1">
             <p className="text-blue-100 text-sm font-medium">Annual Run Rate</p>
-            <InfoIcon tooltip="ARR = MRR × 12. This is your projected yearly revenue if current subscriptions continue unchanged. Useful for understanding your business trajectory." light />
+            <InfoIcon tooltip="ARR = MRR × 12. This is your projected yearly revenue if current subscriptions continue unchanged. Useful for understanding your business trajectory." />
           </div>
           <p className="text-4xl font-bold text-white">{formatCurrency(data.arr)}</p>
           <p className="text-blue-200 text-sm mt-2">projected yearly</p>
@@ -239,10 +239,10 @@ export default function RevenuePage() {
 
       {/* Subscription Breakdown - Apple HIG dark cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-6">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6">
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-lg font-semibold text-white">Subscription Tiers</h2>
-            <InfoIcon tooltip="Breakdown of users by subscription plan. Pro and Creator tiers generate recurring revenue. Free tier users may convert to paid over time." light />
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Subscription Tiers</h2>
+            <InfoIcon tooltip="Breakdown of users by subscription plan. Pro and Creator tiers generate recurring revenue. Free tier users may convert to paid over time." />
           </div>
 
           <div className="space-y-4">
@@ -250,17 +250,17 @@ export default function RevenuePage() {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <div>
-                  <span className="font-medium text-white">Pro</span>
-                  <span className="text-[#98989d] text-sm ml-2">£50/mo</span>
+                  <span className="font-medium text-gray-900 dark:text-white">Pro</span>
+                  <span className="text-gray-500 dark:text-[#98989d] text-sm ml-2">£50/mo</span>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold text-white">{data.subscribers.pro}</span>
+                  <span className="font-bold text-gray-900 dark:text-white">{data.subscribers.pro}</span>
                   <span className="text-green-400 text-sm ml-2">
                     {formatCurrency(data.subscribers.pro * 50)}/mo
                   </span>
                 </div>
               </div>
-              <div className="h-3 bg-[#3a3a3c] rounded-full overflow-hidden">
+              <div className="h-3 bg-gray-100 dark:bg-[#3a3a3c] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-green-500 rounded-full"
                   style={{
@@ -274,17 +274,17 @@ export default function RevenuePage() {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <div>
-                  <span className="font-medium text-white">Creator</span>
-                  <span className="text-[#98989d] text-sm ml-2">£25/mo</span>
+                  <span className="font-medium text-gray-900 dark:text-white">Creator</span>
+                  <span className="text-gray-500 dark:text-[#98989d] text-sm ml-2">£25/mo</span>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold text-white">{data.subscribers.creator}</span>
+                  <span className="font-bold text-gray-900 dark:text-white">{data.subscribers.creator}</span>
                   <span className="text-blue-400 text-sm ml-2">
                     {formatCurrency(data.subscribers.creator * 25)}/mo
                   </span>
                 </div>
               </div>
-              <div className="h-3 bg-[#3a3a3c] rounded-full overflow-hidden">
+              <div className="h-3 bg-gray-100 dark:bg-[#3a3a3c] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-blue-500 rounded-full"
                   style={{
@@ -298,17 +298,17 @@ export default function RevenuePage() {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <div>
-                  <span className="font-medium text-white">Free</span>
-                  <span className="text-[#98989d] text-sm ml-2">£0/mo</span>
+                  <span className="font-medium text-gray-900 dark:text-white">Free</span>
+                  <span className="text-gray-500 dark:text-[#98989d] text-sm ml-2">£0/mo</span>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold text-white">{data.subscribers.free}</span>
-                  <span className="text-[#636366] text-sm ml-2">potential upgrades</span>
+                  <span className="font-bold text-gray-900 dark:text-white">{data.subscribers.free}</span>
+                  <span className="text-gray-400 dark:text-[#636366] text-sm ml-2">potential upgrades</span>
                 </div>
               </div>
-              <div className="h-3 bg-[#3a3a3c] rounded-full overflow-hidden">
+              <div className="h-3 bg-gray-100 dark:bg-[#3a3a3c] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#636366] rounded-full"
+                  className="h-full bg-gray-400 dark:bg-[#636366] rounded-full"
                   style={{
                     width: `${(data.subscribers.free / Math.max(data.subscribers.total, 1)) * 100}%`,
                   }}
@@ -319,10 +319,10 @@ export default function RevenuePage() {
         </div>
 
         {/* Recent Subscriptions */}
-        <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-6">
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6">
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-lg font-semibold text-white">Recent Subscriptions</h2>
-            <InfoIcon tooltip="Latest users who signed up with a paid plan. Shows their email, plan type, subscription status, and when they subscribed." light />
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Subscriptions</h2>
+            <InfoIcon tooltip="Latest users who signed up with a paid plan. Shows their email, plan type, subscription status, and when they subscribed." />
           </div>
 
           <div className="space-y-3 max-h-[300px] overflow-y-auto">
@@ -330,10 +330,10 @@ export default function RevenuePage() {
               data.recentSubscriptions.map((sub) => (
                 <div
                   key={sub.id}
-                  className="flex items-center justify-between py-3 border-b border-white/10 last:border-0"
+                  className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-white/10 last:border-0"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-white font-medium truncate">{sub.email}</p>
+                    <p className="text-sm text-gray-900 dark:text-white font-medium truncate">{sub.email}</p>
                     <div className="flex items-center gap-2">
                       <span
                         className={`text-xs px-2 py-0.5 rounded-full ${
@@ -341,46 +341,46 @@ export default function RevenuePage() {
                             ? 'bg-green-500/20 text-green-400'
                             : sub.plan === 'creator'
                             ? 'bg-blue-500/20 text-blue-400'
-                            : 'bg-[#3a3a3c] text-[#98989d]'
+                            : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d]'
                         }`}
                       >
                         {sub.plan}
                       </span>
                       <span
                         className={`text-xs ${
-                          sub.status === 'active' ? 'text-green-400' : 'text-[#636366]'
+                          sub.status === 'active' ? 'text-green-400' : 'text-gray-400 dark:text-[#636366]'
                         }`}
                       >
                         {sub.status}
                       </span>
                     </div>
                   </div>
-                  <span className="text-xs text-[#636366] ml-4 whitespace-nowrap">
+                  <span className="text-xs text-gray-400 dark:text-[#636366] ml-4 whitespace-nowrap">
                     {timeAgo(sub.created_at)}
                   </span>
                 </div>
               ))
             ) : (
-              <p className="text-[#636366] text-sm py-4 text-center">No subscriptions yet</p>
+              <p className="text-gray-400 dark:text-[#636366] text-sm py-4 text-center">No subscriptions yet</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Orders Section - Apple HIG dark */}
-      <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-6 mb-10">
+      <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6 mb-10">
         <div className="flex items-center gap-2 mb-4">
-          <h2 className="text-lg font-semibold text-white">Commerce Overview</h2>
-          <InfoIcon tooltip="Marketplace transaction metrics. GMV is the total value of all goods sold through the platform - the money flowing through Slydes storefronts." light />
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Commerce Overview</h2>
+          <InfoIcon tooltip="Marketplace transaction metrics. GMV is the total value of all goods sold through the platform - the money flowing through Slydes storefronts." />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
             <div className="flex items-center gap-1 mb-1">
-              <p className="text-sm text-[#98989d]">Total Orders</p>
-              <InfoIcon tooltip="All completed orders across all Slydes storefronts. Each order represents a successful purchase." light />
+              <p className="text-sm text-gray-500 dark:text-[#98989d]">Total Orders</p>
+              <InfoIcon tooltip="All completed orders across all Slydes storefronts. Each order represents a successful purchase." />
             </div>
-            <p className="text-2xl font-bold text-white">{data.orders.total}</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{data.orders.total}</p>
             {metrics?.revenue.ordersTrend && (
               <p className={`text-sm ${metrics.revenue.ordersTrend.changePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {metrics.revenue.ordersTrend.changePercent >= 0 ? '+' : ''}{metrics.revenue.ordersTrend.changePercent}% {getPeriodLabel(period)}
@@ -389,24 +389,24 @@ export default function RevenuePage() {
           </div>
           <div>
             <div className="flex items-center gap-1 mb-1">
-              <p className="text-sm text-[#98989d]">This Month</p>
-              <InfoIcon tooltip="Orders placed in the current calendar month. Shows recent marketplace activity." light />
+              <p className="text-sm text-gray-500 dark:text-[#98989d]">This Month</p>
+              <InfoIcon tooltip="Orders placed in the current calendar month. Shows recent marketplace activity." />
             </div>
-            <p className="text-2xl font-bold text-white">{data.orders.thisMonth}</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">{data.orders.thisMonth}</p>
           </div>
           <div>
             <div className="flex items-center gap-1 mb-1">
-              <p className="text-sm text-[#98989d]">GMV (Total Volume)</p>
-              <InfoIcon tooltip="Gross Merchandise Value - the total value of all goods sold. This is the money flowing through the platform, not your revenue." light />
+              <p className="text-sm text-gray-500 dark:text-[#98989d]">GMV (Total Volume)</p>
+              <InfoIcon tooltip="Gross Merchandise Value - the total value of all goods sold. This is the money flowing through the platform, not your revenue." />
             </div>
-            <p className="text-2xl font-bold text-white">
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">
               {formatCurrency(data.orders.gmv)}
             </p>
           </div>
           <div>
             <div className="flex items-center gap-1 mb-1">
-              <p className="text-sm text-[#98989d]">Platform Fees (0%)</p>
-              <InfoIcon tooltip="Revenue from transaction fees. Currently 0% - you can add a fee (1-10%) to generate revenue from marketplace transactions." light />
+              <p className="text-sm text-gray-500 dark:text-[#98989d]">Platform Fees (0%)</p>
+              <InfoIcon tooltip="Revenue from transaction fees. Currently 0% - you can add a fee (1-10%) to generate revenue from marketplace transactions." />
             </div>
             <p className="text-2xl font-bold text-green-400">
               {formatCurrency(data.orders.platformFees)}
@@ -416,11 +416,11 @@ export default function RevenuePage() {
       </div>
 
       {/* All Customers */}
-      <div className="bg-[#2c2c2e] rounded-xl border border-white/10 p-6 mb-10">
+      <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6 mb-10">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-semibold text-white">All Customers</h2>
-            <InfoIcon tooltip="Complete list of all signed up users across all tiers. Filter by plan to see specific segments." light />
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">All Customers</h2>
+            <InfoIcon tooltip="Complete list of all signed up users across all tiers. Filter by plan to see specific segments." />
           </div>
           <div className="flex gap-2">
             {(['all', 'pro', 'creator', 'free'] as const).map((filter) => (
@@ -434,9 +434,9 @@ export default function RevenuePage() {
                       : filter === 'creator'
                       ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
                       : filter === 'free'
-                      ? 'bg-[#3a3a3c] text-[#98989d] border border-white/10'
-                      : 'bg-white/10 text-white border border-white/20'
-                    : 'text-[#636366] hover:text-white hover:bg-[#3a3a3c]'
+                      ? 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d] border border-gray-200 dark:border-white/10'
+                      : 'bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white border border-gray-300 dark:border-white/20'
+                    : 'text-gray-400 dark:text-[#636366] hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-[#3a3a3c]'
                 }`}
               >
                 {filter === 'all' ? `All (${data.allUsers.length})` :
@@ -454,11 +454,11 @@ export default function RevenuePage() {
             .map((user) => (
               <div
                 key={user.id}
-                className="flex items-center justify-between py-3 px-4 bg-[#3a3a3c]/50 rounded-lg"
+                className="flex items-center justify-between py-3 px-4 bg-gray-100 dark:bg-[#3a3a3c]/50 rounded-lg"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-white font-medium truncate">{user.email}</p>
-                  <p className="text-xs text-[#636366]">
+                  <p className="text-sm text-gray-900 dark:text-white font-medium truncate">{user.email}</p>
+                  <p className="text-xs text-gray-400 dark:text-[#636366]">
                     Joined {new Date(user.created_at).toLocaleDateString()}
                   </p>
                 </div>
@@ -469,7 +469,7 @@ export default function RevenuePage() {
                         ? 'bg-green-500/20 text-green-400'
                         : user.plan === 'creator'
                         ? 'bg-blue-500/20 text-blue-400'
-                        : 'bg-[#3a3a3c] text-[#98989d]'
+                        : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d]'
                     }`}
                   >
                     {user.plan}
@@ -477,7 +477,7 @@ export default function RevenuePage() {
                   {user.plan !== 'free' && (
                     <span
                       className={`text-xs ${
-                        user.status === 'active' ? 'text-green-400' : 'text-[#636366]'
+                        user.status === 'active' ? 'text-green-400' : 'text-gray-400 dark:text-[#636366]'
                       }`}
                     >
                       {user.status}
@@ -488,7 +488,7 @@ export default function RevenuePage() {
             ))}
 
           {data.allUsers.filter(user => userFilter === 'all' || user.plan === userFilter).length === 0 && (
-            <p className="text-[#636366] text-sm py-8 text-center">No customers yet</p>
+            <p className="text-gray-400 dark:text-[#636366] text-sm py-8 text-center">No customers yet</p>
           )}
         </div>
       </div>
@@ -498,7 +498,7 @@ export default function RevenuePage() {
         <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-6 text-white">
           <div className="flex items-center gap-2 mb-2">
             <h2 className="text-lg font-semibold">Fee Projections</h2>
-            <InfoIcon tooltip="Shows potential revenue if you added a platform fee to marketplace transactions. Common SaaS marketplaces charge 2-10%. This helps you model revenue scenarios." light />
+            <InfoIcon tooltip="Shows potential revenue if you added a platform fee to marketplace transactions. Common SaaS marketplaces charge 2-10%. This helps you model revenue scenarios." />
           </div>
           <p className="text-gray-400 text-sm mb-6">
             Based on {formatCurrency(data.orders.gmv)} GMV - what different fee rates would earn

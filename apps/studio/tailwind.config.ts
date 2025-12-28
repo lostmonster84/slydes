@@ -42,9 +42,14 @@ const config: Config = {
           '50%': { boxShadow: '0 0 0 0 rgba(37, 99, 235, 0)' },
           '75%': { boxShadow: '0 0 0 4px rgba(37, 99, 235, 0.3)' },
         },
+        'ken-burns': {
+          '0%': { transform: 'scale(1) translate(0, 0)' },
+          '100%': { transform: 'scale(1.08) translate(-1%, -1%)' },
+        },
       },
       animation: {
         'pulse-hint': 'pulse-hint 1.5s ease-in-out infinite',
+        'ken-burns': 'ken-burns 20s ease-in-out infinite alternate',
       },
     },
   },

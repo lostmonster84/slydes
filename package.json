@@ -11,7 +11,8 @@
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "clean": "turbo clean && rm -rf node_modules",
-    "fix": "node scripts/cleanup-dev.js"
+    "fix": "node scripts/cleanup-dev.js",
+    "version:bump": "node scripts/version-bump.mjs"
   },
   "devDependencies": {
     "turbo": "^2.3.3",

@@ -29,6 +29,8 @@ interface BackgroundMediaInputProps {
   onFilterChange?: (filter: VideoFilterPreset) => void
   vignette?: boolean
   onVignetteChange?: (vignette: boolean) => void
+  kenBurns?: boolean
+  onKenBurnsChange?: (kenBurns: boolean) => void
 
   // Speed props (video only)
   speed?: VideoSpeedPreset
@@ -71,6 +73,8 @@ export function BackgroundMediaInput({
   onFilterChange,
   vignette = false,
   onVignetteChange,
+  kenBurns = false,
+  onKenBurnsChange,
   speed = 'normal',
   onSpeedChange,
   startTime = 0,
@@ -458,6 +462,21 @@ export function BackgroundMediaInput({
               />
               <span className="text-xs text-gray-600 dark:text-white/60">
                 Vignette (darkened edges)
+              </span>
+            </label>
+          )}
+
+          {/* Ken Burns toggle - only for images */}
+          {!isVideo && onKenBurnsChange && (
+            <label className="flex items-center gap-2 mt-2.5 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={kenBurns}
+                onChange={(e) => onKenBurnsChange(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 dark:border-white/20 text-blue-600 focus:ring-leader-blue focus:ring-offset-0 bg-white dark:bg-white/10"
+              />
+              <span className="text-xs text-gray-600 dark:text-white/60">
+                Ken Burns (subtle motion)
               </span>
             </label>
           )}

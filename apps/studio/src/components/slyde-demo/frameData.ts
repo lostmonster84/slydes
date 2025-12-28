@@ -79,6 +79,7 @@ export interface FrameData {
     filter?: 'original' | 'cinematic' | 'vintage' | 'moody' | 'warm' | 'cool'  // VideoFilterPreset
     vignette?: boolean
     speed?: 'normal' | 'slow' | 'slower' | 'cinematic'  // VideoSpeedPreset
+    kenBurns?: boolean  // Subtle zoom/pan animation for static images
   }
   accentColor: string
   // Frame-specific info content for the Info sheet

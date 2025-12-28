@@ -19,7 +19,7 @@ const PERIOD_OPTIONS: { value: TrendPeriod; label: string; tooltip: string }[] =
 
 /**
  * Apple HIG segmented control for period selection
- * Matches existing dark mode styling patterns
+ * Supports light/dark mode
  */
 export function PeriodSelector({ value, onChange, periodLabel, customRange }: PeriodSelectorProps) {
   const [showDatePicker, setShowDatePicker] = useState(false)
@@ -69,9 +69,9 @@ export function PeriodSelector({ value, onChange, periodLabel, customRange }: Pe
   return (
     <div className="relative flex items-center gap-3">
       {periodLabel && (
-        <span className="text-xs text-[#636366] hidden sm:block">{periodLabel}</span>
+        <span className="text-xs text-gray-500 dark:text-[#636366] hidden sm:block">{periodLabel}</span>
       )}
-      <div className="inline-flex items-center p-1 rounded-lg bg-[#3a3a3c] border border-white/10">
+      <div className="inline-flex items-center p-1 rounded-lg bg-gray-100 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10">
         {PERIOD_OPTIONS.map((option) => (
           <button
             key={option.value}
@@ -79,8 +79,8 @@ export function PeriodSelector({ value, onChange, periodLabel, customRange }: Pe
             title={option.tooltip}
             className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               value === option.value
-                ? 'bg-white/15 text-white shadow-sm'
-                : 'text-white/50 hover:text-white/70'
+                ? 'bg-white dark:bg-white/15 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-500 dark:text-white/50 hover:text-gray-700 dark:hover:text-white/70'
             }`}
           >
             {option.label}
@@ -92,34 +92,34 @@ export function PeriodSelector({ value, onChange, periodLabel, customRange }: Pe
       {showDatePicker && (
         <div
           ref={datePickerRef}
-          className="absolute top-full right-0 mt-2 p-4 bg-[#2c2c2e] rounded-xl border border-white/10 shadow-xl z-50"
+          className="absolute top-full right-0 mt-2 p-4 bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 shadow-xl z-50"
         >
           <div className="flex flex-col gap-3 min-w-[280px]">
             <div>
-              <label className="block text-xs text-[#98989d] mb-1">Start Date</label>
+              <label className="block text-xs text-gray-500 dark:text-[#98989d] mb-1">Start Date</label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
                 max={endDate || undefined}
-                className="w-full px-3 py-2 text-sm bg-[#3a3a3c] border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
               />
             </div>
             <div>
-              <label className="block text-xs text-[#98989d] mb-1">End Date</label>
+              <label className="block text-xs text-gray-500 dark:text-[#98989d] mb-1">End Date</label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
                 min={startDate || undefined}
                 max={formatDateForInput(new Date())}
-                className="w-full px-3 py-2 text-sm bg-[#3a3a3c] border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-blue-500"
               />
             </div>
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setShowDatePicker(false)}
-                className="flex-1 px-3 py-2 text-xs font-medium text-white/70 hover:text-white bg-[#3a3a3c] rounded-lg transition-colors"
+                className="flex-1 px-3 py-2 text-xs font-medium text-gray-600 dark:text-white/70 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-[#3a3a3c] rounded-lg transition-colors"
               >
                 Cancel
               </button>
