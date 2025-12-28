@@ -131,7 +131,7 @@ export default function AdminWaitlistPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Waitlist</h1>
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Manage waitlist signups and exports</p>
+          <p className="text-gray-500 dark:text-[#98989d]">Manage waitlist signups and exports</p>
         </div>
         <div className="flex gap-3">
           <button
@@ -161,7 +161,7 @@ export default function AdminWaitlistPage() {
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === tab.id
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-gray-500 dark:text-[#98989d] hover:bg-gray-200 dark:hover:bg-[#48484a] hover:text-white'
+                : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d] hover:bg-gray-200 dark:hover:bg-[#48484a] hover:text-white'
             }`}
           >
             <tab.icon className="w-4 h-4" />
@@ -187,7 +187,7 @@ export default function AdminWaitlistPage() {
               animate={{ opacity: 1, y: 0 }}
               className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6"
             >
-              <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Total on Waitlist</p>
+              <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Total on Waitlist</p>
               <p className="text-4xl font-bold text-gray-900 dark:text-white">{data?.totalCount ?? 0}</p>
               <p className="text-blue-400 text-sm mt-2 font-medium">people waiting</p>
             </motion.div>
@@ -198,9 +198,9 @@ export default function AdminWaitlistPage() {
               transition={{ delay: 0.1 }}
               className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6"
             >
-              <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">This Week</p>
+              <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">This Week</p>
               <p className="text-4xl font-bold text-green-400">+{data?.weekCount ?? 0}</p>
-              <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-sm mt-2">new signups</p>
+              <p className="text-gray-400 dark:text-[#636366] text-sm mt-2">new signups</p>
             </motion.div>
 
             <motion.div
@@ -209,9 +209,9 @@ export default function AdminWaitlistPage() {
               transition={{ delay: 0.2 }}
               className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-6"
             >
-              <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Today</p>
+              <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Today</p>
               <p className="text-4xl font-bold text-blue-400">+{data?.todayCount ?? 0}</p>
-              <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-sm mt-2">new signups</p>
+              <p className="text-gray-400 dark:text-[#636366] text-sm mt-2">new signups</p>
             </motion.div>
           </div>
 
@@ -231,7 +231,7 @@ export default function AdminWaitlistPage() {
                       <span className="text-gray-900 dark:text-white font-medium">
                         {getIndustryLabel(item.industry)}
                       </span>
-                      <span className="text-gray-400 dark:text-gray-400 dark:text-[#636366]">
+                      <span className="text-gray-400 dark:text-[#636366]">
                         {item.count} ({Math.round((item.count / (data?.totalCount || 1)) * 100)}%)
                       </span>
                     </div>
@@ -247,7 +247,7 @@ export default function AdminWaitlistPage() {
                 ))}
 
                 {(!data?.industryBreakdown || data.industryBreakdown.length === 0) && (
-                  <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-sm">No signups yet</p>
+                  <p className="text-gray-400 dark:text-[#636366] text-sm">No signups yet</p>
                 )}
               </div>
             </motion.div>
@@ -268,19 +268,19 @@ export default function AdminWaitlistPage() {
                   >
                     <div className="min-w-0 flex-1">
                       <p className="text-sm text-gray-900 dark:text-white font-medium truncate">{entry.email}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-500 dark:text-[#98989d]">
+                      <p className="text-xs text-gray-500 dark:text-[#98989d]">
                         {entry.first_name && `${entry.first_name} · `}
                         {getIndustryLabel(entry.industry || 'Not specified')}
                       </p>
                     </div>
-                    <span className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] ml-4 whitespace-nowrap">
+                    <span className="text-xs text-gray-400 dark:text-[#636366] ml-4 whitespace-nowrap">
                       {timeAgo(entry.created_at)}
                     </span>
                   </div>
                 ))}
 
                 {(!data?.allSignups || data.allSignups.length === 0) && (
-                  <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-sm">No signups yet</p>
+                  <p className="text-gray-400 dark:text-[#636366] text-sm">No signups yet</p>
                 )}
               </div>
             </motion.div>
@@ -313,7 +313,7 @@ export default function AdminWaitlistPage() {
                   )
                 })}
               </div>
-              <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-2 text-center">
+              <p className="text-xs text-gray-400 dark:text-[#636366] mt-2 text-center">
                 Hover over bars to see daily counts
               </p>
             </motion.div>
@@ -331,12 +331,12 @@ export default function AdminWaitlistPage() {
               placeholder="Search by email, name, or industry..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2.5 bg-gray-100 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder:text-gray-400 dark:text-gray-400 dark:text-[#636366] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-gray-100 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder:text-gray-400 dark:text-[#636366] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           {/* Results count */}
-          <p className="text-sm text-gray-500 dark:text-gray-500 dark:text-[#98989d] mb-4">
+          <p className="text-sm text-gray-500 dark:text-[#98989d] mb-4">
             {searchQuery
               ? `${filteredSignups.length} of ${data?.allSignups.length || 0} signups`
               : `${data?.allSignups.length || 0} total signups`
@@ -347,7 +347,7 @@ export default function AdminWaitlistPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-xs text-gray-500 dark:text-gray-500 dark:text-[#98989d] border-b border-gray-200 dark:border-white/10">
+                <tr className="text-left text-xs text-gray-500 dark:text-[#98989d] border-b border-gray-200 dark:border-white/10">
                   <th className="pb-3 font-medium">Email</th>
                   <th className="pb-3 font-medium">Name</th>
                   <th className="pb-3 font-medium">Industry</th>
@@ -360,22 +360,22 @@ export default function AdminWaitlistPage() {
                   <tr key={entry.id} className="border-b border-white/5 hover:bg-white/5">
                     <td className="py-3">
                       <div className="flex items-center gap-2">
-                        <Mail className="w-4 h-4 text-gray-400 dark:text-gray-400 dark:text-[#636366]" />
+                        <Mail className="w-4 h-4 text-gray-400 dark:text-[#636366]" />
                         <span className="text-gray-900 dark:text-white text-sm">{entry.email}</span>
                       </div>
                     </td>
-                    <td className="py-3 text-sm text-gray-500 dark:text-gray-500 dark:text-[#98989d]">
+                    <td className="py-3 text-sm text-gray-500 dark:text-[#98989d]">
                       {entry.first_name || '—'}
                     </td>
                     <td className="py-3">
-                      <span className="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-gray-500 dark:text-[#98989d]">
+                      <span className="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d]">
                         {getIndustryLabel(entry.industry || 'Not specified')}
                       </span>
                     </td>
-                    <td className="py-3 text-sm text-gray-400 dark:text-gray-400 dark:text-[#636366]">
+                    <td className="py-3 text-sm text-gray-400 dark:text-[#636366]">
                       {entry.utm_source || entry.source || 'direct'}
                     </td>
-                    <td className="py-3 text-sm text-gray-400 dark:text-gray-400 dark:text-[#636366] text-right">
+                    <td className="py-3 text-sm text-gray-400 dark:text-[#636366] text-right">
                       {new Date(entry.created_at).toLocaleDateString('en-GB', {
                         day: 'numeric',
                         month: 'short',
@@ -390,7 +390,7 @@ export default function AdminWaitlistPage() {
             </table>
 
             {filteredSignups.length === 0 && (
-              <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-center py-8">
+              <p className="text-gray-400 dark:text-[#636366] text-center py-8">
                 {searchQuery ? 'No signups match your search' : 'No signups yet'}
               </p>
             )}

@@ -267,7 +267,7 @@ export default function VerticalsPage() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Verticals</h1>
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Manage industry verticals and their default features</p>
+          <p className="text-gray-500 dark:text-[#98989d]">Manage industry verticals and their default features</p>
         </div>
         <button
           onClick={openCreateModal}
@@ -297,7 +297,7 @@ export default function VerticalsPage() {
           </div>
           <div>
             <p className="text-gray-900 dark:text-white text-sm font-medium">How this works</p>
-            <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mt-1">
+            <p className="text-gray-500 dark:text-[#98989d] text-sm mt-1">
               Verticals are industry categories that appear in forms and determine default features for new organizations.
               Add new verticals here without code changes. All forms will automatically update.
             </p>
@@ -337,7 +337,7 @@ export default function VerticalsPage() {
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-gray-400 dark:text-gray-400 dark:text-[#636366]">{vertical.description || 'No description'}</p>
+                <p className="text-sm text-gray-400 dark:text-[#636366]">{vertical.description || 'No description'}</p>
                 <p className="text-xs text-[#48484a] mt-0.5">ID: {vertical.vertical_id}</p>
               </div>
               <div className="flex items-center gap-2">
@@ -380,7 +380,7 @@ export default function VerticalsPage() {
                     <div className="flex items-center gap-3">
                       <div>
                         <p className="text-sm font-medium text-gray-900 dark:text-white">{feature.name}</p>
-                        <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">{feature.description}</p>
+                        <p className="text-xs text-gray-400 dark:text-[#636366]">{feature.description}</p>
                       </div>
                     </div>
 
@@ -421,7 +421,7 @@ export default function VerticalsPage() {
 
       {/* Footer Note */}
       <div className="mt-8 pt-6 border-t border-gray-200 dark:border-white/10">
-        <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">
+        <p className="text-xs text-gray-400 dark:text-[#636366]">
           Note: Changes here only affect <strong>new</strong> organizations. Existing organizations keep their current settings.
           Disabled verticals won't appear in signup forms but existing organizations in that vertical are unaffected.
         </p>
@@ -458,7 +458,7 @@ export default function VerticalsPage() {
                   className="w-full px-4 py-2.5 bg-[#1c1c1e] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 {editModal.mode === 'create' && (
-                  <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">Lowercase, no spaces. This cannot be changed later.</p>
+                  <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">Lowercase, no spaces. This cannot be changed later.</p>
                 )}
               </div>
 

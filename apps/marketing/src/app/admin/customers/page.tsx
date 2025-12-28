@@ -101,7 +101,7 @@ export default function CustomersPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Customers</h1>
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">All signed up users across all tiers</p>
+          <p className="text-gray-500 dark:text-[#98989d]">All signed up users across all tiers</p>
         </div>
         <div className="flex gap-3">
           <button
@@ -151,23 +151,23 @@ export default function CustomersPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-5">
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Customers</p>
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Customers</p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">{data.subscribers.total}</p>
         </div>
         <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-green-500/30 p-5">
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Pro</p>
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Pro</p>
           <p className="text-3xl font-bold text-green-400">{data.subscribers.pro}</p>
-          <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">£50/mo each</p>
+          <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">£50/mo each</p>
         </div>
         <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-blue-500/30 p-5">
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Creator</p>
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Creator</p>
           <p className="text-3xl font-bold text-blue-400">{data.subscribers.creator}</p>
-          <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">£25/mo each</p>
+          <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">£25/mo each</p>
         </div>
         <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-5">
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Free</p>
-          <p className="text-3xl font-bold text-gray-500 dark:text-gray-500 dark:text-[#98989d]">{data.subscribers.free}</p>
-          <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">potential upgrades</p>
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Free</p>
+          <p className="text-3xl font-bold text-gray-500 dark:text-[#98989d]">{data.subscribers.free}</p>
+          <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">potential upgrades</p>
         </div>
       </div>
 
@@ -185,7 +185,7 @@ export default function CustomersPage() {
             {/* Search */}
             <div className="relative">
               <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-400 dark:text-[#636366]"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-[#636366]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -219,9 +219,9 @@ export default function CustomersPage() {
                         : filter === 'creator'
                         ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
                         : filter === 'free'
-                        ? 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-gray-500 dark:text-[#98989d] border border-gray-200 dark:border-white/10'
+                        ? 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d] border border-gray-200 dark:border-white/10'
                         : 'bg-white/10 text-white border border-white/20'
-                      : 'text-gray-400 dark:text-gray-400 dark:text-[#636366] hover:text-white hover:bg-gray-100 dark:bg-[#3a3a3c]'
+                      : 'text-gray-400 dark:text-[#636366] hover:text-white hover:bg-gray-100 dark:bg-[#3a3a3c]'
                   }`}
                 >
                   {filter === 'all'
@@ -242,11 +242,11 @@ export default function CustomersPage() {
           {filteredUsers.map((user) => (
             <div
               key={user.id}
-              className="flex items-center justify-between py-3 px-4 bg-gray-100 dark:bg-gray-50 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg hover:bg-gray-100 dark:bg-[#3a3a3c] transition-colors"
+              className="flex items-center justify-between py-3 px-4 bg-gray-100 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg hover:bg-gray-100 dark:bg-[#3a3a3c] transition-colors"
             >
               <div className="min-w-0 flex-1">
                 <p className="text-sm text-gray-900 dark:text-white font-medium truncate">{user.email}</p>
-                <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">
+                <p className="text-xs text-gray-400 dark:text-[#636366]">
                   Joined {new Date(user.created_at).toLocaleDateString()} ({timeAgo(user.created_at)})
                 </p>
               </div>
@@ -257,7 +257,7 @@ export default function CustomersPage() {
                       ? 'bg-green-500/20 text-green-400'
                       : user.plan === 'creator'
                       ? 'bg-blue-500/20 text-blue-400'
-                      : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-gray-500 dark:text-[#98989d]'
+                      : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d]'
                   }`}
                 >
                   {user.plan}
@@ -265,7 +265,7 @@ export default function CustomersPage() {
                 {user.plan !== 'free' && (
                   <span
                     className={`text-xs ${
-                      user.status === 'active' ? 'text-green-400' : 'text-gray-400 dark:text-gray-400 dark:text-[#636366]'
+                      user.status === 'active' ? 'text-green-400' : 'text-gray-400 dark:text-[#636366]'
                     }`}
                   >
                     {user.status}
@@ -276,7 +276,7 @@ export default function CustomersPage() {
           ))}
 
           {filteredUsers.length === 0 && (
-            <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-sm py-8 text-center">
+            <p className="text-gray-400 dark:text-[#636366] text-sm py-8 text-center">
               {searchQuery ? 'No customers match your search' : 'No customers yet'}
             </p>
           )}
@@ -285,7 +285,7 @@ export default function CustomersPage() {
         {/* Footer with count */}
         {filteredUsers.length > 0 && (
           <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10 flex items-center justify-between">
-            <p className="text-sm text-gray-400 dark:text-gray-400 dark:text-[#636366]">
+            <p className="text-sm text-gray-400 dark:text-[#636366]">
               Showing {filteredUsers.length} of {data.allUsers.length} customers
             </p>
             <button

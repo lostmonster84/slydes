@@ -140,7 +140,7 @@ export default function AdminMessagesPage() {
               </span>
             )}
           </h1>
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Help requests and contact messages</p>
+          <p className="text-gray-500 dark:text-[#98989d]">Help requests and contact messages</p>
         </div>
         <button
           onClick={fetchMessages}
@@ -161,7 +161,7 @@ export default function AdminMessagesPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
               statusFilter === filter.id
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-gray-500 dark:text-[#98989d] hover:bg-gray-200 dark:hover:bg-[#48484a] hover:text-white'
+                : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d] hover:bg-gray-200 dark:hover:bg-[#48484a] hover:text-white'
             }`}
           >
             {filter.label}
@@ -180,13 +180,13 @@ export default function AdminMessagesPage() {
       <div className="space-y-3">
         {isLoading ? (
           <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-8 text-center">
-            <RefreshCw className="w-6 h-6 text-gray-400 dark:text-gray-400 dark:text-[#636366] animate-spin mx-auto" />
-            <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-2">Loading messages...</p>
+            <RefreshCw className="w-6 h-6 text-gray-400 dark:text-[#636366] animate-spin mx-auto" />
+            <p className="text-gray-400 dark:text-[#636366] mt-2">Loading messages...</p>
           </div>
         ) : messages.length === 0 ? (
           <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-8 text-center">
-            <MessageSquare className="w-8 h-8 text-gray-400 dark:text-gray-400 dark:text-[#636366] mx-auto mb-2" />
-            <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366]">No messages yet</p>
+            <MessageSquare className="w-8 h-8 text-gray-400 dark:text-[#636366] mx-auto mb-2" />
+            <p className="text-gray-400 dark:text-[#636366]">No messages yet</p>
           </div>
         ) : (
           messages.map((msg) => {
@@ -218,26 +218,26 @@ export default function AdminMessagesPage() {
                       <span className={`px-2 py-0.5 text-xs rounded-full ${statusConfig.color}`}>
                         {statusConfig.label}
                       </span>
-                      <span className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">{timeAgo(msg.created_at)}</span>
+                      <span className="text-xs text-gray-400 dark:text-[#636366]">{timeAgo(msg.created_at)}</span>
                     </div>
                     <h3 className="text-gray-900 dark:text-white font-medium truncate">
                       {msg.subject || typeConfig.label}
                     </h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-500 dark:text-[#98989d] truncate">
+                    <p className="text-sm text-gray-500 dark:text-[#98989d] truncate">
                       {msg.user_email || 'Anonymous'}
                       {msg.org_name && ` · ${msg.org_name}`}
                     </p>
                     {!isExpanded && (
-                      <p className="text-sm text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1 line-clamp-1">
+                      <p className="text-sm text-gray-400 dark:text-[#636366] mt-1 line-clamp-1">
                         {msg.message}
                       </p>
                     )}
                   </div>
 
                   {isExpanded ? (
-                    <ChevronUp className="w-5 h-5 text-gray-400 dark:text-gray-400 dark:text-[#636366]" />
+                    <ChevronUp className="w-5 h-5 text-gray-400 dark:text-[#636366]" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-400 dark:text-gray-400 dark:text-[#636366]" />
+                    <ChevronDown className="w-5 h-5 text-gray-400 dark:text-[#636366]" />
                   )}
                 </button>
 
@@ -271,7 +271,7 @@ export default function AdminMessagesPage() {
                       {msg.status !== 'archived' && (
                         <button
                           onClick={() => updateStatus(msg.id, 'archived')}
-                          className="px-3 py-1.5 text-sm font-medium bg-gray-100 dark:bg-[#3a3a3c] hover:bg-gray-200 dark:hover:bg-[#48484a] text-gray-500 dark:text-gray-500 dark:text-[#98989d] rounded-lg transition-colors flex items-center gap-2"
+                          className="px-3 py-1.5 text-sm font-medium bg-gray-100 dark:bg-[#3a3a3c] hover:bg-gray-200 dark:hover:bg-[#48484a] text-gray-500 dark:text-[#98989d] rounded-lg transition-colors flex items-center gap-2"
                         >
                           <Archive className="w-4 h-4" />
                           Archive

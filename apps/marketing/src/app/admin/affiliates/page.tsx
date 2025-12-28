@@ -176,7 +176,7 @@ export default function AffiliatesAdminPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Affiliates</h1>
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Manage affiliate program</p>
+          <p className="text-gray-500 dark:text-[#98989d]">Manage affiliate program</p>
         </div>
         <button
           onClick={fetchData}
@@ -198,19 +198,19 @@ export default function AffiliatesAdminPage() {
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-amber-500/30 p-5">
-            <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Pending Applications</p>
+            <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Pending Applications</p>
             <p className="text-3xl font-bold text-amber-400">{stats.pendingApplications}</p>
           </div>
           <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-green-500/30 p-5">
-            <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Active Affiliates</p>
+            <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Active Affiliates</p>
             <p className="text-3xl font-bold text-green-400">{stats.activeAffiliates}</p>
           </div>
           <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-blue-500/30 p-5">
-            <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Conversions</p>
+            <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Conversions</p>
             <p className="text-3xl font-bold text-blue-400">{stats.totalConversions}</p>
           </div>
           <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-purple-500/30 p-5">
-            <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Pending Payouts</p>
+            <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Pending Payouts</p>
             <p className="text-3xl font-bold text-purple-400">{formatCurrency(stats.pendingPayouts)}</p>
           </div>
         </div>
@@ -225,7 +225,7 @@ export default function AffiliatesAdminPage() {
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === tab.id
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-gray-500 dark:text-[#98989d] hover:bg-gray-200 dark:hover:bg-[#48484a] hover:text-white'
+                : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d] hover:bg-gray-200 dark:hover:bg-[#48484a] hover:text-white'
             }`}
           >
             <tab.icon className="w-4 h-4" />
@@ -251,13 +251,13 @@ export default function AffiliatesAdminPage() {
             </h2>
 
             {pendingApps.length === 0 ? (
-              <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-center py-8">No pending applications</p>
+              <p className="text-gray-400 dark:text-[#636366] text-center py-8">No pending applications</p>
             ) : (
               <div className="space-y-4">
                 {pendingApps.map((app) => (
                   <div
                     key={app.id}
-                    className="bg-gray-100 dark:bg-gray-50 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg p-4 border border-white/5"
+                    className="bg-gray-100 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg p-4 border border-white/5"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -271,7 +271,7 @@ export default function AffiliatesAdminPage() {
                         {app.business_name && (
                           <p className="text-sm text-cyan-400 mb-1">{app.business_name}</p>
                         )}
-                        <p className="text-sm text-gray-500 dark:text-gray-500 dark:text-[#98989d] mb-3">{app.email}</p>
+                        <p className="text-sm text-gray-500 dark:text-[#98989d] mb-3">{app.email}</p>
 
                         {/* Social Profile Links */}
                         <div className="flex flex-wrap gap-2 mb-3">
@@ -337,19 +337,19 @@ export default function AffiliatesAdminPage() {
                         </div>
 
                         {app.audience_description && (
-                          <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mb-2">
-                            <span className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Audience:</span> {app.audience_description}
+                          <p className="text-xs text-gray-400 dark:text-[#636366] mb-2">
+                            <span className="text-gray-500 dark:text-[#98989d]">Audience:</span> {app.audience_description}
                           </p>
                         )}
 
                         {app.why_partner && (
                           <div className="bg-white dark:bg-[#2c2c2e] rounded-lg p-3 mt-2">
-                            <p className="text-xs text-gray-500 dark:text-gray-500 dark:text-[#98989d] mb-1">Why they want to partner:</p>
+                            <p className="text-xs text-gray-500 dark:text-[#98989d] mb-1">Why they want to partner:</p>
                             <p className="text-sm text-gray-900 dark:text-white/80">{app.why_partner}</p>
                           </div>
                         )}
 
-                        <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-2">Applied {timeAgo(app.created_at)}</p>
+                        <p className="text-xs text-gray-400 dark:text-[#636366] mt-2">Applied {timeAgo(app.created_at)}</p>
                       </div>
 
                       <div className="flex gap-2 ml-4">
@@ -378,7 +378,7 @@ export default function AffiliatesAdminPage() {
 
             {reviewedApps.length > 0 && (
               <div className="mt-8">
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-500 dark:text-[#98989d] mb-3">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-[#98989d] mb-3">
                   Previously Reviewed ({reviewedApps.length})
                 </h3>
                 <div className="space-y-2">
@@ -392,7 +392,7 @@ export default function AffiliatesAdminPage() {
                         {app.business_name && (
                           <p className="text-xs text-cyan-400">{app.business_name}</p>
                         )}
-                        <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">{app.email}</p>
+                        <p className="text-xs text-gray-400 dark:text-[#636366]">{app.email}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         {app.status === 'rejected' && (
@@ -439,12 +439,12 @@ export default function AffiliatesAdminPage() {
             </h2>
 
             {affiliates.length === 0 ? (
-              <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-center py-8">No affiliates yet</p>
+              <p className="text-gray-400 dark:text-[#636366] text-center py-8">No affiliates yet</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="text-left text-xs text-gray-500 dark:text-gray-500 dark:text-[#98989d] border-b border-gray-200 dark:border-white/10">
+                    <tr className="text-left text-xs text-gray-500 dark:text-[#98989d] border-b border-gray-200 dark:border-white/10">
                       <th className="pb-3 font-medium">Affiliate</th>
                       <th className="pb-3 font-medium">Referral Code</th>
                       <th className="pb-3 font-medium text-right">Referrals</th>
@@ -459,7 +459,7 @@ export default function AffiliatesAdminPage() {
                       <tr key={affiliate.id} className="border-b border-white/5">
                         <td className="py-3">
                           <p className="text-gray-900 dark:text-white font-medium">{affiliate.name}</p>
-                          <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">{affiliate.email}</p>
+                          <p className="text-xs text-gray-400 dark:text-[#636366]">{affiliate.email}</p>
                         </td>
                         <td className="py-3">
                           <code className="px-2 py-1 bg-gray-100 dark:bg-[#3a3a3c] rounded text-sm text-cyan-400">
@@ -502,10 +502,10 @@ export default function AffiliatesAdminPage() {
         {activeTab === 'targeting' && (
           <div>
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Affiliate Targeting</h2>
-            <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] mb-4">
+            <p className="text-gray-500 dark:text-[#98989d] mb-4">
               High-follower organizations that could be potential affiliates.
             </p>
-            <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-center py-8">
+            <p className="text-gray-400 dark:text-[#636366] text-center py-8">
               View targeting data in the dedicated{' '}
               <a href="/admin/hq" className="text-blue-400 hover:underline">
                 HQ Organizations
@@ -521,29 +521,29 @@ export default function AffiliatesAdminPage() {
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Earnings & Payouts</h2>
 
             <div className="grid md:grid-cols-3 gap-4 mb-6">
-              <div className="bg-gray-100 dark:bg-gray-50 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg p-4">
-                <p className="text-sm text-gray-500 dark:text-gray-500 dark:text-[#98989d] mb-1">Total Earned</p>
+              <div className="bg-gray-100 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg p-4">
+                <p className="text-sm text-gray-500 dark:text-[#98989d] mb-1">Total Earned</p>
                 <p className="text-2xl font-bold text-green-400">
                   {formatCurrency(stats?.totalEarnings || 0)}
                 </p>
               </div>
-              <div className="bg-gray-100 dark:bg-gray-50 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg p-4">
-                <p className="text-sm text-gray-500 dark:text-gray-500 dark:text-[#98989d] mb-1">Pending Payouts</p>
+              <div className="bg-gray-100 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg p-4">
+                <p className="text-sm text-gray-500 dark:text-[#98989d] mb-1">Pending Payouts</p>
                 <p className="text-2xl font-bold text-amber-400">
                   {formatCurrency(stats?.pendingPayouts || 0)}
                 </p>
               </div>
-              <div className="bg-gray-100 dark:bg-gray-50 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg p-4">
-                <p className="text-sm text-gray-500 dark:text-gray-500 dark:text-[#98989d] mb-1">Total Paid</p>
+              <div className="bg-gray-100 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg p-4">
+                <p className="text-sm text-gray-500 dark:text-[#98989d] mb-1">Total Paid</p>
                 <p className="text-2xl font-bold text-blue-400">
                   {formatCurrency(affiliates.reduce((sum, a) => sum + (a.paid_earnings || 0), 0))}
                 </p>
               </div>
             </div>
 
-            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-500 dark:text-[#98989d] mb-3">Recent Referrals</h3>
+            <h3 className="text-sm font-medium text-gray-500 dark:text-[#98989d] mb-3">Recent Referrals</h3>
             {referrals.length === 0 ? (
-              <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-center py-8">No referrals yet</p>
+              <p className="text-gray-400 dark:text-[#636366] text-center py-8">No referrals yet</p>
             ) : (
               <div className="space-y-2">
                 {referrals.slice(0, 20).map((ref) => (
@@ -552,7 +552,7 @@ export default function AffiliatesAdminPage() {
                     className="flex items-center justify-between py-2 px-3 bg-gray-100 dark:bg-[#3a3a3c]/30 rounded-lg"
                   >
                     <div className="flex items-center gap-4">
-                      <span className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">
+                      <span className="text-xs text-gray-400 dark:text-[#636366]">
                         via <span className="text-cyan-400">{ref.affiliates?.referral_code}</span>
                       </span>
                       <p className="text-sm text-gray-900 dark:text-white">{ref.referred_email}</p>
@@ -572,7 +572,7 @@ export default function AffiliatesAdminPage() {
                       }`}>
                         {ref.status}
                       </span>
-                      <span className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">
+                      <span className="text-xs text-gray-400 dark:text-[#636366]">
                         {timeAgo(ref.created_at)}
                       </span>
                     </div>

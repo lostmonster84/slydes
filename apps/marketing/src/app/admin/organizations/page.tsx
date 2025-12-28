@@ -154,7 +154,7 @@ export default function OrganizationsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Organizations</h1>
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">All businesses using Slydes</p>
+          <p className="text-gray-500 dark:text-[#98989d]">All businesses using Slydes</p>
         </div>
         <div className="flex gap-3">
           <button
@@ -204,22 +204,22 @@ export default function OrganizationsPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-5">
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Organizations</p>
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Organizations</p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">{data.stats.total}</p>
         </div>
         <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-green-500/30 p-5">
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">New This Month</p>
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">New This Month</p>
           <p className="text-3xl font-bold text-green-400">{data.stats.thisMonth}</p>
         </div>
         <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-blue-500/30 p-5">
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">With Published Slydes</p>
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">With Published Slydes</p>
           <p className="text-3xl font-bold text-blue-400">
             {data.organizations.filter((o) => o.published_slydes > 0).length}
           </p>
         </div>
         <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-5">
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Slydes</p>
-          <p className="text-3xl font-bold text-gray-500 dark:text-gray-500 dark:text-[#98989d]">
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Slydes</p>
+          <p className="text-3xl font-bold text-gray-500 dark:text-[#98989d]">
             {data.organizations.reduce((sum, o) => sum + o.slydes_count, 0)}
           </p>
         </div>
@@ -239,7 +239,7 @@ export default function OrganizationsPage() {
             {/* Search */}
             <div className="relative">
               <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-400 dark:text-[#636366]"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-[#636366]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -278,7 +278,7 @@ export default function OrganizationsPage() {
               title={sortDir === 'asc' ? 'Ascending' : 'Descending'}
             >
               {sortDir === 'desc' ? 'Newest First' : 'Oldest First'}
-              <svg className="w-4 h-4 text-gray-400 dark:text-gray-400 dark:text-[#636366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-gray-400 dark:text-[#636366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
@@ -306,7 +306,7 @@ export default function OrganizationsPage() {
           {filteredOrgs.map((org) => (
             <div
               key={org.id}
-              className="flex items-center justify-between py-3 px-4 bg-gray-100 dark:bg-gray-50 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg hover:bg-gray-100 dark:bg-[#3a3a3c] transition-colors"
+              className="flex items-center justify-between py-3 px-4 bg-gray-100 dark:bg-gray-50 dark:bg-[#3a3a3c]/50 rounded-lg hover:bg-gray-100 dark:bg-[#3a3a3c] transition-colors"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
@@ -328,26 +328,26 @@ export default function OrganizationsPage() {
                     </svg>
                   </a>
                 </div>
-                <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">
+                <p className="text-xs text-gray-400 dark:text-[#636366]">
                   {org.owner_email} · Created {timeAgo(org.created_at)}
                 </p>
               </div>
               <div className="flex items-center gap-4 ml-4">
                 {/* Type badge */}
-                <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-gray-500 dark:text-[#98989d] border border-gray-200 dark:border-white/10">
+                <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d] border border-gray-200 dark:border-white/10">
                   {BUSINESS_TYPE_LABELS[org.business_type || 'other'] || org.business_type || 'Other'}
                 </span>
                 {/* Slydes count */}
                 <div className="text-right">
                   <p className="text-sm text-gray-900 dark:text-white font-medium">{org.slydes_count} slydes</p>
-                  <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366]">{org.published_slydes} published</p>
+                  <p className="text-xs text-gray-400 dark:text-[#636366]">{org.published_slydes} published</p>
                 </div>
               </div>
             </div>
           ))}
 
           {filteredOrgs.length === 0 && (
-            <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-sm py-8 text-center">
+            <p className="text-gray-400 dark:text-[#636366] text-sm py-8 text-center">
               {searchQuery || typeFilter !== 'all'
                 ? 'No organizations match your filters'
                 : 'No organizations yet'}
@@ -358,7 +358,7 @@ export default function OrganizationsPage() {
         {/* Footer with count */}
         {filteredOrgs.length > 0 && (
           <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10 flex items-center justify-between">
-            <p className="text-sm text-gray-400 dark:text-gray-400 dark:text-[#636366]">
+            <p className="text-sm text-gray-400 dark:text-[#636366]">
               Showing {filteredOrgs.length} of {data.organizations.length} organizations
             </p>
             <button

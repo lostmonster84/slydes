@@ -94,7 +94,7 @@ export default function PlatformSettingsPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Platform Settings</h1>
-        <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Global feature toggles that affect all users</p>
+        <p className="text-gray-500 dark:text-[#98989d]">Global feature toggles that affect all users</p>
       </div>
 
       {/* Error Banner */}
@@ -114,7 +114,7 @@ export default function PlatformSettingsPage() {
           </div>
           <div>
             <p className="text-gray-900 dark:text-white text-sm font-medium">Platform-wide controls</p>
-            <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d] text-sm mt-1">
+            <p className="text-gray-500 dark:text-[#98989d] text-sm mt-1">
               These settings apply to ALL users across the platform. Use with care.
               Changes take effect immediately.
             </p>
@@ -127,7 +127,7 @@ export default function PlatformSettingsPage() {
         <div className="px-6 py-4 border-b border-gray-200 dark:border-white/10">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Feature Toggles</h2>
           {updatedAt && (
-            <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">
+            <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">
               Last updated: {new Date(updatedAt).toLocaleString()}
             </p>
           )}
@@ -148,7 +148,7 @@ export default function PlatformSettingsPage() {
                       {feature.category}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-0.5">{feature.description}</p>
+                  <p className="text-sm text-gray-400 dark:text-[#636366] mt-0.5">{feature.description}</p>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -188,7 +188,7 @@ export default function PlatformSettingsPage() {
 
       {/* Future: Add more platform settings here */}
       <div className="mt-8 p-4 border-2 border-dashed border-gray-200 dark:border-white/10 rounded-xl text-center">
-        <p className="text-gray-400 dark:text-gray-400 dark:text-[#636366] text-sm">
+        <p className="text-gray-400 dark:text-[#636366] text-sm">
           More platform settings coming soon (maintenance mode, feature flags, etc.)
         </p>
       </div>

@@ -175,7 +175,7 @@ export default function AdminSoundsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Sounds</h1>
-          <p className="text-gray-500 dark:text-gray-500 dark:text-[#98989d]">Upload and manage demo audio files</p>
+          <p className="text-gray-500 dark:text-[#98989d]">Upload and manage demo audio files</p>
         </div>
         <div className="flex gap-3">
           <button
@@ -221,7 +221,7 @@ export default function AdminSoundsPage() {
             placeholder="e.g. slydes-anthem"
             className="w-full px-4 py-2.5 bg-gray-50 dark:bg-[#3a3a3c] border border-gray-200 dark:border-white/10 rounded-lg text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-400 dark:text-[#636366] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-          <p className="text-xs text-gray-400 dark:text-gray-400 dark:text-[#636366] mt-1">
+          <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">
             Will be saved as: demo/{customName || 'filename'}.mp3
           </p>
         </div>
