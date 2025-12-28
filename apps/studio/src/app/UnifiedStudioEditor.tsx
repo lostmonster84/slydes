@@ -302,6 +302,7 @@ function SortableSectionRow({
             value={editingValue}
             onChange={(e) => setEditingValue(e.target.value)}
             onKeyDown={(e) => {
+              e.stopPropagation()
               if (e.key === 'Enter') {
                 if (editingValue.trim()) updateCategory(cat.id, { name: editingValue.trim() })
                 cancelEditing()
@@ -452,6 +453,7 @@ function SortableFrameRow({
             value={editingValue}
             onChange={(e) => setEditingValue(e.target.value)}
             onKeyDown={(e) => {
+              e.stopPropagation()
               if (e.key === 'Enter') {
                 if (editingValue.trim()) updateCategoryFrame(categoryId, frame.id, { title: editingValue.trim() })
                 cancelEditing()
