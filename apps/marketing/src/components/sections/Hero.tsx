@@ -7,13 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 
 const SUBHEADS = [
-  // Phones are for swiping, not scrolling. Slydes turns mobile attention into fast, high-conversion destinations.
-  { main: "Phones are for swiping, not scrolling.", punch: "Slydes turns attention into action." },
-  { main: "Your customers decide in seconds.", punch: "Slydes wins those seconds." },
-  { main: "Mobile traffic deserves better than desktop pages.", punch: "Slydes delivers." },
-  { main: "Scrolling kills momentum.", punch: "Swiping builds it." },
-  { main: "Your website explains.", punch: "Slydes converts." },
-  { main: "Mobile-first isn't a breakpoint.", punch: "It's a format change." },
+  // Property + hospitality focus: replace the link you share (WhatsApp/email/QR/ads), not the final destination (portal/OTA/booking engine).
+  { main: "Buyers browse on phones.", punch: "Make the tour feel made for mobile." },
+  { main: "Guests book on Airbnb and Booking.", punch: "Slydes sells the atmosphere first." },
+  { main: "One link. Full-screen tour.", punch: "Instant enquiries and viewing requests." },
+  { main: "Your best link isn't your homepage.", punch: "It's the one you share." },
+  { main: "WhatsApp. Email. QR. Ads.", punch: "Slydes is built for the handoff." },
+  { main: "People decide in seconds.", punch: "Slydes wins those seconds." },
 ]
 
 export function Hero() {
@@ -88,7 +88,7 @@ export function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
             </span>
-            Early access open
+            Built for property & hospitality
           </span>
         </motion.div>
         
@@ -99,12 +99,12 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <span className="text-white">Stop sending mobile users</span>
+          <span className="text-white">Stop sharing </span>
+          <span className="text-white/40">boring links</span>
+          <span className="text-white">.</span>
           <br />
-          <span className="text-white">to </span>
-          <span className="text-white/40">websites</span>
-          <span className="text-white">. Send them to </span>
-          <span className="bg-gradient-to-r from-leader-blue to-electric-cyan bg-clip-text text-transparent">Slydes</span>
+          <span className="text-white">Share a </span>
+          <span className="bg-gradient-to-r from-leader-blue to-electric-cyan bg-clip-text text-transparent">Slyde</span>
           <span className="text-white">.</span>
         </motion.h1>
         
@@ -194,7 +194,7 @@ export function Hero() {
         >
           or{' '}
           <Link href="/showcase" className="text-white/70 hover:text-white underline underline-offset-2">
-            view demo
+            see a property demo
           </Link>
         </motion.p>
         
@@ -206,7 +206,7 @@ export function Hero() {
           className="mb-6"
         >
           <div className="animate-phone-float">
-            <PhoneMockup variant="rentals" />
+            <PhoneMockup variant="realestate" />
           </div>
         </motion.div>
         
@@ -217,7 +217,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          Got a mobile-first business?{' '}
+          Selling, letting, or hosting?{' '}
           <a href="#contact" className="text-white/90 font-medium hover:text-white underline underline-offset-2">
             We should talk.
           </a>

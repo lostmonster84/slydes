@@ -5,7 +5,14 @@ import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/Button'
 import { ContactModal } from '@/components/ui/ContactModal'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+interface Vertical {
+  id: string
+  name: string
+  description?: string
+  icon?: string
+}
 
 interface FormData {
   name: string
@@ -76,6 +83,35 @@ export default function FoundingPartnerPage() {
     platforms: []
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Default verticals - used as initial state and fallback
+  const defaultVerticals: Vertical[] = [
+    { id: 'property', name: 'Property (Sales & Lettings)' },
+    { id: 'hospitality', name: 'Hospitality (Hotels, Holiday Lets, Glamping)' },
+    { id: 'automotive', name: 'Automotive (Car Hire, Dealerships)' },
+    { id: 'other', name: 'Other' },
+  ]
+  const [verticals, setVerticals] = useState<Vertical[]>(defaultVerticals)
+
+  // Fetch verticals from API (enhances defaults if available)
+  useEffect(() => {
+    async function fetchVerticals() {
+      try {
+        const response = await fetch('/api/verticals')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.verticals && data.verticals.length > 0) {
+            setVerticals(data.verticals)
+          }
+        }
+        // If not ok, keep using defaults (already set in initial state)
+      } catch (error) {
+        console.error('Failed to fetch verticals:', error)
+        // Keep using defaults (already set in initial state)
+      }
+    }
+    fetchVerticals()
+  }, [])
 
   const spotsRemaining = 47
   const totalSpots = 50
@@ -430,14 +466,9 @@ export default function FoundingPartnerPage() {
                         style={{ fontSize: '16px' }}
                       >
                         <option value="">Select your industry...</option>
-                        <option value="food">Food & Restaurant</option>
-                        <option value="travel">Travel & Hospitality</option>
-                        <option value="realestate">Real Estate</option>
-                        <option value="lifestyle">Lifestyle & Experiences</option>
-                        <option value="fitness">Fitness & Wellness</option>
-                        <option value="beauty">Beauty & Fashion</option>
-                        <option value="business">Small Business / Entrepreneur</option>
-                        <option value="other">Other</option>
+                        {verticals.map((v) => (
+                          <option key={v.id} value={v.id}>{v.name}</option>
+                        ))}
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                         <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -547,26 +578,21 @@ export default function FoundingPartnerPage() {
           >
             <div className="inline-block bg-gray-50 rounded-2xl p-6 border border-gray-200 max-w-3xl">
               <h3 className="font-semibold mb-4">Who we&apos;re looking for</h3>
-              <div className="grid md:grid-cols-4 gap-4 text-sm">
-                <div className="bg-white rounded-xl p-4 border border-gray-100">
-                  <p className="text-2xl mb-2">🍽️</p>
-                  <p className="font-medium text-gray-900">Food & Restaurant</p>
-                  <p className="text-gray-500 text-xs mt-1">Food bloggers, reviewers</p>
-                </div>
-                <div className="bg-white rounded-xl p-4 border border-gray-100">
-                  <p className="text-2xl mb-2">✈️</p>
-                  <p className="font-medium text-gray-900">Travel & Hospitality</p>
-                  <p className="text-gray-500 text-xs mt-1">Hotel reviewers, travel vloggers</p>
-                </div>
+              <div className="grid md:grid-cols-3 gap-4 text-sm">
                 <div className="bg-white rounded-xl p-4 border border-gray-100">
                   <p className="text-2xl mb-2">🏠</p>
-                  <p className="font-medium text-gray-900">Real Estate</p>
-                  <p className="text-gray-500 text-xs mt-1">Property tours, agent influencers</p>
+                  <p className="font-medium text-gray-900">Property</p>
+                  <p className="text-gray-500 text-xs mt-1">Estate agents, lettings, property influencers</p>
                 </div>
                 <div className="bg-white rounded-xl p-4 border border-gray-100">
-                  <p className="text-2xl mb-2">💼</p>
-                  <p className="font-medium text-gray-900">Business</p>
-                  <p className="text-gray-500 text-xs mt-1">Entrepreneur influencers, coaches</p>
+                  <p className="text-2xl mb-2">🏨</p>
+                  <p className="font-medium text-gray-900">Hospitality</p>
+                  <p className="text-gray-500 text-xs mt-1">Hotels, holiday lets, glamping, travel vloggers</p>
+                </div>
+                <div className="bg-white rounded-xl p-4 border border-gray-100">
+                  <p className="text-2xl mb-2">🚗</p>
+                  <p className="font-medium text-gray-900">Automotive</p>
+                  <p className="text-gray-500 text-xs mt-1">Car hire, dealerships, vehicle influencers</p>
                 </div>
               </div>
               <p className="text-gray-500 text-sm mt-4">

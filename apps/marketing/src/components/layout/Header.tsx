@@ -104,7 +104,7 @@ export function Header() {
             <Button
               className={useDarkMode ? '!bg-white !text-future-black hover:!bg-gray-100' : ''}
             >
-              Create your first Slyde
+              Create your first property Slyde
             </Button>
           </a>
         </div>
@@ -223,7 +223,7 @@ export function Header() {
                   className="block"
                 >
                   <Button size="lg" className="w-full text-lg">
-                    Create your first Slyde
+                    Create your first property Slyde
                   </Button>
                 </a>
                 <p className="text-center text-white/40 text-sm mt-4">

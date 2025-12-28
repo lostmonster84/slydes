@@ -7,83 +7,55 @@ import { PhoneMockup } from '@/components/ui/PhoneMockup'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-// Demo examples - showing what's possible with Slydes
+// Demo examples - Property + Hospitality focus
 const demoExamples = [
-  // Experience & Hospitality
+  // Property
   {
-    id: 'hospitality',
-    title: 'Maison Lumière',
-    label: 'Restaurant',
-    variant: 'hospitality' as const,
-    description: 'Video menus, chef recommendations, and instant table reservations.',
-    color: 'from-amber-600 to-amber-800',
+    id: 'realestate',
+    title: 'Prestige Estates',
+    label: 'Estate Agents',
+    variant: 'realestate' as const,
+    description: 'Full-screen property tours with instant viewing requests.',
+    color: 'from-blue-600 to-blue-800',
     isDemo: true,
   },
   {
     id: 'rentals',
     title: 'Villa Serenità',
-    label: 'Vacation Rentals',
+    label: 'Holiday Lets',
     variant: 'rentals' as const,
     description: 'Immersive property tours with direct booking integration.',
     color: 'from-emerald-600 to-emerald-800',
     isDemo: true,
   },
+  // Hospitality
   {
-    id: 'fitness',
-    title: 'FORM Studio',
-    label: 'Fitness',
-    variant: 'fitness' as const,
-    description: 'Class previews with live schedule and signups.',
-    color: 'from-orange-600 to-orange-800',
-    isDemo: true,
-  },
-  {
-    id: 'automotive',
-    title: 'Apex Motors',
-    label: 'Car Hire',
-    variant: 'automotive' as const,
-    description: 'Premium video fleet showcase with reservations.',
-    color: 'from-zinc-700 to-zinc-900',
-    isDemo: true,
-  },
-  // Creatives
-  {
-    id: 'musicians',
-    title: 'NOVA',
-    label: 'Musicians',
+    id: 'hospitality',
+    title: 'Highland Retreat',
+    label: 'Hotels & Lodges',
     variant: 'hospitality' as const,
-    description: 'Live clips, new releases, tour dates, and merch drops.',
-    color: 'from-purple-600 to-purple-900',
+    description: 'Experience-first tours that sell the atmosphere before the price.',
+    color: 'from-amber-600 to-amber-800',
     isDemo: true,
   },
   {
-    id: 'videographers',
-    title: 'Frame & Flow',
-    label: 'Video Producers',
-    variant: 'hospitality' as const,
-    description: 'Your showreel, full-screen. The way it was meant to be seen.',
-    color: 'from-rose-600 to-rose-900',
-    isDemo: true,
-  },
-  {
-    id: 'photographers',
-    title: 'Lena Park',
-    label: 'Photographers',
-    variant: 'hospitality' as const,
-    description: 'Portfolio that scrolls. Packages and booking in one swipe.',
-    color: 'from-sky-600 to-sky-900',
-    isDemo: true,
-  },
-  {
-    id: 'artists',
-    title: 'Studio Mira',
-    label: 'Artists',
-    variant: 'hospitality' as const,
-    description: 'Gallery in your pocket. Process videos, exhibitions, commissions.',
-    color: 'from-fuchsia-600 to-fuchsia-900',
+    id: 'glamping',
+    title: 'Aurora Domes',
+    label: 'Glamping',
+    variant: 'lunadomes' as const,
+    description: 'Unique stays that deserve unique presentation. Cinematic walkthroughs.',
+    color: 'from-purple-600 to-purple-800',
     isDemo: true,
   },
 ]
+
+// Future verticals (kept for /automotive, /fitness, etc.)
+// const futureExamples = [
+//   { id: 'automotive', title: 'Apex Motors', label: 'Car Hire', variant: 'automotive' as const, ... },
+//   { id: 'fitness', title: 'FORM Studio', label: 'Fitness', variant: 'fitness' as const, ... },
+//   { id: 'musicians', title: 'NOVA', label: 'Musicians', ... },
+//   ...
+// ]
 
 
 export default function ShowcasePage() {
@@ -258,8 +230,8 @@ export default function ShowcasePage() {
               </div>
               <h2 className="mb-4">Your industry, your way</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                See how Slydes works for your vertical. From restaurants to musicians, rentals to video producers.
-                <strong> If it can be shown through video, it belongs on Slydes.</strong>
+                See how Slydes works for property and hospitality. Estate agents, holiday lets, hotels, and glamping sites.
+                <strong> If guests and buyers decide visually, Slydes wins those seconds.</strong>
               </p>
             </motion.div>
 

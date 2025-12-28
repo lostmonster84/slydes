@@ -41,16 +41,8 @@ export default function SlydesPage() {
       await navigator.clipboard.writeText(shareUrl)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
-    } catch {
-      // Fallback for older browsers
-      const input = document.createElement('input')
-      input.value = shareUrl
-      document.body.appendChild(input)
-      input.select()
-      document.execCommand('copy')
-      document.body.removeChild(input)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy to clipboard:', err)
     }
   }
 
@@ -69,23 +61,23 @@ export default function SlydesPage() {
     try {
       const storedViewMode = window.localStorage.getItem('slydes_view_mode')
       if (storedViewMode === 'card' || storedViewMode === 'list') setViewMode(storedViewMode)
-    } catch {
-      // ignore
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development') console.warn('localStorage read failed:', err)
     }
   }, [])
 
   useEffect(() => {
     try {
       window.localStorage.setItem('slydes_view_mode', viewMode)
-    } catch {
-      // ignore
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development') console.warn('localStorage write failed:', err)
     }
   }, [viewMode])
 
   // isPaid = creator OR pro (both have more Slydes than free tier)
   const isCreator = isPaid
 
-  // Get plan limit
+  // Get plan limit for display
   const limit = isCreator ? 10 : 1
 
   // Gradient colors for visual variety

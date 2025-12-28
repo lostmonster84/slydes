@@ -155,7 +155,7 @@ function InteractiveChat() {
             onClick={() => handleButtonClick('orders')}
             className="px-3 py-1.5 bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/30 rounded-full text-xs text-white/70 hover:text-emerald-400 transition-all cursor-pointer"
           >
-            How many orders today?
+            How many enquiries today?
           </button>
         </motion.div>
       </div>
@@ -215,7 +215,7 @@ function InteractiveChat() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 2.5 }}
               >
-                Want me to rewrite the copy for you? ✨
+                Want me to rewrite the copy for you?
               </motion.p>
             </div>
           </motion.div>
@@ -281,10 +281,10 @@ function InteractiveChat() {
               >
                 {[
                   { frame: 'Hero', pct: 100, color: 'bg-leader-blue' },
-                  { frame: 'Services', pct: 82, color: 'bg-leader-blue' },
-                  { frame: 'Pricing', pct: 71, color: 'bg-leader-blue' },
-                  { frame: 'Reviews', pct: 52, color: 'bg-amber-500' },
-                  { frame: 'Book Now', pct: 45, color: 'bg-emerald-500' },
+                  { frame: 'Tour', pct: 82, color: 'bg-leader-blue' },
+                  { frame: 'Details', pct: 71, color: 'bg-leader-blue' },
+                  { frame: 'Location', pct: 52, color: 'bg-amber-500' },
+                  { frame: 'Book Viewing', pct: 45, color: 'bg-emerald-500' },
                 ].map((item, i) => (
                   <motion.div
                     key={i}
@@ -312,7 +312,7 @@ function InteractiveChat() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 2.8 }}
               >
-                💡 Reviews frame losing 19% - biggest drop-off point
+                💡 Location frame losing 19% - biggest drop-off point
               </motion.p>
             </div>
           </motion.div>
@@ -335,7 +335,7 @@ function InteractiveChat() {
             onClick={() => handleButtonClick('orders')}
             className="px-3 py-1.5 bg-white/5 hover:bg-emerald-500/20 border border-white/10 hover:border-emerald-500/30 rounded-full text-xs text-white/70 hover:text-emerald-400 transition-all cursor-pointer"
           >
-            How many orders?
+            How many enquiries?
           </button>
           <button
             onClick={() => setCurrentView('initial')}
@@ -348,7 +348,7 @@ function InteractiveChat() {
     )
   }
 
-  // "Orders" conversation view (fallback)
+  // "Orders" conversation view (fallback) - repurposed as enquiries for property/hospitality
   return (
     <div className="p-5 space-y-4 min-h-[320px]">
       {/* User message */}
@@ -359,7 +359,7 @@ function InteractiveChat() {
         transition={{ duration: 0.3 }}
       >
         <div className="bg-leader-blue text-white px-4 py-2.5 rounded-2xl rounded-br-md max-w-[80%] text-sm">
-          How many orders today?
+          How many enquiries today?
         </div>
       </motion.div>
 
@@ -373,7 +373,7 @@ function InteractiveChat() {
         >
           <div className="bg-white/10 text-white px-4 py-3 rounded-2xl rounded-bl-md w-[85%] text-sm space-y-2">
             <p className="text-white/70">
-              <TypingMessage delay={0}>Great day so far! Here&apos;s your shop summary:</TypingMessage>
+              <TypingMessage delay={0}>Great day so far! Here&apos;s your enquiry summary:</TypingMessage>
             </p>
             <motion.div
               className="bg-white/5 rounded-lg p-3 space-y-2"
@@ -382,16 +382,16 @@ function InteractiveChat() {
               transition={{ delay: 1.5 }}
             >
               <div className="flex justify-between text-xs">
-                <span className="text-white/60">Orders today</span>
-                <span className="text-emerald-400 font-bold">7</span>
+                <span className="text-white/60">Enquiries today</span>
+                <span className="text-emerald-400 font-bold">11</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-white/60">Revenue</span>
-                <span className="text-emerald-400 font-bold">£234</span>
+                <span className="text-white/60">Viewing requests</span>
+                <span className="text-emerald-400 font-bold">6</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-white/60">Best seller</span>
-                <span className="text-white/90 font-medium">Silk Serum</span>
+                <span className="text-white/60">Top listing</span>
+                <span className="text-white/90 font-medium">Oceanview Apartment</span>
               </div>
             </motion.div>
             <motion.p
@@ -485,7 +485,7 @@ export function MomentumAI() {
                 </div>
                 <div>
                   <h3 className="text-white font-semibold mb-1">Copy suggestions</h3>
-                  <p className="text-white/60 text-sm">&quot;Your CTA could be stronger. Try: &apos;Book your spot&apos; instead of &apos;Learn more&apos;.&quot;</p>
+                  <p className="text-white/60 text-sm">&quot;Your CTA could be stronger. Try: &apos;Book a viewing&apos; instead of &apos;Learn more&apos;.&quot;</p>
                 </div>
               </div>
 

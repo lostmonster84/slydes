@@ -50,9 +50,12 @@ type MetricsData = {
 }
 
 const INDUSTRY_LABELS: Record<string, string> = {
+  property: 'Property (Sales & Lettings)',
+  hospitality: 'Hospitality (Hotels, Holiday Lets, Glamping)',
+  automotive: 'Automotive (Car Hire, Dealerships)',
+  // Legacy values (keep for backward compatibility)
   restaurant: 'Restaurant / Hospitality',
   'real-estate': 'Real Estate',
-  automotive: 'Automotive / Dealership',
   salon: 'Salon / Beauty',
   fitness: 'Fitness / Wellness',
   travel: 'Travel / Tourism',

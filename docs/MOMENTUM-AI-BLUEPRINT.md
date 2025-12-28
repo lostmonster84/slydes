@@ -821,20 +821,20 @@ Why:
 
 ### Tier Comparison
 
-| Feature | Free | Pro (£19/mo) |
-|---------|------|--------------|
-| **Momentum Dashboard** | ✓ | ✓ |
-| Math-based insights | ✓ | ✓ |
-| "Frame 3 is dropping" | ✓ | ✓ |
-| Basic coaching tips | ✓ | ✓ |
-| **Momentum AI** | ✗ | ✓ |
-| AI chat partner | ✗ | ✓ |
-| Content generation | ✗ | ✓ |
-| Proactive alerts | ✗ | ✓ |
-| Order management AI | ✗ | ✓ |
-| Teaching/tutorials | ✗ | ✓ |
-| Business memory | ✗ | ✓ |
-| One-click actions | ✗ | ✓ |
+| Feature | Free | Creator (£25/mo) | Pro+ (£50+/mo) |
+|---------|------|------------------|----------------|
+| **Momentum Dashboard** | ✓ | ✓ | ✓ |
+| Math-based insights | ✓ | ✓ | ✓ |
+| "Frame 3 is dropping" | ✓ | ✓ | ✓ |
+| Basic coaching tips | ✓ | ✓ | ✓ |
+| **Momentum AI** | 3/day | 3/day | Unlimited |
+| AI chat partner | Limited | Limited | ✓ |
+| Content generation | ✗ | ✗ | ✓ |
+| Proactive alerts | ✗ | ✗ | ✓ |
+| Order management AI | ✗ | ✗ | ✓ |
+| Teaching/tutorials | ✗ | ✗ | ✓ |
+| Business memory | ✗ | ✗ | ✓ |
+| One-click actions | ✗ | ✗ | ✓ |
 
 ### Free Tier Teaser
 
@@ -857,7 +857,7 @@ Free users see Momentum AI but can't use it:
 │  │   • Learn best practices with guided tutorials        │ │
 │  │   • One-click improvements to your Slydes             │ │
 │  │                                                       │ │
-│  │   [🚀 Upgrade to Pro — £19/month]                     │ │
+│  │   [🚀 Upgrade to Pro — £50/month]                     │ │
 │  │                                                       │ │
 │  └───────────────────────────────────────────────────────┘ │
 │                                                             │

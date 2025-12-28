@@ -6,12 +6,12 @@ import { Button } from '@/components/ui/Button'
 
 const INDUSTRIES = [
   { value: '', label: 'Select your industry' },
-  { value: 'restaurant', label: 'Restaurant / Hospitality' },
-  { value: 'real-estate', label: 'Real Estate' },
-  { value: 'automotive', label: 'Automotive / Dealership' },
-  { value: 'salon', label: 'Salon / Beauty' },
-  { value: 'fitness', label: 'Fitness / Wellness' },
-  { value: 'travel', label: 'Travel / Tourism' },
+  { value: 'estate-agent', label: 'Estate agent / property sales' },
+  { value: 'lettings', label: 'Lettings / long-term rentals' },
+  { value: 'holiday-lets', label: 'Holiday lets (Airbnb/Booking)' },
+  { value: 'hotel', label: 'Hotel / lodge / hospitality' },
+  { value: 'property-developer', label: 'Property developer' },
+  { value: 'automotive', label: 'Automotive' },
   { value: 'retail', label: 'Retail / E-commerce' },
   { value: 'professional', label: 'Professional Services' },
   { value: 'creative', label: 'Creative / Portfolio' },
@@ -74,11 +74,11 @@ export function WaitlistSignup() {
         >
           {/* Headline */}
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Stop losing mobile attention.
+            Turn browsing into bookings and enquiries.
           </h2>
 
           <p className="text-lg text-white/70 mb-8 max-w-xl mx-auto">
-            Create a Slyde and see how fast momentum changes everything.
+            Create one link that sells the space on mobile — then send them to your listing or booking page.
           </p>
 
           {/* Form */}
@@ -174,7 +174,7 @@ export function WaitlistSignup() {
                     Joining...
                   </span>
                 ) : (
-                  'Create your first Slyde'
+                  'Create your first property Slyde'
                 )}
               </Button>
 

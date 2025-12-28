@@ -103,13 +103,9 @@ export async function POST(request: NextRequest) {
 
     // Format industry label
     const industryLabels: Record<string, string> = {
-      hospitality: 'Restaurant / Hospitality',
-      travel: 'Travel / Tourism',
-      fitness: 'Fitness / Wellness',
-      beauty: 'Beauty / Fashion',
-      rentals: 'Rentals / Property',
-      automotive: 'Automotive',
-      lifestyle: 'Lifestyle / Creator',
+      property: 'Property (Sales & Lettings)',
+      hospitality: 'Hospitality (Hotels, Holiday Lets, Glamping)',
+      automotive: 'Automotive (Car Hire, Dealerships)',
       other: 'Other',
     }
 

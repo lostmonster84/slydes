@@ -23,6 +23,26 @@ export type HomeSlydeCategory = {
   inventoryCtaText?: string
   ctaText?: string
   listId?: string
+
+  // === COVER BACKGROUND ===
+  // The Slyde Cover has its own background (separate from frames)
+  coverBackgroundType?: 'video' | 'image'
+  coverVideoStreamUid?: string    // Cloudflare Stream UID for cover video
+  coverImageUrl?: string          // URL for cover image
+  coverPosterUrl?: string         // Poster for cover video
+  coverVideoFilter?: VideoFilterPreset
+  coverVideoVignette?: boolean
+  coverVideoSpeed?: VideoSpeedPreset
+
+  // === LOCATION (Slyde-level) ===
+  locationAddress?: string
+  locationLat?: number
+  locationLng?: number
+
+  // === CONTACT (optional override, defaults to org) ===
+  contactPhone?: string
+  contactEmail?: string
+  contactWhatsapp?: string
 }
 
 export type HomeSlyde = {
@@ -106,6 +126,22 @@ interface ExtendedSlyde extends Slyde {
   order_index?: number
   has_inventory?: boolean
   inventory_cta_text?: string
+  // Cover background
+  cover_background_type?: 'video' | 'image'
+  cover_video_stream_uid?: string
+  cover_image_url?: string
+  cover_poster_url?: string
+  cover_video_filter?: VideoFilterPreset
+  cover_video_vignette?: boolean
+  cover_video_speed?: VideoSpeedPreset
+  // Contact methods (per-slyde)
+  contact_phone?: string
+  contact_email?: string
+  contact_whatsapp?: string
+  // Location data (per-slyde)
+  location_address?: string
+  location_lat?: number
+  location_lng?: number
 }
 
 // ============================================
@@ -169,6 +205,22 @@ export function useHomeSlyde(): UseHomeSlydeResult {
       childSlydeId: slyde.public_id,
       hasInventory: slyde.has_inventory ?? false,
       inventoryCtaText: slyde.inventory_cta_text,
+      // Cover background
+      coverBackgroundType: slyde.cover_background_type || undefined,
+      coverVideoStreamUid: slyde.cover_video_stream_uid || undefined,
+      coverImageUrl: slyde.cover_image_url || undefined,
+      coverPosterUrl: slyde.cover_poster_url || undefined,
+      coverVideoFilter: slyde.cover_video_filter || undefined,
+      coverVideoVignette: slyde.cover_video_vignette ?? undefined,
+      coverVideoSpeed: slyde.cover_video_speed || undefined,
+      // Contact methods (per-slyde)
+      contactPhone: slyde.contact_phone || undefined,
+      contactEmail: slyde.contact_email || undefined,
+      contactWhatsapp: slyde.contact_whatsapp || undefined,
+      // Location data (per-slyde)
+      locationAddress: slyde.location_address || undefined,
+      locationLat: slyde.location_lat !== null ? Number(slyde.location_lat) : undefined,
+      locationLng: slyde.location_lng !== null ? Number(slyde.location_lng) : undefined,
     }))
 
     // Build video URL from stream UID
@@ -262,12 +314,21 @@ export function useHomeSlyde(): UseHomeSlydeResult {
   const addCategory = useCallback(async (category: Omit<HomeSlydeCategory, 'id' | 'childSlydeId'>): Promise<string> => {
     if (!organization) throw new Error('No organization')
 
-    // Generate a URL-safe public_id
-    const publicId = category.name
+    // Generate a URL-safe public_id base
+    const baseId = category.name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '')
-      || `slyde-${Date.now()}`
+      || 'slyde'
+
+    // Check if this public_id already exists for this org
+    const existingIds = new Set(slydes.map(s => s.public_id))
+    let publicId = baseId
+    let suffix = 1
+    while (existingIds.has(publicId)) {
+      publicId = `${baseId}-${suffix}`
+      suffix++
+    }
 
     // Get next order index
     const maxOrder = Math.max(...slydes.map((s: any) => s.order_index ?? 0), -1)
@@ -288,7 +349,10 @@ export function useHomeSlyde(): UseHomeSlydeResult {
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error('Supabase addCategory error:', error.message, error.code, error.details)
+      throw new Error(`Failed to create category: ${error.message}`)
+    }
     if (!newSlyde) throw new Error('Failed to create slyde')
 
     // Refetch slydes to update local state
@@ -308,6 +372,22 @@ export function useHomeSlyde(): UseHomeSlydeResult {
     if (updates.icon !== undefined) slydeUpdates.icon = updates.icon
     if (updates.hasInventory !== undefined) slydeUpdates.has_inventory = updates.hasInventory
     if (updates.inventoryCtaText !== undefined) slydeUpdates.inventory_cta_text = updates.inventoryCtaText
+    // Cover background
+    if (updates.coverBackgroundType !== undefined) slydeUpdates.cover_background_type = updates.coverBackgroundType
+    if (updates.coverVideoStreamUid !== undefined) slydeUpdates.cover_video_stream_uid = updates.coverVideoStreamUid || null
+    if (updates.coverImageUrl !== undefined) slydeUpdates.cover_image_url = updates.coverImageUrl || null
+    if (updates.coverPosterUrl !== undefined) slydeUpdates.cover_poster_url = updates.coverPosterUrl || null
+    if (updates.coverVideoFilter !== undefined) slydeUpdates.cover_video_filter = updates.coverVideoFilter
+    if (updates.coverVideoVignette !== undefined) slydeUpdates.cover_video_vignette = updates.coverVideoVignette
+    if (updates.coverVideoSpeed !== undefined) slydeUpdates.cover_video_speed = updates.coverVideoSpeed
+    // Contact methods (per-slyde)
+    if (updates.contactPhone !== undefined) slydeUpdates.contact_phone = updates.contactPhone || null
+    if (updates.contactEmail !== undefined) slydeUpdates.contact_email = updates.contactEmail || null
+    if (updates.contactWhatsapp !== undefined) slydeUpdates.contact_whatsapp = updates.contactWhatsapp || null
+    // Location data (per-slyde)
+    if (updates.locationAddress !== undefined) slydeUpdates.location_address = updates.locationAddress || null
+    if (updates.locationLat !== undefined) slydeUpdates.location_lat = updates.locationLat ?? null
+    if (updates.locationLng !== undefined) slydeUpdates.location_lng = updates.locationLng ?? null
 
     await updateSlyde(slyde.id, slydeUpdates as any)
   }, [slydes, updateSlyde])

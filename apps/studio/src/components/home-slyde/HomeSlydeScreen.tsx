@@ -258,16 +258,15 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
         </motion.button>
       )}
 
-      {/* === RIGHT SIDE ACTIONS === (Heart + Share + Info) */}
+      {/* === RIGHT SIDE ACTIONS === */}
       <SocialActionStack
         heartCount={heartCount}
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
+        onInfoTap={() => setAboutOpen(true)}
         onConnectTap={() => setConnectOpen(true)}
         socialLinks={data.socialLinks}
-        hideHeart={!(data.showHearts ?? true)}
-        hideShare={!(data.showShare ?? true)}
         className="absolute right-3 bottom-36 z-40"
       />
 
@@ -292,7 +291,7 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
           {data.tagline}
         </p>
 
-        {/* ProfilePill → opens drawer (instead of AboutSheet) */}
+        {/* ProfilePill → opens drawer */}
         <ProfilePill
           name={data.businessName}
           accentColor={data.accentColor}

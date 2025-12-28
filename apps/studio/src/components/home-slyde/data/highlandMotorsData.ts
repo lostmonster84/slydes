@@ -54,6 +54,22 @@ export interface CategoryData {
   description: string
   frames: FrameData[]
   inventory?: InventoryItem[] // Only categories with inventory show "View All"
+  // Cover background (landing page for this Slyde)
+  coverBackgroundType?: 'video' | 'image'
+  coverVideoSrc?: string
+  coverImageUrl?: string
+  coverPosterUrl?: string
+  coverVideoFilter?: string
+  coverVideoVignette?: boolean
+  coverVideoSpeed?: string
+  // Location
+  locationAddress?: string
+  locationLat?: number
+  locationLng?: number
+  // Contact
+  contactPhone?: string
+  contactEmail?: string
+  contactWhatsapp?: string
 }
 
 export interface HomeSlydeData {

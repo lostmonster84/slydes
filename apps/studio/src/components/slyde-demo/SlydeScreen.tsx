@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronUp, ChevronLeft, Info, Volume2, VolumeX } from 'lucide-react'
+import { ChevronUp, ChevronLeft, Volume2, VolumeX } from 'lucide-react'
 import { Badge } from './Badge'
 import { RatingDisplay } from './RatingDisplay'
 import { SocialActionStack } from './SocialActionStack'
@@ -12,6 +12,7 @@ import { InfoSheet } from './InfoSheet'
 import { ShareSheet } from './ShareSheet'
 import { ConnectSheet } from './ConnectSheet'
 import { AboutSheet } from './AboutSheet'
+import { LocationSheet } from './LocationSheet'
 import { VideoPlayerOverlay } from './VideoPlayerOverlay'
 import { SlydesPromoSlide } from './SlydesPromoSlide'
 import { parseVideoUrl } from '@/components/VideoMediaInput'
@@ -70,6 +71,8 @@ interface SlydeScreenProps {
   isMuted?: boolean
   /** Callback when mute toggle is pressed */
   onMuteToggle?: () => void
+  /** Location data for this Slyde (shown in action stack if present) */
+  locationData?: { address?: string; lat?: number; lng?: number }
 }
 
 /**
@@ -113,6 +116,7 @@ export function SlydeScreen({
   audioEnabled = true,
   isMuted = true,
   onMuteToggle,
+  locationData,
 }: SlydeScreenProps) {
   const [currentFrame, setCurrentFrame] = useState(initialFrameIndex)
   const syncingFromPropRef = useRef(false)
@@ -130,6 +134,7 @@ export function SlydeScreen({
   const [showConnect, setShowConnect] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
   const [showVideo, setShowVideo] = useState(false)
+  const [showLocation, setShowLocation] = useState(false)
   const [touchCursor, setTouchCursor] = useState({ x: 0, y: 0, visible: false })
 
   const currentFrameData = frames[currentFrame]
@@ -287,14 +292,14 @@ export function SlydeScreen({
 
   // Auto-advance frames
   useEffect(() => {
-    if (!autoAdvance || showInfo || showShare || showConnect || showAbout || showVideo) return
-    
+    if (!autoAdvance || showInfo || showShare || showConnect || showAbout || showVideo || showLocation) return
+
     const interval = setInterval(() => {
       setCurrentFrame((prev) => (prev + 1) % frames.length)
     }, autoAdvanceInterval)
-    
+
     return () => clearInterval(interval)
-  }, [autoAdvance, autoAdvanceInterval, frames.length, showInfo, showShare, showConnect, showAbout, showVideo])
+  }, [autoAdvance, autoAdvanceInterval, frames.length, showInfo, showShare, showConnect, showAbout, showVideo, showLocation])
 
   // Keyboard navigation
   useEffect(() => {
@@ -305,7 +310,7 @@ export function SlydeScreen({
         return
       }
 
-      if (showInfo || showShare || showConnect || showAbout || showVideo) return
+      if (showInfo || showShare || showConnect || showAbout || showVideo || showLocation) return
 
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
         e.preventDefault()
@@ -318,7 +323,7 @@ export function SlydeScreen({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [frames.length, showInfo, showShare, showConnect, showAbout, showVideo])
+  }, [frames.length, showInfo, showShare, showConnect, showAbout, showVideo, showLocation])
 
   // Handle heart tap
   const handleHeartTap = useCallback(() => {
@@ -387,6 +392,11 @@ export function SlydeScreen({
   // Handle connect - opens social links sheet
   const handleConnect = useCallback(() => {
     setShowConnect(true)
+  }, [])
+
+  // Handle location - opens location sheet
+  const handleLocation = useCallback(() => {
+    setShowLocation(true)
   }, [])
 
   // Handle FAQ question submission
@@ -620,7 +630,7 @@ export function SlydeScreen({
       {/* NUCLEAR FIX: left-14 to avoid back button, conditional pointer-events-none when sheets open */}
       <motion.div
         className={`absolute left-14 right-16 top-24 bottom-40 z-20 ${
-          (showInfo || showShare || showConnect || showAbout) ? 'pointer-events-none' : ''
+          (showInfo || showShare || showConnect || showAbout || showLocation) ? 'pointer-events-none' : ''
         }`}
         onClick={() => nextFrame()}
         drag="y"
@@ -649,33 +659,20 @@ export function SlydeScreen({
         </button>
       )}
 
-      {/* Sound toggle - Top left (after back button if present) */}
+      {/* Sound toggle - Top-right corner (environmental control) */}
       {!isSlydesPromo && audioSrc && audioEnabled && onMuteToggle && (
         <button
           onClick={(e) => {
             e.stopPropagation()
             onMuteToggle()
           }}
-          className={`absolute top-10 ${context === 'category' && onBack ? 'left-14' : 'left-3'} w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center z-[70] pointer-events-auto`}
+          className="absolute top-10 right-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center z-[70] pointer-events-auto"
         >
           {isMuted ? (
             <VolumeX className="w-4 h-4 text-white" />
           ) : (
             <Volume2 className="w-4 h-4 text-white" />
           )}
-        </button>
-      )}
-
-      {/* Info button - Top-right corner (context: "Who is this?") */}
-      {!isSlydesPromo && (
-        <button
-          onClick={(e) => {
-            e.stopPropagation()
-            setShowInfo(true)
-          }}
-          className="absolute top-10 right-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center z-[70] pointer-events-auto"
-        >
-          <Info className="w-4 h-4 text-white" />
         </button>
       )}
 
@@ -701,15 +698,20 @@ export function SlydeScreen({
       )}
 
       {/* === RIGHT SIDE ACTIONS === (hidden on Slydes promo) */}
+      {/* In 'category' context (inside a Slyde after Cover), only show engagement buttons: Share, Heart */}
+      {/* In 'standalone' context (direct view), show all context buttons: Location, Info, Connect */}
       {currentFrameData.id !== 'slydes' && (
         <SocialActionStack
           heartCount={heartCounts[currentFrameData.id] || currentFrameData.heartCount}
           isHearted={isHearted[currentFrameData.id] || false}
           onHeartTap={handleHeartTap}
           onShareTap={handleShare}
-          onConnectTap={handleConnect}
+          onConnectTap={context === 'standalone' ? handleConnect : undefined}
+          onInfoTap={context === 'standalone' ? () => setShowInfo(true) : undefined}
+          onLocationTap={context === 'standalone' ? handleLocation : undefined}
           onVideoTap={currentFrameData.demoVideoUrl ? () => setShowVideo(true) : undefined}
-          socialLinks={business.social}
+          socialLinks={context === 'standalone' ? business.social : undefined}
+          locationData={context === 'standalone' ? locationData : undefined}
           demoVideoUrl={currentFrameData.demoVideoUrl}
           className="absolute right-3 top-1/2 -translate-y-1/2 z-40"
         />
@@ -915,6 +917,15 @@ export function SlydeScreen({
         onClose={() => setShowAbout(false)}
         business={business}
       />
+
+      {locationData && (
+        <LocationSheet
+          isOpen={showLocation}
+          onClose={() => setShowLocation(false)}
+          location={locationData}
+          businessName={business.name}
+        />
+      )}
 
       {/* Video Player Overlay */}
       {currentFrameData.demoVideoUrl && (

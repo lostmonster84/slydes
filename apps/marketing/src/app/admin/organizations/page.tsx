@@ -25,6 +25,10 @@ type OrganizationsData = {
 }
 
 const BUSINESS_TYPE_LABELS: Record<string, string> = {
+  property: 'Property (Sales & Lettings)',
+  hospitality: 'Hospitality (Hotels, Holiday Lets, Glamping)',
+  automotive: 'Automotive (Car Hire, Dealerships)',
+  // Legacy values (keep for backward compatibility)
   rentals: 'Rentals',
   tours: 'Tours',
   accommodation: 'Accommodation',
@@ -34,7 +38,6 @@ const BUSINESS_TYPE_LABELS: Record<string, string> = {
   salon: 'Salon',
   events: 'Events',
   real_estate: 'Real Estate',
-  automotive: 'Automotive',
   other: 'Other',
 }
 

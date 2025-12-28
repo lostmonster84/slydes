@@ -302,7 +302,7 @@ export function UrlToSlydeGenerator() {
               </span>
             </div>
             <div className="flex justify-between">
-              <span>Categories:</span>
+              <span>Slydes:</span>
               <span className="font-medium text-gray-900 dark:text-white">
                 {generatedDemo.categorySlydes.length}
               </span>

@@ -9,7 +9,7 @@ export function Footer() {
         <div className="mb-12">
           <Logo size="lg" dark={true} />
           <p className="text-gray-400 text-sm mt-2 max-w-xs">
-            Mobile-first sites that customers actually use.
+            Mobile-first tours that turn browsing into bookings.
           </p>
         </div>
 

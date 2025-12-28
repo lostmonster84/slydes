@@ -87,16 +87,37 @@ Full commerce. Sell directly. Get paid.
 
 **Includes**
 - Everything in Creator
-- Unlimited Slydes
+- Up to 25 Slydes
 - Unlimited categories
 - Buy Now CTAs
 - Add to Cart + Checkout
 - Order management
 - Stripe Connect integration
-- Priority support
+- Unlimited Momentum AI
 
 CTA:
 **Upgrade to Pro**
+
+---
+
+### Agency Plan
+
+**For teams managing clients**
+
+£99 / month
+
+Scale without limits.
+
+**Includes**
+- Everything in Pro
+- Up to 75 Slydes
+- Client management
+- White-label options
+- Team collaboration
+- Priority support
+
+CTA:
+**Upgrade to Agency**
 
 ---
 
@@ -323,8 +344,9 @@ Only behaviour matters in the first 30 days.
 Free proves the format.
 Creator unlocks growth.
 Pro enables commerce.
+Agency scales with you.
 Metrics decide what comes next.
 
 ---
 
-*Last updated: December 16, 2025*
+*Last updated: December 21, 2025*

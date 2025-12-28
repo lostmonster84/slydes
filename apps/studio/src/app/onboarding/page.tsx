@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Loader2, Check, X, ChevronLeft } from 'lucide-react'
@@ -8,17 +8,17 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { applyStarterTemplate } from '@/lib/starterTemplates'
 import { writeDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 
-const BUSINESS_TYPES = [
-  { id: 'rentals', label: 'Rentals & Equipment', icon: '🚗' },
-  { id: 'tours', label: 'Tours & Experiences', icon: '🎯' },
-  { id: 'accommodation', label: 'Accommodation', icon: '🏠' },
-  { id: 'restaurant', label: 'Restaurant & Food', icon: '🍽️' },
-  { id: 'retail', label: 'Retail & Shopping', icon: '🛍️' },
-  { id: 'fitness', label: 'Fitness & Wellness', icon: '💪' },
-  { id: 'salon', label: 'Salon & Beauty', icon: '💇' },
-  { id: 'events', label: 'Events & Venues', icon: '🎉' },
-  { id: 'real_estate', label: 'Real Estate', icon: '🏢' },
-  { id: 'automotive', label: 'Automotive', icon: '🔧' },
+interface BusinessType {
+  id: string
+  label: string
+  icon: string
+}
+
+// Fallback types if API fails - matches HQ verticals
+const DEFAULT_BUSINESS_TYPES: BusinessType[] = [
+  { id: 'property', label: 'Property (Sales & Lettings)', icon: '🏠' },
+  { id: 'hospitality', label: 'Hospitality (Hotels, Holiday Lets)', icon: '🏨' },
+  { id: 'automotive', label: 'Automotive (Car Hire, Dealerships)', icon: '🚗' },
   { id: 'other', label: 'Other', icon: '✨' },
 ]
 
@@ -47,13 +47,33 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [slugStatus, setSlugStatus] = useState<'idle' | 'checking' | 'available' | 'owned' | 'taken'>('idle')
+  const [businessTypes, setBusinessTypes] = useState<BusinessType[]>(DEFAULT_BUSINESS_TYPES)
   const [formData, setFormData] = useState({
     full_name: '',
     organization_name: '',
     slug: '',
     website: '',
     business_type: '',
+    other_description: '', // Custom industry description when "other" is selected
   })
+
+  // Fetch business types from API
+  useEffect(() => {
+    const fetchBusinessTypes = async () => {
+      try {
+        const res = await fetch('/api/verticals')
+        if (!res.ok) throw new Error('Failed to fetch')
+        const data = await res.json()
+        if (data.verticals && data.verticals.length > 0) {
+          setBusinessTypes(data.verticals)
+        }
+      } catch (error) {
+        console.warn('Could not fetch verticals, using defaults:', error)
+        // Keep defaults on error
+      }
+    }
+    fetchBusinessTypes()
+  }, [])
 
   // Auto-generate slug from organization name
   useEffect(() => {
@@ -539,12 +559,12 @@ export default function OnboardingPage() {
                     We'll customize your experience based on this.
                   </p>
 
-                  <div className="grid grid-cols-2 gap-2 mb-6">
-                    {BUSINESS_TYPES.map((type) => (
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    {businessTypes.map((type) => (
                       <motion.button
                         key={type.id}
                         type="button"
-                        onClick={() => setFormData(prev => ({ ...prev, business_type: type.id }))}
+                        onClick={() => setFormData(prev => ({ ...prev, business_type: type.id, other_description: type.id === 'other' ? prev.other_description : '' }))}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         className={`flex items-center gap-3 p-4 rounded-2xl transition-all text-left ${
@@ -558,6 +578,32 @@ export default function OnboardingPage() {
                       </motion.button>
                     ))}
                   </div>
+
+                  {/* Custom industry input when "Other" is selected */}
+                  <AnimatePresence>
+                    {formData.business_type === 'other' && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mb-4 overflow-hidden"
+                      >
+                        <label htmlFor="other_description" className="block text-[13px] font-medium text-white/60 mb-2 uppercase tracking-wide">
+                          Tell us about your industry
+                        </label>
+                        <input
+                          id="other_description"
+                          name="other_description"
+                          type="text"
+                          value={formData.other_description}
+                          onChange={handleChange}
+                          placeholder="e.g. Fitness studio, Restaurant, Event venue..."
+                          autoFocus
+                          className="w-full bg-white/[0.06] border-0 rounded-2xl py-4 px-5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/50 focus:bg-white/[0.08] transition-all text-[17px]"
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   <motion.button
                     type="button"

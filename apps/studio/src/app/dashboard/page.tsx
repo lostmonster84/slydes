@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { X, RefreshCw, Sparkles, BarChart3, PenLine, Target, Zap } from 'lucide-react'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
 import { useSlydes, useOrganization, useMomentum } from '@/hooks'
@@ -28,7 +28,13 @@ export default function HQDashboardPage() {
   const { organization } = useOrganization()
   const { data: momentum, isLoading: momentumLoading, refetch, range, setRange } = useMomentum()
   const { plan, isFree, isPro } = usePlan()
-  const { open: openMomentumAI } = useMomentumAI()
+  const { open: openMomentumAI, hideTrigger, showTrigger } = useMomentumAI()
+
+  // Hide floating Momentum bubble on this page (it's built-in here)
+  useEffect(() => {
+    hideTrigger()
+    return () => showTrigger()
+  }, [hideTrigger, showTrigger])
 
   const hasSlydes = slydes.length > 0
   const hasData = momentum?.hasData ?? false

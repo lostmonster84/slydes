@@ -89,3 +89,272 @@ export interface ApiResponse<T = unknown> {
   error?: string
   message?: string
 }
+
+// =========================================
+// Social Stack Types
+// =========================================
+
+export type SocialStackButtonKey = 'location' | 'info' | 'share' | 'heart' | 'connect'
+
+export interface SocialStackConfig {
+  buttons: {
+    location: boolean
+    info: boolean
+    share: boolean
+    heart: boolean
+    connect: boolean
+  }
+  order: SocialStackButtonKey[]
+}
+
+export interface ContactMethods {
+  phone?: string
+  email?: string
+  whatsapp?: string
+}
+
+export interface LocationData {
+  address?: string
+  lat?: number
+  lng?: number
+}
+
+// =========================================
+// Vertical Types & Configurations
+// =========================================
+
+export type VerticalType =
+  | 'property'
+  | 'automotive'
+  | 'hospitality'
+  | 'beauty'
+  | 'food'
+  | 'other'
+
+/**
+ * Feature flags that can be toggled per vertical/slyde
+ * These control which sections appear in the inspector and preview
+ */
+export interface FeatureFlags {
+  // Action Stack buttons
+  location: boolean
+  info: boolean
+  share: boolean
+  heart: boolean
+  connect: boolean
+  // Content sections
+  contact: boolean    // Contact details (phone/email/whatsapp in Info sheet)
+  faqs: boolean       // FAQ section
+  demoVideo: boolean  // Demo video button
+}
+
+/**
+ * Complete vertical configuration
+ */
+export interface VerticalConfig {
+  id: VerticalType
+  name: string
+  description: string
+  icon: string  // Lucide icon name
+  defaults: {
+    socialStack: SocialStackConfig
+    features: FeatureFlags
+  }
+}
+
+/**
+ * All vertical configurations with their defaults
+ */
+export const VERTICALS: Record<VerticalType, VerticalConfig> = {
+  property: {
+    id: 'property',
+    name: 'Property',
+    description: 'Real estate, lettings, property management',
+    icon: 'Home',
+    defaults: {
+      socialStack: {
+        buttons: { location: true, info: true, share: true, heart: false, connect: false },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: true,
+        info: true,
+        share: true,
+        heart: false,
+        connect: false,
+        contact: true,
+        faqs: true,
+        demoVideo: true
+      }
+    }
+  },
+  automotive: {
+    id: 'automotive',
+    name: 'Automotive',
+    description: 'Car dealers, rentals, vehicle sales',
+    icon: 'Car',
+    defaults: {
+      socialStack: {
+        buttons: { location: false, info: true, share: true, heart: false, connect: true },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: false,
+        info: true,
+        share: true,
+        heart: false,
+        connect: true,
+        contact: true,
+        faqs: true,
+        demoVideo: true
+      }
+    }
+  },
+  hospitality: {
+    id: 'hospitality',
+    name: 'Hospitality',
+    description: 'Hotels, B&Bs, holiday lets, experiences',
+    icon: 'Bed',
+    defaults: {
+      socialStack: {
+        buttons: { location: true, info: true, share: true, heart: true, connect: true },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: true,
+        info: true,
+        share: true,
+        heart: true,
+        connect: true,
+        contact: true,
+        faqs: true,
+        demoVideo: true
+      }
+    }
+  },
+  beauty: {
+    id: 'beauty',
+    name: 'Beauty & Wellness',
+    description: 'Salons, spas, fitness, wellness',
+    icon: 'Sparkles',
+    defaults: {
+      socialStack: {
+        buttons: { location: true, info: true, share: true, heart: true, connect: true },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: true,
+        info: true,
+        share: true,
+        heart: true,
+        connect: true,
+        contact: true,
+        faqs: true,
+        demoVideo: false
+      }
+    }
+  },
+  food: {
+    id: 'food',
+    name: 'Food & Drink',
+    description: 'Restaurants, cafes, bars, catering',
+    icon: 'UtensilsCrossed',
+    defaults: {
+      socialStack: {
+        buttons: { location: true, info: true, share: true, heart: true, connect: false },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: true,
+        info: true,
+        share: true,
+        heart: true,
+        connect: false,
+        contact: true,
+        faqs: true,
+        demoVideo: false
+      }
+    }
+  },
+  other: {
+    id: 'other',
+    name: 'Other',
+    description: 'General business, services, retail',
+    icon: 'Building2',
+    defaults: {
+      socialStack: {
+        buttons: { location: true, info: true, share: true, heart: false, connect: true },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: true,
+        info: true,
+        share: true,
+        heart: false,
+        connect: true,
+        contact: true,
+        faqs: false,
+        demoVideo: false
+      }
+    }
+  }
+}
+
+/**
+ * Get vertical config by type (with fallback to 'other')
+ */
+export function getVerticalConfig(vertical: VerticalType | string | null | undefined): VerticalConfig {
+  if (vertical && vertical in VERTICALS) {
+    return VERTICALS[vertical as VerticalType]
+  }
+  return VERTICALS.other
+}
+
+/**
+ * Get default feature flags for a vertical
+ */
+export function getVerticalDefaults(vertical: VerticalType | string | null | undefined): FeatureFlags {
+  return getVerticalConfig(vertical).defaults.features
+}
+
+/**
+ * Get default social stack config for a vertical
+ */
+export function getVerticalSocialStack(vertical: VerticalType | string | null | undefined): SocialStackConfig {
+  return getVerticalConfig(vertical).defaults.socialStack
+}
+
+// Legacy: Keep VERTICAL_PRESETS for backwards compatibility
+export const VERTICAL_PRESETS: Record<VerticalType, SocialStackConfig> = {
+  property: VERTICALS.property.defaults.socialStack,
+  automotive: VERTICALS.automotive.defaults.socialStack,
+  hospitality: VERTICALS.hospitality.defaults.socialStack,
+  beauty: VERTICALS.beauty.defaults.socialStack,
+  food: VERTICALS.food.defaults.socialStack,
+  other: VERTICALS.other.defaults.socialStack,
+}
+
+// Default social stack config (for slydes/categories)
+// Note: Contact is accessed via Info sheet's dropdown, not a separate button
+export const DEFAULT_SOCIAL_STACK_CONFIG: SocialStackConfig = {
+  buttons: {
+    location: true,
+    info: true,
+    share: true,
+    heart: false,
+    connect: true
+  },
+  order: ['location', 'info', 'share', 'heart', 'connect']
+}
+
+// Home screen social stack config (simpler - no Location/Info since those are slyde-specific)
+export const HOME_SOCIAL_STACK_CONFIG: SocialStackConfig = {
+  buttons: {
+    location: false,
+    info: false,
+    share: true,
+    heart: true,
+    connect: true
+  },
+  order: ['share', 'heart', 'connect']
+}

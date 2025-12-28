@@ -8,39 +8,64 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 
-// Demo businesses - using our existing beautiful PhoneMockup variants
+// Demo businesses - Property + Hospitality focus
 const demos = [
+  // Property
+  {
+    id: 'realestate',
+    name: 'Prestige Estates',
+    variant: 'realestate' as const,
+    industry: 'Estate Agents',
+    location: 'London, UK',
+    description: 'Full-screen property tours with instant viewing requests. Show the best bits fast, then end with one clear action.',
+    color: 'from-slate-700 to-slate-900',
+    bgColor: 'bg-gradient-to-br from-slate-50 to-gray-100',
+    features: ['Video property tours', 'Instant viewing requests', 'One link for WhatsApp + email'],
+    status: 'demo',
+  },
+  {
+    id: 'rentals',
+    name: 'Villa Serenità',
+    variant: 'rentals' as const,
+    industry: 'Holiday Lets',
+    location: 'Lake Como, Italy',
+    description: 'Sell the atmosphere first. Then send guests to Airbnb, Booking.com, or your direct booking engine.',
+    color: 'from-emerald-600 to-emerald-800',
+    bgColor: 'bg-gradient-to-br from-emerald-50 to-teal-50',
+    features: ['Immersive property tour', 'Link out to Airbnb / Booking', 'Availability & reviews'],
+    status: 'demo',
+  },
+  // Hospitality
+  {
+    id: 'hospitality',
+    name: 'Highland Retreat',
+    variant: 'hospitality' as const,
+    industry: 'Hotels & Lodges',
+    location: 'Scottish Highlands',
+    description: 'Guests don\'t scroll galleries. They swipe stories. Show the feeling, the rooms, and the experience — then book direct.',
+    color: 'from-amber-600 to-orange-700',
+    bgColor: 'bg-gradient-to-br from-amber-50 to-yellow-50',
+    features: ['Experience-first tour', 'Room & amenity highlights', 'Book direct CTA'],
+    status: 'demo',
+  },
   {
     id: 'lunadomes',
-    name: 'Luna Domes',
+    name: 'Aurora Domes',
     variant: 'lunadomes' as const,
-    industry: 'Luxury Glamping',
-    location: 'West Kent, UK',
-    description: 'Luxury geodesic domes with hot tubs, stunning views, and sumptuous furnishings. 6 unique domes to choose from.',
+    industry: 'Glamping',
+    location: 'Highlands, UK',
+    description: 'Premium stays deserve premium presentation. One link that feels full-screen on every phone, then send guests to book.',
     color: 'from-amber-600 to-rose-700',
     bgColor: 'bg-gradient-to-br from-amber-50 to-rose-50',
-    features: ['6 unique domes', 'Hot tubs & fire pits', 'Gift vouchers'],
-    website: 'https://www.lunadomes.com',
+    features: ['Cinematic walkthroughs', 'Instant enquiries', 'Shareable link everywhere'],
     status: 'demo',
   },
-  {
-    id: 'extremetrailers',
-    name: 'Extreme Trailers',
-    variant: 'extremetrailers' as const,
-    industry: 'Manufacturing',
-    location: 'Southampton, UK',
-    description: '100 years of marine experience. Premium boat trailers from PWC to custom builds. CNC laser precision, hot-dipped galvanised.',
-    color: 'from-cyan-600 to-blue-800',
-    bgColor: 'bg-gradient-to-br from-cyan-50 to-blue-50',
-    features: ['8 trailer types', 'Custom builds', 'Made in Britain'],
-    website: 'https://www.extreme-trailers.co.uk',
-    status: 'demo',
-  },
+  // Live example
   {
     id: 'wildtrax',
     name: 'WildTrax 4x4',
     variant: 'wildtrax' as const,
-    industry: 'Vehicle Rentals',
+    industry: 'Rentals & Experiences',
     location: 'Scottish Highlands',
     description: 'Highland vehicle rentals transformed into a mobile-first experience. Land Rover Defenders, roof tents, NC500 adventures.',
     color: 'from-red-600 to-red-800',
@@ -49,94 +74,19 @@ const demos = [
     website: 'https://wildtrax.co.uk',
     status: 'live',
   },
-  {
-    id: 'hospitality',
-    name: 'Maison Lumière',
-    variant: 'hospitality' as const,
-    industry: 'Fine Dining',
-    location: 'Paris, France',
-    description: 'Michelin-starred restaurant with video menu previews, chef recommendations, and seamless table reservations.',
-    color: 'from-amber-600 to-orange-700',
-    bgColor: 'bg-gradient-to-br from-amber-50 to-yellow-50',
-    features: ['Video menu previews', 'Table reservations', 'Chef\'s specials'],
-    status: 'demo',
-  },
-  {
-    id: 'experiences',
-    name: 'Azure Charters',
-    variant: 'experiences' as const,
-    industry: 'Yacht Charters',
-    location: 'Mediterranean',
-    description: 'Luxury yacht experiences with cinematic video showcases, instant booking, and concierge service.',
-    color: 'from-blue-600 to-indigo-700',
-    bgColor: 'bg-gradient-to-br from-blue-50 to-indigo-50',
-    features: ['Cinematic showcases', 'Instant booking', 'Concierge service'],
-    status: 'demo',
-  },
-  {
-    id: 'wellness',
-    name: 'Velvet Spa',
-    variant: 'wellness' as const,
-    industry: 'Luxury Wellness',
-    location: 'Beverly Hills',
-    description: 'Forbes 5-star spa with treatment showcases, online booking, and gift card integration.',
-    color: 'from-rose-500 to-pink-600',
-    bgColor: 'bg-gradient-to-br from-rose-50 to-pink-50',
-    features: ['Treatment showcases', 'Online booking', 'Gift cards'],
-    status: 'demo',
-  },
-  {
-    id: 'fitness',
-    name: 'FORM Studio',
-    variant: 'fitness' as const,
-    industry: 'Boutique Fitness',
-    location: 'Manhattan, NYC',
-    description: 'NYC\'s #1 boutique fitness studio with class previews, live schedule, and instant membership signup.',
-    color: 'from-orange-500 to-red-600',
-    bgColor: 'bg-gradient-to-br from-orange-50 to-red-50',
-    features: ['Class previews', 'Live schedule', 'Membership signup'],
-    status: 'demo',
-  },
-  {
-    id: 'automotive',
-    name: 'Apex Motors',
-    variant: 'automotive' as const,
-    industry: 'Exotic Car Rentals',
-    location: 'Dubai, UAE',
-    description: 'Premium exotic car rentals with video fleet showcases, instant reservations, and white-glove delivery.',
-    color: 'from-red-600 to-red-900',
-    bgColor: 'bg-gradient-to-br from-slate-50 to-gray-100',
-    features: ['Video fleet showcase', 'Instant reservations', 'White-glove delivery'],
-    status: 'demo',
-  },
-  {
-    id: 'realestate',
-    name: 'Prestige Estates',
-    variant: 'realestate' as const,
-    industry: 'Luxury Real Estate',
-    location: 'Miami, Florida',
-    description: 'Miami\'s #1 luxury brokerage with video property tours, instant scheduling, and agent direct connect.',
-    color: 'from-slate-700 to-slate-900',
-    bgColor: 'bg-gradient-to-br from-slate-50 to-gray-100',
-    features: ['Video property tours', 'Instant scheduling', 'Agent connect'],
-    status: 'demo',
-  },
-  {
-    id: 'events',
-    name: 'The Glass House',
-    variant: 'events' as const,
-    industry: 'Event Venues',
-    location: 'Los Angeles',
-    description: 'Award-winning event venue with video tours, availability calendar, and instant quote requests.',
-    color: 'from-purple-600 to-violet-700',
-    bgColor: 'bg-gradient-to-br from-purple-50 to-violet-50',
-    features: ['Venue video tours', 'Availability calendar', 'Quote requests'],
-    status: 'demo',
-  },
 ]
 
+// Future verticals (kept for /automotive, /fitness, etc.)
+// const futureExamples = [
+//   { id: 'automotive', name: 'Apex Motors', variant: 'automotive' as const, industry: 'Exotic Car Rentals', ... },
+//   { id: 'fitness', name: 'FORM Studio', variant: 'fitness' as const, industry: 'Boutique Fitness', ... },
+//   { id: 'experiences', name: 'Azure Charters', variant: 'experiences' as const, industry: 'Yacht Charters', ... },
+//   { id: 'wellness', name: 'Velvet Spa', variant: 'wellness' as const, industry: 'Luxury Wellness', ... },
+//   { id: 'events', name: 'The Glass House', variant: 'events' as const, industry: 'Event Venues', ... },
+// ]
+
 export default function DemosPage() {
-  const [activeDemo, setActiveDemo] = useState('lunadomes')
+  const [activeDemo, setActiveDemo] = useState('realestate')
   
   const currentDemo = demos.find(d => d.id === activeDemo) || demos[0]
 
@@ -160,9 +110,9 @@ export default function DemosPage() {
                 See Slydes <span className="gradient-text">in action</span>
               </h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                WildTrax is live. The rest are templates showing what YOUR business could look like.
+                Property tours. Holiday lets. Hotels and glamping. See what YOUR business could look like.
                 <br />
-                <span className="text-leader-blue font-semibold">Swipe, scroll, fall in love.</span>
+                <span className="text-leader-blue font-semibold">Swipe, scroll, book.</span>
               </p>
             </motion.div>
           </div>
@@ -314,7 +264,7 @@ export default function DemosPage() {
             >
               <h2 className="mb-4">What you're looking at</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                WildTrax is a live customer. The templates show real Slydes technology applied to different industries.
+                WildTrax is live. The rest are templates showing real Slydes technology applied to property and hospitality.
               </p>
             </motion.div>
 

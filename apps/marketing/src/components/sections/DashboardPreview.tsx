@@ -1,19 +1,129 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TrendingUp, Smartphone, Layers, BarChart3, Inbox, Palette, Settings } from 'lucide-react'
 import { DevicePreview } from '@/components/ui/DevicePreview'
 
+function VideoBackground({
+  src,
+  fallbackSrc,
+  className
+}: {
+  src: string
+  fallbackSrc: string
+  className?: string
+}) {
+  const [currentSrc, setCurrentSrc] = useState(src)
+
+  // When the desired src changes (e.g. switching frames), attempt it again.
+  useEffect(() => {
+    const controller = new AbortController()
+
+    // Optimistic: try the desired src, but preflight with HEAD to avoid a black flash
+    // when the marketing site is missing optional local demo clips.
+    ;(async () => {
+      try {
+        const res = await fetch(src, { method: 'HEAD', signal: controller.signal })
+        if (!res.ok) {
+          setCurrentSrc(fallbackSrc)
+          return
+        }
+        setCurrentSrc(src)
+      } catch {
+        // If HEAD fails (dev server / aborted / offline), fall back gracefully.
+        setCurrentSrc(fallbackSrc)
+      }
+    })()
+
+    return () => controller.abort()
+  }, [src])
+
+  return (
+    <motion.video
+      key={currentSrc}
+      src={currentSrc}
+      autoPlay
+      loop
+      muted
+      playsInline
+      className={className}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.35 }}
+      onError={() => {
+        if (currentSrc !== fallbackSrc) setCurrentSrc(fallbackSrc)
+      }}
+    />
+  )
+}
+
 // Simplified slyde structure for the phone preview
 const slydes = [
-  { id: 'hero', name: 'Hero Video' },
-  { id: 'about', name: 'About Us' },
-  { id: 'menu', name: 'Menu Highlights' },
-  { id: 'reviews', name: 'Reviews' },
-  { id: 'location', name: 'Find Us' },
+  { id: 'hero', name: 'Welcome' },
+  { id: 'view', name: 'The View' },
+  { id: 'hottub', name: 'Hot Tub' },
+  { id: 'outdoor', name: 'Outdoor Area' },
+  { id: 'location', name: 'Location' },
   { id: 'book', name: 'Book Now' },
 ]
+
+const PROPERTY_VIDEOS = {
+  hero: '/videos/property/hero.mp4',
+  living: '/videos/property/living-room.mp4',
+  kitchen: '/videos/property/kitchen.mp4',
+  bedrooms: '/videos/property/bedrooms.mp4',
+  location: '/videos/property/location.mp4',
+  book: '/videos/property/book-viewing.mp4',
+} as const
+
+const FALLBACK_VIDEO = '/videos/maison.mp4'
+
+const previewSlides = [
+  {
+    label: 'Featured',
+    title: 'Welcome',
+    brand: 'Oceanview Retreat',
+    cta: 'Book now',
+    videoSrc: PROPERTY_VIDEOS.hero,
+  },
+  {
+    label: 'Featured',
+    title: 'The View',
+    brand: 'Oceanview Retreat',
+    cta: 'Book now',
+    videoSrc: PROPERTY_VIDEOS.living,
+  },
+  {
+    label: 'Featured',
+    title: 'Hot Tub',
+    brand: 'Oceanview Retreat',
+    cta: 'Check availability',
+    videoSrc: PROPERTY_VIDEOS.kitchen,
+  },
+  {
+    label: 'Featured',
+    title: 'Outdoor Area',
+    brand: 'Oceanview Retreat',
+    cta: 'Book now',
+    videoSrc: PROPERTY_VIDEOS.bedrooms,
+  },
+  {
+    label: 'Featured',
+    title: 'Location',
+    brand: 'Oceanview Retreat',
+    cta: 'Get directions',
+    videoSrc: PROPERTY_VIDEOS.location,
+  },
+  {
+    label: 'Featured',
+    title: 'Book Now',
+    brand: 'Oceanview Retreat',
+    cta: 'Book now',
+    videoSrc: PROPERTY_VIDEOS.book,
+  },
+] as const
 
 export function DashboardPreview() {
   const [activeSlyde, setActiveSlyde] = useState(0)
@@ -22,7 +132,7 @@ export function DashboardPreview() {
   const navItems = [
     { id: 'momentum' as const, label: 'Momentum', icon: TrendingUp },
     { id: 'studio' as const, label: 'Studio', icon: Smartphone },
-    { id: 'slydes' as const, label: 'Slydes', icon: Layers, badge: 6 },
+    { id: 'slydes' as const, label: 'Slydes', icon: Layers, badge: slydes.length },
     { id: 'analytics' as const, label: 'Analytics', icon: BarChart3 },
     { id: 'inbox' as const, label: 'Inbox', icon: Inbox, comingSoon: true },
   ]
@@ -32,8 +142,10 @@ export function DashboardPreview() {
     { id: 'settings', label: 'Settings', icon: Settings },
   ]
 
+  const currentSlide = previewSlides[activeSlyde] ?? previewSlides[0]
+
   return (
-    <section className="py-24 bg-[#0A0E27] overflow-hidden">
+    <section id="dashboard-preview" className="py-16 md:py-24 bg-[#0A0E27] overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -55,13 +167,97 @@ export function DashboardPreview() {
           </p>
         </motion.div>
 
+        {/* Mobile: keep it simple (phone-first) */}
+        <div className="md:hidden">
+          <div className="bg-[#1e1e1e] rounded-2xl border border-[#3a3a3a] shadow-2xl shadow-black/50 overflow-hidden">
+            {/* Minimal toolbar */}
+            <div className="bg-[#323232] border-b border-[#3a3a3a] px-4 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+              </div>
+              <div className="text-xs font-medium text-white/70">Prestige Estates</div>
+              <button className="px-3 py-1.5 min-h-[44px] bg-leader-blue text-white text-xs rounded-lg font-medium hover:bg-leader-blue/90 transition-colors flex items-center">
+                Publish
+              </button>
+            </div>
+
+            {/* Phone preview + frame tabs */}
+            <div className="p-4">
+              <div className="relative flex items-center justify-center">
+                {/* Subtle spotlight glow */}
+                <div
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.1) 0%, transparent 60%)',
+                  }}
+                />
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeSlyde}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.25 }}
+                    className="relative z-10 w-full flex justify-center"
+                  >
+                    <DevicePreview enableTilt={false}>
+                      <div className="relative w-full h-full flex flex-col justify-end p-4 overflow-hidden">
+                        <AnimatePresence mode="wait">
+                          <VideoBackground
+                            src={currentSlide.videoSrc}
+                            fallbackSrc={FALLBACK_VIDEO}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        </AnimatePresence>
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/40" />
+
+                        <div className="relative z-10">
+                          <div className="text-xs text-white/80 mb-1">{currentSlide.label}</div>
+                          <div className="text-xl font-bold text-white mb-1">{currentSlide.title}</div>
+                          <div className="text-sm text-white/70 mb-4">{currentSlide.brand}</div>
+                          <button className="w-full bg-white/20 backdrop-blur rounded-full py-3 text-sm font-medium text-white">
+                            {currentSlide.cta}
+                          </button>
+                        </div>
+
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-28 h-1 bg-white/30 rounded-full" />
+                      </div>
+                    </DevicePreview>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              <div className="w-full mt-4">
+                <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 -mx-4 px-4">
+                  {slydes.map((slyde, index) => (
+                    <button
+                      key={slyde.id}
+                      onClick={() => setActiveSlyde(index)}
+                      className={`flex-shrink-0 px-3 py-2 min-h-[44px] rounded-lg text-xs font-medium transition-all ${
+                        activeSlyde === index
+                          ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white'
+                          : 'bg-white/10 text-white/60'
+                      }`}
+                    >
+                      {slyde.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Dashboard mockup - macOS style dark mode */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
-          className="bg-[#1e1e1e] rounded-2xl border border-[#3a3a3a] shadow-2xl shadow-black/50 overflow-hidden"
+          className="hidden md:block bg-[#1e1e1e] rounded-2xl border border-[#3a3a3a] shadow-2xl shadow-black/50 overflow-hidden"
         >
           {/* macOS-style toolbar */}
           <div className="bg-[#323232] border-b border-[#3a3a3a] px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
@@ -70,7 +266,7 @@ export function DashboardPreview() {
               <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#febc2e]" />
               <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#28c840]" />
             </div>
-            <div className="text-xs md:text-sm font-medium text-white/70">Bloom Studio</div>
+            <div className="text-xs md:text-sm font-medium text-white/70">Prestige Estates</div>
             <button className="px-3 md:px-4 py-1.5 min-h-[44px] bg-leader-blue text-white text-xs md:text-sm rounded-lg font-medium hover:bg-leader-blue/90 transition-colors flex items-center">
               Publish
             </button>
@@ -155,8 +351,8 @@ export function DashboardPreview() {
                     B
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-white truncate">Bloom Studio</div>
-                    <div className="text-xs text-white/50 truncate">bloomstudio.slydes.io</div>
+                    <div className="text-sm font-medium text-white truncate">Prestige Estates</div>
+                    <div className="text-xs text-white/50 truncate">prestigeestates.slydes.io</div>
                   </div>
                 </div>
               </div>
@@ -198,7 +394,7 @@ export function DashboardPreview() {
               )}
 
               {/* Phone preview area */}
-              <div className="flex-1 flex items-center justify-center p-4 md:p-8 relative">
+              <div className="flex-1 flex flex-col items-center justify-center p-4 md:p-8 relative">
                 {/* Subtle spotlight glow */}
                 <div
                   className="absolute inset-0 flex items-center justify-center pointer-events-none"
@@ -213,21 +409,30 @@ export function DashboardPreview() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.25 }}
-                    className="relative z-10"
+                    className="relative z-10 w-full flex justify-center"
                   >
                     <DevicePreview enableTilt={false}>
                       {/* Screen content */}
-                      <div className="w-full h-full bg-gradient-to-br from-rose-500 to-pink-600 flex flex-col justify-end p-4">
-                        {/* Video background placeholder */}
-                        <div className="absolute inset-0 bg-black/20" />
+                      <div className="relative w-full h-full flex flex-col justify-end p-4 overflow-hidden">
+                        {/* Video background */}
+                        <AnimatePresence mode="wait">
+                          <VideoBackground
+                            src={currentSlide.videoSrc}
+                            fallbackSrc={FALLBACK_VIDEO}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        </AnimatePresence>
+
+                        {/* Readability overlays */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/40" />
 
                         {/* Content */}
                         <div className="relative z-10">
-                          <div className="text-xs text-white/80 mb-1">Florist</div>
-                          <div className="text-xl font-bold text-white mb-1">{slydes[activeSlyde].name}</div>
-                          <div className="text-sm text-white/70 mb-4">Bloom Studio</div>
+                          <div className="text-xs text-white/80 mb-1">{currentSlide.label}</div>
+                          <div className="text-xl font-bold text-white mb-1">{currentSlide.title}</div>
+                          <div className="text-sm text-white/70 mb-4">{currentSlide.brand}</div>
                           <button className="w-full bg-white/20 backdrop-blur rounded-full py-3 text-sm font-medium text-white">
-                            Shop Flowers
+                            {currentSlide.cta}
                           </button>
                         </div>
 
@@ -237,25 +442,6 @@ export function DashboardPreview() {
                     </DevicePreview>
                   </motion.div>
                 </AnimatePresence>
-
-                {/* Mobile frame selector - horizontal scroll */}
-                <div className="md:hidden absolute bottom-4 left-0 right-0 px-4">
-                  <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 -mx-4 px-4">
-                    {slydes.map((slyde, index) => (
-                      <button
-                        key={slyde.id}
-                        onClick={() => setActiveSlyde(index)}
-                        className={`flex-shrink-0 px-3 py-2 min-h-[44px] rounded-lg text-xs font-medium transition-all ${
-                          activeSlyde === index
-                            ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white'
-                            : 'bg-white/10 text-white/60'
-                        }`}
-                      >
-                        {slyde.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
             </div>
           </div>

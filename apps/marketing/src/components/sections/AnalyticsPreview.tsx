@@ -95,7 +95,7 @@ export function AnalyticsPreview() {
                   </div>
                   <div>
                     <div className="text-white font-medium text-sm">Analytics</div>
-                    <div className="text-white/40 text-xs">Bloom Studio</div>
+                    <div className="text-white/40 text-xs">Prestige Estates</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -138,10 +138,10 @@ export function AnalyticsPreview() {
                   <div className="space-y-2">
                     {[
                       { frame: 'Hero', viewers: 100, color: 'bg-leader-blue', delay: 0 },
-                      { frame: 'Fleet', viewers: 85, color: 'bg-leader-blue', delay: 0.1 },
-                      { frame: 'Pricing', viewers: 72, color: 'bg-leader-blue', delay: 0.2 },
-                      { frame: 'Reviews', viewers: 58, color: 'bg-amber-500', delay: 0.3 },
-                      { frame: 'Book Now', viewers: 45, color: 'bg-emerald-500', delay: 0.4 },
+                      { frame: 'Tour', viewers: 86, color: 'bg-leader-blue', delay: 0.1 },
+                      { frame: 'Details', viewers: 74, color: 'bg-leader-blue', delay: 0.2 },
+                      { frame: 'Location', viewers: 59, color: 'bg-amber-500', delay: 0.3 },
+                      { frame: 'Book Viewing', viewers: 46, color: 'bg-emerald-500', delay: 0.4 },
                     ].map((item, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <span className="text-white/50 text-xs w-16 truncate">{item.frame}</span>
@@ -164,7 +164,7 @@ export function AnalyticsPreview() {
                     transition={{ duration: 2, repeat: Infinity }}
                   >
                     <div className="w-2 h-2 rounded-full bg-amber-500" />
-                    <span className="text-amber-400 text-xs font-medium">Reviews frame losing 14% - consider shortening</span>
+                    <span className="text-amber-400 text-xs font-medium">Location frame losing 14% - consider shortening</span>
                   </motion.div>
                 </div>
 

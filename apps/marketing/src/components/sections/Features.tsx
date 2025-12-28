@@ -68,17 +68,17 @@ export function Features() {
                       {/* Hero image area */}
                       <div className="absolute top-12 left-3 right-3 bottom-24 rounded-xl overflow-hidden">
                         <div className="w-full h-full bg-gradient-to-b from-black/20 to-transparent" />
-                        {/* Food image placeholder - styled like a photo */}
+                      {/* Property image placeholder - styled like a photo */}
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-4xl">🍣</div>
+                          <div className="text-white/90 text-sm font-semibold">Property Tour</div>
                         </div>
                       </div>
                       
                       {/* Content at bottom */}
-                      <div className="text-sm font-bold mb-0.5">Chef&apos;s Table</div>
-                      <div className="text-[10px] text-white/80 mb-2">12-course omakase · $285</div>
+                      <div className="text-sm font-bold mb-0.5">Oceanview Apartment</div>
+                      <div className="text-[10px] text-white/80 mb-2">2 bed · 2 bath · Balcony</div>
                       <div className="w-full bg-white/20 backdrop-blur rounded-full py-2 text-[10px] text-center font-medium">
-                        Book Now
+                        Book Viewing
                       </div>
                       
                       {/* Home indicator */}
@@ -142,7 +142,7 @@ export function Features() {
                     <div className="text-[6px] text-white/30 mb-1.5 uppercase">Slydes</div>
                     <div className="space-y-1">
                       <div className="h-4 bg-leader-blue rounded text-[6px] text-white flex items-center px-1.5">Welcome</div>
-                      <div className="h-4 bg-white/5 rounded text-[6px] text-white/40 flex items-center px-1.5">Menu</div>
+                      <div className="h-4 bg-white/5 rounded text-[6px] text-white/40 flex items-center px-1.5">Tour</div>
                       <div className="h-4 bg-white/5 rounded text-[6px] text-white/40 flex items-center px-1.5">Contact</div>
                     </div>
                   </div>
@@ -150,7 +150,7 @@ export function Features() {
                   <div className="flex-1 p-3 flex items-center justify-center bg-[#1a1a1a]">
                     <div className="w-12 h-24 bg-black rounded-xl p-[2px] shadow-lg">
                       <div className="w-full h-full bg-gradient-to-br from-amber-500 to-orange-600 rounded-[10px] flex flex-col justify-end p-1.5">
-                        <div className="text-[5px] text-white font-medium">Chef&apos;s Table</div>
+                        <div className="text-[5px] text-white font-medium">Oceanview Apartment</div>
                         <div className="w-full bg-white/30 rounded-full py-0.5 text-[4px] text-center text-white mt-0.5">View</div>
                       </div>
                     </div>

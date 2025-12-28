@@ -2,23 +2,26 @@
 
 > **Source of Truth** for all pricing, tiers, and payment handling.
 >
-> Last updated: December 16, 2025
+> Last updated: December 21, 2025
 
 ---
 
 ## Plan Pricing
 
-Slydes uses simple, predictable subscription pricing.
+Slydes uses simple, predictable subscription pricing with Slyde caps to ensure sustainable hosting costs.
 
 ### Plans
 
-| Tier | Monthly | Annual | What You Get |
-|------|---------|--------|--------------|
-| **Free** | £0 | £0 | Try the format (1 Slyde, watermark) |
-| **Creator** | £25 | £250/yr | Analytics, no watermark, 10 Slydes, Enquire/Book CTAs |
-| **Pro** | £50 | £500/yr | Full commerce: Buy Now, Cart, Checkout, Orders |
+| Tier | Monthly | Annual | Slydes | What You Get |
+|------|---------|--------|--------|--------------|
+| **Free** | £0 | £0 | 1 | Try the format (watermark required) |
+| **Creator** | £25 | £250/yr | 10 | Analytics, no watermark, Enquire/Book CTAs |
+| **Pro** | £50 | £500/yr | 25 | Full commerce: Buy Now, Cart, Checkout, Orders |
+| **Agency** | £99 | £990/yr | 75 | Client management, white-label, team features |
 
 **Annual discount**: 17% off (2 months free)
+
+**Enterprise**: Custom pricing for 75+ Slydes or franchise/chain requirements.
 
 ### What Each Tier Unlocks
 
@@ -27,6 +30,7 @@ Slydes uses simple, predictable subscription pricing.
 - Full mobile experience
 - Shareable public link
 - Core creation tools
+- 3 Momentum AI messages/day
 - **Slydes watermark required**
 
 #### Creator — £25/month (or £250/year)
@@ -38,28 +42,42 @@ Slydes uses simple, predictable subscription pricing.
 - Up to 6 categories
 
 #### Pro — £50/month (or £500/year)
+- Up to 25 published Slydes
 - Everything in Creator
 - **Commerce enabled**: Buy Now, Add to Cart, Checkout
 - Order management
 - Stripe Connect integration
+- Advanced analytics (frame drop-off, traffic sources, revenue)
 - Unlimited categories
+- Unlimited Momentum AI
+
+#### Agency — £99/month (or £990/year)
+- Up to 75 published Slydes
+- Everything in Pro
+- Client management
+- White-label options
+- Team collaboration
 - Priority support
 
 ---
 
 ## Feature Gating Summary
 
-| Feature | Free | Creator | Pro |
-|---------|------|---------|-----|
-| Published Slydes | 1 | 10 | Unlimited |
-| Categories | 4 | 6 | Unlimited |
-| Watermark | Required | Removed | Removed |
-| Analytics | ✗ | ✓ | ✓ |
-| Inventory (browse) | ✗ | ✓ | ✓ |
-| Enquire / Book CTA | ✗ | ✓ | ✓ |
-| Buy Now | ✗ | ✗ | ✓ |
-| Cart + Checkout | ✗ | ✗ | ✓ |
-| Order management | ✗ | ✗ | ✓ |
+| Feature | Free | Creator | Pro | Agency |
+|---------|------|---------|-----|--------|
+| Published Slydes | 1 | 10 | 25 | 75 |
+| Categories | 4 | 6 | Unlimited | Unlimited |
+| Watermark | Required | Removed | Removed | Removed |
+| Analytics | ✗ | Basic | Advanced | Advanced |
+| Inventory (browse) | ✗ | ✓ | ✓ | ✓ |
+| Enquire / Book CTA | ✗ | ✓ | ✓ | ✓ |
+| Buy Now | ✗ | ✗ | ✓ | ✓ |
+| Cart + Checkout | ✗ | ✗ | ✓ | ✓ |
+| Order management | ✗ | ✗ | ✓ | ✓ |
+| Client management | ✗ | ✗ | ✗ | ✓ |
+| White-label | ✗ | ✗ | ✗ | ✓ |
+| Team collaboration | ✗ | ✗ | ✗ | ✓ |
+| Momentum AI | 3/day | 3/day | Unlimited | Unlimited |
 
 ---
 
@@ -126,11 +144,11 @@ This is standard behaviour across Stripe powered platforms.
 
 ## Currency Display
 
-| Currency | Free | Creator Monthly | Creator Annual | Pro Monthly | Pro Annual |
-|----------|------|-----------------|----------------|-------------|------------|
-| GBP (£) | £0 | £25 | £250 | £50 | £500 |
-| USD ($) | $0 | $29 | $290 | $59 | $590 |
-| EUR (€) | €0 | €27 | €270 | €55 | €550 |
+| Currency | Free | Creator Monthly | Creator Annual | Pro Monthly | Pro Annual | Agency Monthly | Agency Annual |
+|----------|------|-----------------|----------------|-------------|------------|----------------|---------------|
+| GBP (£) | £0 | £25 | £250 | £50 | £500 | £99 | £990 |
+| USD ($) | $0 | $29 | $290 | $59 | $590 | $119 | $1,190 |
+| EUR (€) | €0 | €27 | €270 | €55 | €550 | €109 | €1,090 |
 
 Implementation: Auto-detect user location, show local currency. Store preference.
 
@@ -180,9 +198,13 @@ What makes users upgrade:
 | Access analytics | Free | Creator |
 | Remove watermark | Free | Creator |
 | Hit media limits | Free | Creator |
+| Need more than 10 Slydes | Creator | Pro |
 | Enable Buy Now | Creator | Pro |
 | Enable Cart/Checkout | Creator | Pro |
 | Need order management | Creator | Pro |
+| Need more than 25 Slydes | Pro | Agency |
+| Managing multiple clients | Pro | Agency |
+| Need white-label | Pro | Agency |
 
 ---
 
@@ -192,15 +214,17 @@ What makes users upgrade:
 > Slydes takes 0% of your sales. Payments are processed by Stripe. Stripe's standard processing fees apply.
 
 ### Pricing page headline
-> Simple pricing. Pay when attention matters.
+> Simple pricing. No surprises.
 
 ### FAQ: Transaction fees
 **Are there any transaction fees?**
 Slydes does not charge transaction fees or take a cut of your sales. Payments are processed by Stripe, which applies standard processing fees depending on card type and customer location.
 
-### FAQ: What's the difference between Creator and Pro?
-**Creator** is for businesses that want analytics and a professional presence. Use Enquire/Book CTAs to drive leads.
-**Pro** is for businesses that sell products or services directly. Enable Buy Now, Cart, and Checkout powered by Stripe.
+### FAQ: What's the difference between the plans?
+**Free** lets you try the format with 1 Slyde.
+**Creator** is for single businesses that want analytics and a professional presence (up to 10 Slydes).
+**Pro** is for businesses that sell products or services directly, with commerce and up to 25 Slydes.
+**Agency** is for teams managing multiple clients, with up to 75 Slydes, white-label, and collaboration features.
 
 ---
 
@@ -209,8 +233,27 @@ Slydes does not charge transaction fees or take a cut of your sales. Payments ar
 Founding Partners earn **25% commission for life** on referred paid subscribers:
 - Creator: £25/mo × 25% = **£6.25/month per subscriber**
 - Pro: £50/mo × 25% = **£12.50/month per subscriber**
+- Agency: £99/mo × 25% = **£24.75/month per subscriber**
 
 Recurring as long as subscriber stays active.
+
+---
+
+## Why Slyde Caps?
+
+Slydes includes video hosting (Cloudflare Stream) which has real costs:
+- **Storage**: ~$5 per 1,000 minutes stored
+- **Streaming**: ~$1 per 1,000 minutes watched
+
+Slyde caps ensure sustainable margins at every tier:
+
+| Tier | Max Slydes | Realistic Max Cost | Revenue | Min Margin |
+|------|------------|-------------------|---------|------------|
+| Creator | 10 | ~$14/mo | £25 ($31) | 55% |
+| Pro | 25 | ~$28/mo | £50 ($63) | 56% |
+| Agency | 75 | ~$83/mo | £99 ($125) | 34% |
+
+This keeps pricing simple (no view caps or overages) while protecting margins.
 
 ---
 
@@ -220,9 +263,10 @@ Recurring as long as subscriber stays active.
 - No additional configuration required for overseas buyers
 - All global payment logic handled by Stripe
 - Link to Stripe pricing page for transparency
-- Feature flags: `has_commerce` (Pro), `has_inventory` (Creator+), `has_analytics` (Creator+)
+- Feature flags: `has_commerce` (Pro+), `has_inventory` (Creator+), `has_analytics` (Creator+), `has_agency` (Agency)
+- Slyde limits enforced at publish time, not creation
 
 ---
 
 *Document status: Canonical — Source of Truth*
-*Tiers: Free £0 / Creator £25 / Pro £50*
+*Tiers: Free £0 / Creator £25 / Pro £50 / Agency £99*

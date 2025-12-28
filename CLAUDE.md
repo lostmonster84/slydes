@@ -562,7 +562,13 @@ What are we tackling? 🚀
 
 **Target**: $223M TAM, 2,000 paying customers by end of 2025
 
-**Pricing**: Free tier + $19/mo Pro (or $190/yr)
+**Pricing** (4 tiers, Slyde-capped for margin safety):
+| Tier | Price | Slydes |
+|------|-------|--------|
+| Free | £0 | 1 |
+| Creator | £25/mo | 10 |
+| Pro | £50/mo | 25 |
+| Agency | £99/mo | 75 |
 
 **Distribution**: Influencer Program (50 Founding Partners, 25% commission)
 

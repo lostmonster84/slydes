@@ -1,20 +1,28 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Heart, Share2, AtSign, Clapperboard } from 'lucide-react'
+import { Heart, Share2, AtSign, Clapperboard, MapPin, Info } from 'lucide-react'
 import type { SocialLinks } from './frameData'
+import type { LocationData } from '@slydes/types'
 
 interface SocialActionStackProps {
-  heartCount: number
-  isHearted: boolean
-  onHeartTap: () => void
-  onShareTap: () => void
+  // Heart
+  heartCount?: number
+  isHearted?: boolean
+  onHeartTap?: () => void
+
+  // Actions
+  onShareTap?: () => void
   onConnectTap?: () => void
   onVideoTap?: () => void
-  hideHeart?: boolean // Hide Heart button
-  hideShare?: boolean // Hide Share button
-  socialLinks?: SocialLinks // Social links - Connect button hidden if empty
-  demoVideoUrl?: string // Demo video URL - Video button hidden if empty
+  onInfoTap?: () => void
+  onLocationTap?: () => void
+
+  // Data for visibility (content presence = visibility)
+  socialLinks?: SocialLinks
+  locationData?: LocationData
+  demoVideoUrl?: string
+
   className?: string
 }
 
@@ -28,61 +36,131 @@ function formatCount(count: number): string {
 }
 
 /**
- * SocialActionStack - TikTok-style vertical action buttons
- *
- * Pure engagement actions only (top to bottom):
- * 1. Heart - Like/save with count
- * 2. Share - Share button with label
- * 3. Connect - Social links (only if links exist)
- * 4. Video - Demo video (only if demoVideoUrl exists)
- *
- * Note: Info button moved to top-right corner, slide indicator to bottom-right
- *
- * Specs:
- * - Container: absolute right-3, vertical flex, gap-5
- * - Button: 40x40px, bg-white/20 backdrop-blur-sm rounded-full
- * - Icon: 20x20px, white
- * - Label: 10px, white, medium weight
- *
- * @see UI-PATTERNS.md for full specification
+ * Check if any social links are configured
  */
-// Check if any social links are configured
 function hasSocialLinks(links?: SocialLinks): boolean {
   if (!links) return false
   return !!(links.instagram || links.tiktok || links.facebook || links.youtube || links.twitter || links.linkedin)
 }
 
+/**
+ * Check if location data is configured
+ */
+function hasLocationData(location?: LocationData): boolean {
+  if (!location) return false
+  return !!(location.address || (location.lat !== undefined && location.lng !== undefined))
+}
+
+/**
+ * SocialActionStack - Content-driven vertical action buttons
+ *
+ * NO TOGGLES! Visibility is based purely on content presence:
+ * - Location: shows if address/coordinates exist
+ * - Info: always shows (opens Info sheet with FAQs, contact, etc.)
+ * - Share: always shows
+ * - Heart: always shows
+ * - Connect: shows if social links exist
+ * - Video: shows if demoVideoUrl exists
+ *
+ * Pattern: "Add content → button appears. No content → button hidden."
+ *
+ * Specs:
+ * - Container: vertical flex, gap-5
+ * - Button: 40x40px, bg-white/20 backdrop-blur-sm rounded-full
+ * - Icon: 20x20px, white
+ * - Label: 10px, white, medium weight
+ */
 export function SocialActionStack({
-  heartCount,
-  isHearted,
+  heartCount = 0,
+  isHearted = false,
   onHeartTap,
   onShareTap,
   onConnectTap,
   onVideoTap,
-  hideHeart = false,
-  hideShare = false,
+  onInfoTap,
+  onLocationTap,
   socialLinks,
+  locationData,
   demoVideoUrl,
   className = ''
 }: SocialActionStackProps) {
-  // Only show Connect button if social links exist
-  const showConnect = hasSocialLinks(socialLinks) && onConnectTap
-  // Only show Video button if demo video URL exists
-  const showVideo = !!demoVideoUrl && onVideoTap
+
+  // Visibility based purely on content presence + handler existence
+  const showLocation = hasLocationData(locationData) && !!onLocationTap
+  const showInfo = !!onInfoTap
+  const showShare = !!onShareTap
+  const showHeart = !!onHeartTap
+  const showConnect = hasSocialLinks(socialLinks) && !!onConnectTap
+  const showVideo = !!demoVideoUrl && !!onVideoTap
+
   return (
     <div
       className={`flex flex-col items-center gap-5 pointer-events-auto ${className}`}
       onClick={(e) => e.stopPropagation()}
     >
-      {/* Heart Button */}
-      {!hideHeart && (
+      {/* Location - shows if address exists */}
+      {showLocation && (
         <motion.button
           className="flex flex-col items-center gap-1"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={(e) => {
             e.stopPropagation()
-            onHeartTap()
+            onLocationTap?.()
+          }}
+        >
+          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <MapPin className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-white text-[10px] font-medium">Location</span>
+        </motion.button>
+      )}
+
+      {/* Info - always shows */}
+      {showInfo && (
+        <motion.button
+          className="flex flex-col items-center gap-1"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={(e) => {
+            e.stopPropagation()
+            onInfoTap?.()
+          }}
+        >
+          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <Info className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-white text-[10px] font-medium">Info</span>
+        </motion.button>
+      )}
+
+      {/* Share - always shows */}
+      {showShare && (
+        <motion.button
+          className="flex flex-col items-center gap-1"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={(e) => {
+            e.stopPropagation()
+            onShareTap?.()
+          }}
+        >
+          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <Share2 className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-white text-[10px] font-medium">Share</span>
+        </motion.button>
+      )}
+
+      {/* Heart - always shows */}
+      {showHeart && (
+        <motion.button
+          className="flex flex-col items-center gap-1"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={(e) => {
+            e.stopPropagation()
+            onHeartTap?.()
           }}
         >
           <motion.div
@@ -102,25 +180,7 @@ export function SocialActionStack({
         </motion.button>
       )}
 
-      {/* Share Button */}
-      {!hideShare && (
-        <motion.button
-          className="flex flex-col items-center gap-1"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={(e) => {
-            e.stopPropagation()
-            onShareTap()
-          }}
-        >
-          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-            <Share2 className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-white text-[10px] font-medium">Share</span>
-        </motion.button>
-      )}
-
-      {/* Connect Button (only if social links exist) */}
+      {/* Connect - shows if social links exist */}
       {showConnect && (
         <motion.button
           className="flex flex-col items-center gap-1"
@@ -128,7 +188,7 @@ export function SocialActionStack({
           whileTap={{ scale: 0.95 }}
           onClick={(e) => {
             e.stopPropagation()
-            onConnectTap()
+            onConnectTap?.()
           }}
         >
           <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
@@ -138,7 +198,7 @@ export function SocialActionStack({
         </motion.button>
       )}
 
-      {/* Video/Demo Button (only if demo video URL exists) */}
+      {/* Video - shows if demoVideoUrl exists */}
       {showVideo && (
         <motion.button
           className="flex flex-col items-center gap-1"
@@ -146,7 +206,7 @@ export function SocialActionStack({
           whileTap={{ scale: 0.95 }}
           onClick={(e) => {
             e.stopPropagation()
-            onVideoTap()
+            onVideoTap?.()
           }}
         >
           <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">

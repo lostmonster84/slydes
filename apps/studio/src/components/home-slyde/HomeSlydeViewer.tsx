@@ -3,12 +3,14 @@
 import { useReducer, useCallback, useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HomeSlydeOverlay } from './HomeSlydeOverlay'
+import { SlydeCover } from '@/components/slyde-demo/SlydeCover'
 import { CategorySlydeView } from './CategorySlydeView'
 import { InventoryGridView } from './InventoryGridView'
 import { ItemSlydeView } from './ItemSlydeView'
 import { FloatingCartButton } from './FloatingCartButton'
 import { emptyHomeSlydeData, type HomeSlydeData, type CategoryData, type FrameData as ViewerFrameData, type InventoryItem } from './data/highlandMotorsData'
 import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
+import { useHomeSlyde } from '@/hooks/useHomeSlyde'
 import { useOrganization } from '@/hooks/useOrganization'
 import { useBackgroundMusic } from '@/hooks/useBackgroundMusic'
 import { BackgroundAudioPlayer } from '@/components/audio/BackgroundAudioPlayer'
@@ -22,7 +24,10 @@ import { getFilterStyle, VIGNETTE_STYLE, type VideoFilterPreset } from '@/lib/vi
 // STATE MACHINE
 // ============================================
 
-type Level = 'home' | 'category' | 'inventory' | 'item'
+// Navigation flow: home → cover → frames → inventory → item
+// Cover is the landing page for each Slyde (shows name, description, location)
+// Frames are the content inside the Slyde
+type Level = 'home' | 'cover' | 'frames' | 'inventory' | 'item'
 
 interface NavState {
   level: Level
@@ -33,6 +38,7 @@ interface NavState {
 
 type NavAction =
   | { type: 'TAP_CATEGORY'; categoryId: string }
+  | { type: 'EXPLORE_FRAMES' }  // From cover → frames
   | { type: 'VIEW_ALL' }
   | { type: 'TAP_ITEM'; itemId: string }
   | { type: 'GO_BACK' }
@@ -51,10 +57,19 @@ const initialState: NavState = {
 function navReducer(state: NavState, action: NavAction): NavState {
   switch (action.type) {
     case 'TAP_CATEGORY':
+      // Tapping a category now goes to Cover first
       return {
-        level: 'category',
+        level: 'cover',
         categoryId: action.categoryId,
         itemId: null,
+        frameIndex: 0,
+      }
+
+    case 'EXPLORE_FRAMES':
+      // From cover, swipe up goes to frames
+      return {
+        ...state,
+        level: 'frames',
         frameIndex: 0,
       }
 
@@ -78,8 +93,10 @@ function navReducer(state: NavState, action: NavAction): NavState {
         case 'item':
           return { ...state, level: 'inventory', itemId: null, frameIndex: 0 }
         case 'inventory':
-          return { ...state, level: 'category', frameIndex: 0 }
-        case 'category':
+          return { ...state, level: 'frames', frameIndex: 0 }
+        case 'frames':
+          return { ...state, level: 'cover', frameIndex: 0 }
+        case 'cover':
           return { level: 'home', categoryId: null, itemId: null, frameIndex: 0 }
         default:
           return state
@@ -142,6 +159,7 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, videoFilter = 'origi
   const [state, dispatch] = useReducer(navReducer, initialState)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { data: demoHome, hydrated: demoHydrated } = useDemoHomeSlyde()
+  const { data: homeSlydeData, isLoading: categoriesLoading } = useHomeSlyde()
   const { organization, isLoading: orgLoading } = useOrganization()
   const cart = useCart()
   const { checkout, isLoading: isCheckingOut } = useDemoCheckout()
@@ -161,7 +179,7 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, videoFilter = 'origi
   })
 
   // Show loading state while data is hydrating
-  const isLoading = orgLoading || !demoHydrated
+  const isLoading = orgLoading || !demoHydrated || categoriesLoading
 
   // Build viewer data from organization + localStorage editor state
   const viewerData: HomeSlydeData = useMemo(() => {
@@ -174,8 +192,8 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, videoFilter = 'origi
       ? `https://customer-${process.env.NEXT_PUBLIC_CF_ACCOUNT_HASH}.cloudflarestream.com/${organization.home_video_stream_uid}/manifest/video.m3u8`
       : null
 
-    // Categories from localStorage editor state
-    const categories: CategoryData[] = (demoHome.categories || []).map((cat) => {
+    // Categories - merge Supabase data (with cover fields) with localStorage frame data
+    const categories: CategoryData[] = (homeSlydeData?.categories || []).map((cat) => {
       const customFrames = demoHome.childFrames?.[cat.id] as EditorFrameData[] | undefined
 
       // Get list ID from any frame CTA that links to a list
@@ -198,7 +216,7 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, videoFilter = 'origi
         : [{
             id: `${cat.id}-placeholder`,
             title: cat.name,
-            subtitle: cat.description,
+            subtitle: cat.description || '',
             background: { type: 'gradient' as const, gradient: 'from-slate-800 to-slate-900' },
           }]
 
@@ -222,13 +240,34 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, videoFilter = 'origi
         })),
       }))
 
+      // Build cover video URL from Cloudflare stream UID
+      const coverVideoSrc = cat.coverVideoStreamUid
+        ? `https://customer-${process.env.NEXT_PUBLIC_CF_ACCOUNT_HASH}.cloudflarestream.com/${cat.coverVideoStreamUid}/manifest/video.m3u8`
+        : undefined
+
       return {
         id: cat.id,
         label: cat.name,
         icon: cat.icon,
-        description: cat.description,
+        description: cat.description || '',
         frames,
         inventory,
+        // Cover background (from Supabase)
+        coverBackgroundType: cat.coverBackgroundType,
+        coverVideoSrc,
+        coverImageUrl: cat.coverImageUrl,
+        coverPosterUrl: cat.coverPosterUrl,
+        coverVideoFilter: cat.coverVideoFilter,
+        coverVideoVignette: cat.coverVideoVignette,
+        coverVideoSpeed: cat.coverVideoSpeed,
+        // Location (from Supabase)
+        locationAddress: cat.locationAddress,
+        locationLat: cat.locationLat,
+        locationLng: cat.locationLng,
+        // Contact (from Supabase)
+        contactPhone: cat.contactPhone,
+        contactEmail: cat.contactEmail,
+        contactWhatsapp: cat.contactWhatsapp,
       }
     })
 
@@ -256,7 +295,7 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, videoFilter = 'origi
       showSound: demoHome.showSound,
       showReviews: demoHome.showReviews,
     }
-  }, [demoHome, customVideoSrc, organization])
+  }, [demoHome, customVideoSrc, organization, homeSlydeData])
 
   const videoSrc = viewerData.videoSrc || '/videos/adventure.mp4'
 
@@ -266,6 +305,10 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, videoFilter = 'origi
     setTimeout(() => {
       dispatch({ type: 'TAP_CATEGORY', categoryId })
     }, 100)
+  }, [])
+
+  const handleExploreFrames = useCallback(() => {
+    dispatch({ type: 'EXPLORE_FRAMES' })
   }, [])
 
   const handleViewAll = useCallback(() => {
@@ -324,23 +367,71 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, videoFilter = 'origi
   // Render overlay views
   const renderOverlayView = () => {
     switch (state.level) {
-      case 'category':
+      case 'cover':
+        // Slyde Cover - landing page before frames
         if (!category) {
           return (
             <motion.div
-              key="no-category"
+              key="no-cover"
               className="absolute inset-0 bg-slate-900 flex items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <p className="text-white/60">Category not found</p>
+              <p className="text-white/60">Slyde not found</p>
             </motion.div>
           )
         }
         return (
           <motion.div
-            key={`category-${state.categoryId}`}
+            key={`cover-${state.categoryId}`}
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <SlydeCover
+              name={category.label}
+              description={category.description}
+              backgroundType={category.coverBackgroundType}
+              videoSrc={category.coverVideoSrc}
+              imageSrc={category.coverImageUrl}
+              posterSrc={category.coverPosterUrl}
+              videoFilter={category.coverVideoFilter as any}
+              videoVignette={category.coverVideoVignette}
+              videoSpeed={category.coverVideoSpeed as any}
+              locationData={category.locationAddress ? {
+                address: category.locationAddress,
+                lat: category.locationLat,
+                lng: category.locationLng,
+              } : undefined}
+              accentColor={viewerData.accentColor}
+              onExplore={handleExploreFrames}
+              onBack={handleBack}
+              showBack={true}
+            />
+          </motion.div>
+        )
+
+      case 'frames':
+        // Frames inside the Slyde
+        if (!category) {
+          return (
+            <motion.div
+              key="no-frames"
+              className="absolute inset-0 bg-slate-900 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <p className="text-white/60">Slyde not found</p>
+            </motion.div>
+          )
+        }
+        return (
+          <motion.div
+            key={`frames-${state.categoryId}`}
             className="absolute inset-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -369,7 +460,7 @@ export function HomeSlydeViewer({ videoSrc: customVideoSrc, videoFilter = 'origi
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <p className="text-white/60">Category not found</p>
+              <p className="text-white/60">Slyde not found</p>
             </motion.div>
           )
         }

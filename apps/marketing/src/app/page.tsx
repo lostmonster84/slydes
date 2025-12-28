@@ -7,7 +7,6 @@ import { Features } from '@/components/sections/Features'
 import { SocialProof } from '@/components/sections/SocialProof'
 import { WaitlistSignup } from '@/components/sections/WaitlistSignup'
 import { MomentumAI } from '@/components/sections/MomentumAI'
-import { ShopPreview } from '@/components/sections/ShopPreview'
 import { AnalyticsPreview } from '@/components/sections/AnalyticsPreview'
 
 export default function HomePage() {
@@ -18,7 +17,6 @@ export default function HomePage() {
         <Hero />
         <IndustrySelector />
         <DashboardPreview />
-        <ShopPreview />
         <MomentumAI />
         <Features />
         <AnalyticsPreview />

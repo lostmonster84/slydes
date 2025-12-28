@@ -562,13 +562,9 @@ export default function AffiliatesPage() {
                         style={{ fontSize: '16px' }}
                       >
                         <option value="">Select your industry...</option>
-                        <option value="food">Food & Restaurant</option>
-                        <option value="travel">Travel & Hospitality</option>
-                        <option value="realestate">Real Estate</option>
-                        <option value="lifestyle">Lifestyle & Experiences</option>
-                        <option value="fitness">Fitness & Wellness</option>
-                        <option value="beauty">Beauty & Fashion</option>
-                        <option value="business">Small Business / Entrepreneur</option>
+                        <option value="property">Property (Sales & Lettings)</option>
+                        <option value="hospitality">Hospitality (Hotels, Holiday Lets, Glamping)</option>
+                        <option value="automotive">Automotive (Car Hire, Dealerships)</option>
                         <option value="other">Other</option>
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -656,26 +652,21 @@ export default function AffiliatesPage() {
           >
             <div className="inline-block bg-gray-50 rounded-2xl p-6 border border-gray-200 max-w-3xl">
               <h3 className="font-semibold mb-4">Who we&apos;re looking for</h3>
-              <div className="grid md:grid-cols-4 gap-4 text-sm">
-                <div className="bg-white rounded-xl p-4 border border-gray-100">
-                  <p className="text-2xl mb-2">🍽️</p>
-                  <p className="font-medium text-gray-900">Food & Restaurant</p>
-                  <p className="text-gray-500 text-xs mt-1">Food bloggers, reviewers</p>
-                </div>
-                <div className="bg-white rounded-xl p-4 border border-gray-100">
-                  <p className="text-2xl mb-2">✈️</p>
-                  <p className="font-medium text-gray-900">Travel & Hospitality</p>
-                  <p className="text-gray-500 text-xs mt-1">Hotel reviewers, travel vloggers</p>
-                </div>
+              <div className="grid md:grid-cols-3 gap-4 text-sm">
                 <div className="bg-white rounded-xl p-4 border border-gray-100">
                   <p className="text-2xl mb-2">🏠</p>
-                  <p className="font-medium text-gray-900">Real Estate</p>
-                  <p className="text-gray-500 text-xs mt-1">Property tours, agent influencers</p>
+                  <p className="font-medium text-gray-900">Property</p>
+                  <p className="text-gray-500 text-xs mt-1">Estate agents, lettings, property influencers</p>
                 </div>
                 <div className="bg-white rounded-xl p-4 border border-gray-100">
-                  <p className="text-2xl mb-2">💼</p>
-                  <p className="font-medium text-gray-900">Business</p>
-                  <p className="text-gray-500 text-xs mt-1">Entrepreneur influencers, coaches</p>
+                  <p className="text-2xl mb-2">🏨</p>
+                  <p className="font-medium text-gray-900">Hospitality</p>
+                  <p className="text-gray-500 text-xs mt-1">Hotels, holiday lets, glamping, travel vloggers</p>
+                </div>
+                <div className="bg-white rounded-xl p-4 border border-gray-100">
+                  <p className="text-2xl mb-2">🚗</p>
+                  <p className="font-medium text-gray-900">Automotive</p>
+                  <p className="text-gray-500 text-xs mt-1">Car hire, dealerships, vehicle influencers</p>
                 </div>
               </div>
               <p className="text-gray-500 text-sm mt-4">

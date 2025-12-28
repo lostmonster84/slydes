@@ -75,6 +75,15 @@ export interface HomeSlydeData {
   showShare?: boolean
   showSound?: boolean
   showReviews?: boolean
+  // Social links for Connect button
+  socialLinks?: {
+    instagram?: string
+    tiktok?: string
+    facebook?: string
+    youtube?: string
+    twitter?: string
+    linkedin?: string
+  }
 }
 
 // ============================================

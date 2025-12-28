@@ -31,21 +31,25 @@ Slydes operates as a **two-sided platform** connecting businesses (supply) with 
 
 ---
 
-#### PRICING MODEL: THREE-TIER
+#### PRICING MODEL: FOUR-TIER
 
 > **See [PRICING-PAYMENTS.md](./PRICING-PAYMENTS.md) for source of truth on pricing and payments.**
 
-**Freemium Model** (Free + Creator + Pro)
+**Freemium Model** (Free + Creator + Pro + Agency)
 
-| Tier | Price | Features | Target Customer |
-|------|-------|----------|-----------------|
-| **Free** | £0 | 1 Slyde, Slydes watermark, no analytics | Testing, early creators |
-| **Creator** | £25/mo or £250/yr | Up to 10 Slydes, analytics, no watermark, Enquire/Book CTAs | Lead generation businesses |
-| **Pro** | £50/mo or £500/yr | Unlimited Slydes, full commerce (Buy Now, Cart, Checkout) | E-commerce, direct sellers |
+| Tier | Price | Slydes | Features | Target Customer |
+|------|-------|--------|----------|-----------------|
+| **Free** | £0 | 1 | Slydes watermark, no analytics | Testing, early creators |
+| **Creator** | £25/mo or £250/yr | 10 | Analytics, no watermark, Enquire/Book CTAs | Single businesses |
+| **Pro** | £50/mo or £500/yr | 25 | Full commerce (Buy Now, Cart, Checkout) | E-commerce, multi-location |
+| **Agency** | £99/mo or £990/yr | 75 | Client management, white-label, team features | Agencies, franchises |
 
 **Annual Discount**: 17% off (2 months free)
 - Creator Annual: £250/year (vs £300)
 - Pro Annual: £500/year (vs £600)
+- Agency Annual: £990/year (vs £1,188)
+
+**Enterprise**: Custom pricing for 75+ Slydes or franchise/chain requirements.
 
 ---
 
@@ -83,13 +87,15 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 | Tier | Customers | MRR/Customer | Total MRR |
 |------|-----------|--------------|-----------|
 | Free | 8,000 | £0 | £0 (viral growth engine) |
-| Creator Monthly | 600 | £25 | £15,000 |
-| Creator Annual | 800 | £20.83 | £16,667 |
-| Pro Monthly | 300 | £50 | £15,000 |
-| Pro Annual | 300 | £41.67 | £12,500 |
-| **Total Paid** | **2,000** | — | **£59,167** |
+| Creator Monthly | 500 | £25 | £12,500 |
+| Creator Annual | 700 | £20.83 | £14,583 |
+| Pro Monthly | 250 | £50 | £12,500 |
+| Pro Annual | 250 | £41.67 | £10,417 |
+| Agency Monthly | 100 | £99 | £9,900 |
+| Agency Annual | 100 | £82.50 | £8,250 |
+| **Total Paid** | **1,900** | — | **£68,150** |
 
-**ARR at End of 2025**: ~£710K
+**ARR at End of 2025**: ~£818K
 
 ---
 

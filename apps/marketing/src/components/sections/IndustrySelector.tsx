@@ -5,51 +5,44 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { PhoneMockup } from '@/components/ui/PhoneMockup'
 
 // Only industries with unique video content - honest demos
+// Property-first homepage: we show the use cases we want to win at launch.
 const industries = [
   {
-    id: 'hospitality',
-    label: 'Restaurant',
-    title: 'Maison Lumière',
-    variant: 'hospitality' as const,
-    description: 'Your menu comes alive. Video previews of signature dishes, chef\'s recommendations, and instant reservations. A digital experience as refined as your cuisine.',
-    features: ['Video menu previews', 'Table reservations', 'Chef\'s specials & pairings'],
+    id: 'estate-agents',
+    label: 'Estate Agents',
+    title: 'Prestige Estates',
+    variant: 'realestate' as const,
+    description: 'A full-screen tour link you can share in WhatsApp, email, and ads. Show the best bits fast, then end with one clear action: book a viewing.',
+    features: ['Video property tours', 'Instant viewing requests', 'One link for WhatsApp + email'],
   },
   {
-    id: 'rentals',
-    label: 'Vacation Rentals',
+    id: 'holiday-lets',
+    label: 'Holiday Lets',
     title: 'Villa Serenità',
     variant: 'rentals' as const,
-    description: 'Let guests experience your property before they book. Immersive video tours, real reviews, and seamless reservations. All in one stunning mobile experience.',
-    features: ['Virtual property tours', 'Direct booking integration', 'Guest reviews & ratings'],
+    description: 'Sell the atmosphere first. Then send guests to Airbnb, Booking.com, or your direct booking engine.',
+    features: ['Immersive property tour', 'Link out to Airbnb / Booking', 'Availability & reviews'],
   },
   {
-    id: 'fitness',
-    label: 'Fitness',
-    title: 'FORM Studio',
-    variant: 'fitness' as const,
-    description: 'Boutique fitness thrives on community and energy. Capture your vibe with video, showcase classes, and let members book in seconds.',
-    features: ['Class previews', 'Live schedule', 'Membership signup'],
+    id: 'hotels-lodges',
+    label: 'Hotels & Lodges',
+    title: 'Highland Retreat',
+    variant: 'hospitality' as const,
+    description: 'Guests don’t scroll galleries. They swipe stories. Show the feeling, the rooms, and the experience — then book direct.',
+    features: ['Experience-first tour', 'Room & amenity highlights', 'Book direct CTA'],
   },
   {
-    id: 'automotive',
-    label: 'Car Hire',
-    title: 'Apex Motors',
-    variant: 'automotive' as const,
-    description: 'Exotic cars deserve exotic presentation. Video walkarounds, engine sounds, and instant reservations. The premium experience your clients expect.',
-    features: ['Video fleet showcase', 'Instant reservations', 'Concierge service'],
-  },
-  {
-    id: 'wildtrax',
-    label: 'Adventure',
-    title: 'WildTrax 4x4',
-    variant: 'wildtrax' as const,
-    description: 'Real Land Rover Defenders, real Scottish adventures. This is an actual Slydes project we\'re building. See the future of mobile-first business sites.',
-    features: ['Full-screen video showcase', 'Instant booking', 'Real customer project'],
+    id: 'luxury-stays',
+    label: 'Luxury Stays',
+    title: 'Aurora Domes',
+    variant: 'lunadomes' as const,
+    description: 'Premium stays deserve premium presentation. One link that feels full-screen on every phone, then send guests to book.',
+    features: ['Cinematic walkthroughs', 'Instant enquiries', 'Shareable link everywhere'],
   },
 ]
 
 export function IndustrySelector() {
-  const [activeIndustry, setActiveIndustry] = useState('hospitality')
+  const [activeIndustry, setActiveIndustry] = useState('estate-agents')
   
   const currentIndustry = industries.find(i => i.id === activeIndustry) || industries[0]
 
@@ -72,11 +65,11 @@ export function IndustrySelector() {
           </span>
           
           <h2 className="mb-4">
-            Built for <span className="gradient-text">mobile-first businesses</span>.
+            Built for <span className="gradient-text">property &amp; hospitality</span>.
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Slydes works best where decisions are visual, time-sensitive, and made on phones.
-            <br /><strong>If mobile traffic matters, this format works.</strong>
+            Slydes works best where guests and renters decide visually, quickly, and on their phones.
+            <br /><strong>If you&apos;re selling or letting spaces, this format works.</strong> Works with your existing listing or booking link.
           </p>
         </motion.div>
 

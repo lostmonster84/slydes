@@ -27,33 +27,33 @@ const variantContent: Record<string, {
   accentColor: string
   gradient: string
 }> = {
-  // 1. HOSPITALITY - Fine Dining (Maison Lumière, Paris)
+  // 1. HOSPITALITY - Hotels & Lodges (Highland Retreat)
   hospitality: {
     accentColor: 'bg-amber-500',
     gradient: 'from-amber-600 to-orange-700',
     slides: [
       {
-        title: 'Maison Lumière',
-        subtitle: 'Paris • Fine dining',
-        cta: 'Reserve Table',
+        title: 'Highland Retreat',
+        subtitle: 'Scottish Highlands • Lodge',
+        cta: 'Book Direct',
         ctaIcon: 'book',
         rating: 4.9,
-        reviews: 3512,
-        tag: '🍷 Michelin ⭐⭐',
+        reviews: 847,
+        tag: '🏔️ Mountain Views',
         videoSrc: 'https://videos.pexels.com/video-files/5107292/5107292-uhd_1440_2560_25fps.mp4',
       },
       {
-        title: "Chef's Table",
-        subtitle: '12-course omakase',
-        cta: 'View Menu',
-        ctaIcon: 'menu',
-        tag: '🔥 Signature Experience',
+        title: 'Rooms & Suites',
+        subtitle: 'Fireplace • Spa • Breakfast',
+        cta: 'View Rooms',
+        ctaIcon: 'view',
+        tag: '⭐ Guest Favourite',
         videoSrc: 'https://videos.pexels.com/video-files/8477264/8477264-hd_1080_1920_24fps.mp4',
       },
       {
-        title: 'Private Events',
-        subtitle: 'Exclusive dining rooms',
-        cta: 'Inquire',
+        title: 'Plan Your Stay',
+        subtitle: 'Dates • Packages • Location',
+        cta: 'Check Dates',
         ctaIcon: 'call',
         videoSrc: 'https://videos.pexels.com/video-files/5107292/5107292-uhd_1440_2560_25fps.mp4',
       },
@@ -328,7 +328,7 @@ const variantContent: Record<string, {
     ],
   },
 
-  // LUNA DOMES - Luxury Glamping (West Kent)
+  // LUXURY GLAMPING (Fictional demo brand)
   // 4 slides: Hero, Featured Dome, Hot Tub Experience, Winter Offer
   lunadomes: {
     accentColor: 'bg-amber-500',
@@ -336,20 +336,20 @@ const variantContent: Record<string, {
     slides: [
       {
         // SLIDE 1: Hero - Stunning dome exterior at sunset/dusk
-        title: 'Luna Domes',
-        subtitle: 'West Kent • Luxury Glamping',
+        title: 'Aurora Domes',
+        subtitle: 'Highlands • Luxury Glamping',
         cta: 'Explore Domes',
         ctaIcon: 'view',
         rating: 4.9,
         reviews: 847,
-        tag: '🌙 Britain\'s Finest',
+        tag: '🌙 Under the Stars',
         // Glamping dome in nature at dusk
         videoSrc: 'https://videos.pexels.com/video-files/6394054/6394054-uhd_2560_1440_25fps.mp4',
       },
       {
         // SLIDE 2: Featured Dome - Wakehurst interior luxury
-        title: 'Wakehurst Dome',
-        subtitle: 'Split-level • Incredible views',
+        title: 'The Aurora Dome',
+        subtitle: 'Private deck • Forest views',
         cta: 'View Dome',
         ctaIcon: 'view',
         tag: '👑 Most Popular',

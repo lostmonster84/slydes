@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, Smartphone, BarChart3, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, ShoppingBag, List, HelpCircle, Map, Sun, Moon, Monitor, Link2, Check, Share2, Users } from 'lucide-react'
+import { TrendingUp, Smartphone, BarChart3, Palette, Settings, LogOut, Menu, X, Layers, Lightbulb, List, HelpCircle, Sun, Moon, Monitor, Link2, Check, Share2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { FeatureSuggestionModal } from './FeatureSuggestionModal'
 import { useOrganization } from '@/hooks/useOrganization'
@@ -22,7 +22,7 @@ import { usePlan } from '@/hooks/usePlan'
 import { DevPanel } from '@/components/dev/DevPanel'
 
 interface HQSidebarConnectedProps {
-  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'lists' | 'faqs' | 'analytics' | 'shop' | 'brand' | 'settings' | 'inbox' | 'affiliates'
+  activePage: 'dashboard' | 'home-slyde' | 'slydes' | 'lists' | 'faqs' | 'analytics' | 'brand' | 'settings' | 'inbox' | 'affiliates' | 'shop'
 }
 
 export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
@@ -185,24 +185,25 @@ export function HQSidebarConnected({ activePage }: HQSidebarConnectedProps) {
   // Dashboard (standalone at top) - Paid users see "Momentum AI"
   const dashboardItem = { id: 'dashboard', label: isPaid ? 'Momentum AI' : 'Momentum', href: '/dashboard', icon: TrendingUp }
 
+  // Feature toggles - check if features are enabled for this organization
+  const listsEnabled = organization?.features_enabled?.lists ?? false
+
   // Editor group - these are the content creation tools
   const editorItems = [
     { id: 'home-slyde', label: 'Studio', href: '/', icon: Smartphone },
     { id: 'slydes', label: 'Slydes', href: '/slydes', icon: Layers, badge: slydeCount > 0 ? slydeCount : undefined },
-    { id: 'lists', label: 'Lists', href: '/lists', icon: List, badge: listCount > 0 ? listCount : undefined },
+    // Only show Lists if enabled in settings
+    ...(listsEnabled ? [{ id: 'lists', label: 'Lists', href: '/lists', icon: List, badge: listCount > 0 ? listCount : undefined }] : []),
     { id: 'faqs', label: 'FAQs', href: '/faqs', icon: HelpCircle, badge: faqCount > 0 ? faqCount : undefined },
   ]
 
   // Business tools
   const navItems: Array<{ id: string; label: string; href: string; icon: typeof BarChart3; badge?: number; comingSoon?: boolean; inProgress?: boolean }> = [
     { id: 'analytics', label: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { id: 'shop', label: 'Shop', href: '/shop', icon: ShoppingBag, inProgress: true },
   ]
 
   // Admin tools (only shown in dev or for admin users)
-  const adminItems = process.env.NODE_ENV === 'development' ? [
-    { id: 'affiliates', label: 'Affiliates', href: '/admin/affiliates', icon: Users },
-  ] : []
+  const adminItems: Array<{ id: string; label: string; href: string; icon: typeof BarChart3 }> = []
 
   // Brand and Settings are in the account dropdown menu only
 
