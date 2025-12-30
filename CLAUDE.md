@@ -43,6 +43,32 @@
 
 ## 👋 GREETING PROTOCOL
 
+### ⏰ TIME VERIFICATION PROTOCOL (CRITICAL)
+
+**Before ANY greeting, ALWAYS verify:**
+1. Check system-provided date in the environment context
+2. Parse: Day of week, Date, Time
+3. Determine time period:
+   - Morning: 05:00 - 11:59
+   - Afternoon: 12:00 - 17:59
+   - Evening: 18:00 - 04:59
+
+**Environment context location**: Look for `Today's date:` in the `<env>` block
+
+**Example verification**:
+```
+Environment says: Today's date: 2025-12-28
+→ December 28, 2025 = SUNDAY
+→ Use "SUNDAY" not day-of-week assumption
+```
+
+**NEVER**:
+- ❌ Assume the day based on vibes
+- ❌ Use "Saturday night" when it's Sunday afternoon
+- ❌ Skip verification - always check the env block first
+
+---
+
 ### ALWAYS Start Sessions With Energy
 
 **When James says "hi" or starts a conversation**:
@@ -173,6 +199,20 @@ What are we tackling? 🚀
 - Use `VideoTrimEditor` with `maxDuration` prop to constrain selection
 - Use `BackgroundMediaInput` with `context` prop ('home' | 'frame') for context-aware limits
 - Helper text guides users: always show max duration + trim capability
+
+**9. CLICKABLE FILE REFERENCES** 📁
+- **ALWAYS** make file paths clickable using markdown link syntax
+- **Format**: `[filename.ext](/absolute/path/to/filename.ext)` - use ABSOLUTE paths (Cursor requires this)
+- For specific lines: `[filename.ext:42](/absolute/path/to/filename.ext#L42)`
+- For line ranges: `[filename.ext:42-51](/absolute/path/to/filename.ext#L42-L51)`
+- **Examples** (using project root `/Users/james/Projects/slydes`):
+  - SQL: `[029_create_vertical_defaults.sql](/Users/james/Projects/slydes/apps/studio/supabase/migrations/029_create_vertical_defaults.sql)`
+  - Components: `[SlydeScreen.tsx](/Users/james/Projects/slydes/apps/studio/src/components/slyde/SlydeScreen.tsx)`
+  - Config: `[tailwind.config.ts](/Users/james/Projects/slydes/apps/studio/tailwind.config.ts)`
+- **NEVER** just dump a raw path - always make it clickable
+- **NEVER** use `file://` protocol - it doesn't work in Cursor
+- This applies to ALL file types: `.sql`, `.tsx`, `.ts`, `.md`, `.json`, etc.
+- James should be able to click any file reference to open it in Cursor
 
 ---
 

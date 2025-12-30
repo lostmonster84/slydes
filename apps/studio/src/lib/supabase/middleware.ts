@@ -41,8 +41,10 @@ export async function updateSession(request: NextRequest) {
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login') ||
                       request.nextUrl.pathname.startsWith('/auth')
   const isApiRoute = request.nextUrl.pathname.startsWith('/api/')
+  const isOnboardingRoute = request.nextUrl.pathname.startsWith('/onboarding')
 
-  if (!user && !isAuthRoute && !isApiRoute) {
+  // Allow unauthenticated access to login, auth, api, and onboarding routes
+  if (!user && !isAuthRoute && !isApiRoute && !isOnboardingRoute) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
@@ -56,8 +58,6 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Check if user needs onboarding (skip for auth routes, API routes, and onboarding itself)
-  const isOnboardingRoute = request.nextUrl.pathname.startsWith('/onboarding')
-
   if (user && !isAuthRoute && !isOnboardingRoute && !isApiRoute) {
     // Check if profile exists and onboarding is completed
     const { data: profile } = await supabase
