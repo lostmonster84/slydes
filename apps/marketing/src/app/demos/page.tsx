@@ -8,69 +8,58 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 
-// Demo businesses - Property + Hospitality focus
+// Demo businesses - Experience-first focus
 const demos = [
-  // Property
+  // Restaurants & Bars
   {
-    id: 'realestate',
-    name: 'Prestige Estates',
-    variant: 'realestate' as const,
-    industry: 'Estate Agents',
-    location: 'London, UK',
-    description: 'Full-screen property tours with instant viewing requests. Show the best bits fast, then end with one clear action.',
-    color: 'from-slate-700 to-slate-900',
-    bgColor: 'bg-gradient-to-br from-slate-50 to-gray-100',
-    features: ['Video property tours', 'Instant viewing requests', 'One link for WhatsApp + email'],
+    id: 'restaurant',
+    name: 'The Kitchen Table',
+    variant: 'hospitality' as const,
+    industry: 'Restaurants & Bars',
+    location: 'Edinburgh, UK',
+    description: 'Show the atmosphere, the food, the cocktails. Make them hungry before they book. One link that turns browsers into reservations.',
+    color: 'from-amber-600 to-orange-700',
+    bgColor: 'bg-gradient-to-br from-amber-50 to-yellow-50',
+    features: ['Video menu tours', 'Instant reservations', 'One link for Instagram bio + QR'],
     status: 'demo',
   },
-  {
-    id: 'rentals',
-    name: 'Villa Serenità',
-    variant: 'rentals' as const,
-    industry: 'Holiday Lets',
-    location: 'Lake Como, Italy',
-    description: 'Sell the atmosphere first. Then send guests to Airbnb, Booking.com, or your direct booking engine.',
-    color: 'from-emerald-600 to-emerald-800',
-    bgColor: 'bg-gradient-to-br from-emerald-50 to-teal-50',
-    features: ['Immersive property tour', 'Link out to Airbnb / Booking', 'Availability & reviews'],
-    status: 'demo',
-  },
-  // Hospitality
+  // Hotels & Stays
   {
     id: 'hospitality',
     name: 'Highland Retreat',
     variant: 'hospitality' as const,
-    industry: 'Hotels & Lodges',
+    industry: 'Hotels & Stays',
     location: 'Scottish Highlands',
     description: 'Guests don\'t scroll galleries. They swipe stories. Show the feeling, the rooms, and the experience — then book direct.',
-    color: 'from-amber-600 to-orange-700',
-    bgColor: 'bg-gradient-to-br from-amber-50 to-yellow-50',
-    features: ['Experience-first tour', 'Room & amenity highlights', 'Book direct CTA'],
+    color: 'from-emerald-600 to-emerald-800',
+    bgColor: 'bg-gradient-to-br from-emerald-50 to-teal-50',
+    features: ['Experience-first tours', 'Room & amenity highlights', 'Book direct CTA'],
     status: 'demo',
   },
+  // Venues & Events
   {
-    id: 'lunadomes',
-    name: 'Aurora Domes',
-    variant: 'lunadomes' as const,
-    industry: 'Glamping',
-    location: 'Highlands, UK',
-    description: 'Premium stays deserve premium presentation. One link that feels full-screen on every phone, then send guests to book.',
-    color: 'from-amber-600 to-rose-700',
-    bgColor: 'bg-gradient-to-br from-amber-50 to-rose-50',
-    features: ['Cinematic walkthroughs', 'Instant enquiries', 'Shareable link everywhere'],
+    id: 'venue',
+    name: 'The Grand Hall',
+    variant: 'events' as const,
+    industry: 'Venues & Events',
+    location: 'London, UK',
+    description: 'Weddings, parties, conferences — show the space in motion. Let them picture their event before they enquire.',
+    color: 'from-purple-600 to-purple-800',
+    bgColor: 'bg-gradient-to-br from-purple-50 to-pink-50',
+    features: ['Cinematic venue tours', 'Event space highlights', 'Instant enquiry forms'],
     status: 'demo',
   },
-  // Live example
+  // Adventures & Tours - LIVE
   {
     id: 'wildtrax',
     name: 'WildTrax 4x4',
     variant: 'wildtrax' as const,
-    industry: 'Rentals & Experiences',
+    industry: 'Adventures & Tours',
     location: 'Scottish Highlands',
-    description: 'Highland vehicle rentals transformed into a mobile-first experience. Land Rover Defenders, roof tents, NC500 adventures.',
+    description: 'Highland adventures transformed into a mobile-first experience. Land Rover Defenders, roof tents, NC500 adventures.',
     color: 'from-red-600 to-red-800',
     bgColor: 'bg-gradient-to-br from-red-50 to-orange-50',
-    features: ['Video fleet showcase', 'Instant booking', 'Adventure guides'],
+    features: ['Action-packed previews', 'Tour & activity highlights', 'Book the adventure'],
     website: 'https://wildtrax.co.uk',
     status: 'live',
   },
@@ -86,7 +75,7 @@ const demos = [
 // ]
 
 export default function DemosPage() {
-  const [activeDemo, setActiveDemo] = useState('realestate')
+  const [activeDemo, setActiveDemo] = useState('restaurant')
   
   const currentDemo = demos.find(d => d.id === activeDemo) || demos[0]
 
@@ -110,7 +99,7 @@ export default function DemosPage() {
                 See Slydes <span className="gradient-text">in action</span>
               </h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Property tours. Holiday lets. Hotels and glamping. See what YOUR business could look like.
+                Restaurants. Hotels. Venues. Adventures. See what YOUR experience could look like.
                 <br />
                 <span className="text-leader-blue font-semibold">Swipe, scroll, book.</span>
               </p>
@@ -264,7 +253,7 @@ export default function DemosPage() {
             >
               <h2 className="mb-4">What you're looking at</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                WildTrax is live. The rest are templates showing real Slydes technology applied to property and hospitality.
+                WildTrax is live. The rest are templates showing real Slydes technology applied to experience-first businesses.
               </p>
             </motion.div>
 

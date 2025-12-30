@@ -6,8 +6,9 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const token_hash = searchParams.get('token_hash')
   const type = searchParams.get('type') as EmailOtpType | null
-  // Always redirect to /auth/complete to handle potential pending onboarding
-  const next = '/auth/complete'
+  // Respect the next param if provided, otherwise go to /auth/complete
+  const nextParam = searchParams.get('next')
+  const next = nextParam && nextParam.startsWith('/') ? nextParam : '/auth/complete'
 
   const redirectTo = request.nextUrl.clone()
   redirectTo.pathname = next

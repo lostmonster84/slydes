@@ -219,6 +219,44 @@ This directory contains the complete strategic documentation for Slydes, from vi
 
 ---
 
+## 🔬 SPIN-OFF RESEARCH (Parked Opportunities)
+
+### [PROPERTYSLYDE.md](./PROPERTYSLYDE.md)
+**Purpose**: Deep analysis of property/real estate vertical video opportunity
+
+**Read this when**:
+- Evaluating future expansion into property tech
+- Considering spin-off products
+- Understanding why property is NOT part of Slydes core
+
+**Key Points**:
+- £50M+ ARR opportunity as agent branding + luxury discovery
+- NOT viable as Rightmove replacement
+- Best play: Help agents differentiate through video presence
+- Parked for future consideration (focus on Slydes core first)
+
+**Status**: Research complete, parked
+
+---
+
+### [AUTOSLYDE.md](./AUTOSLYDE.md)
+**Purpose**: Deep analysis of automotive vertical video opportunity
+
+**Read this when**:
+- Evaluating future expansion into automotive
+- Considering spin-off products
+- Understanding why automotive is NOT part of Slydes core
+
+**Key Points**:
+- £50M ARR opportunity for enthusiast vehicles only
+- NOT viable for mass market (commodity purchases)
+- Best play: Luxury/exotic discovery + boutique dealer branding
+- Parked for future consideration (focus on Slydes core first)
+
+**Status**: Research complete, parked
+
+---
+
 ## 📁 RELATED DOCUMENTS (In `/docs`)
 
 ### Brand & Design
@@ -306,7 +344,7 @@ This directory contains the complete strategic documentation for Slydes, from vi
 
 ## 🎯 THE VISION IN ONE SENTENCE
 
-**"Slydes is building the vertical video layer on top of the entire business ecosystem — transforming how businesses showcase themselves and how consumers discover experiences."**
+**"Slydes is the discovery platform for experience-first businesses — transforming how people discover restaurants, bars, hotels, venues, adventures, and everything worth experiencing."**
 
 ---
 

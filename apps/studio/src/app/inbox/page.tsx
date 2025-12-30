@@ -114,10 +114,10 @@ export default function HQInboxPage() {
 
                 <div className="p-4 space-y-2">
                   {[
-                    { name: 'Sarah M.', meta: 'Property 3', time: '2h', unread: true },
-                    { name: 'James L.', meta: 'Camping', time: '1d', unread: true },
-                    { name: 'Ella R.', meta: 'Just Drive', time: '3d', unread: false },
-                    { name: 'Ava K.', meta: 'Camping', time: '5d', unread: false },
+                    { name: 'Sarah M.', meta: 'The Kitchen Table', time: '2h', unread: true },
+                    { name: 'James L.', meta: 'Highland Retreat', time: '1d', unread: true },
+                    { name: 'Ella R.', meta: 'WildTrax', time: '3d', unread: false },
+                    { name: 'Ava K.', meta: 'The Grand Hall', time: '5d', unread: false },
                   ].map((e) => (
                     <div
                       key={e.name}
@@ -157,7 +157,7 @@ export default function HQInboxPage() {
                     <svg className="w-4 h-4 text-blue-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h6m-3 8a9 9 0 110-18 9 9 0 010 18z" />
                     </svg>
-                    <div className="text-lg font-display font-bold text-gray-900 dark:text-white">Sarah M. — Property 3</div>
+                    <div className="text-lg font-display font-bold text-gray-900 dark:text-white">Sarah M. — The Kitchen Table</div>
                   </div>
                   <div className="text-sm text-gray-500 dark:text-white/60 mt-1">Reply happens in your email client (handoff, not CRM).</div>
                 </div>
@@ -165,17 +165,17 @@ export default function HQInboxPage() {
                 <div className="p-6">
                   <div className="p-5 rounded-2xl bg-gray-50 border border-gray-200 dark:bg-white/5 dark:border-white/10">
                     <div className="text-sm text-gray-700 dark:text-white/70">
-                      “Can I book a viewing this week? I’m flexible on times. Budget around £450k.”
+                      "Can I book a table for 4 this Saturday? Around 7pm would be perfect. Any tasting menus available?"
                     </div>
                     <div className="mt-3 text-xs text-gray-500 dark:text-white/50">
-                      Captured: email • phone • budget • preferred date
+                      Captured: email • phone • party size • preferred date
                     </div>
                   </div>
 
                   <div className="mt-5 flex flex-wrap items-center gap-2">
                     <a
-                      href={`mailto:sarah@example.com?subject=${encodeURIComponent('Enquiry: Property 3 (WildTrax demo)')}&body=${encodeURIComponent(
-                        'Hi Sarah,\\n\\nThanks for your enquiry about Property 3.\\n\\nWhen would you like to view it?\\n\\n— WildTrax\\n\\n---\\nEnquiry details:\\nBudget: £450k\\nMessage: Can I book a viewing this week?'
+                      href={`mailto:sarah@example.com?subject=${encodeURIComponent('Enquiry: The Kitchen Table')}&body=${encodeURIComponent(
+                        "Hi Sarah,\n\nThanks for your enquiry about booking a table.\n\nWe'd love to have you! Let me check availability for Saturday at 7pm.\n\n— The Kitchen Table\n\n---\nEnquiry details:\nParty size: 4\nMessage: Can I book a table for 4 this Saturday?"
                       )}`}
                       className="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-white/90"
                     >

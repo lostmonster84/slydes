@@ -3,9 +3,9 @@
 > **"You and me against the world, James."**
 >
 > **This file EVOLVES with every session**
-> **Updated**: December 18, 2025 - Session 5 ✅ COMPLETE
+> **Updated**: December 30, 2025 - Session 6 ✅ COMPLETE
 > **Energy Level**: MAXIMUM 🔥
-> **Growth Stage**: 🌿 Early Growth (Session 5 - Demo Video feature + UX refinement)
+> **Growth Stage**: 🌿 Early Growth (Session 6 - Experience-First Pivot)
 
 ---
 
@@ -584,6 +584,68 @@ What are we tackling? 🚀
 - Conditional rendering based on demoVideoUrl presence
 - Inspector toggle + URL input pattern for optional features
 
+**Session 6** (Dec 30, 2025) ✅ COMPLETE:
+
+**Part 1: Experience-First Pivot (MAJOR STRATEGIC SHIFT)**
+- Deep strategic discussion on Slydes positioning
+- Identified fundamental divide: DISCOVERY businesses vs SEARCH businesses
+- Decision: Slydes is for experience-first businesses ONLY
+- Removed Property & Automotive from Tier 1 targets
+
+**The Pivot Logic**:
+- **Discovery businesses** (Slydes): "I want to find something amazing" - restaurants, bars, hotels, venues, adventures
+- **Search businesses** (NOT Slydes): "I know what I need" - property, cars, B2B services
+- **The Litmus Test**: "Would I scroll past this on TikTok and think 'I want to go there'?"
+
+**Part 2: Spin-Off Research Documents**
+- Created PROPERTYSLYDE.md - Deep analysis of property/real estate vertical
+  - £50M+ ARR opportunity as agent branding + luxury discovery
+  - NOT viable as Rightmove replacement
+  - Parked for future consideration
+- Created AUTOSLYDE.md - Deep analysis of automotive vertical
+  - £50M ARR opportunity for enthusiast vehicles only
+  - NOT viable for mass market
+  - Parked for future consideration
+
+**Part 3: Full Documentation Overhaul**
+- Updated THE-CASE-FOR-SLYDES.md - Removed property/automotive, sharpened to experience-first
+- Updated PLATFORM-OVERVIEW.md - Reframed target categories as "Discovery Businesses"
+- Updated BUSINESS-MODEL.md - Removed automotive references
+- Updated INVESTOR-ONE-PAGER.md - Sharpened to experience-first positioning
+- Updated STRATEGIC-DOCS-INDEX.md - Added spin-off research docs
+
+**Session 6 Learnings**:
+- James thinks in fundamentals (discovery vs search psychology)
+- Strategic pivots need deep research before execution
+- Property and Auto are different user mindsets (high-stakes, infrequent)
+- Focus beats fragmentation - dominate experiences before expanding
+- Spin-off research preserves optionality without diluting focus
+
+**What Worked This Session**:
+- ✅ Deep strategic discussion before any code changes
+- ✅ Research agents for parallel Property/Auto analysis
+- ✅ Clear decision criteria (the litmus test)
+- ✅ Comprehensive documentation updates
+- ✅ Parked opportunities properly documented
+
+**Strategic Clarifications**:
+- Slydes = Discovery platform for experience-first businesses
+- NOT for: Property sales, car sales, B2B services
+- YES for: Restaurants, bars, hotels, venues, adventures, wellness, entertainment
+- Property/Auto = Parked for £5M+ ARR (separate products if pursued)
+
+**New Target Categories**:
+- Tier 1: Restaurants, Hotels, Bars, Experiences, Vacation Rentals
+- Tier 2: Wedding Venues, Event Spaces, Live Music, Entertainment
+- Tier 3: Spas, Wellness, Fitness, Salons
+- Tier 4: Creatives, Musicians, Performers
+
+**Next Steps**:
+- Continue building Slydes Consumer App
+- Focus on experience-first businesses only
+- Revisit PropertySlyde/AutoSlyde at £5M+ ARR
+- Keep documentation updated with experience-first messaging
+
 ---
 
 ## 🎨 SLYDES QUICK REFERENCE
@@ -599,6 +661,12 @@ What are we tackling? 🚀
 **Message**: "Built for the Future"
 
 **Voice**: Bold, confident, leader energy
+
+**Target Market**: Experience-first businesses (restaurants, bars, hotels, venues, adventures, wellness, entertainment)
+
+**The Litmus Test**: "Would someone scroll past this and think 'I want to go there'?"
+
+**NOT For**: Property sales, car sales, B2B services (parked as future spin-offs)
 
 **Target**: $223M TAM, 2,000 paying customers by end of 2025
 

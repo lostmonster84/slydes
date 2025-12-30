@@ -7,43 +7,35 @@ import { PhoneMockup } from '@/components/ui/PhoneMockup'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-// Demo examples - Property + Hospitality focus
+// Demo examples - Experience-first businesses
 const demoExamples = [
-  // Property
+  // Restaurants & Bars
   {
-    id: 'realestate',
-    title: 'Prestige Estates',
-    label: 'Estate Agents',
-    variant: 'realestate' as const,
-    description: 'Full-screen property tours with instant viewing requests.',
-    color: 'from-blue-600 to-blue-800',
-    isDemo: true,
-  },
-  {
-    id: 'rentals',
-    title: 'Villa Serenità',
-    label: 'Holiday Lets',
-    variant: 'rentals' as const,
-    description: 'Immersive property tours with direct booking integration.',
-    color: 'from-emerald-600 to-emerald-800',
-    isDemo: true,
-  },
-  // Hospitality
-  {
-    id: 'hospitality',
-    title: 'Highland Retreat',
-    label: 'Hotels & Lodges',
+    id: 'restaurant',
+    title: 'The Kitchen Table',
+    label: 'Restaurants & Bars',
     variant: 'hospitality' as const,
-    description: 'Experience-first tours that sell the atmosphere before the price.',
+    description: 'Full-screen atmosphere tours with instant reservations.',
     color: 'from-amber-600 to-amber-800',
     isDemo: true,
   },
+  // Hotels & Stays
   {
-    id: 'glamping',
-    title: 'Aurora Domes',
-    label: 'Glamping',
-    variant: 'lunadomes' as const,
-    description: 'Unique stays that deserve unique presentation. Cinematic walkthroughs.',
+    id: 'hospitality',
+    title: 'Highland Retreat',
+    label: 'Hotels & Stays',
+    variant: 'hospitality' as const,
+    description: 'Experience-first tours that sell the atmosphere before the price.',
+    color: 'from-emerald-600 to-emerald-800',
+    isDemo: true,
+  },
+  // Venues & Events
+  {
+    id: 'venue',
+    title: 'The Grand Hall',
+    label: 'Venues & Events',
+    variant: 'events' as const,
+    description: 'Cinematic venue tours that let guests picture their event.',
     color: 'from-purple-600 to-purple-800',
     isDemo: true,
   },
@@ -142,7 +134,7 @@ export default function ShowcasePage() {
                       <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      <span className="text-gray-700">Full-screen vehicle showcase videos</span>
+                      <span className="text-gray-700">Full-screen experience tours on mobile</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -230,8 +222,8 @@ export default function ShowcasePage() {
               </div>
               <h2 className="mb-4">Your industry, your way</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                See how Slydes works for property and hospitality. Estate agents, holiday lets, hotels, and glamping sites.
-                <strong> If guests and buyers decide visually, Slydes wins those seconds.</strong>
+                See how Slydes works for experience-first businesses. Restaurants, hotels, venues, and adventures.
+                <strong> If people say &quot;I want to go there&quot; — Slydes wins those seconds.</strong>
               </p>
             </motion.div>
 

@@ -284,9 +284,9 @@ export const eventsTemplate: WizardTemplate = {
 
 export const carHireTemplate: WizardTemplate = {
   id: 'car-hire',
-  name: 'Car Hire',
+  name: 'Adventure Rentals',
   icon: '🚗',
-  description: 'Vehicle rental, car hire, van hire',
+  description: 'Campervans, adventure vehicles, unique transport',
 
   sections: [
     { id: 'fleet', name: 'Our Fleet', icon: 'car', enabled: true },

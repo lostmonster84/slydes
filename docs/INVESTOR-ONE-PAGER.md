@@ -4,11 +4,11 @@
 
 ## THE OPPORTUNITY
 
-**Slydes is building the TikTok for business discovery.**
+**Slydes is building the TikTok for experience discovery.**
 
 70% of internet traffic is mobile — but businesses are still building websites like it's 2015. Meanwhile, consumers spend 52 minutes/day on TikTok. The behavior has shifted. The tools haven't.
 
-**Slydes is the vertical video layer on top of the entire business ecosystem.**
+**Slydes is the discovery platform for experience-first businesses** — restaurants, bars, hotels, venues, adventures, and everything worth experiencing.
 
 ---
 
@@ -44,19 +44,19 @@
 | Market | Size | Notes |
 |--------|------|-------|
 | **TAM** | $223B | Global SMB marketing spend |
-| **SAM** | $45B | Visual/experience-based businesses (restaurants, hotels, services, rentals) |
+| **SAM** | $45B | Experience-first businesses (restaurants, hotels, venues, experiences) |
 | **SOM** | $500M | Addressable in first 3 years (US/UK focus) |
 
-**Target Categories**:
-- Restaurants & Hospitality
-- Hotels & Vacation Rentals
-- Experiences & Tours
+**Target Categories** (Experience-First Businesses):
+- Restaurants, Bars & Hospitality
+- Hotels & Boutique Accommodation
+- Experiences, Tours & Adventures
+- Venues & Event Spaces
 - Wellness & Beauty
-- Real Estate
-- Automotive (Sales, Rentals)
-- Personal Services (Trainers, Stylists, etc.)
+- Entertainment & Nightlife
+- Creatives & Performers
 
-**Anyone who can tell their story through video is a customer.**
+**The Litmus Test**: Would someone scroll past this and think "I want to go there"? If yes, they're a Slydes customer.
 
 ---
 
@@ -193,7 +193,7 @@
 
 ## THE VISION (2030)
 
-**Every business that relies on visual storytelling has a Slyde.**
+**Every experience-first business has a Slyde.**
 
 **Every consumer discovers experiences through the Slydes app.**
 

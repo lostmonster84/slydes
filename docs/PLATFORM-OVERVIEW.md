@@ -1,18 +1,18 @@
 # SLYDES PLATFORM OVERVIEW
 ## The Complete Ecosystem
 
-> **"The vertical video layer on top of the entire business ecosystem"**
+> **"The discovery platform for experience-first businesses"**
 
 ---
 
 ## EXECUTIVE SUMMARY
 
-Slydes is a **two-sided platform** that transforms how businesses showcase themselves and how consumers discover experiences.
+Slydes is a **two-sided discovery platform** for experience-first businesses.
 
 **For Businesses**: Create immersive vertical video Slydes that capture attention like TikTok
-**For Consumers**: Discover and book amazing businesses through an addictive swipe-to-explore app
+**For Consumers**: Discover and book amazing experiences through an addictive swipe-to-explore app
 
-**The Vision**: Replace fragmented discovery (Google, Yelp, Instagram) with one unified platform built entirely for mobile-first video storytelling.
+**The Vision**: Become the default way people discover experiences — restaurants, bars, hotels, venues, adventures, and everything worth experiencing. Replace fragmented discovery (Google, Yelp, Instagram) with one unified platform built entirely for mobile-first video storytelling.
 
 ---
 
@@ -172,36 +172,34 @@ Creates more content    ←  →  Discovers more businesses
 
 ## TARGET CATEGORIES
 
-### Who Uses Slydes (Businesses)
+### Who Uses Slydes (Experience-First Businesses)
 
-**Tier 1 - Visual-First Businesses** (Launch Focus):
-- Restaurants & Fine Dining
-- Hotels & Vacation Rentals
-- Bars & Nightlife
-- Experiences (Tours, Activities)
-- Real Estate
+**Tier 1 - Discovery Businesses** (Launch Focus):
+- Restaurants, Cafes & Fine Dining
+- Hotels & Boutique Accommodation
+- Bars, Rooftop Lounges & Nightlife
+- Experiences (Tours, Activities, Adventures)
+- Vacation Rentals & Holiday Stays
 
-**Tier 2 - Service Businesses**:
-- Salons & Barbershops
-- Spas & Wellness
-- Fitness Studios & Gyms
-- Personal Trainers
-- Beauty Services
+**Tier 2 - Venues & Entertainment**:
+- Wedding Venues & Event Spaces
+- Live Music Venues & Comedy Clubs
+- Immersive Experiences & Pop-ups
+- Conference & Corporate Venues
 
-**Tier 3 - Commerce**:
-- Automotive (Sales, Rentals, Detailing)
-- Retail (Boutiques, Showrooms)
-- Wedding Services
-- Event Venues
+**Tier 3 - Wellness & Lifestyle**:
+- Spas & Wellness Retreats
+- Fitness Studios & Yoga Studios
+- Salons & Beauty Services
+- Health & Wellness Experiences
 
-**Tier 4 - Professional Services**:
-- Dog Walking & Pet Care
-- Interior Design
-- Photography
-- Home Services
-- Personal Services
+**Tier 4 - Creatives & Performers**:
+- Musicians & Bands
+- Photographers & Videographers
+- Artists & Galleries
+- Personal Brands & Creators
 
-**Anyone who can tell their story through video can use Slydes.**
+**The Litmus Test**: Would someone scroll past this and think "I want to go there"? If yes, they're a Slydes customer.
 
 ---
 
@@ -493,7 +491,7 @@ See [HOME-SLYDE-SYSTEM.md](./HOME-SLYDE-SYSTEM.md) for the Home Slyde concept.
 
 ## THE VISION
 
-**2030: How businesses showcase themselves has fundamentally changed.**
+**2030: How people discover experiences has fundamentally changed.**
 
 Walking down the street, you see a restaurant. On the window: **QR code → Slydes.**
 
@@ -501,9 +499,9 @@ Scrolling Instagram, you see a hotel's bio: **Link in bio → Slydes.**
 
 Planning a weekend trip, you open your phone: **Slydes App → Discover → Book.**
 
-**Slydes becomes the default way visual businesses tell their story and consumers discover experiences.**
+**Slydes becomes the default way people discover experiences — and experience-first businesses tell their story.**
 
-**We're not building a tool. We're building the infrastructure for how business happens in a mobile-first world.**
+**We're not building a tool. We're building the infrastructure for how experiences are discovered in a mobile-first world.**
 
 ---
 

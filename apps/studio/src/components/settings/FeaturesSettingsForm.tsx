@@ -16,7 +16,7 @@ const FEATURES: FeatureToggle[] = [
   {
     id: 'lists',
     name: 'Lists',
-    description: 'Manage collections of items like vehicles, room types, or services. Great for dealerships, hotels, and rental fleets.',
+    description: 'Manage collections of items like rooms, menu items, or experiences. Great for hotels, restaurants, and tour operators.',
     icon: List,
   },
   {

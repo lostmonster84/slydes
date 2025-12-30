@@ -4,45 +4,44 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PhoneMockup } from '@/components/ui/PhoneMockup'
 
-// Only industries with unique video content - honest demos
-// Property-first homepage: we show the use cases we want to win at launch.
+// Experience-first businesses: discovery businesses where people want to be inspired
 const industries = [
   {
-    id: 'estate-agents',
-    label: 'Estate Agents',
-    title: 'Prestige Estates',
-    variant: 'realestate' as const,
-    description: 'A full-screen tour link you can share in WhatsApp, email, and ads. Show the best bits fast, then end with one clear action: book a viewing.',
-    features: ['Video property tours', 'Instant viewing requests', 'One link for WhatsApp + email'],
+    id: 'restaurants-bars',
+    label: 'Restaurants & Bars',
+    title: 'The Kitchen Table',
+    variant: 'hospitality' as const,
+    description: 'Show the atmosphere, the food, the cocktails. Make them hungry before they book. One link that turns browsers into reservations.',
+    features: ['Video menu tours', 'Instant reservations', 'One link for Instagram bio + QR'],
   },
   {
-    id: 'holiday-lets',
-    label: 'Holiday Lets',
-    title: 'Villa Serenità',
-    variant: 'rentals' as const,
-    description: 'Sell the atmosphere first. Then send guests to Airbnb, Booking.com, or your direct booking engine.',
-    features: ['Immersive property tour', 'Link out to Airbnb / Booking', 'Availability & reviews'],
-  },
-  {
-    id: 'hotels-lodges',
-    label: 'Hotels & Lodges',
+    id: 'hotels-stays',
+    label: 'Hotels & Stays',
     title: 'Highland Retreat',
     variant: 'hospitality' as const,
-    description: 'Guests don’t scroll galleries. They swipe stories. Show the feeling, the rooms, and the experience — then book direct.',
-    features: ['Experience-first tour', 'Room & amenity highlights', 'Book direct CTA'],
+    description: 'Guests don\'t scroll galleries. They swipe stories. Show the feeling, the rooms, and the experience — then book direct.',
+    features: ['Experience-first tours', 'Room & amenity highlights', 'Book direct CTA'],
   },
   {
-    id: 'luxury-stays',
-    label: 'Luxury Stays',
-    title: 'Aurora Domes',
-    variant: 'lunadomes' as const,
-    description: 'Premium stays deserve premium presentation. One link that feels full-screen on every phone, then send guests to book.',
-    features: ['Cinematic walkthroughs', 'Instant enquiries', 'Shareable link everywhere'],
+    id: 'venues-events',
+    label: 'Venues & Events',
+    title: 'The Grand Hall',
+    variant: 'events' as const,
+    description: 'Weddings, parties, conferences — show the space in motion. Let them picture their event before they enquire.',
+    features: ['Cinematic venue tours', 'Event space highlights', 'Instant enquiry forms'],
+  },
+  {
+    id: 'adventures-tours',
+    label: 'Adventures & Tours',
+    title: 'WildTrax 4x4',
+    variant: 'wildtrax' as const,
+    description: 'Adventure seekers want to feel the thrill. Show them the experience, the views, the excitement — then let them book.',
+    features: ['Action-packed previews', 'Tour & activity highlights', 'Book the adventure'],
   },
 ]
 
 export function IndustrySelector() {
-  const [activeIndustry, setActiveIndustry] = useState('estate-agents')
+  const [activeIndustry, setActiveIndustry] = useState('restaurants-bars')
   
   const currentIndustry = industries.find(i => i.id === activeIndustry) || industries[0]
 
@@ -65,11 +64,11 @@ export function IndustrySelector() {
           </span>
           
           <h2 className="mb-4">
-            Built for <span className="gradient-text">property &amp; hospitality</span>.
+            Built for <span className="gradient-text">experience-first businesses</span>.
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Slydes works best where guests and renters decide visually, quickly, and on their phones.
-            <br /><strong>If you&apos;re selling or letting spaces, this format works.</strong> Works with your existing listing or booking link.
+            Slydes works best where people discover visually, decide quickly, and book on their phones.
+            <br /><strong>The litmus test:</strong> Would someone scroll past and think &quot;I want to go there&quot;?
           </p>
         </motion.div>
 

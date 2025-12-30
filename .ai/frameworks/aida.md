@@ -1,126 +1,122 @@
 # AIDA Framework
 
-> **Marketing & Content Framework**
-> Structure content and user journeys to maximize conversions through proven psychology.
+> **User Psychology Framework**
+> Understanding where people come from and what they need at each stage.
 
 ## What is AIDA?
 
 **A**ttention → **I**nterest → **D**esire → **A**ction
 
-A marketing framework for structuring content, pages, and user journeys to guide users from awareness to conversion.
+AIDA is **not** a marketing framework. It's a **user psychology framework** for understanding:
+- **Who** arrives at your product
+- **Why** they're there
+- **What** they're feeling
+- **What** they need at each stage
+
+This applies to everything - pages, features, onboarding, support, product design. Anywhere humans interact with what you build.
 
 ---
 
-## AIDA Structure
+## The AIDA Stages
 
 ### A - ATTENTION
-*"Grab the user's attention immediately"*
+*"What made them notice? What are they escaping?"*
 
-**Purpose:** Make users stop and notice
+**Purpose:** Understand the moment of arrival
 
-**Elements:**
-- Hero section with compelling headline
-- Visual impact (stunning imagery)
-- Clear value proposition
-- Immediate understanding of what you offer
-- Strong opening statement
+**Questions to ask:**
+- Where did they come from?
+- What problem brought them here?
+- What are they tired of?
+- What caught their eye?
+- What's their emotional state on arrival?
 
 **For Slydes:**
-- "Built for 2030"
-- Hero video: Mobile-native vertical scroll demo
-- Subheading: "TikTok-style business sites that convert"
-- Clear pricing shown (transparency builds trust)
+- Coming from: Frustration with slow, desktop-first websites
+- Problem: Mobile sites that don't convert
+- Tired of: Website builders that aren't mobile-native
+- Emotional state: Skeptical but curious
 
-**Best Practices:**
-- ✅ Compelling headline (not generic)
-- ✅ High-quality imagery
-- ✅ Clear value proposition
-- ✅ Immediate understanding
-- ❌ Don't overwhelm with too much text
-- ❌ Don't use generic stock phrases
+**What users need at this stage:**
+- Immediate clarity on what this is
+- Signals that this is different
+- Permission to explore without commitment
+- Confidence they're in the right place
 
 ### I - INTEREST
-*"Build interest with relevant information"*
+*"What makes them stay? What questions do they have?"*
 
-**Purpose:** Keep users engaged with valuable content
+**Purpose:** Understand what keeps them engaged
 
-**Elements:**
-- Key features and benefits
-- Unique selling points
-- Educational content
-- Problem-solving information
-- Why this matters to them
+**Questions to ask:**
+- What do they need to understand next?
+- What objections are forming?
+- What would build credibility?
+- What makes this relevant to them?
+- What pain points need addressing?
 
 **For Slydes:**
-- What's included (design, build, hosting, analytics)
-- Mobile-first philosophy (TikTok-style vertical scroll)
-- Why vertical scroll converts better
-- No coding required, no maintenance hassles
+- Need to understand: How vertical scroll works, what's included
+- Objections forming: "Is this just another builder?"
+- Credibility builders: Real examples, live demos
+- Relevance: Their industry represented
+- Pain points: Mobile conversion rates, maintenance hassle
 
-**Best Practices:**
-- ✅ Address user needs/pain points
-- ✅ Provide valuable information
-- ✅ Show expertise
-- ✅ Build credibility
-- ❌ Don't just list features (explain benefits)
-- ❌ Don't use jargon
+**What users need at this stage:**
+- Answers to unspoken questions
+- Proof this solves their problem
+- Evidence of expertise
+- Clear benefits (not just features)
 
 ### D - DESIRE
-*"Create desire through emotional connection"*
+*"What makes them want it? What's the emotional hook?"*
 
-**Purpose:** Make users want what you're offering
+**Purpose:** Understand the emotional decision
 
-**Elements:**
-- Lifestyle imagery and storytelling
-- Social proof (testimonials, reviews)
-- Exclusive benefits
-- Aspirational content
-- Risk reversal (guarantees, policies)
-- Emotional connection
+**Questions to ask:**
+- What would make them feel this is for them?
+- What social proof matters?
+- What aspiration does this fulfil?
+- What fear does this calm?
+- What would make them imagine success?
 
 **For Slydes:**
-- "Who's Using Slydes" showcase (7 real businesses + "Your Business" CTA)
-- Customer testimonial with specific results ("3x mobile conversions in 30 days")
-- Live demo phones with real sites
-- Aspirational business success stories
+- Feel it's for them: Seeing their industry in the showcase
+- Social proof: Real businesses, real results
+- Aspiration: Being ahead of competition, looking modern
+- Fear calmed: Not being left behind, mobile users bouncing
+- Imagine success: Interactive phone mockups they can scroll
 
-**Best Practices:**
-- ✅ Show, don't just tell
-- ✅ Use social proof
-- ✅ Create emotional connection
-- ✅ Highlight exclusivity
-- ✅ Address objections
-- ❌ Don't oversell
-- ❌ Don't make false claims
+**What users need at this stage:**
+- To see themselves succeeding
+- Proof others have succeeded
+- Emotional connection to the outcome
+- Risk reduction (guarantees, transparency)
 
 ### A - ACTION
-*"Drive action with clear CTAs"*
+*"What do they need to take the next step?"*
 
-**Purpose:** Convert interest into action
+**Purpose:** Understand the decision moment
 
-**Elements:**
-- Prominent call-to-action buttons
-- Remove friction from conversion
-- Urgency/scarcity (if appropriate)
-- Multiple conversion opportunities
-- Clear next steps
-- Trust signals
+**Questions to ask:**
+- What's stopping them from acting?
+- What would reduce friction?
+- What options suit different readiness levels?
+- What trust signals matter here?
+- What's the smallest possible commitment?
 
 **For Slydes:**
-- "Join the Waitlist" (primary CTA)
-- Plan selection with pricing
-- "What happens next?" process explanation
-- Email/chat for human contact
-- Alternative options (demo request, consultation call)
+- Stopping them: Price concerns, commitment fear, uncertainty
+- Reduce friction: Clear pricing, simple process, no lock-in
+- Different readiness: Waitlist (low), demo (medium), buy (high)
+- Trust signals: Transparent pricing, real contact info
+- Smallest commitment: Join waitlist (just email)
 
-**Best Practices:**
-- ✅ Clear, action-oriented language
-- ✅ Prominent placement
-- ✅ Remove friction
-- ✅ Multiple opportunities
-- ✅ Trust signals nearby
-- ❌ Don't be pushy
-- ❌ Don't hide CTAs
+**What users need at this stage:**
+- Clear, low-friction next step
+- Options for different commitment levels
+- Trust signals nearby
+- Confidence in the process
 
 ---
 
@@ -128,413 +124,175 @@ A marketing framework for structuring content, pages, and user journeys to guide
 
 **Score each section: 0-25 points per letter**
 **Total: 0-100 points**
-**Target: 80+ for high-converting pages**
+**Target: 80+ for effective user experience**
 
 ### Scoring Criteria
 
 **Attention (0-25 points):**
 | Criteria | Points |
 |----------|--------|
-| Compelling headline | 5 |
-| Strong visual impact | 5 |
 | Clear value proposition | 5 |
+| Addresses arrival context | 5 |
+| Signals differentiation | 5 |
+| Appropriate emotional tone | 5 |
 | Immediate understanding | 5 |
-| Professional presentation | 5 |
 
 **Interest (0-25 points):**
 | Criteria | Points |
 |----------|--------|
-| Relevant information | 5 |
-| Addresses user needs | 5 |
-| Educational value | 5 |
+| Answers key questions | 5 |
+| Addresses objections | 5 |
 | Builds credibility | 5 |
-| Clear benefits | 5 |
+| Shows relevance | 5 |
+| Explains benefits clearly | 5 |
 
 **Desire (0-25 points):**
 | Criteria | Points |
 |----------|--------|
 | Emotional connection | 5 |
-| Social proof | 5 |
+| Effective social proof | 5 |
 | Aspirational content | 5 |
-| Exclusive benefits | 5 |
-| Risk reversal | 5 |
+| Risk reduction | 5 |
+| User can see themselves succeeding | 5 |
 
 **Action (0-25 points):**
 | Criteria | Points |
 |----------|--------|
-| Clear CTAs | 5 |
+| Clear next steps | 5 |
 | Low friction | 5 |
-| Multiple opportunities | 5 |
-| Trust signals | 5 |
-| Urgency (if appropriate) | 5 |
-
----
-
-## Slydes Page Scores
-
-### Homepage (Current)
-
-**ATTENTION (Score: 23/25):**
-- ✅ "Built for 2030" - bold, differentiating (5/5)
-- ✅ Full-screen video hero with demo (5/5)
-- ✅ "TikTok-style business sites" - clear value (5/5)
-- ✅ Pricing visible in nav/early sections (4/5)
-- ✅ Video background creates motion (4/5)
-
-**INTEREST (Score: 21/25):**
-- ✅ Why vertical scroll section (5/5)
-- ✅ Mobile-first philosophy explained (4/5)
-- ✅ Features grid with benefits (4/5)
-- ✅ Addresses pain points (slow mobile sites) (4/5)
-- ⚠️ Could show more specific benefits (4/5)
-
-**DESIRE (Score: 24/25):**
-- ✅ Showcase section with 8 real businesses (5/5)
-- ✅ Live phone mockups you can scroll (5/5)
-- ✅ "Your Business" CTA card (conversion-focused) (5/5)
-- ✅ Video testimonials planned (4/5)
-- ✅ Aspirational business success messaging (5/5)
-
-**ACTION (Score: 19/25):**
-- ✅ "Join Waitlist" CTA prominent (4/5)
-- ✅ Multiple CTA opportunities throughout (4/5)
-- ✅ Process explanation clear (4/5)
-- ⚠️ No urgency messaging yet (3/5)
-- ⚠️ Could add "Early Bird" pricing incentive (4/5)
-
-**Total: 87/100** ✅ (Good - close to excellent)
-
-### Homepage - Improvement Targets
-
-To reach 95/100:
-1. **Interest +2**: Add specific ROI examples, show conversion data
-2. **Action +6**: Add urgency ("First 50 customers: 50% off"), show starting price, add "Most Popular Plan" badge
-
----
-
-### Pricing Page (Target Structure)
-
-**ATTENTION (Target: 23/25):**
-- Hero: "Simple Pricing. No Surprises."
-- Clear value prop: "Complete mobile-first sites from £997"
-- Three plans immediately visible
-- Transparent pricing
-
-**INTEREST (Target: 22/25):**
-- Three plans explained (Starter, Pro, Enterprise)
-- Why Slydes? differentiators vs traditional builders
-- ROI calculator or comparison chart
-
-**DESIRE (Target: 22/25):**
-- Customer success stories per plan level
-- Before/After conversion stats
-- Case studies with specific results
-- "Most Popular" badge on Pro plan
-
-**ACTION (Target: 23/25):**
-- "Start Now" CTA per plan
-- Free demo option
-- Consultation booking
-- Trust signals throughout
-
-**Target Total: 90/100**
-
----
-
-### Showcase Page (Target Structure)
-
-**ATTENTION (Target: 22/25):**
-- Hero: "Real Businesses. Real Results."
-- Grid of live customer sites
-- Industry variety showcased
-
-**INTEREST (Target: 23/25):**
-- Industry-specific examples
-- Conversion improvements shown
-- Mobile vs desktop stats
-- Interactive phone mockups
-
-**DESIRE (Target: 24/25):**
-- Scrollable live demos
-- Customer testimonials with metrics
-- "Your Business" CTA card
-- Success story details
-
-**ACTION (Target: 22/25):**
-- "Get Your Site" CTA prominent
-- Industry-specific landing pages
-- Request demo per example
-- Waitlist signup
-
-**Target Total: 91/100**
-
----
-
-## AIDA Application by Page Type
-
-### Homepage Structure
-
-```
-1. HERO (AIDA: Attention)
-   - Compelling headline
-   - Value proposition
-   - Primary CTA
-   - Secondary CTA
-
-2. OFFERINGS (AIDA: Interest)
-   - Three core products
-   - Clear differentiation
-   - Quick benefits
-
-3. FLEET PREVIEW (AIDA: Interest/Desire)
-   - Featured vehicles
-   - Pricing visible
-   - Aspirational imagery
-
-4. ROUTES/EXPERIENCES (AIDA: Desire)
-   - Where you can go
-   - Lifestyle content
-   - Aspirational imagery
-
-5. TESTIMONIALS (AIDA: Desire)
-   - Authentic reviews
-   - Specific stories
-   - Trust building
-
-6. PARTNER FEATURE (AIDA: Desire)
-   - Ancarraig Lodge
-   - Extended offering
-   - Cross-sell
-
-7. FAQ (AIDA: Interest/Action)
-   - Address objections
-   - Build confidence
-   - Reduce friction
-
-8. FINAL CTA (AIDA: Action)
-   - Clear next steps
-   - Multiple options
-   - Contact info
-```
-
-### Product Page Structure (Camping/Vehicles)
-
-```
-1. HERO (AIDA: Attention)
-   - Full-bleed imagery
-   - Compelling headline
-   - Price visible
-   - Primary CTA
-
-2. TRUST BAR (AIDA: Attention)
-   - Quick credibility signals
-   - Reviews, features, benefits
-
-3. WHAT YOU GET (AIDA: Interest)
-   - Features and benefits
-   - What's included
-   - Clear value
-
-4. LIFESTYLE (AIDA: Desire)
-   - Aspirational imagery
-   - Where you can go
-   - The experience
-
-5. SOCIAL PROOF (AIDA: Desire)
-   - Testimonials
-   - Reviews
-   - Customer stories
-
-6. BOOKING (AIDA: Action)
-   - Product selection
-   - Pricing clear
-   - Form/CTA
-   - Process explanation
-   - Trust signals
-
-7. ALTERNATIVES (AIDA: Action)
-   - Cross-sell options
-   - Different products
-   - Capture all visitors
-```
-
-### Email Template Structure
-
-```
-1. HEADER (AIDA: Attention)
-   - Logo
-   - Subject line preview
-
-2. HERO (AIDA: Attention)
-   - Compelling headline
-   - Hero image
-   - Primary CTA
-
-3. OPENING (AIDA: Interest)
-   - Context setting
-   - Value proposition
-
-4. FEATURES (AIDA: Interest/Desire)
-   - What's included
-   - Benefits list
-   - Visual elements
-
-5. SOCIAL PROOF (AIDA: Desire)
-   - Testimonials
-   - Reviews
-   - Trust signals
-
-6. OFFER DETAILS (AIDA: Desire)
-   - Pricing
-   - Terms
-   - Value proposition
-
-7. RISK REVERSAL (AIDA: Desire)
-   - Guarantees
-   - Policies
-   - Trust building
-
-8. FINAL CTA (AIDA: Action)
-   - Clear call-to-action
-   - Urgency (if appropriate)
-   - Secondary CTA
-```
-
----
-
-## AIDA Best Practices
-
-### Do's ✅
-
-1. **Structure content with AIDA flow**
-   - Attention first
-   - Build interest
-   - Create desire
-   - Drive action
-
-2. **Score your pages**
-   - Use AIDA scoring system
-   - Target 80+ points
-   - Identify weak sections
-
-3. **Multiple CTAs**
-   - Don't rely on single CTA
-   - Provide options
-   - Different readiness levels
-
-4. **Social proof in Desire**
-   - Testimonials
-   - Reviews
-   - Trust signals
-
-5. **Remove friction in Action**
-   - Clear next steps
-   - Simple forms
-   - Trust signals nearby
-
-### Don'ts ❌
-
-1. **Don't skip sections**
-   - All four stages needed
-   - Don't jump to action
-
-2. **Don't overwhelm in Attention**
-   - Keep hero focused
-   - One clear message
-
-3. **Don't be pushy in Action**
-   - Multiple opportunities
-   - Not just one CTA
-
-4. **Don't forget Desire**
-   - Emotional connection needed
-   - Not just features
-
-5. **Don't ignore scoring**
-   - Measure effectiveness
-   - Improve weak sections
-
----
-
-## AIDA Checklist
-
-**For Every Page:**
-
-**ATTENTION:**
-- [ ] Compelling headline (not generic)
-- [ ] Strong visual impact
-- [ ] Clear value proposition
-- [ ] Immediate understanding
-- [ ] Price/key info visible
-
-**INTEREST:**
-- [ ] Relevant information
-- [ ] Addresses user needs/pain points
-- [ ] Educational value
-- [ ] Builds credibility
-- [ ] Benefits, not just features
-
-**DESIRE:**
-- [ ] Emotional connection
-- [ ] Social proof (testimonials, reviews)
-- [ ] Aspirational content
-- [ ] Exclusive benefits
-- [ ] Risk reversal (guarantees, policies)
-
-**ACTION:**
-- [ ] Clear CTAs
-- [ ] Low friction
-- [ ] Multiple opportunities
-- [ ] Trust signals
-- [ ] Urgency (if appropriate)
-
-**SCORING:**
-- [ ] Score each section (0-25)
-- [ ] Total score calculated
-- [ ] Target: 80+ points
-- [ ] Identify improvements
-- [ ] Plan fixes for weak sections
+| Multiple commitment levels | 5 |
+| Trust signals present | 5 |
+| Appropriate urgency | 5 |
 
 ---
 
 ## Score Interpretation
 
-| Score | Grade | Interpretation |
-|-------|-------|----------------|
-| 90-100 | A | Excellent - high converting |
-| 80-89 | B | Good - meets target |
-| 70-79 | C | Needs improvement |
-| 60-69 | D | Significant issues |
-| <60 | F | Major restructure needed |
+| Score | Grade | Meaning |
+|-------|-------|---------|
+| 90-100 | A | Excellent understanding of user needs |
+| 80-89 | B | Good - meets user psychology targets |
+| 70-79 | C | Gaps in user understanding |
+| 60-69 | D | Significant user experience issues |
+| <60 | F | Major rethink needed |
 
 ---
 
-## Integration with CODA
+## Applying AIDA Beyond Pages
 
-**CODA for Planning:**
-- Use CODA to plan features/pages
-- Structure thinking before building
+### Feature Design
+- **Attention**: Why would users notice this feature?
+- **Interest**: What questions does it answer?
+- **Desire**: What emotional need does it meet?
+- **Action**: How easy is it to use?
 
-**AIDA for Content:**
-- Use AIDA to structure content
-- Ensure conversion-focused flow
+### Onboarding
+- **Attention**: First impression - does it feel right?
+- **Interest**: Learning curve - is it engaging?
+- **Desire**: Early wins - do they want more?
+- **Action**: Next step - is it obvious?
 
-**Together:**
-- CODA: How to build it
-- AIDA: What content to include
-- Both: Quality outcomes
+### Support
+- **Attention**: Finding help - is it accessible?
+- **Interest**: Understanding the issue - do we get it?
+- **Desire**: Confidence in resolution - do they trust us?
+- **Action**: Resolution path - is it clear?
+
+### Product Development
+- **Attention**: Who will this serve? Why will they care?
+- **Interest**: What problem does it solve? How well?
+- **Desire**: What emotional outcome do they want?
+- **Action**: How will they adopt and use it?
+
+---
+
+## AIDA Checklist
+
+For any user-facing element:
+
+**ATTENTION:**
+- [ ] Clear value proposition
+- [ ] Addresses where they're coming from
+- [ ] Signals this is different/better
+- [ ] Appropriate emotional tone
+- [ ] Immediate understanding
+
+**INTEREST:**
+- [ ] Answers their questions
+- [ ] Addresses forming objections
+- [ ] Builds credibility
+- [ ] Feels relevant to them
+- [ ] Benefits clear (not just features)
+
+**DESIRE:**
+- [ ] Creates emotional connection
+- [ ] Provides social proof
+- [ ] Aspirational content present
+- [ ] Reduces perceived risk
+- [ ] User can see themselves succeeding
+
+**ACTION:**
+- [ ] Clear next steps
+- [ ] Low friction
+- [ ] Options for different commitment levels
+- [ ] Trust signals nearby
+- [ ] Appropriate urgency (not forced)
+
+---
+
+## Integration with Other Frameworks
+
+### AIDA + CODA
+- **CODA**: Plan what to build
+- **AIDA**: Understand user psychology throughout
+
+### AIDA + SOPHIA
+- **AIDA**: Structure user journey
+- **SOPHIA**: Audit design quality
+
+### AIDA + TOUCH
+- **AIDA**: User psychology
+- **TOUCH**: Mobile implementation patterns
+
+### AIDA + DEMX
+- **AIDA**: Score each design variation
+- **DEMX**: Generate variations to score
+
+---
+
+## The Core Truth
+
+AIDA is not about manipulation or conversion tricks.
+
+It's about **understanding humans**:
+- Where they come from
+- What they're feeling
+- What they need
+- How to serve them at each stage
+
+Any product, page, feature, or interaction can be improved by asking:
+- Do we understand who arrives? (Attention)
+- Do we answer their questions? (Interest)
+- Do we meet their emotional needs? (Desire)
+- Do we make the next step easy? (Action)
 
 ---
 
 ## Summary
 
-**AIDA = Conversion-focused content structure**
+**AIDA = User Psychology Framework**
 
 Use AIDA to:
-- Structure pages and content
-- Guide user journeys
-- Maximize conversions
-- **Score effectiveness**
+- Understand who arrives and why
+- Know what users need at each stage
+- Design experiences that meet people where they are
+- Measure how well you understand your users
 
 **Key Philosophy:**
-*"Guide users from attention to action through structured, conversion-focused content. Always score. Always improve."*
+*"AIDA is not about getting users to convert. It's about understanding what people need and serving them at each stage of their journey."*
+
+---
+
+**Framework Status:** Production-ready
+**Universal:** Applies to any user-facing work
+**Last Updated:** December 2025

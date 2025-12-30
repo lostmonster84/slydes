@@ -84,11 +84,12 @@ export default function FoundingPartnerPage() {
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  // Default verticals - used as initial state and fallback
+  // Default verticals - used as initial state and fallback (experience-first)
   const defaultVerticals: Vertical[] = [
-    { id: 'property', name: 'Property (Sales & Lettings)' },
-    { id: 'hospitality', name: 'Hospitality (Hotels, Holiday Lets, Glamping)' },
-    { id: 'automotive', name: 'Automotive (Car Hire, Dealerships)' },
+    { id: 'restaurant-bar', name: 'Restaurant / Bar / Cafe' },
+    { id: 'hotel', name: 'Hotel / Lodge / Boutique Stay' },
+    { id: 'venue', name: 'Venue / Event Space' },
+    { id: 'adventure', name: 'Tours / Adventures / Experiences' },
     { id: 'other', name: 'Other' },
   ]
   const [verticals, setVerticals] = useState<Vertical[]>(defaultVerticals)
@@ -580,19 +581,19 @@ export default function FoundingPartnerPage() {
               <h3 className="font-semibold mb-4">Who we&apos;re looking for</h3>
               <div className="grid md:grid-cols-3 gap-4 text-sm">
                 <div className="bg-white rounded-xl p-4 border border-gray-100">
-                  <p className="text-2xl mb-2">🏠</p>
-                  <p className="font-medium text-gray-900">Property</p>
-                  <p className="text-gray-500 text-xs mt-1">Estate agents, lettings, property influencers</p>
+                  <p className="text-2xl mb-2">🍽️</p>
+                  <p className="font-medium text-gray-900">Restaurants & Bars</p>
+                  <p className="text-gray-500 text-xs mt-1">Food bloggers, dining influencers, cocktail creators</p>
                 </div>
                 <div className="bg-white rounded-xl p-4 border border-gray-100">
                   <p className="text-2xl mb-2">🏨</p>
-                  <p className="font-medium text-gray-900">Hospitality</p>
-                  <p className="text-gray-500 text-xs mt-1">Hotels, holiday lets, glamping, travel vloggers</p>
+                  <p className="font-medium text-gray-900">Hotels & Stays</p>
+                  <p className="text-gray-500 text-xs mt-1">Travel vloggers, boutique stay reviewers</p>
                 </div>
                 <div className="bg-white rounded-xl p-4 border border-gray-100">
-                  <p className="text-2xl mb-2">🚗</p>
-                  <p className="font-medium text-gray-900">Automotive</p>
-                  <p className="text-gray-500 text-xs mt-1">Car hire, dealerships, vehicle influencers</p>
+                  <p className="text-2xl mb-2">🎉</p>
+                  <p className="font-medium text-gray-900">Venues & Events</p>
+                  <p className="text-gray-500 text-xs mt-1">Wedding planners, event influencers, venue scouts</p>
                 </div>
               </div>
               <p className="text-gray-500 text-sm mt-4">

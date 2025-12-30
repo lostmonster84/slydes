@@ -6,15 +6,14 @@ import { Button } from '@/components/ui/Button'
 
 const INDUSTRIES = [
   { value: '', label: 'Select your industry' },
-  { value: 'estate-agent', label: 'Estate agent / property sales' },
-  { value: 'lettings', label: 'Lettings / long-term rentals' },
-  { value: 'holiday-lets', label: 'Holiday lets (Airbnb/Booking)' },
-  { value: 'hotel', label: 'Hotel / lodge / hospitality' },
-  { value: 'property-developer', label: 'Property developer' },
-  { value: 'automotive', label: 'Automotive' },
-  { value: 'retail', label: 'Retail / E-commerce' },
-  { value: 'professional', label: 'Professional Services' },
-  { value: 'creative', label: 'Creative / Portfolio' },
+  { value: 'restaurant-bar', label: 'Restaurant / Bar / Cafe' },
+  { value: 'hotel', label: 'Hotel / Lodge / Boutique Stay' },
+  { value: 'venue', label: 'Venue / Event Space' },
+  { value: 'adventure', label: 'Tours / Adventures / Experiences' },
+  { value: 'wellness', label: 'Spa / Wellness / Fitness' },
+  { value: 'nightlife', label: 'Nightclub / Entertainment' },
+  { value: 'holiday-lets', label: 'Holiday lets / Vacation rentals' },
+  { value: 'creative', label: 'Creative / Performer / Artist' },
   { value: 'other', label: 'Other' },
 ]
 
@@ -74,11 +73,11 @@ export function WaitlistSignup() {
         >
           {/* Headline */}
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Turn browsing into bookings and enquiries.
+            Turn scrollers into guests and diners.
           </h2>
 
           <p className="text-lg text-white/70 mb-8 max-w-xl mx-auto">
-            Create one link that sells the space on mobile — then send them to your listing or booking page.
+            Create one link that sells the experience on mobile — then watch the reservations roll in.
           </p>
 
           {/* Form */}
@@ -174,7 +173,7 @@ export function WaitlistSignup() {
                     Joining...
                   </span>
                 ) : (
-                  'Create your first property Slyde'
+                  'Create your first Slyde'
                 )}
               </Button>
 

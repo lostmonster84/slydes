@@ -119,8 +119,8 @@ See [INFLUENCER-PROGRAM.md](./INFLUENCER-PROGRAM.md) for full details.
 | Restaurants | $100 | 5% | $5 |
 | Hotels | $500 | 3% | $15 |
 | Experiences | $200 | 5% | $10 |
-| Car Rentals | $300 | 5% | $15 |
-| Services | $150 | 5% | $7.50 |
+| Venues | $2,000 | 3% | $60 |
+| Wellness | $150 | 5% | $7.50 |
 
 ---
 

@@ -7,13 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 
 const SUBHEADS = [
-  // Property + hospitality focus: replace the link you share (WhatsApp/email/QR/ads), not the final destination (portal/OTA/booking engine).
-  { main: "Buyers browse on phones.", punch: "Make the tour feel made for mobile." },
-  { main: "Guests book on Airbnb and Booking.", punch: "Slydes sells the atmosphere first." },
-  { main: "One link. Full-screen tour.", punch: "Instant enquiries and viewing requests." },
-  { main: "Your best link isn't your homepage.", punch: "It's the one you share." },
-  { main: "WhatsApp. Email. QR. Ads.", punch: "Slydes is built for the handoff." },
-  { main: "People decide in seconds.", punch: "Slydes wins those seconds." },
+  // Experience-first businesses: restaurants, bars, hotels, venues, adventures
+  { main: "Guests scroll TikTok for hours.", punch: "Make your venue just as addictive." },
+  { main: "Diners check Instagram before booking.", punch: "Give them a Slyde to remember." },
+  { main: "One link. Full-screen experience.", punch: "Instant reservations and enquiries." },
+  { main: "Adventure seekers want to feel it.", punch: "Show them the thrill before they book." },
+  { main: "Your cocktail bar deserves more.", punch: "More than a static menu." },
+  { main: "Make them say 'I want to go there'.", punch: "In 3 seconds flat." },
 ]
 
 export function Hero() {
@@ -88,7 +88,7 @@ export function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
             </span>
-            Built for property & hospitality
+            Built for experiences
           </span>
         </motion.div>
         
@@ -194,7 +194,7 @@ export function Hero() {
         >
           or{' '}
           <Link href="/showcase" className="text-white/70 hover:text-white underline underline-offset-2">
-            see a property demo
+            see live examples
           </Link>
         </motion.p>
         
@@ -206,7 +206,7 @@ export function Hero() {
           className="mb-6"
         >
           <div className="animate-phone-float">
-            <PhoneMockup variant="realestate" />
+            <PhoneMockup variant="hospitality" />
           </div>
         </motion.div>
         
@@ -217,7 +217,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          Selling, letting, or hosting?{' '}
+          Running a restaurant, bar, hotel, or venue?{' '}
           <a href="#contact" className="text-white/90 font-medium hover:text-white underline underline-offset-2">
             We should talk.
           </a>

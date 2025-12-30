@@ -45,23 +45,23 @@ export function SocialProof() {
                 Case Study
               </div>
               <h3 className="text-2xl font-bold mb-4">
-                From listing links to <span className="gradient-text">booked viewings</span>.
+                From static menus to <span className="gradient-text">booked tables</span>.
               </h3>
               <p className="text-gray-600 mb-6">
-                Prestige Estates replaced clunky listing pages with Slydes and turned browsing into intent. Faster decisions. Better enquiries.
+                The Kitchen Table replaced their clunky website with a Slyde and turned browsers into diners. The atmosphere sells itself.
               </p>
               <div className="space-y-3 mb-8">
                 <div className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-gray-700">Full-screen property tours on mobile</span>
+                  <span className="text-gray-700">Full-screen experience tours on mobile</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-gray-700">One-tap enquiries and viewing requests</span>
+                  <span className="text-gray-700">One-tap reservations and enquiries</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-leader-blue flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,17 +74,17 @@ export function SocialProof() {
               {/* Quote */}
               <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 border border-gray-200">
                 <div className="text-base font-semibold text-gray-900 mb-3">
-                  &ldquo;Buyers engage way more with video walkthroughs. Our viewing requests jumped immediately.&rdquo;
+                  &ldquo;Guests see the vibe before they book. Our reservations went up 35% the first month.&rdquo;
                 </div>
                 <div className="text-sm text-gray-600">
-                  <span className="font-medium">Prestige Estates</span> • Estate agency
+                  <span className="font-medium">The Kitchen Table</span> • Restaurant & Bar
                 </div>
               </div>
             </div>
 
             {/* Mobile mockup */}
             <div className="relative flex justify-center">
-              <PhoneMockup variant="realestate" />
+              <PhoneMockup variant="hospitality" />
             </div>
           </div>
         </motion.div>

@@ -124,6 +124,13 @@ export interface LocationData {
 // =========================================
 
 export type VerticalType =
+  // Experience-first verticals (primary focus)
+  | 'restaurant-bar'
+  | 'hotel'
+  | 'venue'
+  | 'adventure'
+  | 'wellness'
+  // Legacy verticals (for existing users)
   | 'property'
   | 'automotive'
   | 'hospitality'
@@ -166,6 +173,122 @@ export interface VerticalConfig {
  * All vertical configurations with their defaults
  */
 export const VERTICALS: Record<VerticalType, VerticalConfig> = {
+  // =========================================
+  // Experience-first verticals (primary focus)
+  // =========================================
+  'restaurant-bar': {
+    id: 'restaurant-bar',
+    name: 'Restaurant / Bar / Cafe',
+    description: 'Restaurants, bars, cafes, food & drink venues',
+    icon: 'UtensilsCrossed',
+    defaults: {
+      socialStack: {
+        buttons: { location: true, info: true, share: true, heart: true, connect: true },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: true,
+        info: true,
+        share: true,
+        heart: true,
+        connect: true,
+        contact: true,
+        faqs: true,
+        demoVideo: true
+      }
+    }
+  },
+  hotel: {
+    id: 'hotel',
+    name: 'Hotel / Lodge / Boutique Stay',
+    description: 'Hotels, lodges, boutique stays, vacation rentals',
+    icon: 'Bed',
+    defaults: {
+      socialStack: {
+        buttons: { location: true, info: true, share: true, heart: true, connect: true },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: true,
+        info: true,
+        share: true,
+        heart: true,
+        connect: true,
+        contact: true,
+        faqs: true,
+        demoVideo: true
+      }
+    }
+  },
+  venue: {
+    id: 'venue',
+    name: 'Venue / Event Space',
+    description: 'Wedding venues, event spaces, conference centers',
+    icon: 'PartyPopper',
+    defaults: {
+      socialStack: {
+        buttons: { location: true, info: true, share: true, heart: true, connect: true },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: true,
+        info: true,
+        share: true,
+        heart: true,
+        connect: true,
+        contact: true,
+        faqs: true,
+        demoVideo: true
+      }
+    }
+  },
+  adventure: {
+    id: 'adventure',
+    name: 'Tours / Adventures / Experiences',
+    description: 'Tours, adventures, outdoor experiences, activities',
+    icon: 'Compass',
+    defaults: {
+      socialStack: {
+        buttons: { location: true, info: true, share: true, heart: true, connect: true },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: true,
+        info: true,
+        share: true,
+        heart: true,
+        connect: true,
+        contact: true,
+        faqs: true,
+        demoVideo: true
+      }
+    }
+  },
+  wellness: {
+    id: 'wellness',
+    name: 'Spa / Wellness / Fitness',
+    description: 'Spas, wellness centers, gyms, fitness studios',
+    icon: 'Sparkles',
+    defaults: {
+      socialStack: {
+        buttons: { location: true, info: true, share: true, heart: true, connect: true },
+        order: ['location', 'info', 'share', 'heart', 'connect']
+      },
+      features: {
+        location: true,
+        info: true,
+        share: true,
+        heart: true,
+        connect: true,
+        contact: true,
+        faqs: true,
+        demoVideo: false
+      }
+    }
+  },
+  // =========================================
+  // Legacy verticals (for existing users)
+  // =========================================
   property: {
     id: 'property',
     name: 'Property',
@@ -326,6 +449,13 @@ export function getVerticalSocialStack(vertical: VerticalType | string | null | 
 
 // Legacy: Keep VERTICAL_PRESETS for backwards compatibility
 export const VERTICAL_PRESETS: Record<VerticalType, SocialStackConfig> = {
+  // Experience-first verticals
+  'restaurant-bar': VERTICALS['restaurant-bar'].defaults.socialStack,
+  hotel: VERTICALS.hotel.defaults.socialStack,
+  venue: VERTICALS.venue.defaults.socialStack,
+  adventure: VERTICALS.adventure.defaults.socialStack,
+  wellness: VERTICALS.wellness.defaults.socialStack,
+  // Legacy verticals
   property: VERTICALS.property.defaults.socialStack,
   automotive: VERTICALS.automotive.defaults.socialStack,
   hospitality: VERTICALS.hospitality.defaults.socialStack,

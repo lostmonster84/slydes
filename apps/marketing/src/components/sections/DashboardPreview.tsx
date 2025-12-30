@@ -59,69 +59,61 @@ function VideoBackground({
   )
 }
 
-// Simplified slyde structure for the phone preview
+// Simplified slyde structure for the phone preview - restaurant example
 const slydes = [
-  { id: 'hero', name: 'Welcome' },
-  { id: 'view', name: 'The View' },
-  { id: 'hottub', name: 'Hot Tub' },
-  { id: 'outdoor', name: 'Outdoor Area' },
-  { id: 'location', name: 'Location' },
-  { id: 'book', name: 'Book Now' },
+  { id: 'welcome', name: 'Welcome' },
+  { id: 'ambiance', name: 'Ambiance' },
+  { id: 'menu', name: 'Menu' },
+  { id: 'cocktails', name: 'Cocktails' },
+  { id: 'chefs-table', name: "Chef's Table" },
+  { id: 'reserve', name: 'Reserve' },
 ]
 
-const PROPERTY_VIDEOS = {
-  hero: '/videos/property/hero.mp4',
-  living: '/videos/property/living-room.mp4',
-  kitchen: '/videos/property/kitchen.mp4',
-  bedrooms: '/videos/property/bedrooms.mp4',
-  location: '/videos/property/location.mp4',
-  book: '/videos/property/book-viewing.mp4',
-} as const
-
+// Using fallback video for all frames - demo purpose
 const FALLBACK_VIDEO = '/videos/maison.mp4'
 
 const previewSlides = [
   {
     label: 'Featured',
     title: 'Welcome',
-    brand: 'Oceanview Retreat',
+    brand: 'The Kitchen Table',
+    cta: 'Reserve a table',
+    videoSrc: FALLBACK_VIDEO,
+  },
+  {
+    label: 'Atmosphere',
+    title: 'Ambiance',
+    brand: 'The Kitchen Table',
+    cta: 'Reserve a table',
+    videoSrc: FALLBACK_VIDEO,
+  },
+  {
+    label: 'Our Menu',
+    title: 'Menu',
+    brand: 'The Kitchen Table',
+    cta: 'View full menu',
+    videoSrc: FALLBACK_VIDEO,
+  },
+  {
+    label: 'Cocktails',
+    title: 'Cocktails',
+    brand: 'The Kitchen Table',
+    cta: 'See drink menu',
+    videoSrc: FALLBACK_VIDEO,
+  },
+  {
+    label: 'Private Dining',
+    title: "Chef's Table",
+    brand: 'The Kitchen Table',
+    cta: 'Book private dining',
+    videoSrc: FALLBACK_VIDEO,
+  },
+  {
+    label: 'Reserve',
+    title: 'Reserve',
+    brand: 'The Kitchen Table',
     cta: 'Book now',
-    videoSrc: PROPERTY_VIDEOS.hero,
-  },
-  {
-    label: 'Featured',
-    title: 'The View',
-    brand: 'Oceanview Retreat',
-    cta: 'Book now',
-    videoSrc: PROPERTY_VIDEOS.living,
-  },
-  {
-    label: 'Featured',
-    title: 'Hot Tub',
-    brand: 'Oceanview Retreat',
-    cta: 'Check availability',
-    videoSrc: PROPERTY_VIDEOS.kitchen,
-  },
-  {
-    label: 'Featured',
-    title: 'Outdoor Area',
-    brand: 'Oceanview Retreat',
-    cta: 'Book now',
-    videoSrc: PROPERTY_VIDEOS.bedrooms,
-  },
-  {
-    label: 'Featured',
-    title: 'Location',
-    brand: 'Oceanview Retreat',
-    cta: 'Get directions',
-    videoSrc: PROPERTY_VIDEOS.location,
-  },
-  {
-    label: 'Featured',
-    title: 'Book Now',
-    brand: 'Oceanview Retreat',
-    cta: 'Book now',
-    videoSrc: PROPERTY_VIDEOS.book,
+    videoSrc: FALLBACK_VIDEO,
   },
 ] as const
 
@@ -177,7 +169,7 @@ export function DashboardPreview() {
                 <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
                 <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
               </div>
-              <div className="text-xs font-medium text-white/70">Prestige Estates</div>
+              <div className="text-xs font-medium text-white/70">The Kitchen Table</div>
               <button className="px-3 py-1.5 min-h-[44px] bg-leader-blue text-white text-xs rounded-lg font-medium hover:bg-leader-blue/90 transition-colors flex items-center">
                 Publish
               </button>
@@ -266,7 +258,7 @@ export function DashboardPreview() {
               <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#febc2e]" />
               <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#28c840]" />
             </div>
-            <div className="text-xs md:text-sm font-medium text-white/70">Prestige Estates</div>
+            <div className="text-xs md:text-sm font-medium text-white/70">The Kitchen Table</div>
             <button className="px-3 md:px-4 py-1.5 min-h-[44px] bg-leader-blue text-white text-xs md:text-sm rounded-lg font-medium hover:bg-leader-blue/90 transition-colors flex items-center">
               Publish
             </button>
@@ -347,12 +339,12 @@ export function DashboardPreview() {
               {/* Business profile */}
               <div className="p-3 border-t border-[#3a3a3a]">
                 <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
-                    B
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                    K
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-white truncate">Prestige Estates</div>
-                    <div className="text-xs text-white/50 truncate">prestigeestates.slydes.io</div>
+                    <div className="text-sm font-medium text-white truncate">The Kitchen Table</div>
+                    <div className="text-xs text-white/50 truncate">thekitchentable.slydes.io</div>
                   </div>
                 </div>
               </div>

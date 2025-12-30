@@ -217,7 +217,7 @@ export default function PricingPage() {
                   For busy portfolios
                 </div>
                 <h2 className="text-2xl font-bold text-future-black mb-2">Pro</h2>
-                <p className="text-gray-600 mb-6">More listings, deeper insights</p>
+                <p className="text-gray-600 mb-6">More Slydes, deeper insights</p>
 
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className="text-5xl font-bold text-future-black">£50</span>
@@ -226,7 +226,7 @@ export default function PricingPage() {
                 <p className="text-sm text-gray-500 mb-6">or £500/year (save 17%)</p>
 
                 <p className="text-gray-600 mb-8 text-sm">
-                  For agents and hosts managing multiple properties.
+                  For businesses managing multiple locations or experiences.
                 </p>
 
                 <div className="space-y-4">
@@ -275,7 +275,7 @@ export default function PricingPage() {
                   For large portfolios
                 </div>
                 <h2 className="text-2xl font-bold text-future-black mb-2">Agency</h2>
-                <p className="text-gray-600 mb-6">No limits on your listings</p>
+                <p className="text-gray-600 mb-6">No limits on your Slydes</p>
 
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className="text-5xl font-bold text-future-black">£99</span>
@@ -284,7 +284,7 @@ export default function PricingPage() {
                 <p className="text-sm text-gray-500 mb-6">or £990/year (save 17%)</p>
 
                 <p className="text-gray-600 mb-8 text-sm">
-                  For agencies and property managers with 25+ listings.
+                  For agencies and businesses with 25+ experiences.
                 </p>
 
                 <div className="space-y-4">
@@ -388,7 +388,7 @@ export default function PricingPage() {
                 <strong>Busy portfolio?</strong> Pro gives you room to grow.
               </p>
               <p className="text-lg text-gray-600 mb-8">
-                <strong>25+ listings?</strong> Agency gives you unlimited.
+                <strong>25+ experiences?</strong> Agency gives you unlimited.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

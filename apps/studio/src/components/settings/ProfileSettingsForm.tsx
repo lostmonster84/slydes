@@ -7,6 +7,12 @@ import { Loader2, User, Building2, Globe, Check, Home, Bed, Car, Sparkles, Utens
 import { useOrganization } from '@/hooks/useOrganization'
 
 const VERTICAL_INFO: Record<string, { name: string; icon: typeof Home }> = {
+  'restaurant-bar': { name: 'Restaurant / Bar / Cafe', icon: UtensilsCrossed },
+  hotel: { name: 'Hotel / Lodge / Boutique Stay', icon: Bed },
+  venue: { name: 'Venue / Event Space', icon: Home },
+  adventure: { name: 'Tours / Adventures / Experiences', icon: Sparkles },
+  wellness: { name: 'Spa / Wellness / Fitness', icon: Sparkles },
+  // Legacy verticals (for existing users)
   property: { name: 'Property', icon: Home },
   hospitality: { name: 'Hospitality', icon: Bed },
   automotive: { name: 'Automotive', icon: Car },

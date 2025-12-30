@@ -112,45 +112,51 @@ Smart CTAs at every step. Make it stupid-easy to book, buy, or contact.
 
 ## WHO NEEDS SLYDES?
 
-### Any Business That Relies on Visual Appeal
+### Experience-First Businesses That People Discover
 
-**Hospitality**
-- Restaurants showcasing signature dishes
-- Hotels showing rooms and amenities
-- Bars highlighting atmosphere and cocktails
+**Hospitality & Dining**
+- Restaurants showcasing signature dishes and atmosphere
+- Hotels showing rooms, amenities, and the guest experience
+- Bars and rooftop lounges highlighting cocktails and vibes
+- Cafes with their unique ambiance and specialty drinks
 
-**Rentals & Real Estate**
-- Vacation rentals with property walkthroughs
-- Car rentals showing actual vehicles
-- Real estate agents with listing tours
+**Accommodation & Stays**
+- Boutique hotels with character and story
+- Vacation rentals and holiday cottages
+- Glamping sites and unique accommodations
+- Lodges and retreats in stunning locations
 
-**Experiences**
+**Experiences & Adventures**
 - Tour operators showcasing adventures
-- Event venues with space previews
-- Activity providers showing the experience
+- Activity providers (hiking, kayaking, zip-lining)
+- 4x4 and off-road experiences
+- Food tours and cultural experiences
+
+**Venues & Events**
+- Wedding venues with space previews
+- Event spaces and conference centers
+- Live music venues and comedy clubs
+- Immersive experiences and pop-ups
 
 **Wellness & Beauty**
 - Spas with treatment previews
+- Wellness retreats and yoga studios
 - Salons with transformation videos
 - Fitness studios showing classes
 
-**Automotive**
-- Dealerships with vehicle walkarounds
-- Detail shops showing before/after
-- Exotic car rentals with fleet tours
+**Entertainment & Nightlife**
+- Nightclubs and cocktail bars
+- Live entertainment venues
+- Speakeasies and hidden gems
+- Rooftop bars with views
 
-**Personal Services**
-- Dog walkers with happy clients
-- Personal trainers showing results
-- Wedding planners with portfolio work
-
-**Creatives**
+**Creatives & Performers**
 - Musicians with live clips, releases, and tour dates
 - Video producers with full-screen showreels
 - Photographers with scrollable portfolios
 - Artists showcasing process videos and exhibitions
 
-**If your business can be shown through video, you need Slydes.**
+**The Litmus Test**: Would someone scroll past this on TikTok and think "I want to go there"? If yes, you need Slydes.
 
 ---
 
@@ -211,12 +217,12 @@ Right now, you have a website. People visit it (maybe).
 
 **The Vision**:
 - Consumer opens Slydes app
-- "I need dinner tonight" → Browses restaurant Slydes in their area
-- Swipes through options (just like TikTok)
-- Books directly in-app
-- Shares with friends
+- "What should we do tonight?" → Browses experiences in their area
+- Swipes through restaurants, bars, venues, adventures (just like TikTok)
+- Sees something amazing → Books directly in-app
+- Shares with friends → They discover more
 
-**You're not just creating content. You're joining the platform where discovery happens.**
+**You're not just creating content. You're joining the platform where experiences are discovered.**
 
 ---
 
@@ -236,7 +242,7 @@ Right now, you have a website. People visit it (maybe).
 
 **Phase 3** (2026+):
 - "Google it" becomes "Slyde it"
-- The default way to discover experience-based businesses
+- The default way to discover experiences
 - Customers expect you to be on Slydes
 
 **The businesses that join early will dominate their categories when discovery scales.**
@@ -304,17 +310,20 @@ A movement that puts **visual storytelling** at the center of business.
 **We believe:**
 - Vertical video is not a trend. It's the future.
 - Mobile-first is not enough. Mobile-ONLY is the answer.
-- Businesses deserve tools built for how customers actually behave.
+- Experience-first businesses deserve tools built for how customers actually behave.
 - Immersion beats information. Emotion beats features.
+- Discovery beats search. People want to be inspired, not just informed.
 - The businesses that adapt now will dominate tomorrow.
 
 **We're building Slydes for:**
 - The restaurant owner filming their signature dish
 - The hotel manager showcasing their best suite
 - The adventure company sharing the thrill
-- The small business owner who knows video sells
+- The bar owner capturing Friday night energy
+- The venue coordinator showing the perfect wedding space
+- The experience provider that makes people say "I want to go there"
 
-**We're building Slydes for you.**
+**We're building Slydes for experience-first businesses.**
 
 ---
 

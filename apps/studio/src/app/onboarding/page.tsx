@@ -14,12 +14,14 @@ interface BusinessType {
   icon: string
 }
 
-// Fallback types if API fails - matches HQ verticals
+// Fallback types if API fails - matches experience-first positioning
 const DEFAULT_BUSINESS_TYPES: BusinessType[] = [
-  { id: 'property', label: 'Property (Sales & Lettings)', icon: '🏠' },
-  { id: 'hospitality', label: 'Hospitality (Hotels, Holiday Lets)', icon: '🏨' },
-  { id: 'automotive', label: 'Automotive (Car Hire, Dealerships)', icon: '🚗' },
-  { id: 'other', label: 'Other', icon: '✨' },
+  { id: 'restaurant-bar', label: 'Restaurant / Bar / Cafe', icon: '🍽️' },
+  { id: 'hotel', label: 'Hotel / Lodge / Boutique Stay', icon: '🏨' },
+  { id: 'venue', label: 'Venue / Event Space', icon: '🎉' },
+  { id: 'adventure', label: 'Tours / Adventures / Experiences', icon: '⛵' },
+  { id: 'wellness', label: 'Spa / Wellness / Fitness', icon: '✨' },
+  { id: 'other', label: 'Other', icon: '🌟' },
 ]
 
 // iOS-style slide animation variants
@@ -45,6 +47,7 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [slugStatus, setSlugStatus] = useState<'idle' | 'checking' | 'available' | 'owned' | 'taken'>('idle')
   const [businessTypes, setBusinessTypes] = useState<BusinessType[]>(DEFAULT_BUSINESS_TYPES)
@@ -53,6 +56,7 @@ export default function OnboardingPage() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const [isLinkedInLoading, setIsLinkedInLoading] = useState(false)
   const [authMessage, setAuthMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [formData, setFormData] = useState({
     full_name: '',
     organization_name: '',
@@ -61,6 +65,26 @@ export default function OnboardingPage() {
     business_type: '',
     other_description: '', // Custom industry description when "other" is selected
   })
+
+  // Check if user is already authenticated on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setIsAuthenticated(true)
+        // Pre-fill name from OAuth profile if available
+        if (user.user_metadata?.full_name) {
+          setFormData(prev => ({ ...prev, full_name: user.user_metadata.full_name }))
+        } else if (user.user_metadata?.name) {
+          setFormData(prev => ({ ...prev, full_name: user.user_metadata.name }))
+        }
+        // Skip to step 2 (name) since already authed
+        setStep(2)
+      }
+      setIsCheckingAuth(false)
+    }
+    checkAuth()
+  }, [supabase.auth])
 
   // Fetch business types from API
   useEffect(() => {
@@ -116,8 +140,6 @@ export default function OnboardingPage() {
       }
 
       // Fallback path: handle missing RPC or transient errors.
-      // 1) If the org is visible to this user (RLS), treat it as "owned" (or at least accessible).
-      // 2) Otherwise fall back to the older boolean RPC which checks global uniqueness.
       console.warn('slug_status RPC unavailable; falling back to RLS + is_slug_available', error)
 
       const { data: visibleOrg, error: visibleOrgError } = await supabase
@@ -182,7 +204,9 @@ export default function OnboardingPage() {
 
       if (!user) {
         setIsLoading(false)
-        router.push('/login')
+        // Should not happen since we're auth-first, but handle gracefully
+        setStep(1)
+        setIsAuthenticated(false)
         return
       }
 
@@ -281,56 +305,42 @@ export default function OnboardingPage() {
   }
 
   const nextStep = () => {
-    if (step === 1 && formData.full_name) {
+    if (step === 2 && formData.full_name) {
       setDirection(1)
-      setStep(2)
+      setStep(3)
     } else if (
-      step === 2 &&
+      step === 3 &&
       formData.organization_name &&
       formData.slug &&
       (slugStatus === 'available' || slugStatus === 'owned')
     ) {
       setDirection(1)
-      setStep(3)
+      setStep(4)
     }
   }
 
   const prevStep = () => {
-    if (step > 1) {
+    if (step > 2) {
+      // Can't go back to auth step once authenticated
       setDirection(-1)
       setStep(step - 1)
     }
   }
 
-  const canProceedStep2 =
+  const canProceedStep3 =
     formData.organization_name &&
     formData.slug.length >= 3 &&
     (slugStatus === 'available' || slugStatus === 'owned')
-  const canProceedStep3 = formData.business_type
-
-  // Save form data to localStorage before auth redirect
-  const savePendingOnboarding = () => {
-    localStorage.setItem('pendingOnboarding', JSON.stringify({
-      full_name: formData.full_name,
-      organization_name: formData.organization_name,
-      slug: formData.slug,
-      website: formData.website,
-      business_type: formData.business_type,
-      other_description: formData.other_description,
-      timestamp: Date.now(),
-    }))
-  }
+  const canProceedStep4 = formData.business_type
 
   const handleGoogleSignUp = async () => {
-    if (!canProceedStep3) return
     setIsGoogleLoading(true)
     setAuthMessage(null)
-    savePendingOnboarding()
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
       },
     })
 
@@ -341,15 +351,13 @@ export default function OnboardingPage() {
   }
 
   const handleLinkedInSignUp = async () => {
-    if (!canProceedStep3) return
     setIsLinkedInLoading(true)
     setAuthMessage(null)
-    savePendingOnboarding()
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'linkedin_oidc',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
       },
     })
 
@@ -361,16 +369,15 @@ export default function OnboardingPage() {
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!canProceedStep3 || !email) return
+    if (!email) return
 
     setIsEmailLoading(true)
     setAuthMessage(null)
-    savePendingOnboarding()
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/confirm`,
+        emailRedirectTo: `${window.location.origin}/auth/confirm?next=/onboarding`,
       },
     })
 
@@ -379,10 +386,23 @@ export default function OnboardingPage() {
     if (error) {
       setAuthMessage({ type: 'error', text: error.message })
     } else {
-      setAuthMessage({ type: 'success', text: 'Check your email for the magic link to complete signup!' })
+      setAuthMessage({ type: 'success', text: 'Check your email for the magic link!' })
       setEmail('')
     }
   }
+
+  // Show loading while checking auth
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-future-black">
+        <Loader2 className="w-8 h-8 animate-spin text-leader-blue" />
+      </div>
+    )
+  }
+
+  // Calculate total steps and current progress
+  const totalSteps = 4
+  const progressStep = isAuthenticated ? step : 1
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-future-black">
@@ -400,11 +420,11 @@ export default function OnboardingPage() {
 
       {/* iOS-style Progress Dots */}
       <div className="flex items-center gap-2 mb-8">
-        {[1, 2, 3].map((i) => (
+        {[1, 2, 3, 4].map((i) => (
           <motion.div
             key={i}
             className={`h-2 rounded-full transition-all duration-300 ${
-              step === i ? 'bg-leader-blue w-6' : step > i ? 'bg-leader-blue w-2' : 'bg-white/20 w-2'
+              progressStep === i ? 'bg-leader-blue w-6' : progressStep > i ? 'bg-leader-blue w-2' : 'bg-white/20 w-2'
             }`}
             layout
           />
@@ -429,14 +449,152 @@ export default function OnboardingPage() {
               exit="exit"
               transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
             >
-              {/* Step 1: Your Name */}
-              {step === 1 && (
+              {/* Step 1: Auth (ATTENTION) */}
+              {step === 1 && !isAuthenticated && (
+                <div>
+                  <h2 className="text-2xl font-display font-semibold mb-2 tracking-tight">
+                    Create your Slyde
+                  </h2>
+                  <p className="text-white/50 mb-8 text-[15px]">
+                    Sign up to get started. It takes 60 seconds.
+                  </p>
+
+                  {/* OAuth Buttons */}
+                  <div className="space-y-3">
+                    {/* Google */}
+                    <motion.button
+                      type="button"
+                      onClick={handleGoogleSignUp}
+                      disabled={isGoogleLoading}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full flex items-center justify-center gap-3 bg-white text-gray-900 font-medium py-4 px-4 rounded-2xl hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isGoogleLoading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" viewBox="0 0 24 24">
+                            <path
+                              fill="#4285F4"
+                              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                            />
+                            <path
+                              fill="#34A853"
+                              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                            />
+                            <path
+                              fill="#FBBC05"
+                              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                            />
+                            <path
+                              fill="#EA4335"
+                              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                            />
+                          </svg>
+                          <span>
+                            Continue with <span className="text-[#4285F4]">G</span><span className="text-[#EA4335]">o</span><span className="text-[#FBBC05]">o</span><span className="text-[#4285F4]">g</span><span className="text-[#34A853]">l</span><span className="text-[#EA4335]">e</span>
+                          </span>
+                        </>
+                      )}
+                    </motion.button>
+
+                    {/* LinkedIn */}
+                    <motion.button
+                      type="button"
+                      onClick={handleLinkedInSignUp}
+                      disabled={isLinkedInLoading}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full flex items-center justify-center gap-3 bg-[#0A66C2] text-white font-medium py-4 px-4 rounded-2xl hover:bg-[#004182] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isLinkedInLoading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                          </svg>
+                          Continue with LinkedIn
+                        </>
+                      )}
+                    </motion.button>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="flex items-center gap-4 my-5">
+                    <div className="flex-1 h-px bg-white/10" />
+                    <span className="text-white/40 text-sm">or</span>
+                    <div className="flex-1 h-px bg-white/10" />
+                  </div>
+
+                  {/* Email Signup */}
+                  <form onSubmit={handleEmailSignUp} className="space-y-3">
+                    <div className="relative">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email"
+                        autoComplete="email"
+                        className="w-full bg-white/[0.06] border-0 rounded-2xl py-4 pl-12 pr-5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/50 focus:bg-white/[0.08] transition-all text-[17px]"
+                      />
+                    </div>
+                    <motion.button
+                      type="submit"
+                      disabled={isEmailLoading || !email}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full flex items-center justify-center gap-2 bg-leader-blue text-white font-semibold py-4 px-4 rounded-2xl transition-all disabled:opacity-40 disabled:cursor-not-allowed text-[17px]"
+                    >
+                      {isEmailLoading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <>
+                          Send magic link
+                          <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </motion.button>
+                  </form>
+
+                  {/* Auth Message */}
+                  <AnimatePresence>
+                    {authMessage && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        className={`mt-4 rounded-2xl p-4 text-[13px] ${
+                          authMessage.type === 'success'
+                            ? 'bg-green-500/10 border border-green-500/20 text-green-200'
+                            : 'bg-red-500/10 border border-red-500/20 text-red-200'
+                        }`}
+                      >
+                        {authMessage.text}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Login link */}
+                  <p className="text-center text-white/40 text-[13px] mt-6">
+                    Already have an account?{' '}
+                    <a href="/login" className="text-leader-blue hover:underline">
+                      Sign in
+                    </a>
+                  </p>
+                </div>
+              )}
+
+              {/* Step 2: Your Name (INTEREST) */}
+              {step === 2 && (
                 <div>
                   <h2 className="text-2xl font-display font-semibold mb-2 tracking-tight">
                     Welcome to Slydes
                   </h2>
                   <p className="text-white/50 mb-8 text-[15px]">
-                    Let's get you set up. What should we call you?
+                    What should we call you?
                   </p>
 
                   <div className="space-y-5">
@@ -471,8 +629,8 @@ export default function OnboardingPage() {
                 </div>
               )}
 
-              {/* Step 2: Organization & Subdomain */}
-              {step === 2 && (
+              {/* Step 3: Organization & Subdomain (DESIRE) */}
+              {step === 3 && (
                 <div>
                   {/* Back button - iOS style */}
                   <motion.button
@@ -503,7 +661,7 @@ export default function OnboardingPage() {
                         type="text"
                         value={formData.organization_name}
                         onChange={handleChange}
-                        placeholder="Bloom Studio"
+                        placeholder="The Kitchen Table"
                         autoComplete="organization"
                         autoFocus
                         className="w-full bg-white/[0.06] border-0 rounded-2xl py-4 px-5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/50 focus:bg-white/[0.08] transition-all text-[17px]"
@@ -522,7 +680,7 @@ export default function OnboardingPage() {
                             type="text"
                             value={formData.slug}
                             onChange={handleChange}
-                            placeholder="bloomstudio"
+                            placeholder="thekitchentable"
                             className="flex-1 bg-transparent py-4 px-5 text-white placeholder:text-white/30 focus:outline-none text-[17px]"
                           />
                           <div className="flex items-center gap-2 px-4 py-4 text-white/40 bg-white/[0.04] border-l border-white/[0.06]">
@@ -600,7 +758,7 @@ export default function OnboardingPage() {
                         type="text"
                         value={formData.website}
                         onChange={handleChange}
-                        placeholder="bloomstudio.com"
+                        placeholder="thekitchentable.com"
                         className="w-full bg-white/[0.06] border-0 rounded-2xl py-4 px-5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/50 focus:bg-white/[0.08] transition-all text-[17px]"
                       />
                     </div>
@@ -608,7 +766,7 @@ export default function OnboardingPage() {
                     <motion.button
                       type="button"
                       onClick={nextStep}
-                      disabled={!canProceedStep2}
+                      disabled={!canProceedStep3}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className="w-full flex items-center justify-center gap-2 bg-leader-blue text-white font-semibold py-4 px-4 rounded-2xl transition-all disabled:opacity-40 disabled:cursor-not-allowed text-[17px]"
@@ -619,8 +777,8 @@ export default function OnboardingPage() {
                 </div>
               )}
 
-              {/* Step 3: Business Type */}
-              {step === 3 && (
+              {/* Step 4: Business Type (ACTION) */}
+              {step === 4 && (
                 <div>
                   {/* Back button - iOS style */}
                   <motion.button
@@ -678,7 +836,7 @@ export default function OnboardingPage() {
                           type="text"
                           value={formData.other_description}
                           onChange={handleChange}
-                          placeholder="e.g. Fitness studio, Restaurant, Event venue..."
+                          placeholder="e.g. Fitness studio, Salon, Retail..."
                           autoFocus
                           className="w-full bg-white/[0.06] border-0 rounded-2xl py-4 px-5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/50 focus:bg-white/[0.08] transition-all text-[17px]"
                         />
@@ -686,145 +844,41 @@ export default function OnboardingPage() {
                     )}
                   </AnimatePresence>
 
-                  {/* Account Creation Section */}
+                  {/* Error message */}
                   <AnimatePresence>
-                    {canProceedStep3 && (
+                    {submitError && (
                       <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="overflow-hidden"
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        className="mb-4 rounded-2xl p-4 text-[13px] bg-red-500/10 border border-red-500/20 text-red-200"
                       >
-                        {/* Divider */}
-                        <div className="flex items-center gap-4 my-6">
-                          <div className="flex-1 h-px bg-white/10" />
-                          <span className="text-white/40 text-[13px] uppercase tracking-wide">Create your account</span>
-                          <div className="flex-1 h-px bg-white/10" />
-                        </div>
-
-                        {/* OAuth Buttons */}
-                        <div className="space-y-3">
-                          {/* Google */}
-                          <motion.button
-                            type="button"
-                            onClick={handleGoogleSignUp}
-                            disabled={isGoogleLoading}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-center gap-3 bg-white text-gray-900 font-medium py-4 px-4 rounded-2xl hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {isGoogleLoading ? (
-                              <Loader2 className="w-5 h-5 animate-spin" />
-                            ) : (
-                              <>
-                                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                                  <path
-                                    fill="#4285F4"
-                                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                                  />
-                                  <path
-                                    fill="#34A853"
-                                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                                  />
-                                  <path
-                                    fill="#FBBC05"
-                                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                                  />
-                                  <path
-                                    fill="#EA4335"
-                                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                                  />
-                                </svg>
-                                <span>
-                                  Continue with <span className="text-[#4285F4]">G</span><span className="text-[#EA4335]">o</span><span className="text-[#FBBC05]">o</span><span className="text-[#4285F4]">g</span><span className="text-[#34A853]">l</span><span className="text-[#EA4335]">e</span>
-                                </span>
-                              </>
-                            )}
-                          </motion.button>
-
-                          {/* LinkedIn */}
-                          <motion.button
-                            type="button"
-                            onClick={handleLinkedInSignUp}
-                            disabled={isLinkedInLoading}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-center gap-3 bg-[#0A66C2] text-white font-medium py-4 px-4 rounded-2xl hover:bg-[#004182] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {isLinkedInLoading ? (
-                              <Loader2 className="w-5 h-5 animate-spin" />
-                            ) : (
-                              <>
-                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                </svg>
-                                Continue with LinkedIn
-                              </>
-                            )}
-                          </motion.button>
-                        </div>
-
-                        {/* Divider */}
-                        <div className="flex items-center gap-4 my-5">
-                          <div className="flex-1 h-px bg-white/10" />
-                          <span className="text-white/40 text-sm">or</span>
-                          <div className="flex-1 h-px bg-white/10" />
-                        </div>
-
-                        {/* Email Signup */}
-                        <form onSubmit={handleEmailSignUp} className="space-y-3">
-                          <div className="relative">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-                            <input
-                              type="email"
-                              value={email}
-                              onChange={(e) => setEmail(e.target.value)}
-                              placeholder="Enter your email"
-                              autoComplete="email"
-                              className="w-full bg-white/[0.06] border-0 rounded-2xl py-4 pl-12 pr-5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/50 focus:bg-white/[0.08] transition-all text-[17px]"
-                            />
-                          </div>
-                          <motion.button
-                            type="submit"
-                            disabled={isEmailLoading || !email}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-center gap-2 bg-leader-blue text-white font-semibold py-4 px-4 rounded-2xl transition-all disabled:opacity-40 disabled:cursor-not-allowed text-[17px]"
-                          >
-                            {isEmailLoading ? (
-                              <Loader2 className="w-5 h-5 animate-spin" />
-                            ) : (
-                              <>
-                                Send magic link
-                                <ArrowRight className="w-4 h-4" />
-                              </>
-                            )}
-                          </motion.button>
-                        </form>
-
-                        {/* Auth Message */}
-                        <AnimatePresence>
-                          {authMessage && (
-                            <motion.div
-                              initial={{ opacity: 0, y: -8 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -8 }}
-                              className={`mt-4 rounded-2xl p-4 text-[13px] ${
-                                authMessage.type === 'success'
-                                  ? 'bg-green-500/10 border border-green-500/20 text-green-200'
-                                  : 'bg-red-500/10 border border-red-500/20 text-red-200'
-                              }`}
-                            >
-                              {authMessage.text}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
+                        {submitError}
                       </motion.div>
                     )}
                   </AnimatePresence>
 
+                  {/* Launch button */}
+                  <motion.button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={!canProceedStep4 || isLoading}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full flex items-center justify-center gap-2 bg-leader-blue text-white font-semibold py-4 px-4 rounded-2xl transition-all disabled:opacity-40 disabled:cursor-not-allowed text-[17px]"
+                  >
+                    {isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <>
+                        Launch Studio
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </motion.button>
+
                   {/* Prompt to select business type if not selected */}
-                  {!canProceedStep3 && (
+                  {!canProceedStep4 && (
                     <p className="text-white/40 text-center text-[15px] mt-6">
                       Select your business type to continue
                     </p>

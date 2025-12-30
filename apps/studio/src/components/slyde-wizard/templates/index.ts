@@ -8,6 +8,7 @@
 import type { CTAType } from '@/components/slyde-demo/frameData'
 import type { VerticalType } from '@slydes/types'
 import { propertyTemplates } from './property'
+import { hospitalityTemplates } from './hospitality'
 
 // ============================================
 // Types
@@ -49,18 +50,24 @@ export interface SlydeTemplate {
  * All templates indexed by vertical
  */
 export const TEMPLATE_REGISTRY: Record<VerticalType, SlydeTemplate[]> = {
+  // Experience-first verticals (primary focus)
+  'restaurant-bar': hospitalityTemplates,
+  hotel: hospitalityTemplates,
+  venue: hospitalityTemplates,
+  adventure: hospitalityTemplates,
+  wellness: hospitalityTemplates,
+  hospitality: hospitalityTemplates,
+  food: hospitalityTemplates,
+  beauty: hospitalityTemplates,
+  // Legacy verticals (for existing users)
   property: propertyTemplates,
-  hospitality: [], // TODO: Add hospitality templates
-  automotive: [],  // TODO: Add automotive templates
-  beauty: [],      // TODO: Add beauty templates
-  food: [],        // TODO: Add food templates
-  other: [],       // Generic templates
+  automotive: propertyTemplates,
+  other: hospitalityTemplates,
 }
 
 /**
  * Get templates for a vertical
- * Falls back to property templates if none available for the vertical
- * (Property templates are generic enough - Showcase, Profile, Event work for any business)
+ * Falls back to hospitality templates (experience-first positioning)
  */
 export function getTemplatesForVertical(vertical: VerticalType | null): SlydeTemplate[] {
   // If vertical specified and has templates, use those
@@ -68,9 +75,8 @@ export function getTemplatesForVertical(vertical: VerticalType | null): SlydeTem
     return TEMPLATE_REGISTRY[vertical]
   }
 
-  // Fallback to property templates (they're universal)
-  // TODO: Create truly generic templates when we have more verticals
-  return propertyTemplates
+  // Fallback to hospitality templates (experience-first)
+  return hospitalityTemplates
 }
 
 /**

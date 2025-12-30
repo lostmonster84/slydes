@@ -112,11 +112,11 @@ export function FoundersClub() {
             <div className="pt-4 border-t border-gray-100">
               <p className="text-gray-500 text-xs text-center mb-2">Perfect for creators in:</p>
               <div className="flex flex-wrap justify-center gap-2 text-gray-600 text-xs">
-                <span className="bg-gray-100 px-2 py-1 rounded">Food</span>
-                <span className="bg-gray-100 px-2 py-1 rounded">Travel</span>
-                <span className="bg-gray-100 px-2 py-1 rounded">Real Estate</span>
+                <span className="bg-gray-100 px-2 py-1 rounded">Food & Dining</span>
+                <span className="bg-gray-100 px-2 py-1 rounded">Travel & Hotels</span>
+                <span className="bg-gray-100 px-2 py-1 rounded">Events & Venues</span>
+                <span className="bg-gray-100 px-2 py-1 rounded">Adventures</span>
                 <span className="bg-gray-100 px-2 py-1 rounded">Lifestyle</span>
-                <span className="bg-gray-100 px-2 py-1 rounded">Business</span>
               </div>
             </div>
           </motion.div>
