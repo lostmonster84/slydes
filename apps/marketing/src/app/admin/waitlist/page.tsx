@@ -126,7 +126,7 @@ export default function AdminWaitlistPage() {
   ]
 
   return (
-    <div className="p-8 max-w-7xl">
+    <div className="p-8 max-w-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>

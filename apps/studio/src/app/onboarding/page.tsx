@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Loader2, Check, X, ChevronLeft, Mail, ArrowRight } from 'lucide-react'
+import { Loader2, Check, X, ChevronLeft, ArrowRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { applyStarterTemplate } from '@/lib/starterTemplates'
 import { writeDemoHomeSlyde } from '@/lib/demoHomeSlyde'
@@ -51,13 +51,12 @@ export default function OnboardingPage() {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [slugStatus, setSlugStatus] = useState<'idle' | 'checking' | 'available' | 'owned' | 'taken'>('idle')
   const [businessTypes, setBusinessTypes] = useState<BusinessType[]>(DEFAULT_BUSINESS_TYPES)
-  const [email, setEmail] = useState('')
-  const [isEmailLoading, setIsEmailLoading] = useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const [isLinkedInLoading, setIsLinkedInLoading] = useState(false)
   const [authMessage, setAuthMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [formData, setFormData] = useState({
+    email: '',
     full_name: '',
     organization_name: '',
     slug: '',
@@ -367,30 +366,6 @@ export default function OnboardingPage() {
     }
   }
 
-  const handleEmailSignUp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email) return
-
-    setIsEmailLoading(true)
-    setAuthMessage(null)
-
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/confirm?next=/onboarding`,
-      },
-    })
-
-    setIsEmailLoading(false)
-
-    if (error) {
-      setAuthMessage({ type: 'error', text: error.message })
-    } else {
-      setAuthMessage({ type: 'success', text: 'Check your email for the magic link!' })
-      setEmail('')
-    }
-  }
-
   // Show loading while checking auth
   if (isCheckingAuth) {
     return (
@@ -400,8 +375,7 @@ export default function OnboardingPage() {
     )
   }
 
-  // Calculate total steps and current progress
-  const totalSteps = 4
+  // Calculate current progress for dots
   const progressStep = isAuthenticated ? step : 1
 
   return (
@@ -449,7 +423,7 @@ export default function OnboardingPage() {
               exit="exit"
               transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
             >
-              {/* Step 1: Auth (ATTENTION) */}
+              {/* Step 1: Email or OAuth (ATTENTION) */}
               {step === 1 && !isAuthenticated && (
                 <div>
                   <h2 className="text-2xl font-display font-semibold mb-2 tracking-tight">
@@ -458,6 +432,48 @@ export default function OnboardingPage() {
                   <p className="text-white/50 mb-8 text-[15px]">
                     Sign up to get started. It takes 60 seconds.
                   </p>
+
+                  {/* Email Input */}
+                  <div className="space-y-3">
+                    <input
+                      type="email"
+                      value={formData.email || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                      placeholder="Enter your email"
+                      autoComplete="email"
+                      className="w-full bg-white/[0.06] border-0 rounded-2xl py-4 px-5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/50 focus:bg-white/[0.08] transition-all text-[17px]"
+                    />
+                    <motion.button
+                      type="button"
+                      onClick={async () => {
+                        if (formData.email) {
+                          // Capture email immediately (fire and forget)
+                          fetch('/api/leads', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: formData.email }),
+                          }).catch(() => {}) // Silently fail - don't block user
+
+                          setDirection(1)
+                          setStep(2)
+                        }
+                      }}
+                      disabled={!formData.email}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full flex items-center justify-center gap-2 bg-leader-blue text-white font-semibold py-4 px-4 rounded-2xl transition-all disabled:opacity-40 disabled:cursor-not-allowed text-[17px]"
+                    >
+                      Continue
+                      <ArrowRight className="w-4 h-4" />
+                    </motion.button>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="flex items-center gap-4 my-5">
+                    <div className="flex-1 h-px bg-white/10" />
+                    <span className="text-white/40 text-sm">or</span>
+                    <div className="flex-1 h-px bg-white/10" />
+                  </div>
 
                   {/* OAuth Buttons */}
                   <div className="space-y-3">
@@ -492,9 +508,7 @@ export default function OnboardingPage() {
                               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                             />
                           </svg>
-                          <span>
-                            Continue with <span className="text-[#4285F4]">G</span><span className="text-[#EA4335]">o</span><span className="text-[#FBBC05]">o</span><span className="text-[#4285F4]">g</span><span className="text-[#34A853]">l</span><span className="text-[#EA4335]">e</span>
-                          </span>
+                          <span>Sign up with Google</span>
                         </>
                       )}
                     </motion.button>
@@ -515,62 +529,20 @@ export default function OnboardingPage() {
                           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                           </svg>
-                          Continue with LinkedIn
+                          Sign up with LinkedIn
                         </>
                       )}
                     </motion.button>
                   </div>
 
-                  {/* Divider */}
-                  <div className="flex items-center gap-4 my-5">
-                    <div className="flex-1 h-px bg-white/10" />
-                    <span className="text-white/40 text-sm">or</span>
-                    <div className="flex-1 h-px bg-white/10" />
-                  </div>
-
-                  {/* Email Signup */}
-                  <form onSubmit={handleEmailSignUp} className="space-y-3">
-                    <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter your email"
-                        autoComplete="email"
-                        className="w-full bg-white/[0.06] border-0 rounded-2xl py-4 pl-12 pr-5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-leader-blue/50 focus:bg-white/[0.08] transition-all text-[17px]"
-                      />
-                    </div>
-                    <motion.button
-                      type="submit"
-                      disabled={isEmailLoading || !email}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full flex items-center justify-center gap-2 bg-leader-blue text-white font-semibold py-4 px-4 rounded-2xl transition-all disabled:opacity-40 disabled:cursor-not-allowed text-[17px]"
-                    >
-                      {isEmailLoading ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <>
-                          Send magic link
-                          <ArrowRight className="w-4 h-4" />
-                        </>
-                      )}
-                    </motion.button>
-                  </form>
-
-                  {/* Auth Message */}
+                  {/* Auth Error Message */}
                   <AnimatePresence>
-                    {authMessage && (
+                    {authMessage && authMessage.type === 'error' && (
                       <motion.div
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className={`mt-4 rounded-2xl p-4 text-[13px] ${
-                          authMessage.type === 'success'
-                            ? 'bg-green-500/10 border border-green-500/20 text-green-200'
-                            : 'bg-red-500/10 border border-red-500/20 text-red-200'
-                        }`}
+                        className="mt-4 rounded-2xl p-4 text-[13px] bg-red-500/10 border border-red-500/20 text-red-200"
                       >
                         {authMessage.text}
                       </motion.div>

@@ -149,7 +149,7 @@ export default function RevenuePage() {
   }
 
   return (
-    <div className="p-8 max-w-7xl">
+    <div className="p-8 max-w-full">
       {/* Header - Apple HIG */}
       <div className="flex items-start justify-between mb-8">
         <div>

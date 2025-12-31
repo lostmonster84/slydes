@@ -1,0 +1,620 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		/* App */
+		F700000000000001 /* SlydesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000001 /* SlydesApp.swift */; };
+		F700000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000002 /* ContentView.swift */; };
+
+		/* Core/Models */
+		F700000000000010 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000010 /* Models.swift */; };
+
+		/* Core/Services */
+		F700000000000020 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000020 /* SupabaseService.swift */; };
+		F700000000000021 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000021 /* AnalyticsService.swift */; };
+
+		/* Core/Utilities */
+		F700000000000030 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000030 /* Config.swift */; };
+
+		/* Features/Discovery */
+		F700000000000040 /* DiscoveryFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000040 /* DiscoveryFeedView.swift */; };
+
+		/* Features/Viewer */
+		F700000000000050 /* SlydeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000050 /* SlydeView.swift */; };
+		F700000000000051 /* FrameBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000051 /* FrameBackgroundView.swift */; };
+		F700000000000052 /* VideoPlayerOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000052 /* VideoPlayerOverlayView.swift */; };
+		F700000000000053 /* InfoSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000053 /* InfoSheetView.swift */; };
+		F700000000000054 /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000054 /* ShareSheetView.swift */; };
+		F700000000000055 /* ConnectSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000055 /* ConnectSheetView.swift */; };
+
+		/* UI/Components */
+		F700000000000060 /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000060 /* BadgeView.swift */; };
+		F700000000000061 /* CTAButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000061 /* CTAButtonView.swift */; };
+		F700000000000062 /* SwipeIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000062 /* SwipeIndicatorView.swift */; };
+		F700000000000063 /* SocialActionStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000063 /* SocialActionStackView.swift */; };
+
+		/* UI/Theme */
+		F700000000000070 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800000000000070 /* Theme.swift */; };
+
+		/* Resources */
+		F700000000000080 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F800000000000080 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F800000000000000 /* Slydes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slydes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+
+		/* App */
+		F800000000000001 /* SlydesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlydesApp.swift; sourceTree = "<group>"; };
+		F800000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+
+		/* Core/Models */
+		F800000000000010 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+
+		/* Core/Services */
+		F800000000000020 /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
+		F800000000000021 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+
+		/* Core/Utilities */
+		F800000000000030 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+
+		/* Features/Discovery */
+		F800000000000040 /* DiscoveryFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryFeedView.swift; sourceTree = "<group>"; };
+
+		/* Features/Viewer */
+		F800000000000050 /* SlydeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlydeView.swift; sourceTree = "<group>"; };
+		F800000000000051 /* FrameBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameBackgroundView.swift; sourceTree = "<group>"; };
+		F800000000000052 /* VideoPlayerOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerOverlayView.swift; sourceTree = "<group>"; };
+		F800000000000053 /* InfoSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoSheetView.swift; sourceTree = "<group>"; };
+		F800000000000054 /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
+		F800000000000055 /* ConnectSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectSheetView.swift; sourceTree = "<group>"; };
+
+		/* UI/Components */
+		F800000000000060 /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
+		F800000000000061 /* CTAButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTAButtonView.swift; sourceTree = "<group>"; };
+		F800000000000062 /* SwipeIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeIndicatorView.swift; sourceTree = "<group>"; };
+		F800000000000063 /* SocialActionStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialActionStackView.swift; sourceTree = "<group>"; };
+
+		/* UI/Theme */
+		F800000000000070 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+
+		/* Resources */
+		F800000000000080 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F800000000000081 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F800000000000082 /* Slydes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Slydes.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F900000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F600000000000000 = {
+			isa = PBXGroup;
+			children = (
+				F600000000000001 /* Slydes */,
+				F600000000000002 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F600000000000001 /* Slydes */ = {
+			isa = PBXGroup;
+			children = (
+				F600000000000010 /* App */,
+				F600000000000020 /* Core */,
+				F600000000000030 /* Features */,
+				F600000000000040 /* UI */,
+				F600000000000050 /* Resources */,
+				F800000000000081 /* Info.plist */,
+				F800000000000082 /* Slydes.entitlements */,
+			);
+			path = Slydes;
+			sourceTree = "<group>";
+		};
+		F600000000000002 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F800000000000000 /* Slydes.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F600000000000010 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F800000000000001 /* SlydesApp.swift */,
+				F800000000000002 /* ContentView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		F600000000000020 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				F600000000000021 /* Models */,
+				F600000000000022 /* Services */,
+				F600000000000023 /* Utilities */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		F600000000000021 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F800000000000010 /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F600000000000022 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				F800000000000020 /* SupabaseService.swift */,
+				F800000000000021 /* AnalyticsService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		F600000000000023 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				F800000000000030 /* Config.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		F600000000000030 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				F600000000000031 /* Discovery */,
+				F600000000000032 /* Viewer */,
+				F600000000000033 /* Profile */,
+				F600000000000034 /* Auth */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		F600000000000031 /* Discovery */ = {
+			isa = PBXGroup;
+			children = (
+				F800000000000040 /* DiscoveryFeedView.swift */,
+			);
+			path = Discovery;
+			sourceTree = "<group>";
+		};
+		F600000000000032 /* Viewer */ = {
+			isa = PBXGroup;
+			children = (
+				F800000000000050 /* SlydeView.swift */,
+				F800000000000051 /* FrameBackgroundView.swift */,
+				F800000000000052 /* VideoPlayerOverlayView.swift */,
+				F800000000000053 /* InfoSheetView.swift */,
+				F800000000000054 /* ShareSheetView.swift */,
+				F800000000000055 /* ConnectSheetView.swift */,
+			);
+			path = Viewer;
+			sourceTree = "<group>";
+		};
+		F600000000000033 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		F600000000000034 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		F600000000000040 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				F600000000000041 /* Components */,
+				F600000000000042 /* Theme */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		F600000000000041 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F800000000000060 /* BadgeView.swift */,
+				F800000000000061 /* CTAButtonView.swift */,
+				F800000000000062 /* SwipeIndicatorView.swift */,
+				F800000000000063 /* SocialActionStackView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F600000000000042 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				F800000000000070 /* Theme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		F600000000000050 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F800000000000080 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FA00000000000001 /* Slydes */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB00000000000001 /* Build configuration list for PBXNativeTarget "Slydes" */;
+			buildPhases = (
+				FC00000000000001 /* Sources */,
+				F900000000000001 /* Frameworks */,
+				FD00000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Slydes;
+			packageProductDependencies = (
+				FE00000000000001 /* Supabase */,
+				FE00000000000002 /* NukeUI */,
+				FE00000000000003 /* KeychainAccess */,
+			);
+			productName = Slydes;
+			productReference = F800000000000000 /* Slydes.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F500000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					FA00000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = FB00000000000002 /* Build configuration list for PBXProject "Slydes" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F600000000000000;
+			packageReferences = (
+				FF00000000000001 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				FF00000000000002 /* XCRemoteSwiftPackageReference "Nuke" */,
+				FF00000000000003 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+			);
+			productRefGroup = F600000000000002 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FA00000000000001 /* Slydes */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FD00000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F700000000000080 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FC00000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F700000000000001 /* SlydesApp.swift in Sources */,
+				F700000000000002 /* ContentView.swift in Sources */,
+				F700000000000010 /* Models.swift in Sources */,
+				F700000000000020 /* SupabaseService.swift in Sources */,
+				F700000000000021 /* AnalyticsService.swift in Sources */,
+				F700000000000030 /* Config.swift in Sources */,
+				F700000000000040 /* DiscoveryFeedView.swift in Sources */,
+				F700000000000050 /* SlydeView.swift in Sources */,
+				F700000000000051 /* FrameBackgroundView.swift in Sources */,
+				F700000000000052 /* VideoPlayerOverlayView.swift in Sources */,
+				F700000000000053 /* InfoSheetView.swift in Sources */,
+				F700000000000054 /* ShareSheetView.swift in Sources */,
+				F700000000000055 /* ConnectSheetView.swift in Sources */,
+				F700000000000060 /* BadgeView.swift in Sources */,
+				F700000000000061 /* CTAButtonView.swift in Sources */,
+				F700000000000062 /* SwipeIndicatorView.swift in Sources */,
+				F700000000000063 /* SocialActionStackView.swift in Sources */,
+				F700000000000070 /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		/* Debug - Project */
+		FBC0000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		/* Release - Project */
+		FBC0000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		/* Debug - Target */
+		FBC0000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Slydes/Slydes.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Slydes/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Slydes;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.slydes.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		/* Release - Target */
+		FBC0000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Slydes/Slydes.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Slydes/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Slydes;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.slydes.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FB00000000000001 /* Build configuration list for PBXNativeTarget "Slydes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBC0000000000003 /* Debug */,
+				FBC0000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FB00000000000002 /* Build configuration list for PBXProject "Slydes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBC0000000000001 /* Debug */,
+				FBC0000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FF00000000000001 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		FF00000000000002 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
+		FF00000000000003 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FE00000000000001 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF00000000000001 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		FE00000000000002 /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF00000000000002 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
+		};
+		FE00000000000003 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF00000000000003 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+/* End XCSwiftPackageProductDependency section */
+
+	};
+	rootObject = F500000000000001 /* Project object */;
+}

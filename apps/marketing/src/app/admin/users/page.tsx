@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { RefreshCw, Download } from 'lucide-react'
 import { InfoIcon } from '../_components/InfoTooltip'
 
 type User = {
@@ -13,6 +14,8 @@ type User = {
   created_at: string
   last_sign_in: string | null
   provider: string
+  plan: 'free' | 'creator' | 'pro' | 'agency'
+  subscription_status: string | null
 }
 
 function timeAgo(dateString: string | null): string {
@@ -35,7 +38,7 @@ export default function UsersPage() {
   const [error, setError] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
-  const [filter, setFilter] = useState<'all' | 'onboarded' | 'pending'>('all')
+  const [filter, setFilter] = useState<'all' | 'free' | 'creator' | 'pro' | 'agency'>('all')
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [dropdownPos, setDropdownPos] = useState<{ top: number; right: number } | null>(null)
   const buttonRefs = useRef<Map<string, HTMLButtonElement>>(new Map())
@@ -73,11 +76,9 @@ export default function UsersPage() {
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.message || 'Action failed')
-      // Show success message
       if (json.message) {
         alert(json.message)
       }
-      // Refresh user list
       fetchUsers()
     } catch (e) {
       alert(e instanceof Error ? e.message : 'Action failed')
@@ -120,16 +121,43 @@ export default function UsersPage() {
   }
 
   const filteredUsers = users.filter(user => {
-    if (filter === 'onboarded') return user.onboarding_completed
-    if (filter === 'pending') return !user.onboarding_completed
-    return true
+    const matchesSearch =
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.company_name?.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesTier = filter === 'all' || user.plan === filter
+    return matchesSearch && matchesTier
   })
 
   const stats = {
     total: users.length,
-    onboarded: users.filter(u => u.onboarding_completed).length,
-    pending: users.filter(u => !u.onboarding_completed).length,
-    confirmedEmail: users.filter(u => u.email_confirmed).length,
+    free: users.filter(u => u.plan === 'free').length,
+    creator: users.filter(u => u.plan === 'creator').length,
+    pro: users.filter(u => u.plan === 'pro').length,
+    agency: users.filter(u => u.plan === 'agency').length,
+  }
+
+  const paying = stats.creator + stats.pro + stats.agency
+
+  const exportCSV = () => {
+    const headers = ['Email', 'Name', 'Company', 'Plan', 'Status', 'Onboarded', 'Joined']
+    const rows = filteredUsers.map((user) => [
+      user.email,
+      user.full_name || '',
+      user.company_name || '',
+      user.plan,
+      user.subscription_status || 'n/a',
+      user.onboarding_completed ? 'Yes' : 'No',
+      new Date(user.created_at).toISOString(),
+    ])
+
+    const csv = [headers, ...rows].map((row) => row.map(cell => `"${cell}"`).join(',')).join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `slydes-users-${filter}-${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
   }
 
   if (isLoading) {
@@ -141,33 +169,31 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="p-8 max-w-7xl">
+    <div className="p-8 max-w-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Users</h1>
-          <p className="text-gray-500 dark:text-[#98989d]">All Supabase auth users and their status</p>
+          <p className="text-gray-500 dark:text-[#98989d]">All authenticated users and their subscription tiers</p>
         </div>
-        <button
-          onClick={fetchUsers}
-          disabled={isRefreshing}
-          className="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-[#3a3a3c] text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
-        >
-          <svg
-            className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <div className="flex gap-3">
+          <button
+            onClick={fetchUsers}
+            disabled={isRefreshing}
+            className="px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-[#3a3a3c] text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 rounded-lg hover:bg-gray-200 dark:hover:bg-[#48484a] disabled:opacity-50 transition-colors flex items-center gap-2"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-            />
-          </svg>
-          Refresh
-        </button>
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
+          <button
+            onClick={exportCSV}
+            disabled={filteredUsers.length === 0}
+            className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg transition-colors flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            Export CSV
+          </button>
+        </div>
       </div>
 
       {error && (
@@ -177,22 +203,30 @@ export default function UsersPage() {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-5">
           <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Total Users</p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
         </div>
-        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-green-500/30 p-5">
-          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Onboarded</p>
-          <p className="text-3xl font-bold text-green-400">{stats.onboarded}</p>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-purple-500/30 p-5">
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Agency</p>
+          <p className="text-3xl font-bold text-purple-400">{stats.agency}</p>
+          <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">£99/mo</p>
         </div>
-        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-amber-500/30 p-5">
-          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Pending Onboarding</p>
-          <p className="text-3xl font-bold text-amber-400">{stats.pending}</p>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-green-500/30 p-5">
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Pro</p>
+          <p className="text-3xl font-bold text-green-400">{stats.pro}</p>
+          <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">£50/mo</p>
         </div>
         <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-blue-500/30 p-5">
-          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Email Confirmed</p>
-          <p className="text-3xl font-bold text-blue-400">{stats.confirmedEmail}</p>
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Creator</p>
+          <p className="text-3xl font-bold text-blue-400">{stats.creator}</p>
+          <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">£25/mo</p>
+        </div>
+        <div className="bg-white dark:bg-[#2c2c2e] rounded-xl border border-gray-200 dark:border-white/10 p-5">
+          <p className="text-gray-500 dark:text-[#98989d] text-sm mb-1">Free</p>
+          <p className="text-3xl font-bold text-gray-500 dark:text-[#98989d]">{stats.free}</p>
+          <p className="text-xs text-gray-400 dark:text-[#636366] mt-1">{paying > 0 ? `${Math.round((paying / stats.total) * 100)}% paying` : 'potential upgrades'}</p>
         </div>
       </div>
 
@@ -202,7 +236,7 @@ export default function UsersPage() {
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">User List</h2>
             <InfoIcon
-              tooltip="Search by email, name, or company. Click actions to manage users."
+              tooltip="Search by email, name, or company. Filter by tier. Click actions to manage users."
             />
           </div>
 
@@ -233,21 +267,29 @@ export default function UsersPage() {
 
             {/* Filter buttons */}
             <div className="flex gap-2">
-              {(['all', 'onboarded', 'pending'] as const).map((f) => (
+              {(['all', 'agency', 'pro', 'creator', 'free'] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
                   className={`px-3 py-2 text-sm rounded-lg transition-colors ${
                     filter === f
-                      ? f === 'onboarded'
+                      ? f === 'agency'
+                        ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                        : f === 'pro'
                         ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                        : f === 'pending'
-                        ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                        : f === 'creator'
+                        ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                        : f === 'free'
+                        ? 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d] border border-gray-200 dark:border-white/10'
                         : 'bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white border border-gray-300 dark:border-white/20'
                       : 'text-gray-400 dark:text-[#636366] hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-[#3a3a3c]'
                   }`}
                 >
-                  {f === 'all' ? `All (${stats.total})` : f === 'onboarded' ? `Onboarded (${stats.onboarded})` : `Pending (${stats.pending})`}
+                  {f === 'all' ? `All (${stats.total})` :
+                   f === 'agency' ? `Agency (${stats.agency})` :
+                   f === 'pro' ? `Pro (${stats.pro})` :
+                   f === 'creator' ? `Creator (${stats.creator})` :
+                   `Free (${stats.free})`}
                 </button>
               ))}
             </div>
@@ -269,6 +311,11 @@ export default function UsersPage() {
                       unverified
                     </span>
                   )}
+                  {!user.onboarding_completed && (
+                    <span className="text-[10px] px-1.5 py-0.5 bg-gray-500/20 text-gray-400 rounded">
+                      pending
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center gap-3 text-xs text-gray-400 dark:text-[#636366] mt-0.5">
                   {user.full_name && <span>{user.full_name}</span>}
@@ -279,16 +326,31 @@ export default function UsersPage() {
               </div>
 
               <div className="flex items-center gap-3 ml-4">
-                {/* Onboarding status */}
+                {/* Plan badge */}
                 <span
                   className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                    user.onboarding_completed
+                    user.plan === 'agency'
+                      ? 'bg-purple-500/20 text-purple-400'
+                      : user.plan === 'pro'
                       ? 'bg-green-500/20 text-green-400'
-                      : 'bg-amber-500/20 text-amber-400'
+                      : user.plan === 'creator'
+                      ? 'bg-blue-500/20 text-blue-400'
+                      : 'bg-gray-100 dark:bg-[#3a3a3c] text-gray-500 dark:text-[#98989d]'
                   }`}
                 >
-                  {user.onboarding_completed ? 'Onboarded' : 'Pending'}
+                  {user.plan}
                 </span>
+
+                {/* Subscription status for paying users */}
+                {user.plan !== 'free' && user.subscription_status && (
+                  <span
+                    className={`text-xs ${
+                      user.subscription_status === 'active' ? 'text-green-400' : 'text-gray-400 dark:text-[#636366]'
+                    }`}
+                  >
+                    {user.subscription_status}
+                  </span>
+                )}
 
                 {/* Actions button */}
                 <button
@@ -323,10 +385,17 @@ export default function UsersPage() {
 
         {/* Footer */}
         {filteredUsers.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10">
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10 flex items-center justify-between">
             <p className="text-sm text-gray-500 dark:text-[#636366]">
               Showing {filteredUsers.length} of {users.length} users
             </p>
+            <button
+              onClick={exportCSV}
+              className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1"
+            >
+              <Download className="w-4 h-4" />
+              Export {filter !== 'all' ? filter : ''} users
+            </button>
           </div>
         )}
       </div>

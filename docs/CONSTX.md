@@ -50,8 +50,8 @@ Every HQ page MUST have:
 ### 1.4 Content Area
 ```tsx
 <div className="flex-1 overflow-y-auto p-8">
-  <div className="max-w-6xl">
-    {/* Content here */}
+  <div className="max-w-full">
+    {/* Content fills available width */}
   </div>
 </div>
 ```
@@ -395,7 +395,7 @@ When running CONSTX, check each item:
 - [ ] Outer wrapper has correct classes
 - [ ] Sidebar has correct classes
 - [ ] Header has correct classes  
-- [ ] Content has `max-w-6xl` wrapper
+- [ ] Content has `max-w-full` wrapper (fills available width)
 - [ ] Ambient glow divs present
 
 ### Colors
@@ -477,6 +477,7 @@ To audit a page, I will:
 ## Version History
 
 - **v1.0** (Dec 14, 2025): Initial framework created after consistency audit failures
+
 
 
 

@@ -28,6 +28,7 @@ type NavSection = {
 type NavBadges = {
   triageCount: number
   waitlistTodayCount: number
+  leadsTodayCount: number
   messagesUnreadCount: number
   healthStatus: 'healthy' | 'degraded' | 'unhealthy' | null
 }
@@ -65,9 +66,9 @@ function getNavSections(badges: NavBadges): NavSection[] {
       label: 'CRM',
       items: [
         { href: '/admin/users', label: 'Users', icon: 'user' },
-        { href: '/admin/customers', label: 'Customers', icon: 'customers' },
         { href: '/admin/organizations', label: 'Organizations', icon: 'building' },
         { href: '/admin/affiliates', label: 'Affiliates', icon: 'megaphone' },
+        { href: '/admin/leads', label: 'Leads', icon: 'inbox', badge: badges.leadsTodayCount > 0 ? badges.leadsTodayCount : undefined, badgeColor: 'green' },
         { href: '/admin/waitlist', label: 'Waitlist', icon: 'users', badge: badges.waitlistTodayCount > 0 ? badges.waitlistTodayCount : undefined, badgeColor: 'blue' },
       ],
     },
@@ -173,6 +174,12 @@ function NavIcon({ name }: { name: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
       )
+    case 'inbox':
+      return (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+        </svg>
+      )
     default:
       return null
   }
@@ -187,6 +194,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isNavCollapsed, setIsNavCollapsed] = useState(false)
   const [triageCount, setTriageCount] = useState(0)
   const [waitlistTodayCount, setWaitlistTodayCount] = useState(0)
+  const [leadsTodayCount, setLeadsTodayCount] = useState(0)
   const [messagesUnreadCount, setMessagesUnreadCount] = useState(0)
   const [healthStatus, setHealthStatus] = useState<'healthy' | 'degraded' | 'unhealthy' | null>(null)
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('dark')
@@ -257,6 +265,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         if (waitlistRes.ok) {
           const waitlistData = await waitlistRes.json()
           setWaitlistTodayCount(waitlistData.todayCount || 0)
+        }
+      } catch {
+        // Ignore errors, badge just won't show
+      }
+
+      try {
+        // Fetch leads data for today's count
+        const leadsRes = await fetch('/api/admin/leads')
+        if (leadsRes.ok) {
+          const leadsData = await leadsRes.json()
+          setLeadsTodayCount(leadsData.todayCount || 0)
         }
       } catch {
         // Ignore errors, badge just won't show
@@ -435,7 +454,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Navigation */}
         <nav className="flex-1 p-2 overflow-y-auto">
           <div className="space-y-4">
-            {getNavSections({ triageCount, waitlistTodayCount, messagesUnreadCount, healthStatus }).map((section, sectionIdx) => (
+            {getNavSections({ triageCount, waitlistTodayCount, leadsTodayCount, messagesUnreadCount, healthStatus }).map((section, sectionIdx) => (
               <div key={sectionIdx}>
                 {section.label && !isNavCollapsed && (
                   <p className="px-3 py-1.5 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">

@@ -78,7 +78,7 @@ export default function PlatformSettingsPage() {
 
   if (loading) {
     return (
-      <div className="p-8 max-w-3xl">
+      <div className="p-8 max-w-full">
         <div className="flex items-center justify-center py-12">
           <svg className="w-8 h-8 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
@@ -90,7 +90,7 @@ export default function PlatformSettingsPage() {
   }
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-8 max-w-full">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Platform Settings</h1>

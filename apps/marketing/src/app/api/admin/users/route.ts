@@ -43,10 +43,10 @@ export async function GET(request: NextRequest) {
       throw authError
     }
 
-    // Get all profiles for additional data
+    // Get all profiles for additional data (including subscription fields)
     const { data: profiles, error: profilesError } = await supabase
       .from('profiles')
-      .select('id, email, full_name, company_name, onboarding_completed, created_at')
+      .select('id, email, full_name, company_name, onboarding_completed, created_at, plan, subscription_status')
 
     if (profilesError) {
       console.error('[Users API] Profiles error:', profilesError)
@@ -68,6 +68,8 @@ export async function GET(request: NextRequest) {
         created_at: user.created_at,
         last_sign_in: user.last_sign_in_at,
         provider: user.app_metadata?.provider || 'email',
+        plan: profile?.plan || 'free',
+        subscription_status: profile?.subscription_status || null,
       }
     })
 
