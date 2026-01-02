@@ -9,7 +9,7 @@ import type {
   ScrapedBusiness,
 } from '@/types/generator'
 import type { DemoHomeSlydeCategory } from '@/lib/demoHomeSlyde'
-import type { FrameData, FAQItem } from '@/components/slyde-demo/frameData'
+import type { FrameData, FAQItem } from '@/components/slyde-demo'
 
 /**
  * POST /api/dev/generate-slyde-content

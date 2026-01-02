@@ -5,7 +5,7 @@
  * Templates create Slydes with pre-populated frames - users just fill in their media.
  */
 
-import type { CTAType } from '@/components/slyde-demo/frameData'
+import type { CTAType } from '@/components/slyde-demo'
 import type { VerticalType } from '@slydes/types'
 import { propertyTemplates } from './property'
 import { hospitalityTemplates } from './hospitality'

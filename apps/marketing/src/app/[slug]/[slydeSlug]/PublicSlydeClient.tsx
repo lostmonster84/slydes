@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
+import { SlydeScreen } from '@/components/slyde-demo'
 import { DesktopSlydeWrapper } from '@/components/DesktopSlydeWrapper'
 import {
   campingFrames,
@@ -13,7 +13,7 @@ import {
   wildtraxBusiness,
   type BusinessInfo,
   type FrameData,
-} from '@/components/slyde-demo/frameData'
+} from '@/lib/demo-data'
 import { useDemoBrand, demoBrandGradient } from '@/lib/demoBrand'
 
 export type FrameMedia = {

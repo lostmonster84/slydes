@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { HQSidebarConnected } from '@/components/hq/HQSidebarConnected'
-import { DevicePreview } from '@/components/slyde-demo/DevicePreview'
+import { DevicePreview } from '@/components/slyde-demo'
 import { HomeSlydeViewer } from '@/components/home-slyde/HomeSlydeViewer'
 import { useOrders, formatCurrency } from '@/hooks/useOrders'
 import { useCart } from '@/lib/useCart'

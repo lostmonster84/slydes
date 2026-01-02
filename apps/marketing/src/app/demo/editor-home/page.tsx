@@ -3,13 +3,13 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { 
-  wildtraxBusiness, 
-  wildtraxSlydes, 
-  campingFrames, 
+import {
+  wildtraxBusiness,
+  wildtraxSlydes,
+  campingFrames,
   justDriveFrames,
-  type SlydeConfig 
-} from '@/components/slyde-demo/frameData'
+  type SlydeConfig
+} from '@/lib/demo-data'
 
 /**
  * Editor Home Page

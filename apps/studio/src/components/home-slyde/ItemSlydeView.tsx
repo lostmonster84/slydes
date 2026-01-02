@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronUp, ChevronLeft, ShoppingCart, MessageCircle, Zap, Plus, Check } from 'lucide-react'
-import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
+import { SocialActionStack } from '@/components/slyde-demo'
 import type { InventoryItem } from './data/highlandMotorsData'
 
 interface ItemSlydeViewProps {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState, useCallback, useRef, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { HomeSlydeScreen } from '@/app/demo/home-slyde/components/HomeSlydeScreen'
 import { DesktopSlydeWrapper } from '@/components/DesktopSlydeWrapper'
@@ -40,6 +40,24 @@ export function PublicHomeClient({
   // Check if we're in embed mode (inside iframe)
   const isEmbed = searchParams.get('embed') === 'true'
 
+  // Audio state management
+  const [isMuted, setIsMuted] = useState(true)
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const hasMusicTrack = !!audioSrc && audioEnabled
+
+  const handleMuteToggle = useCallback(() => {
+    setIsMuted(prev => {
+      const newMuted = !prev
+      if (audioRef.current) {
+        audioRef.current.muted = newMuted
+        if (!newMuted) {
+          audioRef.current.play().catch(() => {})
+        }
+      }
+      return newMuted
+    })
+  }, [])
+
   // Create gradient from primary color
   const accent = useMemo(() => {
     // Generate a complementary gradient from the primary color
@@ -71,20 +89,32 @@ export function PublicHomeClient({
         if (!child) return
         router.push(`/${encodeURIComponent(businessSlug)}/${encodeURIComponent(child)}`)
       }}
-      audioSrc={audioSrc}
-      audioEnabled={audioEnabled}
+      hasMusicTrack={hasMusicTrack}
+      isMusicMuted={isMuted}
+      onMusicToggle={handleMuteToggle}
     />
+  )
+
+  // Audio element (hidden)
+  const audioElement = audioSrc && audioEnabled && (
+    <audio ref={audioRef} src={audioSrc} loop muted preload="auto" />
   )
 
   // Embed mode: render Slyde directly (no wrapper, for iframe)
   if (isEmbed) {
-    return <main className="h-screen w-full bg-black">{slydeScreen}</main>
+    return (
+      <main className="h-screen w-full bg-black">
+        {slydeScreen}
+        {audioElement}
+      </main>
+    )
   }
 
   // Normal mode: render with desktop wrapper
   return (
     <DesktopSlydeWrapper businessName={businessName} slug={businessSlug}>
       {slydeScreen}
+      {audioElement}
     </DesktopSlydeWrapper>
   )
 }

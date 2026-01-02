@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronUp } from 'lucide-react'
-import { RatingDisplay } from '@/components/slyde-demo/RatingDisplay'
-import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
-import { ProfilePill } from '@/components/slyde-demo/ProfilePill'
+import { RatingDisplay } from '@/components/slyde-demo'
+import { SocialActionStack } from '@/components/slyde-demo'
+import { ProfilePill } from '@/components/slyde-demo'
 import { CategoryDrawer } from './CategoryDrawer'
-import { ShareSheet } from '@/components/slyde-demo/ShareSheet'
+import { ShareSheet } from '@/components/slyde-demo'
 import type { HomeSlydeData } from './data/highlandMotorsData'
 
 interface HomeSlydeOverlayProps {

@@ -13,6 +13,7 @@
     "@anthropic-ai/sdk": "^0.71.2",
     "@aws-sdk/client-s3": "^3.954.0",
     "@slydes/media": "workspace:*",
+    "@slydes/slyde-viewer": "workspace:*",
     "@slydes/types": "workspace:^",
     "@supabase/supabase-js": "^2.87.1",
     "@vercel/analytics": "^1.6.1",

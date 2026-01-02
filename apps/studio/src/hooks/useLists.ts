@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useDemoHomeSlyde, writeDemoHomeSlyde } from '@/lib/demoHomeSlyde'
-import type { ListData, ListItem, FrameData } from '@/components/slyde-demo/frameData'
+import type { ListData, ListItem, FrameData } from '@/components/slyde-demo'
 
 interface UseListsResult {
   lists: ListData[]

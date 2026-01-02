@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react'
 import { useDemoHomeSlyde, writeChildFAQs, readChildFAQs } from '@/lib/demoHomeSlyde'
-import type { FAQItem } from '@/components/slyde-demo/frameData'
+import type { FAQItem } from '@/components/slyde-demo'
 
 interface UseFAQsResult {
   faqs: FAQItem[]

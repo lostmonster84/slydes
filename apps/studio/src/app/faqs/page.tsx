@@ -13,7 +13,7 @@ import {
   writeChildFAQs,
   readChildFAQs,
 } from '@/lib/demoHomeSlyde'
-import type { FAQItem } from '@/components/slyde-demo/frameData'
+import type { FAQItem } from '@/components/slyde-demo'
 
 // Category icon mapping (matches UnifiedStudioEditor)
 const CATEGORY_ICONS: { id: string; Icon: LucideIcon }[] = [

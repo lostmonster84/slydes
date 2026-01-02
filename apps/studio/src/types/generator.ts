@@ -6,7 +6,7 @@
  */
 
 import type { DemoHomeSlydeCategory } from '@/lib/demoHomeSlyde'
-import type { FAQItem, FrameData, SocialLinks } from '@/components/slyde-demo/frameData'
+import type { FAQItem, FrameData, SocialLinks } from '@/components/slyde-demo'
 
 // ============================================
 // SCRAPED DATA TYPES

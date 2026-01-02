@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useOrganization } from './useOrganization'
 import { useSlydes } from './useSlydes'
 import type { Frame } from './useFrames'
-import type { FrameData, CTAType, CTAIconType } from '@/components/slyde-demo/frameData'
+import type { FrameData, CTAType, CTAIconType } from '@/components/slyde-demo'
 import type { FrameTemplate } from '@/components/slyde-wizard/templates'
 
 // ============================================

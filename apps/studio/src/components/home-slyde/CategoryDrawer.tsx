@@ -25,7 +25,7 @@ import {
   Utensils,
   type LucideIcon,
 } from 'lucide-react'
-import { SheetHandle } from '@/components/slyde-demo/SheetHandle'
+import { SheetHandle } from '@/components/slyde-demo'
 
 // Same icon map as the editor (CONSTX consistency)
 const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {

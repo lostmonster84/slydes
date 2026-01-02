@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronUp, ChevronLeft } from 'lucide-react'
-import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
+import { SocialActionStack } from '@/components/slyde-demo'
 import type { CategoryData } from './data/highlandMotorsData'
 
 interface CategorySlydeViewProps {

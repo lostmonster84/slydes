@@ -2,16 +2,15 @@
 
 import { useEffect, useMemo, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { DevicePreview } from '@/components/slyde-demo'
-import { SlydeScreen } from '@/components/slyde-demo/SlydeScreen'
+import { DevicePreview, SlydeScreen } from '@/components/slyde-demo'
 import {
   campingFrames,
   campingFAQs,
   justDriveFrames,
   justDriveFAQs,
   wildtraxBusiness
-} from '@/components/slyde-demo/frameData'
-import type { BusinessInfo, FrameData } from '@/components/slyde-demo/frameData'
+} from '@/lib/demo-data'
+import type { BusinessInfo, FrameData } from '@/lib/demo-data'
 import { demoBrandGradient, useDemoBrand } from '@/lib/demoBrand'
 import { useDemoHomeSlyde } from '@/lib/demoHomeSlyde'
 import { HomeSlydeScreen } from '@/app/demo/home-slyde/components/HomeSlydeScreen'

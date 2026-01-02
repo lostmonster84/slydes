@@ -3,16 +3,24 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronUp, Volume2, VolumeX } from 'lucide-react'
-import { RatingDisplay } from '@/components/slyde-demo/RatingDisplay'
-import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
-import { ProfilePill } from '@/components/slyde-demo/ProfilePill'
+import {
+  RatingDisplay,
+  SocialActionStack,
+  ProfilePill,
+  ShareSheet,
+  AboutSheet,
+  ConnectSheet,
+  parseVideoUrl,
+  getFilterStyle,
+  getSpeedRate,
+  VIGNETTE_STYLE,
+  type VideoFilterPreset,
+  type VideoSpeedPreset
+} from '@slydes/slyde-viewer'
 import { CategoryDrawer } from './CategoryDrawer'
-import { ShareSheet } from '@/components/slyde-demo/ShareSheet'
-import { AboutSheet } from '@/components/slyde-demo/AboutSheet'
-import type { HomeSlydeData } from '../data/highlandMotorsData'
-import { useDemoHomeSlyde, type BackgroundType } from '@/lib/demoHomeSlyde'
-import { parseVideoUrl } from '@/lib/videoUtils'
-import { getFilterStyle, getSpeedRate, VIGNETTE_STYLE, type VideoFilterPreset, type VideoSpeedPreset } from '@/lib/videoFilters'
+import type { HomeSlydeData } from './data/highlandMotorsData'
+
+export type BackgroundType = 'video' | 'image'
 
 interface HomeSlydeScreenProps {
   data: HomeSlydeData
@@ -23,9 +31,10 @@ interface HomeSlydeScreenProps {
   videoVignette?: boolean
   videoSpeed?: VideoSpeedPreset
   kenBurns?: boolean
-  // Audio props for background music
-  audioSrc?: string
-  audioEnabled?: boolean
+  // Music props (optional - for when music is managed externally)
+  hasMusicTrack?: boolean
+  isMusicMuted?: boolean
+  onMusicToggle?: () => void
 }
 
 /**
@@ -38,20 +47,33 @@ interface HomeSlydeScreenProps {
  *
  * @see docs/UI-PATTERNS.md for full specification
  */
-export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video', imageSrc, videoFilter = 'original', videoVignette = false, videoSpeed = 'normal', kenBurns = false, audioSrc, audioEnabled = true }: HomeSlydeScreenProps) {
+export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video', imageSrc, videoFilter = 'original', videoVignette = false, videoSpeed = 'normal', kenBurns = false, hasMusicTrack, isMusicMuted, onMusicToggle }: HomeSlydeScreenProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
+  const [connectOpen, setConnectOpen] = useState(false)
   const [isHearted, setIsHearted] = useState(false)
   const [heartCount, setHeartCount] = useState(2400)
   const [isMuted, setIsMuted] = useState(true)
-  const [audioUnlocked, setAudioUnlocked] = useState(false)
+  const [touchCursor, setTouchCursor] = useState({ x: 0, y: 0, visible: false })
   const videoRef = useRef<HTMLVideoElement>(null)
-  const audioRef = useRef<HTMLAudioElement>(null)
   const sessionIdRef = useRef<string | null>(null)
   const firstSeenAtRef = useRef<number | null>(null)
   const drawerOpenedOnceRef = useRef(false)
-  const { data: demoHome } = useDemoHomeSlyde()
+  // Data comes from props (fetched from Supabase), no demo fallback needed
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    setTouchCursor({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      visible: true
+    })
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    setTouchCursor(prev => ({ ...prev, visible: false }))
+  }, [])
 
   const handleHeartTap = useCallback(() => {
     setIsHearted((prev) => {
@@ -61,30 +83,24 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
   }, [])
 
   const toggleMute = useCallback(() => {
-    const newMuted = !isMuted
-    setIsMuted(newMuted)
-
-    // Toggle video audio
+    // If music is managed externally, use the callback
+    if (hasMusicTrack && onMusicToggle) {
+      onMusicToggle()
+      return
+    }
+    // Otherwise, toggle video audio
     if (videoRef.current) {
-      videoRef.current.muted = newMuted
+      videoRef.current.muted = !videoRef.current.muted
+      setIsMuted(!isMuted)
     }
+  }, [isMuted, hasMusicTrack, onMusicToggle])
 
-    // Toggle background music
-    if (audioRef.current && audioSrc && audioEnabled) {
-      audioRef.current.muted = newMuted
-      // If unmuting for the first time, start playback (mobile autoplay policy)
-      if (!newMuted && !audioUnlocked) {
-        setAudioUnlocked(true)
-        audioRef.current.play().catch(() => {
-          // Autoplay blocked - will start on next interaction
-        })
-      }
-    }
-  }, [isMuted, audioSrc, audioEnabled, audioUnlocked])
+  // Determine effective muted state (music takes precedence if available)
+  const effectiveMuted = hasMusicTrack ? isMusicMuted : isMuted
 
   const emit = useCallback(
     async (eventType: 'sessionStart' | 'drawerOpen' | 'categorySelect' | 'videoLoop', meta?: Record<string, unknown>) => {
-      const organizationSlug = 'wildtrax'
+      const organizationSlug = data.organizationSlug || 'unknown'
       const slydePublicId = 'home'
 
       try {
@@ -113,7 +129,7 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
         // ignore
       }
     },
-    []
+    [data.organizationSlug]
   )
 
   useEffect(() => {
@@ -137,21 +153,23 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
     description: cat.description,
   }))
 
-  const videoSrc = data.videoSrc || demoHome.videoSrc || '/videos/adventure.mp4'
+  const videoSrc = data.videoSrc || '/videos/adventure.mp4'
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
-      {/* Background Audio (hidden) */}
-      {audioSrc && audioEnabled && (
-        <audio
-          ref={audioRef}
-          src={audioSrc}
-          loop
-          muted={isMuted}
-          playsInline
-          style={{ display: 'none' }}
-        />
-      )}
+    <div
+      className="relative w-full h-full cursor-none overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Touch cursor indicator - always visible at parent level */}
+      <div
+        className={`pointer-events-none absolute w-7 h-7 rounded-full border-2 border-white/70 bg-white/20 z-[100] transition-opacity duration-100 ${touchCursor.visible ? 'opacity-100' : 'opacity-0'}`}
+        style={{
+          left: touchCursor.x,
+          top: touchCursor.y,
+          transform: 'translate(-50%, -50%)'
+        }}
+      />
 
       {/* Background (Video or Image) */}
       <motion.div
@@ -210,16 +228,13 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
                 loop
                 muted
                 playsInline
-                className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                className="absolute inset-0 w-full h-full object-cover"
                 onEnded={() => void emit('videoLoop', {})}
               />
             )
           })()
         )}
       </motion.div>
-
-      {/* Gradient overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
 
       {/* Vignette overlay */}
       {videoVignette && (
@@ -229,15 +244,21 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
         />
       )}
 
-      {/* Sound Toggle - Top Left (conditionally shown) */}
+      {/* Gradient overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
+
+      {/* Sound Toggle - Top Left (conditionally shown) - top-10 clears the notch */}
       {(data.showSound ?? true) && (
         <motion.button
-          className="absolute top-4 left-4 z-50 w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center"
+          className="absolute top-10 left-4 z-[70] w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center pointer-events-auto"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          onClick={toggleMute}
+          onClick={(e) => {
+            e.stopPropagation()
+            toggleMute()
+          }}
         >
-          {isMuted ? (
+          {effectiveMuted ? (
             <VolumeX className="w-4 h-4 text-white" />
           ) : (
             <Volume2 className="w-4 h-4 text-white" />
@@ -245,12 +266,14 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
         </motion.button>
       )}
 
-      {/* === RIGHT SIDE ACTIONS === (Share + Heart + Connect only on Home) */}
+      {/* === RIGHT SIDE ACTIONS === */}
       <SocialActionStack
         heartCount={heartCount}
         isHearted={isHearted}
         onHeartTap={handleHeartTap}
         onShareTap={() => setShareOpen(true)}
+        onInfoTap={() => setAboutOpen(true)}
+        onConnectTap={() => setConnectOpen(true)}
         socialLinks={data.socialLinks}
         className="absolute right-3 bottom-36 z-40"
       />
@@ -276,7 +299,7 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
           {data.tagline}
         </p>
 
-        {/* ProfilePill → opens drawer (instead of AboutSheet) */}
+        {/* ProfilePill → opens drawer */}
         <ProfilePill
           name={data.businessName}
           accentColor={data.accentColor}
@@ -295,10 +318,10 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
         </motion.div>
       </div>
 
-      {/* Swipe-up gesture zone (bottom 20%) */}
-      {!drawerOpen && (
+      {/* Swipe-up gesture zone (bottom 20%) - disabled when ANY sheet is open */}
+      {!drawerOpen && !shareOpen && !aboutOpen && !connectOpen && (
         <motion.div
-          className="absolute left-0 right-0 bottom-0 h-[20%] z-40"
+          className="absolute left-0 right-0 bottom-0 h-[20%] z-20"
           drag="y"
           dragConstraints={{ top: 0, bottom: 0 }}
           dragElastic={{ top: 0.2, bottom: 0 }}
@@ -352,7 +375,7 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
         isOpen={aboutOpen}
         onClose={() => setAboutOpen(false)}
         business={{
-          id: 'home-slyde',
+          id: 'home',
           name: data.businessName,
           tagline: data.tagline,
           location: data.address || 'Scottish Highlands',
@@ -367,6 +390,17 @@ export function HomeSlydeScreen({ data, onCategoryTap, backgroundType = 'video',
           },
           accentColor: data.accentColor,
         }}
+      />
+
+      {/* Connect Sheet (Social links) */}
+      <ConnectSheet
+        isOpen={connectOpen}
+        onClose={() => setConnectOpen(false)}
+        business={{
+          name: data.businessName,
+          tagline: data.tagline,
+        }}
+        socialLinks={data.socialLinks}
       />
     </div>
   )

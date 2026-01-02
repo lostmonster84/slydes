@@ -12,7 +12,7 @@ import type {
   ScrapedReview,
   ScrapeProgress,
 } from '@/types/generator'
-import type { SocialLinks } from '@/components/slyde-demo/frameData'
+import type { SocialLinks } from '@/components/slyde-demo'
 
 // ============================================
 // CONFIGURATION

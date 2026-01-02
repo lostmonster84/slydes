@@ -3,8 +3,8 @@
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronUp, ChevronLeft } from 'lucide-react'
-import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
-import type { CategoryData } from '../data/highlandMotorsData'
+import { SocialActionStack } from '@/components/slyde-demo'
+import type { CategoryData } from './data/highlandMotorsData'
 
 interface CategorySlydeViewProps {
   category: CategoryData
@@ -75,18 +75,19 @@ export function CategorySlydeView({
     <div className="relative w-full h-full overflow-hidden bg-slate-900">
       {/* Background */}
       <div
-        className={`absolute inset-0 bg-gradient-to-b ${currentFrame.background.gradient || 'from-slate-800 to-slate-900'}`}
+        className={`absolute inset-0 bg-gradient-to-b pointer-events-none ${currentFrame.background.gradient || 'from-slate-800 to-slate-900'}`}
       />
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40 pointer-events-none" />
 
-      {/* Back button */}
+      {/* iOS Back button */}
       <button
         onClick={onBack}
-        className="absolute top-10 left-3 z-30 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center"
+        className="absolute top-12 left-3 z-30 flex items-center gap-0.5 px-2 py-1 rounded-full bg-black/30 backdrop-blur-sm"
       >
         <ChevronLeft className="w-5 h-5 text-white" />
+        <span className="text-white text-[15px] font-medium pr-1">Back</span>
       </button>
 
       {/* Tap zone for navigation */}
@@ -95,22 +96,6 @@ export function CategorySlydeView({
         onClick={handleTap}
       />
 
-      {/* === TOP SECTION === */}
-      <div className="absolute top-10 left-0 right-0 px-4 z-10">
-        <AnimatePresence mode="wait">
-          {currentFrame.badge && (
-            <motion.div
-              key={`badge-${currentFrame.id}`}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="inline-flex items-center gap-1.5 bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 ml-10"
-            >
-              <span className="text-xs font-medium text-white">{currentFrame.badge}</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
 
       {/* === RIGHT SIDE ACTIONS === (using shared SocialActionStack) */}
       <SocialActionStack
@@ -120,11 +105,6 @@ export function CategorySlydeView({
         onShareTap={() => {}}
         className="absolute right-3 top-1/2 -translate-y-1/2 z-40"
       />
-
-      {/* Slide indicator - Bottom-right corner */}
-      <div className="absolute bottom-6 right-3 z-40 pointer-events-none">
-        <span className="text-white/50 text-[10px] font-medium">{`${frameIndex + 1}/${totalFrames}`}</span>
-      </div>
 
       {/* === BOTTOM CONTENT === */}
       <div className="absolute bottom-0 left-0 right-0 p-4 pb-6 z-10">

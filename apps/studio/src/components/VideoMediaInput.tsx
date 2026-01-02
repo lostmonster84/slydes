@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { Upload, Link2, X, Loader2, Youtube, Film, Scissors } from 'lucide-react'
 import { useMediaUpload } from '@/hooks/useMediaUpload'
-import { VIDEO_FILTERS, VIDEO_SPEEDS, type VideoFilterPreset, type VideoSpeedPreset } from '@/lib/videoFilters'
+import { VIDEO_FILTERS, VIDEO_SPEEDS, type VideoFilterPreset, type VideoSpeedPreset } from '@slydes/slyde-viewer'
 import { VideoTrimEditor } from './VideoTrimEditor'
 
 // Parse video URLs and return embed-friendly format

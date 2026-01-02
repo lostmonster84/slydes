@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronUp } from 'lucide-react'
-import { RatingDisplay } from '@/components/slyde-demo/RatingDisplay'
-import { SocialActionStack } from '@/components/slyde-demo/SocialActionStack'
-import { ProfilePill } from '@/components/slyde-demo/ProfilePill'
+import { RatingDisplay } from '@/components/slyde-demo'
+import { SocialActionStack } from '@/components/slyde-demo'
+import { ProfilePill } from '@/components/slyde-demo'
 import { CategoryDrawer } from './CategoryDrawer'
-import { ShareSheet } from '@/components/slyde-demo/ShareSheet'
-import type { HomeSlydeData } from '../data/highlandMotorsData'
+import { ShareSheet } from '@/components/slyde-demo'
+import type { HomeSlydeData } from './data/highlandMotorsData'
 
 interface HomeSlydeOverlayProps {
   data: HomeSlydeData
@@ -51,7 +51,7 @@ export function HomeSlydeOverlay({
 
   const emit = useCallback(
     async (eventType: 'sessionStart' | 'drawerOpen' | 'categorySelect' | 'videoLoop', meta?: Record<string, unknown>) => {
-      const organizationSlug = 'wildtrax'
+      const organizationSlug = data.organizationSlug || 'unknown'
       const slydePublicId = 'home'
 
       try {
@@ -80,7 +80,7 @@ export function HomeSlydeOverlay({
         // ignore
       }
     },
-    []
+    [data.organizationSlug]
   )
 
   useEffect(() => {

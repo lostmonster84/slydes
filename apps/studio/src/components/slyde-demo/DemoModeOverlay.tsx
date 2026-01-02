@@ -3,15 +3,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Volume2, VolumeX, Play } from 'lucide-react'
-import { DevicePreview } from './DevicePreview'
+import { DevicePreview, SlydeScreen, type FrameData, type BusinessInfo, type SocialLinks, type VideoFilterPreset, type VideoSpeedPreset } from '@slydes/slyde-viewer'
 import { HomeSlydeScreen } from '@/components/home-slyde/HomeSlydeScreen'
-import { SlydeScreen } from './SlydeScreen'
 import { BackgroundAudioPlayer } from '@/components/audio/BackgroundAudioPlayer'
 import { useBackgroundMusic } from '@/hooks/useBackgroundMusic'
 import type { HomeSlydeData } from '@/components/home-slyde/data/highlandMotorsData'
-import type { FrameData, BusinessInfo, SocialLinks } from './frameData'
 import type { BackgroundType } from '@/lib/demoHomeSlyde'
-import type { VideoFilterPreset, VideoSpeedPreset } from '@/lib/videoFilters'
 
 interface DemoModeOverlayProps {
   isOpen: boolean

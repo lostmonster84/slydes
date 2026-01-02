@@ -20,6 +20,7 @@
     "@ffmpeg/util": "^0.12.2",
     "@slydes/database": "workspace:*",
     "@slydes/media": "workspace:*",
+    "@slydes/slyde-viewer": "workspace:*",
     "@slydes/types": "workspace:*",
     "@slydes/ui": "workspace:*",
     "@stripe/stripe-js": "^8.6.0",

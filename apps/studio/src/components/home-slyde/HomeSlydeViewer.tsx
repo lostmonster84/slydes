@@ -3,7 +3,7 @@
 import { useReducer, useCallback, useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HomeSlydeOverlay } from './HomeSlydeOverlay'
-import { SlydeCover } from '@/components/slyde-demo/SlydeCover'
+import { SlydeCover } from '@/components/slyde-demo'
 import { CategorySlydeView } from './CategorySlydeView'
 import { InventoryGridView } from './InventoryGridView'
 import { ItemSlydeView } from './ItemSlydeView'
@@ -16,9 +16,9 @@ import { useBackgroundMusic } from '@/hooks/useBackgroundMusic'
 import { BackgroundAudioPlayer } from '@/components/audio/BackgroundAudioPlayer'
 import { useCart } from '@/lib/useCart'
 import { useDemoCheckout } from '@/lib/useCheckout'
-import type { FrameData as EditorFrameData, ListData } from '@/components/slyde-demo/frameData'
+import type { FrameData as EditorFrameData, ListData } from '@/components/slyde-demo'
 import { parseVideoUrl } from '@/components/VideoMediaInput'
-import { getFilterStyle, VIGNETTE_STYLE, type VideoFilterPreset } from '@/lib/videoFilters'
+import { getFilterStyle, VIGNETTE_STYLE, type VideoFilterPreset } from '@slydes/slyde-viewer'
 
 // ============================================
 // STATE MACHINE

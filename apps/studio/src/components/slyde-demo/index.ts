@@ -1,7 +1,6 @@
 /**
- * Slyde Demo Components
- *
- * Portable components for building Slyde experiences.
+ * Slyde Demo Components - Studio App
+ * Re-exports from @slydes/slyde-viewer shared package.
  *
  * TERMINOLOGY (per STRUCTURE.md):
  * - Profile → Slyde → Frame
@@ -12,52 +11,8 @@
  * @see docs/STRUCTURE.md for hierarchy
  */
 
-// Core Components
-export { DevicePreview, HomeIndicator, PhoneFrame } from './DevicePreview'
-export { SlydeScreen } from './SlydeScreen'
-export { SlydeCover } from './SlydeCover'
+// Re-export everything from shared package
+export * from '@slydes/slyde-viewer'
 
-// UI Components
-export { Badge } from './Badge'
-export { RatingDisplay } from './RatingDisplay'
-export { SocialActionStack } from './SocialActionStack'
-export { ProfilePill } from './ProfilePill'
-export { CTAButton } from './CTAButton'
-
-// Bottom Sheets
-export { InfoSheet } from './InfoSheet'
-export { ShareSheet } from './ShareSheet'
-export { AboutSheet } from './AboutSheet'
-export { ConnectSheet } from './ConnectSheet'
-export { LocationSheet } from './LocationSheet'
-export { PropertyDetailsSheet } from './PropertyDetailsSheet'
-export { SheetHandle } from './SheetHandle'
-
-// Overlays
-export { VideoPlayerOverlay } from './VideoPlayerOverlay'
+// Studio-only components (not in shared package)
 export { DemoModeOverlay } from './DemoModeOverlay'
-
-// Special Frames
-export { SlydesPromoSlide } from './SlydesPromoSlide'
-
-// Types - no demo data
-export {
-  type FrameData,
-  type FrameInfoContent,
-  type FAQItem,
-  type FAQInboxItem,
-  type Review,
-  type BusinessInfo,
-  type CTAIconType,
-  type CTAType,
-  type SlydeConfig,
-  type ListItem,
-  type ListData,
-  type SocialLinks,
-  // Helpers
-  emptyBusinessInfo,
-  createEmptyFrame,
-  // Backwards compatibility (deprecated)
-  type SlideData,
-  type SlideInfoContent,
-} from './frameData'

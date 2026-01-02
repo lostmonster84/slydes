@@ -4,8 +4,8 @@ import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useOrganization } from './useOrganization'
 import { useSlydes, type Slyde } from './useSlydes'
-import type { FrameData, FAQItem, SocialLinks } from '@/components/slyde-demo/frameData'
-import type { VideoFilterPreset, VideoSpeedPreset } from '@/lib/videoFilters'
+import type { FrameData, FAQItem, SocialLinks } from '@/components/slyde-demo'
+import type { VideoFilterPreset, VideoSpeedPreset } from '@slydes/slyde-viewer'
 
 // ============================================
 // Types - matching DemoHomeSlyde for compatibility

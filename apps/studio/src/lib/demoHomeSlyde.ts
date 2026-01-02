@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { FAQItem, FAQInboxItem, FrameData, ListData, SocialLinks } from '@/components/slyde-demo/frameData'
-import type { VideoFilterPreset, VideoSpeedPreset } from '@/lib/videoFilters'
+import type { FAQItem, FAQInboxItem, FrameData, ListData, SocialLinks } from '@/components/slyde-demo'
+import type { VideoFilterPreset, VideoSpeedPreset } from '@slydes/slyde-viewer'
 
 export type DemoHomeSlydeCategory = {
   id: string

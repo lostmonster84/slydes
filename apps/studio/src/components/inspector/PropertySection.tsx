@@ -1,7 +1,7 @@
 'use client'
 
 import { ChevronDown, Home, MapPin, Video, LayoutGrid, Calendar, FileText, Phone, ClipboardCheck, HandCoins, Bed, Bath, Ruler, Zap, Car, Trees, PawPrint, Key, Receipt } from 'lucide-react'
-import type { FrameData } from '@/components/slyde-demo/frameData'
+import type { FrameData } from '@/components/slyde-demo'
 
 interface PropertySectionProps {
   isExpanded: boolean
