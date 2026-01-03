@@ -5,6 +5,7 @@ const config: Config = {
   content: [
     './src/**/*.{js,ts,jsx,tsx,mdx}',
     '../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/slyde-viewer/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   safelist: [
     // Navigator/Inspector size toggle classes (S/M/L)

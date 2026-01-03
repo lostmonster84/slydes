@@ -59,27 +59,29 @@ export function SlydeWizard({
               className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm z-50"
               onClick={handleClose}
             />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-50"
-            >
-              <div className="bg-white dark:bg-[#1c1c1e] border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-2xl p-6 text-center">
-                <Sparkles className="w-12 h-12 text-gray-300 dark:text-white/20 mx-auto mb-3" />
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Templates Yet</h2>
-                <p className="text-gray-500 dark:text-white/50 text-sm mb-4">
-                  Templates for your industry are coming soon. Use Quick Add for now.
-                </p>
-                <button
-                  onClick={handleClose}
-                  className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-700 dark:text-white text-sm transition-colors"
-                >
-                  Got it
-                </button>
-              </div>
-            </motion.div>
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+                className="w-full max-w-md"
+              >
+                <div className="bg-white dark:bg-[#1c1c1e] border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-2xl p-6 text-center">
+                  <Sparkles className="w-12 h-12 text-gray-300 dark:text-white/20 mx-auto mb-3" />
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Templates Yet</h2>
+                  <p className="text-gray-500 dark:text-white/50 text-sm mb-4">
+                    Templates for your industry are coming soon. Use Quick Add for now.
+                  </p>
+                  <button
+                    onClick={handleClose}
+                    className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-700 dark:text-white text-sm transition-colors"
+                  >
+                    Got it
+                  </button>
+                </div>
+              </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>
@@ -100,14 +102,15 @@ export function SlydeWizard({
           />
 
           {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg z-50 max-h-[90vh] overflow-hidden"
-          >
-            <div className="bg-white dark:bg-[#1c1c1e] border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+              className="w-full max-w-lg max-h-[90vh] overflow-hidden"
+            >
+              <div className="relative bg-white dark:bg-[#1c1c1e] border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
               {/* Header */}
               <div className="px-6 pt-6 pb-4 flex-shrink-0">
                 <button
@@ -166,8 +169,9 @@ export function SlydeWizard({
                   </button>
                 </div>
               )}
-            </div>
-          </motion.div>
+              </div>
+            </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>

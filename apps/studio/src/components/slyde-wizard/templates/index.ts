@@ -8,7 +8,15 @@
 import type { CTAType } from '@/components/slyde-demo'
 import type { VerticalType } from '@slydes/types'
 import { propertyTemplates } from './property'
-import { hospitalityTemplates } from './hospitality'
+import {
+  hospitalityTemplates,
+  restaurantShowcase,
+  hotelExperience,
+  venueShowcase,
+  adventureExperience,
+  barNightlife,
+  wellnessExperience,
+} from './hospitality'
 
 // ============================================
 // Types
@@ -48,20 +56,22 @@ export interface SlydeTemplate {
 
 /**
  * All templates indexed by vertical
+ * Each vertical shows only relevant templates to reduce friction
  */
 export const TEMPLATE_REGISTRY: Record<VerticalType, SlydeTemplate[]> = {
   // Experience-first verticals (primary focus)
-  'restaurant-bar': hospitalityTemplates,
-  hotel: hospitalityTemplates,
-  venue: hospitalityTemplates,
-  adventure: hospitalityTemplates,
-  wellness: hospitalityTemplates,
-  hospitality: hospitalityTemplates,
-  food: hospitalityTemplates,
-  beauty: hospitalityTemplates,
+  'restaurant-bar': [restaurantShowcase, barNightlife],
+  hotel: [hotelExperience],
+  venue: [venueShowcase],
+  adventure: [adventureExperience],
+  wellness: [wellnessExperience],
   // Legacy verticals (for existing users)
+  hospitality: hospitalityTemplates,
+  food: [restaurantShowcase, barNightlife],
+  beauty: [wellnessExperience],
   property: propertyTemplates,
   automotive: propertyTemplates,
+  // "Other" shows all templates
   other: hospitalityTemplates,
 }
 

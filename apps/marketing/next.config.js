@@ -3,6 +3,7 @@ const path = require("node:path");
 
 const nextConfig = {
   reactStrictMode: true,
+  transpilePackages: ['@slydes/slyde-viewer'],
   // Fix Turbopack in pnpm workspaces/monorepos by explicitly declaring the repo root.
   // See: https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory
   // NOTE: Must match `outputFileTracingRoot` if both are set.

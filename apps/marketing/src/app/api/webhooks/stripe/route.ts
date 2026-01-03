@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { createSupabaseAdmin } from '@/lib/supabaseAdmin'
 
 // Lazy initialization - only create Stripe instance when needed
 function getStripe() {
@@ -16,6 +17,14 @@ export async function POST(request: NextRequest) {
   if (!stripe || !webhookSecret) {
     console.log('Stripe not configured, skipping webhook')
     return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 })
+  }
+
+  let supabase: ReturnType<typeof createSupabaseAdmin>
+  try {
+    supabase = createSupabaseAdmin()
+  } catch (e) {
+    console.error('Supabase admin not configured:', e)
+    return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
   }
 
   try {
@@ -39,42 +48,97 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session
-        
+
         // Extract customer info from metadata
         const { name, company, useCase, memberType } = session.metadata || {}
         const email = session.customer_email
+        const customerId = session.customer as string
+        const subscriptionId = session.subscription as string
 
-        console.log('🎉 New Pro subscriber!', {
+        console.log('🎉 New subscriber!', {
           name,
           email,
           company,
           useCase,
           memberType,
+          customerId,
+          subscriptionId,
           amountPaid: session.amount_total,
           currency: session.currency,
           paymentStatus: session.payment_status,
         })
 
-        // TODO: Add to your database
-        // await db.subscribers.create({
-        //   data: {
-        //     name,
-        //     email,
-        //     company,
-        //     useCase,
-        //     stripeSessionId: session.id,
-        //     stripeCustomerId: session.customer as string,
-        //     stripeSubscriptionId: session.subscription as string,
-        //     tier: 'pro',
-        //     subscribedAt: new Date(),
-        //   }
-        // })
+        // Update the user's profile with Stripe IDs and plan
+        if (email) {
+          // Determine tier from metadata or default to 'creator'
+          const tier = memberType === 'pro' ? 'pro' : 'creator'
 
-        // TODO: Send welcome email
-        // await sendWelcomeEmail({ name, email })
+          const { error: updateError } = await supabase
+            .from('profiles')
+            .update({
+              stripe_customer_id: customerId,
+              stripe_subscription_id: subscriptionId,
+              subscription_status: 'active',
+              plan: tier,
+              company_name: company || undefined,
+            })
+            .eq('email', email)
 
-        // TODO: Provision Pro access
-        // await provisionProAccess(email)
+          if (updateError) {
+            console.error('Failed to update profile:', updateError)
+            // Don't fail the webhook - the payment succeeded
+          } else {
+            console.log(`✅ Profile updated for ${email} - plan: ${tier}`)
+          }
+        }
+
+        break
+      }
+
+      case 'customer.subscription.updated': {
+        const subscription = event.data.object as Stripe.Subscription
+        const subscriptionId = subscription.id
+        const status = subscription.status // active, past_due, canceled, etc.
+
+        console.log('📝 Subscription updated:', { subscriptionId, status })
+
+        // Map Stripe status to our status
+        let ourStatus: 'active' | 'cancelled' | 'past_due' = 'active'
+        if (status === 'canceled') ourStatus = 'cancelled'
+        else if (status === 'past_due') ourStatus = 'past_due'
+        else if (status === 'active') ourStatus = 'active'
+
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({ subscription_status: ourStatus })
+          .eq('stripe_subscription_id', subscriptionId)
+
+        if (updateError) {
+          console.error('Failed to update subscription status:', updateError)
+        }
+
+        break
+      }
+
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object as Stripe.Subscription
+        const subscriptionId = subscription.id
+
+        console.log('❌ Subscription cancelled:', subscriptionId)
+
+        // Downgrade to free
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({
+            subscription_status: 'cancelled',
+            plan: 'free',
+            stripe_subscription_id: null,
+          })
+          .eq('stripe_subscription_id', subscriptionId)
+
+        if (updateError) {
+          console.error('Failed to update cancelled subscription:', updateError)
+        }
 
         break
       }
@@ -82,7 +146,7 @@ export async function POST(request: NextRequest) {
       case 'payment_intent.payment_failed': {
         const paymentIntent = event.data.object as Stripe.PaymentIntent
         console.log('❌ Payment failed:', paymentIntent.id)
-        // Could send a "payment failed" email
+        // Could send a "payment failed" email here
         break
       }
 
@@ -100,7 +164,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-
-
-
-

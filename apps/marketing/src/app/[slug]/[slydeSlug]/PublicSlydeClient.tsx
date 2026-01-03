@@ -159,7 +159,7 @@ export function PublicSlydeClient({
       : 'call'
 
     return {
-      id: dbFrame.id,
+      id: dbFrame.publicId, // Use publicId for analytics (ingest looks up by public_id)
       order: index + 1, // 1-indexed order
       templateType,
       title: dbFrame.title ?? '',

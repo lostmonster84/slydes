@@ -1383,7 +1383,11 @@ export function UnifiedStudioEditor() {
 
   // Add a new frame to a category
   const addCategoryFrame = useCallback(async (categoryId: string) => {
-    await addCategoryFrameDB(categoryId)
+    const frameId = await addCategoryFrameDB(categoryId)
+    if (frameId) {
+      setSelection({ type: 'categoryFrame', categoryId, categoryFrameId: frameId })
+      setPreviewMode('category')
+    }
   }, [addCategoryFrameDB])
 
   // Update a frame's data

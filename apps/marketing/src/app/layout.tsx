@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/react'
 import { PageTracker } from '@/components/PageTracker'
 import { spaceGrotesk, inter, jetbrainsMono } from '@/lib/fonts'
@@ -60,6 +61,13 @@ export default function RootLayout({
         {children}
         <Analytics />
         <PageTracker />
+        {/* Plausible Analytics - privacy-friendly site analytics */}
+        <Script
+          defer
+          data-domain="slydes.io"
+          src="https://plausible.io/js/script.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )

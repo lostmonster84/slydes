@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useUser } from './useUser'
+import type { VerticalType } from '@slydes/types'
 
 export interface Organization {
   id: string
@@ -11,7 +12,7 @@ export interface Organization {
   slug: string
   website: string | null
   business_type: string | null
-  vertical: 'property' | 'hospitality' | 'automotive' | 'beauty' | 'food' | 'other' | null
+  vertical: VerticalType | null
   logo_url: string | null
   primary_color: string
   secondary_color: string | null

@@ -6,12 +6,98 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 5.8s
+ ✓ Compiled successfully in 5.0s
    Skipping linting
    Checking validity of types ...
    Collecting page data ...
-unhandledRejection [Error [PageNotFoundError]: Cannot find module for page: /_document] {
-  type: 'PageNotFoundError',
-  code: 'ENOENT'
-}
- ELIFECYCLE  Command failed with exit code 1.
+   Generating static pages (0/72) ...
+   Generating static pages (18/72) 
+   Generating static pages (36/72) 
+   Generating static pages (54/72) 
+ ✓ Generating static pages (72/72)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ƒ /                                    65.2 kB         334 kB
+├ ○ /_not-found                             1 kB         103 kB
+├ ○ /admin/affiliates                    2.93 kB         188 kB
+├ ○ /analytics                           11.6 kB         237 kB
+├ ƒ /api/account/delete                    240 B         103 kB
+├ ƒ /api/account/slug                      240 B         103 kB
+├ ƒ /api/account/username                  240 B         103 kB
+├ ƒ /api/admin/configure-r2-cors           240 B         103 kB
+├ ƒ /api/admin/seed-music-library          240 B         103 kB
+├ ƒ /api/ai/chat                           240 B         103 kB
+├ ƒ /api/ai/context                        240 B         103 kB
+├ ƒ /api/analytics/momentum                240 B         103 kB
+├ ƒ /api/analytics/slyde                   240 B         103 kB
+├ ƒ /api/auth/dev-login                    240 B         103 kB
+├ ƒ /api/billing/create-checkout           240 B         103 kB
+├ ƒ /api/billing/portal                    240 B         103 kB
+├ ƒ /api/billing/webhook                   240 B         103 kB
+├ ƒ /api/dev/demos                         240 B         103 kB
+├ ƒ /api/dev/demos/[id]                    240 B         103 kB
+├ ƒ /api/dev/demos/[id]/load               240 B         103 kB
+├ ƒ /api/dev/generate-slyde-content        240 B         103 kB
+├ ƒ /api/dev/scrape-business               240 B         103 kB
+├ ƒ /api/domain/add                        240 B         103 kB
+├ ƒ /api/domain/remove                     240 B         103 kB
+├ ƒ /api/domain/setup-checkout             240 B         103 kB
+├ ƒ /api/domain/verify                     240 B         103 kB
+├ ƒ /api/feedback                          240 B         103 kB
+├ ƒ /api/leads                             240 B         103 kB
+├ ƒ /api/media/attach-audio                240 B         103 kB
+├ ƒ /api/media/attach-to-frame             240 B         103 kB
+├ ƒ /api/media/create-audio-upload         240 B         103 kB
+├ ƒ /api/media/create-image-upload         240 B         103 kB
+├ ƒ /api/media/create-upload               240 B         103 kB
+├ ƒ /api/media/create-video-upload         240 B         103 kB
+├ ƒ /api/media/sync-video-status           240 B         103 kB
+├ ƒ /api/media/video-status                240 B         103 kB
+├ ƒ /api/platform-settings                 240 B         103 kB
+├ ƒ /api/social/instagram                  240 B         103 kB
+├ ƒ /api/social/tiktok                     240 B         103 kB
+├ ƒ /api/stripe/checkout                   240 B         103 kB
+├ ƒ /api/stripe/connect                    240 B         103 kB
+├ ƒ /api/stripe/demo-checkout              240 B         103 kB
+├ ƒ /api/stripe/webhook                    240 B         103 kB
+├ ƒ /api/version                           240 B         103 kB
+├ ƒ /api/verticals                         240 B         103 kB
+├ ƒ /auth/auth-code-error                  166 B         106 kB
+├ ƒ /auth/callback                         240 B         103 kB
+├ ○ /auth/complete                       3.45 kB         202 kB
+├ ƒ /auth/confirm                          240 B         103 kB
+├ ƒ /auth/signout                          240 B         103 kB
+├ ○ /brand                               4.81 kB         190 kB
+├ ○ /checkout/success                    1.52 kB         107 kB
+├ ○ /dashboard                           5.33 kB         201 kB
+├ ○ /dev/demos                           4.97 kB         111 kB
+├ ○ /faqs                                5.82 kB         191 kB
+├ ○ /icon.svg                                0 B            0 B
+├ ○ /inbox                               2.87 kB         188 kB
+├ ○ /lists                               3.53 kB         189 kB
+├ ○ /login                                3.6 kB         168 kB
+├ ○ /onboarding                          8.53 kB         207 kB
+├ ○ /preview                             1.07 kB         260 kB
+├ ○ /settings                            15.9 kB         183 kB
+├ ○ /settings/billing                    3.33 kB         171 kB
+├ ƒ /settings/domain                     5.36 kB         111 kB
+├ ƒ /settings/media                      4.31 kB         169 kB
+├ ○ /settings/payments                   2.86 kB         105 kB
+├ ○ /settings/profile                     2.6 kB         167 kB
+├ ○ /shop                                4.44 kB         284 kB
+├ ○ /shop/orders                         4.29 kB         190 kB
+├ ○ /shop/products                       1.32 kB         187 kB
+└ ○ /slydes                              5.44 kB         191 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/960-9074e57d59702200.js       46.2 kB
+  ├ chunks/b653352e-2c3f19b15f03879e.js  54.2 kB
+  └ other shared chunks (total)          2.06 kB
+
+
+ƒ Middleware                             85.6 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
